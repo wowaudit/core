@@ -1,0 +1,7 @@
+*.pyc
+.DS_Store
+csv
+api/auth.py
+web/db.php
+api/auth.py
+web/db.php
