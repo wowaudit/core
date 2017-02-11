@@ -19,7 +19,7 @@ class Scraper(object):
             key_code = member[4]
 
             if key_code not in self.done:
-                self.guilds.append(Guild(member))
+                self.guilds.append(Guild(member,mode))
                 self.done[key_code] = count
                 count += 1
             else: self.guilds[self.done[key_code]].add_member(member)
@@ -29,14 +29,24 @@ class Scraper(object):
         for guild in self.guilds:
             count += 1
             if time.time() - self.start_time >= MAXIMUM_RUNTIME: return False
-            if self.mode == 'production':
-                try:
-                    guild.check()
-                    print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
-                except:
-                    print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
 
-            else:
+            if self.mode == 'production':
+                if self.ids:
+                    if str(guild.guild_id) in self.ids:
+                        try:
+                            guild.check()
+                            print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                        except:
+                            print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                else:
+                    try:
+                        guild.check()
+                        print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                    except:
+                        print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+
+
+            if self.mode == 'debug':
                 if self.ids:
                     if str(guild.guild_id) in self.ids:
                         guild.check()
@@ -44,4 +54,5 @@ class Scraper(object):
                 else:
                     guild.check()
                     print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+
         return True

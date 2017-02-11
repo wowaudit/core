@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+
+# Use one of these modes as the first parameter in calling the script (defaults to the first mode in the constant list)
+# Debug mode: has limited exception handling in order to debug errors, does not write to database so does not impact production
+#             Avoid using the debug mode on production server as to not overwrite production csv files
+# Production mode: regular mode used in production
 MODES = ["debug","production"]
+
 CURRENT_VERSION = "1.0"
 CYCLE_MINIMUM = 60 #seconds
 MAXIMUM_RUNTIME = 1700 #seconds
@@ -14,7 +20,7 @@ REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold', \
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
 URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}".encode('utf-8')
-header = ['head_ilvl','head_id','head_icon','head_q','neck_ilvl','neck_id','neck_icon','neck_q', \
+HEADER = ['head_ilvl','head_id','head_icon','head_q','neck_ilvl','neck_id','neck_icon','neck_q', \
          'shoulder_ilvl','shoulder_id','shoulder_icon','shoulder_q','cloak_ilvl','cloak_id','cloak_icon','cloak_q','chest_ilvl','chest_id','chest_icon','chest_q', \
          'wrist_ilvl','wrist_id','wrist_icon','wrist_q','gloves_ilvl','gloves_id','gloves_icon','gloves_q','waist_ilvl','waist_id','waist_icon','waist_q', \
          'legs_ilvl','legs_id','legs_icon','legs_q','boots_ilvl','boots_id','boots_icon','boots_q','ring1_ilvl','ring1_id','ring1_icon','ring1_q','ring2_ilvl', \
