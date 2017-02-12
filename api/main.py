@@ -29,6 +29,7 @@ except Exception:
 
 start_time = time.time()
 keep_going = True
+sleep_duration = 0
 while keep_going:
     step_time = time.time()
     guilds = Scraper(mode,guild_ids,start_time)
