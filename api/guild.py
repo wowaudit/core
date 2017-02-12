@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from member import Member
 from constants import *
-from auth import API_KEY
+from auth import API_KEY, PATH_TO_CSV
 from concurrent import futures
 import requests, datetime
 from execute_query import execute_query

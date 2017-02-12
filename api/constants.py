@@ -9,7 +9,6 @@ MODES = ["debug","production"]
 CURRENT_VERSION = "1.0"
 CYCLE_MINIMUM = 60 #seconds
 MAXIMUM_RUNTIME = 1700 #seconds
-PATH_TO_CSV = 'csv/'
 TIER_IDS = range(138309,138381) #Tier 19
 REPUTATIONS = {1859:'nightfallen',1948:'valarjar',1894:'wardens',1883:'dreamweavers',1828:'highmountain_tribe',1900:'court_of_farondis'}
 CLASSES = {1:'Warrior',2:'Paladin',3:'Hunter',4:'Rogue',5:'Priest',6:'Death Knight',7:'Shaman',8:'Mage',9:'Warlock',10:'Monk',11:'Druid',12:'Demon Hunter'}

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import csv, codecs, cStringIO, datetime
 from dateutil import tz
-from constants import *
+from constants import HEADER
 
 def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data):
     writer = UnicodeWriter(csvfile,delimiter=',', lineterminator='\n')
