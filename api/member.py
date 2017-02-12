@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from constants import *
 import time, datetime
+from execute_query import execute_query
 from json import loads, dumps
 
 class Member(object):
@@ -111,7 +112,9 @@ class Member(object):
 
             if item in self.tier_data: self.processed_data['tier_{0}'.format(item)] = self.tier_data[item]
 
-        self.ilvl += (data['items']['mainHand']['itemLevel']*2) # Weapon is always counted twice to keep it fair for 2h specs
+        try: self.ilvl += (data['items']['mainHand']['itemLevel']*2) # Weapon is always counted twice to keep it fair for 2h specs
+        except: pass
+
         self.processed_data['ilvl'] = round(self.ilvl / (len(ITEMS) + 2),2)
         self.processed_data['empty_sockets'] = data['audit']['emptySockets']
         self.processed_data['gem_list'] = '|'.join(self.worst_gem)
