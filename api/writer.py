@@ -7,9 +7,13 @@ def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data
     writer = UnicodeWriter(csvfile,delimiter=',', lineterminator='\n')
     utc_time = datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC'))
     europe_time = utc_time.astimezone(tz.gettz('Europe/Amsterdam'))
-    writer.writerow([europe_time.strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message]+HEADER)
+
+    first_row = list(HEADER)
+    guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message]
+    first_row[0:len(guild_wide_data)] = guild_wide_data
+    writer.writerow(first_row)
+
     csv_data = sorted(csv_data,key=lambda x: x[2])
-    rank = 1
     for row in reversed(csv_data):
         new_row = []
         for i in row:
@@ -19,14 +23,8 @@ def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data
                 try: new_row.append(i.encode('utf-8'))
                 except: new_row.append(i)
 
-        if row[-1] == 'none':
-            new_row.insert(2,'-')
-
-        else:
-            new_row.insert(2,unicode(rank))
-            rank += 1
-        if len(new_row) > 88:
-            writer.writerow(new_row)
+        if len(new_row) == len(HEADER): writer.writerow(new_row)
+        else: print 'Row data length and header length mismatch. Not writing this row.'
 
 class UnicodeWriter:
 

@@ -11,8 +11,7 @@ CYCLE_MINIMUM = 60 #seconds
 MAXIMUM_RUNTIME = 1700 #seconds
 PATH_TO_CSV = 'csv/'
 TIER_IDS = range(138309,138381) #Tier 19
-REP_ORDERED = ['nightfallen','valarjar','wardens','dreamweavers','highmountain tribe','court of farondis']
-REPUTATIONS = {1859:'nightfallen',1948:'valarjar',1894:'wardens',1883:'dreamweavers',1828:'highmountain tribe',1900:'court of farondis'}
+REPUTATIONS = {1859:'nightfallen',1948:'valarjar',1894:'wardens',1883:'dreamweavers',1828:'highmountain_tribe',1900:'court_of_farondis'}
 CLASSES = {1:'Warrior',2:'Paladin',3:'Hunter',4:'Rogue',5:'Priest',6:'Death Knight',7:'Shaman',8:'Mage',9:'Warlock',10:'Monk',11:'Druid',12:'Demon Hunter'}
 ITEMS = ['head','neck','shoulder','back','chest','wrist','hands','waist','legs','feet','finger1','finger2','trinket1','trinket2']
 STANDINGS = {0:'Hated',1:'Hostile',2:'Unfriendly',3:'Neutral',4:'Friendly',5:'Honored',6:'Revered',7:'Exalted'}
@@ -20,19 +19,19 @@ REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold', \
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
 URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}".encode('utf-8')
-HEADER = ['head_ilvl','head_id','head_icon','head_q','neck_ilvl','neck_id','neck_icon','neck_q', \
-         'shoulder_ilvl','shoulder_id','shoulder_icon','shoulder_q','cloak_ilvl','cloak_id','cloak_icon','cloak_q','chest_ilvl','chest_id','chest_icon','chest_q', \
-         'wrist_ilvl','wrist_id','wrist_icon','wrist_q','gloves_ilvl','gloves_id','gloves_icon','gloves_q','waist_ilvl','waist_id','waist_icon','waist_q', \
-         'legs_ilvl','legs_id','legs_icon','legs_q','boots_ilvl','boots_id','boots_icon','boots_q','ring1_ilvl','ring1_id','ring1_icon','ring1_q','ring2_ilvl', \
-         'ring2_id','ring2_icon','ring2_q','trinket1_ilvl','trinket1_id','trinket1_icon','trinket1_q','trinket2_ilvl','trinket2_id','trinket2_icon','trinket2_q', \
-         'relic1_ilvl','relic1_id','relic1_icon','relic1_q','relic2_ilvl','relic2_id','relic2_icon','relic2_q','relic3_ilvl','relic3_id','relic3_icon','relic3_q', \
+HEADER = ['name','class','rank','artifact_ilvl','equipped_traits','head_ilvl','head_id','head_name','head_quality','neck_ilvl','neck_id','neck_name','neck_quality', \
+         'shoulder_ilvl','shoulder_id','shoulder_name','shoulder_quality','back_ilvl','back_id','back_name','back_quality','chest_ilvl','chest_id','chest_name','chest_quality', \
+         'wrist_ilvl','wrist_id','wrist_name','wrist_quality','hands_ilvl','hands_id','hands_name','hands_quality','waist_ilvl','waist_id','waist_name','waist_quality', \
+         'legs_ilvl','legs_id','legs_name','legs_quality','feet_ilvl','feet_id','feet_name','feet_quality','finger1_ilvl','finger1_id','finger1_name','finger1_quality','finger2_ilvl', \
+         'finger2_id','finger2_name','finger2_quality','trinket1_ilvl','trinket1_id','trinket1_name','trinket1_quality','trinket2_ilvl','trinket2_id','trinket2_name','trinket2_quality', \
+         'relic1_ilvl','relic1_id','relic1_name','relic1_quality','relic2_ilvl','relic2_id','relic2_name','relic2_quality','relic3_ilvl','relic3_id','relic3_name','relic3_quality', \
          'nightfallen_standing','nightfallen_value','valarjar_standing','valarjar_value','wardens_standing','wardens_value','dreamweavers_standing','dreamweavers_value',\
-         'highmountain-tribe_standing','highmountain-tribe_value','court-of-farondis_standing','court-of-farondis_value','enchant_q_neck','enchant_q_cloak','enchant_q_ring1',\
-         'enchant_q_ring2','missing_sockets','rep_value','role','dungeon_total','eye_of_azshara','darkheart_thicket','neltharions_lair','halls_of_valor','violet_hold', \
-         'vault of the wardens','black rook hold','maw of souls','arcway','court of stars','karazhan','this_week','wq_alltime','wq_this_week','legendary_amount', \
-         'achievements','mounts','exalted_reps','pets','pets_lvl25','realm','legendary_list','neck_enchant','cloak_enchant','ring1_enchant','ring2_enchant','gem_list', \
-         'tier_helm_ilvl','tier_shoulder_ilvl','tier_cloak_ilvl','tier_chest_ilvl','tier_gloves_ilvl','tier_legs_ilvl','total_ap','weekly_ap','spec1_traits','spec1_ilvl',\
-         'spec2_traits','spec2_ilvl','spec3_traits','spec3_ilvl','spec4_traits','spec4_ilvl','current_spec','ilvl_eq_record','main_spec','cathedral_of_eternal_night']
+         'highmountain_tribe_standing','highmountain_tribe_value','court_of_farondis_standing','court_of_farondis_value','enchant_quality_neck','enchant_quality_back','enchant_quality_finger1',\
+         'enchant_quality_finger2','empty_sockets','reputation_ranking','role','dungeons_done_total','Eye of Azshara','Darkheart Thicket','Neltharion\'s Lair','Halls of Valor','Violet Hold', \
+         'Vault of the Wardens','Black Rook Hold','Maw of Souls','Arcway','Court of Stars','Karazhan','dungeons_this_week','wqs_done_total','wqs_this_week','legendary_amount', \
+         'achievement_points','mounts','exalted_amount','unique_pets','lvl_25_pets','realm','legendary_list','neck_enchant','back_enchant','finger1_enchant','finger2_enchant','gem_list', \
+         'tier_head','tier_shoulder','tier_back','tier_chest','tier_hands','tier_legs','ap_obtained_total','ap_this_week','spec1_traits','spec1_ilvl',\
+         'spec2_traits','spec2_ilvl','spec3_traits','spec3_ilvl','spec4_traits','spec4_ilvl','current_spec_name','highest_ilvl_ever_equipped','main_spec','Cathedral of Eternal Night']
 RELIC_ILVL = {2:690,3:695,4:700,5:705,7:710,8:715,9:720,10:725,12:730,13:735,14:740,15:745,17:750,18:755,19:760,21:765, \
                22:770,23:775,24:780,26:785,27:790,28:795,29:800,31:805,32:810,33:815,35:820,36:825,37:830,39:835,40:840,42:845,43:850,45:855,46:860,48:865,49:870,51:875, \
                52:880,53:885,55:890,56:895,58:900,59:905,61:910,62:915,64:920,65:925}
