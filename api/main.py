@@ -33,7 +33,7 @@ sleep_duration = 0
 while keep_going:
     step_time = time.time()
     guilds = Scraper(mode,guild_ids,start_time)
-    keep_going = guilds.check_all()
+    keep_going = guilds.run()
     if time.time() - step_time < CYCLE_MINIMUM and keep_going:
         sleep_duration = 3 + CYCLE_MINIMUM - (time.time() - step_time)
 

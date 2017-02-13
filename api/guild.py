@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from member import Member
 from constants import *
-from auth import API_KEY
+from auth import API_KEY, WCL_KEY
 from concurrent import futures
 import requests, datetime
 from execute_query import execute_query
@@ -33,7 +33,7 @@ class Guild(object):
         count = 0
 
         with futures.ThreadPoolExecutor(max_workers=20) as executor:
-            tasks = dict((executor.submit(self.make_request_futures, user), user) for user in self.members)
+            tasks = dict((executor.submit(self.make_request_api, user), user) for user in self.members)
             for user in futures.as_completed(tasks):
                 data, result_code, member, realm = user.result()
                 count += 1
@@ -52,10 +52,16 @@ class Guild(object):
         self.update_users_in_db()
         self.write()
 
-    def make_request_futures(self,user):
+    def make_request_api(self,user):
         if self.members[user].realm: realm = self.members[user].realm.encode('utf-8')
         else: realm = self.realm
-        response = requests.get(URL.format(self.region,realm,self.members[user].name,API_KEY).replace(" ","%20"))
+
+        if self.mode == 'warcraftlogs':
+            metric = 'hps' if self.members[user].role == 'Heal' else 'dps'
+            response = requests.get(WCL_URL.format(self.members[user].name,realm,self.region,metric,WCL_KEY).replace(" ","%20"))
+        else:
+            response = requests.get(URL.format(self.region,realm,self.members[user].name,API_KEY).replace(" ","%20"))
+
         return (response.text,response.status_code,self.members[user],realm)
 
     def generate_warnings(self):
@@ -107,3 +113,19 @@ class Guild(object):
     def write(self):
         with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
             write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data)
+
+    def update_warcraftlogs(self):
+        count = 0
+
+        with futures.ThreadPoolExecutor(max_workers=20) as executor:
+            tasks = dict((executor.submit(self.make_request_api, user), user) for user in self.members)
+            for user in futures.as_completed(tasks):
+                data, result_code, member, realm = user.result()
+                count += 1
+
+                if result_code == 200 and len(loads(data)) > 0:
+                    member.refresh_warcraftlogs(loads(data))
+                    print u'Progress: {0}/{1}'.format(count,len(self.members))
+                else:
+                    print u'Skipped one due to a query error. Progress: {0}/{1}'.format(count,len(self.members))
+

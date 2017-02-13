@@ -4,7 +4,7 @@
 # Debug mode: has limited exception handling in order to debug errors, does not write to database so does not impact production
 #             Avoid using the debug mode on production server as to not overwrite production csv files
 # Production mode: regular mode used in production
-MODES = ["debug","production"]
+MODES = ["debug","production","warcraftlogs"]
 
 CURRENT_VERSION = "1.0"
 CYCLE_MINIMUM = 60 #seconds
@@ -19,6 +19,9 @@ REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold', \
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
 URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}".encode('utf-8')
+WCL_URL = "https://www.warcraftlogs.com:443/v1/rankings/character/{0}/{1}/{2}?metric={3}&api_key={4}"
+WCL_ZONES_URL = "https://www.warcraftlogs.com:443/v1/zones?api_key={0}"
+VALID_RAIDS = {'Emerald Nightmare':{'order':1},'Trial of Valor':{'order':2},'The Nighthold':{'order':3}}
 HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_ilvl','head_id','head_name','head_quality','neck_ilvl','neck_id','neck_name','neck_quality', \
          'shoulder_ilvl','shoulder_id','shoulder_name','shoulder_quality','back_ilvl','back_id','back_name','back_quality','chest_ilvl','chest_id','chest_name','chest_quality', \
          'wrist_ilvl','wrist_id','wrist_name','wrist_quality','hands_ilvl','hands_id','hands_name','hands_quality','waist_ilvl','waist_id','waist_name','waist_quality', \

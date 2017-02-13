@@ -7,7 +7,8 @@ from json import loads, dumps
 class Member(object):
 
     def __init__(self,data):
-        self.user_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, self.tier_data, self.status = data[6:]
+        self.user_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
+        self.tier_data, self.status, self.warcraftlogs = data[6:]
         self.name = self.name.encode('utf-8')
         self.realm = self.realm
 
@@ -306,3 +307,15 @@ class Member(object):
                 'ap': self.processed_data['ap_obtained_total'] if self.ap_snapshot == 'not there' else self.ap_snapshot})
 
         else: self.snapshot_data = False
+
+    def refresh_warcraftlogs(self,data):
+        pass
+
+
+
+
+
+
+
+
+
