@@ -65,14 +65,11 @@ class Scraper(object):
         return True
 
     def check_warcraftlogs(self):
-        response = requests.get(WCL_ZONES_URL.format(WCL_KEY))
-        data = loads(response.text)[-2]
-        print data
         count = 0
         for guild in self.guilds:
-            count += 1
-
-            guild.update_warcraftlogs()
+            if guild.guild_id == 1: #Hardcode for testing
+                count += 1
+                guild.update_warcraftlogs()
 
 
 

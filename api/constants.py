@@ -18,9 +18,19 @@ REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold', \
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
 URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}".encode('utf-8')
-WCL_URL = "https://www.warcraftlogs.com:443/v1/rankings/character/{0}/{1}/{2}?metric={3}&api_key={4}"
+WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?api_key={3}"
 WCL_ZONES_URL = "https://www.warcraftlogs.com:443/v1/zones?api_key={0}"
-VALID_RAIDS = {'Emerald Nightmare':{'order':1},'Trial of Valor':{'order':2},'The Nighthold':{'order':3}}
+VALID_RAIDS = {'Emerald Nightmare':{'raid_order':1, u'encounters': [{u'id': 1853, u'name': u'Nythendra','order': 1}, {u'id': 1873, u'name': u"Il'gynoth, Heart of Corruption",'order': 5}, {u'id': 1876, u'name': u'Elerethe Renferal','order': 2},
+                {u'id': 1841, u'name': u'Ursoc','order': 3}, {u'id': 1854, u'name': u'Dragons of Nightmare','order': 4}, {u'id': 1877, u'name': u'Cenarius','order': 6}, {u'id': 1864, u'name': u'Xavius','order': 7}]},
+               'Trial of Valor':{'raid_order':2, u'encounters': [{u'id': 1958, u'name': u'Odyn','order': 1}, {u'id': 1962, u'name': u'Guarm','order': 2}, {u'id': 2008, u'name': u'Helya','order': 3}]},
+               'The Nighthold':{'raid_order':3, u'encounters': [{u'id': 1849, u'name': u'Skorpyron','order': 1}, {u'id': 1865, u'name': u'Chronomatic Anomaly','order': 2}, {u'id': 1867, u'name': u'Trilliax','order': 3},
+                {u'id': 1871, u'name': u'Spellblade Aluriel','order': 4}, {u'id': 1862, u'name': u'Tichondrius','order': 5}, {u'id': 1863, u'name': u'Star Augur Etraeus','order': 6}, {u'id': 1842, u'name': u'Krosus','order': 7},
+                {u'id': 1886, u'name': u"High Botanist Tel'arn",'order': 8}, {u'id': 1872, u'name': u'Grand Magistrix Elisande','order': 9}, {u'id': 1866, u'name': u"Gul'dan",'order': 10}]}}
+RAID_DIFFICULTIES = {3:'Normal',4:'Heroic',5:'Mythic'}
+WCL_ROLES_TO_SPEC_MAP = {'Heal':['Restoration','Holy','Discipline','Mistweaver'],
+                         'Tank':['Blood','Vengeance','Protection','Brewmaster','Guardian'],
+                         'Melee':['Outlaw','Subtlety','Assassination','Feral','Windwalker','Havoc','Enhancement','Survival','Arms','Fury','Retribution','Unholy','Frost'],
+                         'Ranged':['Shadow','Affliction','Demonology','Destruction','Arcane','Fire','Frost','Balance','Marksmanship','BeastMastery','Elemental']}
 HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_ilvl','head_id','head_name','head_quality','neck_ilvl','neck_id','neck_name','neck_quality', \
          'shoulder_ilvl','shoulder_id','shoulder_name','shoulder_quality','back_ilvl','back_id','back_name','back_quality','chest_ilvl','chest_id','chest_name','chest_quality', \
          'wrist_ilvl','wrist_id','wrist_name','wrist_quality','hands_ilvl','hands_id','hands_name','hands_quality','waist_ilvl','waist_id','waist_name','waist_quality', \

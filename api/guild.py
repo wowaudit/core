@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 from member import Member
 from constants import *
-<<<<<<< HEAD
-from auth import API_KEY, WCL_KEY
-=======
-from auth import API_KEY, PATH_TO_CSV
->>>>>>> ee976e0975dea42756ffcd352f55b2111853c35c
+from auth import API_KEY, WCL_KEY, PATH_TO_CSV
 from concurrent import futures
-import requests, datetime
+import requests, datetime, sys
 from execute_query import execute_query
 from writer import write_csv
 from json import loads, dumps
@@ -61,8 +57,7 @@ class Guild(object):
         else: realm = self.realm
 
         if self.mode == 'warcraftlogs':
-            metric = 'hps' if self.members[user].role == 'Heal' else 'dps'
-            response = requests.get(WCL_URL.format(self.members[user].name,realm,self.region,metric,WCL_KEY).replace(" ","%20"))
+            response = requests.get(WCL_URL.format(self.members[user].name,realm,self.region,WCL_KEY).replace(" ","%20"))
         else:
             response = requests.get(URL.format(self.region,realm,self.members[user].name,API_KEY).replace(" ","%20"))
 
@@ -120,6 +115,7 @@ class Guild(object):
 
     def update_warcraftlogs(self):
         count = 0
+        self.processed_data = {}
 
         with futures.ThreadPoolExecutor(max_workers=20) as executor:
             tasks = dict((executor.submit(self.make_request_api, user), user) for user in self.members)
@@ -128,8 +124,61 @@ class Guild(object):
                 count += 1
 
                 if result_code == 200 and len(loads(data)) > 0:
-                    member.refresh_warcraftlogs(loads(data))
+                    self.prepare_warcraftlogs_data(loads(data),member)
                     print u'Progress: {0}/{1}'.format(count,len(self.members))
                 else:
                     print u'Skipped one due to a query error. Progress: {0}/{1}'.format(count,len(self.members))
+
+        self.process_warcraftlogs_data()
+
+    def prepare_warcraftlogs_data(self,data,member):
+        self.processed_data[member.user_id] = {}
+        for raid in VALID_RAIDS:
+            for encounter in VALID_RAIDS[raid]['encounters']:
+                self.processed_data[member.user_id][encounter['name']] = {1:{'raid':raid},3:{'raid':raid},4:{'raid':raid},5:{'raid':raid}}
+
+        for encounter in data:
+            stored = False
+            for spec in encounter['specs']:
+                if spec['spec'] == member.role:
+                    self.processed_data[member.user_id][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
+                    stored = True
+                    break
+                elif spec['spec'] in WCL_ROLES_TO_SPEC_MAP[member.role]:
+                    self.processed_data[member.user_id][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
+                    stored = True
+                    break
+            if not stored:
+                self.processed_data[member.user_id][encounter['name']][encounter['difficulty']].update({'best': '-', 'median': '-', 'average': '-'})
+
+
+    def process_warcraftlogs_data(self):
+        base_spec_query = 'UPDATE users SET warcraftlogs = CASE '
+        for member in self.processed_data:
+            output = {'best_3': [],
+                      'best_4': [],
+                      'best_5': [],
+                      'median_3': [],
+                      'median_4': [],
+                      'median_5': [],
+                      'average_3': [],
+                      'average_4': [],
+                      'average_5': []}
+
+            #Ugliest code in the history of the world, needs refactor badly (had issues with ordering of output string)
+            for raid_order in range(1,len(VALID_RAIDS)+1):
+                for raid in VALID_RAIDS:
+                    if VALID_RAIDS[raid]['raid_order'] == raid_order:
+                        for order in range(1,len(VALID_RAIDS[raid]['encounters'])+1):
+                            for encounter in VALID_RAIDS[raid]['encounters']:
+                                if encounter['order'] == order:
+                                    for difficulty in self.processed_data[member][encounter['name']]:
+                                        for metric in ['best','median','average']:
+                                            if difficulty in RAID_DIFFICULTIES:
+                                                try: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],self.processed_data[member][encounter['name']][difficulty][metric]))
+                                                except: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],'-'))
+
+            base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(member,dumps(output).replace("'","\\'"))
+
+        execute_query(base_spec_query + ' ELSE warcraftlogs END',False)
 

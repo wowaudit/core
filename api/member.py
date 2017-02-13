@@ -307,15 +307,3 @@ class Member(object):
                 'ap': self.processed_data['ap_obtained_total'] if self.ap_snapshot == 'not there' else self.ap_snapshot})
 
         else: self.snapshot_data = False
-
-    def refresh_warcraftlogs(self,data):
-        pass
-
-
-
-
-
-
-
-
-
