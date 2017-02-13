@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 from member import Member
 from constants import *
+<<<<<<< HEAD
 from auth import API_KEY, WCL_KEY
+=======
+from auth import API_KEY, PATH_TO_CSV
+>>>>>>> ee976e0975dea42756ffcd352f55b2111853c35c
 from concurrent import futures
 import requests, datetime
 from execute_query import execute_query
