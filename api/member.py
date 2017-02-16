@@ -47,7 +47,7 @@ class Member(object):
             self.specs = {1:(0,0),2:(0,0),3:(0,0),4:(0,0)}
             self.max_ilvl = 0
 
-    def check(self,data,realm,region):
+    def check(self,data,realm,region,new_snapshot):
         self.processed_data = {}
         spec_information = []
 
@@ -61,8 +61,8 @@ class Member(object):
         self.process_legendary_data(data)
         self.process_nocombat_data(data)
         self.process_spec_data(data)
+        self.update_stored_data(region,new_snapshot)
 
-        self.update_stored_data(region)
         self.build_from_header()
 
         return [self.row_data,self.spec_data,self.snapshot_data]
@@ -96,8 +96,12 @@ class Member(object):
                 if int(data['items'][item]['id']) in TIER_IDS:
                     self.tier_data[item] = int(data['items'][item]['itemLevel'])
 
-                self.ilvl += data['items'][item]['itemLevel']
-                self.processed_data[item + '_ilvl'] = data['items'][item]['itemLevel']
+                if 3529 in data['items'][item]['bonusLists']: #Workaround for Armory returning Legendary ilvl wrong
+                    self.ilvl += 940
+                    self.processed_data[item + '_ilvl'] = 940
+                else:
+                    self.ilvl += data['items'][item]['itemLevel']
+                    self.processed_data[item + '_ilvl'] = data['items'][item]['itemLevel']
                 self.processed_data[item + '_id'] = data['items'][item]['id']
                 self.processed_data[item + '_name'] = data['items'][item]['name']
                 self.processed_data[item + '_quality'] = data['items'][item]['quality']
@@ -227,7 +231,16 @@ class Member(object):
         self.processed_data['Cathedral of Eternal Night'] = 0
 
     def process_warcraftlogs_data(self,data):
-        pass
+        if self.warcraftlogs:
+            data = loads(self.warcraftlogs)
+            self.processed_data['WCL_id'] = data['character_id']
+            for difficulty in data:
+                if data[difficulty] != self.processed_data['WCL_id']:
+                    self.processed_data['WCL_{0}_{1}'.format(RAID_DIFFICULTIES[int(difficulty.split('_')[1])],difficulty.split('_')[0])] = '|'.join(data[difficulty])
+        else:
+            self.processed_data['WCL_id'] = ''
+            for difficulty in ['best_3','best_4','best_5','median_3','median_4','median_5','average_3','average_4','average_5']:
+                self.processed_data['WCL_{0}_{1}'.format(RAID_DIFFICULTIES[int(difficulty.split('_')[1])],difficulty.split('_')[0])] = ''
 
     def process_wq_data(self,data):
         try:
@@ -292,10 +305,9 @@ class Member(object):
         self.processed_data['main_spec'] = max_spec[0]
         self.spec_data = [self.user_id,'|'.join(self.spec_output),self.tier_data]
 
-    def update_stored_data(self,region):
+    def update_stored_data(self,region,new_snapshot):
         #Sets updated snapshot data if a new snapshot has to be made
-        if (region == 'EU' and datetime.datetime.weekday(datetime.datetime.now()) == 2 and datetime.datetime.now().hour == 7) or \
-           (region == 'US' and datetime.datetime.weekday(datetime.datetime.now()) == 1 and datetime.datetime.now().hour == 13):
+        if new_snapshot and region == new_snapshot:
             self.snapshot_data = (self.user_id,{'dungeons': self.processed_data['dungeons_done_total'],
                                                 'wqs': self.processed_data['wqs_done_total'],
                                                 'ap': self.processed_data['ap_obtained_total']})

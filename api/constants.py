@@ -4,11 +4,12 @@
 # Debug mode: has limited exception handling in order to debug errors, does not write to database so does not impact production
 #             Avoid using the debug mode on production server as to not overwrite production csv files
 # Production mode: regular mode used in production
-MODES = ["debug","production","warcraftlogs"]
+MODES = ["debug","production","production_patreon","warcraftlogs","snapshot_US","snapshot_EU"]
 
 CURRENT_VERSION = "1.0"
-CYCLE_MINIMUM = 60 #seconds
-MAXIMUM_RUNTIME = 1700 #seconds
+CYCLE_MINIMUM = 120 #seconds
+MAXIMUM_RUNTIME = 3500 #seconds
+MAX_ALLOCATED = 25 #guilds
 TIER_IDS = range(138309,138381) #Tier 19
 REPUTATIONS = {1859:'nightfallen',1948:'valarjar',1894:'wardens',1883:'dreamweavers',1828:'highmountain_tribe',1900:'court_of_farondis'}
 CLASSES = {1:'Warrior',2:'Paladin',3:'Hunter',4:'Rogue',5:'Priest',6:'Death Knight',7:'Shaman',8:'Mage',9:'Warlock',10:'Monk',11:'Druid',12:'Demon Hunter'}
@@ -18,12 +19,12 @@ REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold', \
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
 URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}".encode('utf-8')
-WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?api_key={3}"
+WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&api_key={5}"
 WCL_ZONES_URL = "https://www.warcraftlogs.com:443/v1/zones?api_key={0}"
-VALID_RAIDS = {'Emerald Nightmare':{'raid_order':1, u'encounters': [{u'id': 1853, u'name': u'Nythendra','order': 1}, {u'id': 1873, u'name': u"Il'gynoth, Heart of Corruption",'order': 5}, {u'id': 1876, u'name': u'Elerethe Renferal','order': 2},
+VALID_RAIDS = {'Emerald Nightmare':{'id':10,'raid_order':1, u'encounters': [{u'id': 1853, u'name': u'Nythendra','order': 1}, {u'id': 1873, u'name': u"Il'gynoth, Heart of Corruption",'order': 5}, {u'id': 1876, u'name': u'Elerethe Renferal','order': 2},
                 {u'id': 1841, u'name': u'Ursoc','order': 3}, {u'id': 1854, u'name': u'Dragons of Nightmare','order': 4}, {u'id': 1877, u'name': u'Cenarius','order': 6}, {u'id': 1864, u'name': u'Xavius','order': 7}]},
-               'Trial of Valor':{'raid_order':2, u'encounters': [{u'id': 1958, u'name': u'Odyn','order': 1}, {u'id': 1962, u'name': u'Guarm','order': 2}, {u'id': 2008, u'name': u'Helya','order': 3}]},
-               'The Nighthold':{'raid_order':3, u'encounters': [{u'id': 1849, u'name': u'Skorpyron','order': 1}, {u'id': 1865, u'name': u'Chronomatic Anomaly','order': 2}, {u'id': 1867, u'name': u'Trilliax','order': 3},
+               'Trial of Valor':{'id':12,'raid_order':2, u'encounters': [{u'id': 1958, u'name': u'Odyn','order': 1}, {u'id': 1962, u'name': u'Guarm','order': 2}, {u'id': 2008, u'name': u'Helya','order': 3}]},
+               'The Nighthold':{'id':11,'raid_order':3, u'encounters': [{u'id': 1849, u'name': u'Skorpyron','order': 1}, {u'id': 1865, u'name': u'Chronomatic Anomaly','order': 2}, {u'id': 1867, u'name': u'Trilliax','order': 3},
                 {u'id': 1871, u'name': u'Spellblade Aluriel','order': 4}, {u'id': 1862, u'name': u'Tichondrius','order': 5}, {u'id': 1863, u'name': u'Star Augur Etraeus','order': 6}, {u'id': 1842, u'name': u'Krosus','order': 7},
                 {u'id': 1886, u'name': u"High Botanist Tel'arn",'order': 8}, {u'id': 1872, u'name': u'Grand Magistrix Elisande','order': 9}, {u'id': 1866, u'name': u"Gul'dan",'order': 10}]}}
 RAID_DIFFICULTIES = {3:'Normal',4:'Heroic',5:'Mythic'}
@@ -43,7 +44,8 @@ HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_i
          'Vault of the Wardens','Black Rook Hold','Maw of Souls','Arcway','Court of Stars','Karazhan','dungeons_this_week','wqs_done_total','wqs_this_week','legendary_amount', \
          'achievement_points','mounts','exalted_amount','unique_pets','lvl_25_pets','realm','legendary_list','neck_enchant','back_enchant','finger1_enchant','finger2_enchant','gem_list', \
          'tier_head','tier_shoulder','tier_back','tier_chest','tier_hands','tier_legs','ap_obtained_total','ap_this_week','spec1_traits','spec1_ilvl',\
-         'spec2_traits','spec2_ilvl','spec3_traits','spec3_ilvl','spec4_traits','spec4_ilvl','current_spec_name','highest_ilvl_ever_equipped','main_spec','Cathedral of Eternal Night']
+         'spec2_traits','spec2_ilvl','spec3_traits','spec3_ilvl','spec4_traits','spec4_ilvl','current_spec_name','highest_ilvl_ever_equipped','main_spec','Cathedral of Eternal Night', \
+         'WCL_id','WCL_Normal_best','WCL_Normal_median','WCL_Normal_average','WCL_Heroic_best','WCL_Heroic_median','WCL_Heroic_average','WCL_Mythic_best','WCL_Mythic_median','WCL_Mythic_average']
 RELIC_ILVL = {2:690,3:695,4:700,5:705,7:710,8:715,9:720,10:725,12:730,13:735,14:740,15:745,17:750,18:755,19:760,21:765, \
                22:770,23:775,24:780,26:785,27:790,28:795,29:800,31:805,32:810,33:815,35:820,36:825,37:830,39:835,40:840,42:845,43:850,45:855,46:860,48:865,49:870,51:875, \
                52:880,53:885,55:890,56:895,58:900,59:905,61:910,62:915,64:920,65:925}
@@ -51,7 +53,7 @@ ENCHANTS = {'finger1':{5423:(1,"+150 Crit"),5424:(1,"+150 Haste"),5425:(1,"+150 
              5430:(2,"+200 Versatility")},'finger2':{5423:(1,"+150 Crit"),5424:(1,"+150 Haste"),5425:(1,"+150 Mastery"),5426:(1,"+150 Versatility"),5427:(2,"+200 Crit"),5428:(2,"+200 Haste"),5429:(2,"+200 Mastery"), \
              5430:(2,"+200 Versatility")},'back':{5431:(1,"+150 Strength"),5432:(1,"+150 Agility"),5433:(1,"+150 Intellect"),5434:(2,"+200 Strength"),5435:(2,"+200 Agility"), \
              5436:(2,"+200 Intellect")},'neck':{5437:(2,"Mark of the Claw"),5438:(2,"Mark of the Distant Army"),5439:(2,"Mark of the Hidden Satyr"), \
-             5889:(2,"Mark of the Heavy Hide"),5890:(2,"Mark of the Heavy Soldier"),5891:(2,"Mark of the Ancient Priestess")}}
+             5889:(2,"Mark of the Heavy Hide"),5890:(2,"Mark of the Trained Soldier"),5891:(2,"Mark of the Ancient Priestess")}}
 GEMS = {130218:1,130217:1,130216:1,130215:1,130219:2,130220:2,130221:2,130222:2,130246:3,130247:3,130248:3} #1 = 100, 2 = 150, 3 = epic unique
 
 ARTIFACTS = {'Ulthalesh, the Deadwind Harvester':('Affliction',1),'Scepter of Sargeras':('Destruction',2),"Skull of the Man'ari":('Demonology',3), \
