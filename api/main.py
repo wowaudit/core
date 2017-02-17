@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from constants import *
-import sys, time
+import sys, time, datetime
 from scraper import Scraper
 
 try:
@@ -8,6 +8,13 @@ try:
     if mode not in MODES:
         raise Exception
     print "Running in {0} mode.".format(mode)
+    if mode == 'snapshot_US' and datetime.datetime.weekday(datetime.datetime.now()) != 1:
+        print "It is not Tuesday, snapshots should not be reset for US. Aborting now."
+        sys.exit()
+    if mode == 'snapshot_EU' and datetime.datetime.weekday(datetime.datetime.now()) != 2:
+        print "It is not Wednesday, snapshots should not be reset for EU. Aborting now."
+        sys.exit()
+
 except Exception:
     mode = MODES[0]
     print 'No mode selected. Running in {0} mode.'.format(mode)

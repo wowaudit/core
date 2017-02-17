@@ -24,7 +24,7 @@ class Scraper(object):
 
         count = 0
         for member in data:
-            if len(self.guilds) >= MAX_ALLOCATED and self.mode == 'production': break
+            if len(self.guilds) >= MAX_ALLOCATED and self.mode == 'production' and not self.ids: break
             key_code = member[4]
 
             if key_code not in self.done:
