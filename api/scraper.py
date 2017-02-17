@@ -38,7 +38,8 @@ class Scraper(object):
         self.allocate()
 
     def allocate(self):
-        execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id IN ({1})'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join([str(guild.guild_id) for guild in self.guilds])))
+        if self.mode in ['production','production_patreon']:
+            execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id IN ({1})'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join([str(guild.guild_id) for guild in self.guilds])))
 
     def run(self):
         if self.mode in ['debug','production','production_patreon','snapshot_EU','snapshot_US']:
