@@ -136,11 +136,12 @@ class Guild(object):
                     count += 1
 
                     if result_code == 200 and len(loads(data)) > 0:
-                        self.prepare_warcraftlogs_data(loads(data),member)
-                        success += 1
+                        try:
+                            self.prepare_warcraftlogs_data(loads(data),member)
+                            success += 1
+                        except: pass
                     elif result_code != 200:
-                        print data, result_code, member.name, realm
-                        print u'Skipped one due to a query error. Progress: {0}/{1}'.format(count,len(self.members)*len(VALID_RAIDS))
+                        print u'Skipped one due to a query error. Reason: {0} - Progress: {1}/{2}'.format(result_code,count,len(self.members)*len(VALID_RAIDS))
 
         if success > 0: self.process_warcraftlogs_data()
 
