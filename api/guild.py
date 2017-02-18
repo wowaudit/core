@@ -116,7 +116,7 @@ class Guild(object):
 
     def write(self):
         with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
-            write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data)
+            write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode)
 
     def update_warcraftlogs(self):
         count = 0

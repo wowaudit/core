@@ -3,13 +3,14 @@ import csv, codecs, cStringIO, datetime
 from dateutil import tz
 from constants import HEADER
 
-def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data):
+def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data,mode):
     writer = UnicodeWriter(csvfile,delimiter=',', lineterminator='\n')
     utc_time = datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC'))
     europe_time = utc_time.astimezone(tz.gettz('Europe/Amsterdam'))
 
     first_row = list(HEADER)
-    guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message]
+    if mode == 'production_patreon': guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message,"patreon"]
+    else: guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message,"no patreon"]
     first_row[0:len(guild_wide_data)] = guild_wide_data
     writer.writerow(first_row)
 
