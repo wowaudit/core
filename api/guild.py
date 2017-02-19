@@ -39,15 +39,18 @@ class Guild(object):
                 data, result_code, member, realm = user.result()
                 count += 1
 
-                if result_code == 200 and len(loads(data)) > 0:
-                    processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region,self.new_snapshot)
-                    self.csv_data.append(processed_data)
-                    self.spec_data.append(processed_spec_data)
-                    if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
-                    #print u'Progress: {0}/{1}'.format(count,len(self.members))
+                if data:
+                    if result_code == 200 and len(loads(data)) > 0:
+                        processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region,self.new_snapshot)
+                        self.csv_data.append(processed_data)
+                        self.spec_data.append(processed_spec_data)
+                        if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
+                        #print u'Progress: {0}/{1}'.format(count,len(self.members))
+                    else:
+                        self.wrong_users.append(member.user_id)
+                        #print u'Skipped one due to a query error. Progress: {0}/{1}'.format(count,len(self.members))
                 else:
                     self.wrong_users.append(member.user_id)
-                    #print u'Skipped one due to a query error. Progress: {0}/{1}'.format(count,len(self.members))
 
         self.generate_warnings()
         self.update_users_in_db()
