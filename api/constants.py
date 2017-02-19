@@ -6,7 +6,7 @@
 # Production mode: regular mode used in production
 MODES = ["debug","production","production_patreon","warcraftlogs","snapshot_US","snapshot_EU"]
 
-CURRENT_VERSION = "1.0"
+CURRENT_VERSION = "2"
 CYCLE_MINIMUM = 120 #seconds
 MAXIMUM_RUNTIME = 3500 #seconds
 MAX_ALLOCATED = 25 #guilds
