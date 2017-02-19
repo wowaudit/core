@@ -85,8 +85,10 @@ class Scraper(object):
         count = 0
         for guild in self.guilds:
             count += 1
-            guild.update_warcraftlogs()
-            print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+            if self.ids:
+                if str(guild.guild_id) in self.ids:
+                    guild.update_warcraftlogs()
+                    print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
 
 
 

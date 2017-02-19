@@ -166,7 +166,8 @@ class Guild(object):
         base_spec_query = 'UPDATE users SET warcraftlogs = CASE '
         try:
             for member in self.processed_data:
-                output = {'character_id': self.processed_data[member]['warcraftlogs_id'],
+                try:
+                    output = {'character_id': self.processed_data[member]['warcraftlogs_id'],
                           'best_3': [],
                           'best_4': [],
                           'best_5': [],
@@ -177,21 +178,22 @@ class Guild(object):
                           'average_4': [],
                           'average_5': []}
 
-                #Ugliest code in the history of the world, needs refactor badly (had issues with ordering of output string)
-                for raid_order in range(1,len(VALID_RAIDS)+1):
-                    for raid in VALID_RAIDS:
-                        if VALID_RAIDS[raid]['raid_order'] == raid_order:
-                            for order in range(1,len(VALID_RAIDS[raid]['encounters'])+1):
-                                for encounter in VALID_RAIDS[raid]['encounters']:
-                                    if encounter['order'] == order:
-                                        for difficulty in self.processed_data[member][encounter['name']]:
-                                            for metric in ['best','median','average']:
-                                                if difficulty in RAID_DIFFICULTIES:
-                                                    try: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],self.processed_data[member][encounter['name']][difficulty][metric]))
-                                                    except: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],'-'))
+                    #Ugliest code in the history of the world, needs refactor badly (had issues with ordering of output string)
+                    for raid_order in range(1,len(VALID_RAIDS)+1):
+                        for raid in VALID_RAIDS:
+                            if VALID_RAIDS[raid]['raid_order'] == raid_order:
+                                for order in range(1,len(VALID_RAIDS[raid]['encounters'])+1):
+                                    for encounter in VALID_RAIDS[raid]['encounters']:
+                                        if encounter['order'] == order:
+                                            for difficulty in self.processed_data[member][encounter['name']]:
+                                                for metric in ['best','median','average']:
+                                                    if difficulty in RAID_DIFFICULTIES:
+                                                        try: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],self.processed_data[member][encounter['name']][difficulty][metric]))
+                                                        except: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],'-'))
 
-                base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(self.members[member]   .user_id,dumps(output).replace("'","\\'"))
+                    base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(self.members[member]   .user_id,dumps(output).replace("'","\\'"))
+                except: pass
 
             execute_query(base_spec_query + ' ELSE warcraftlogs END',False)
 
-        except: pass
+        except: print 'Encountered an error in adding WCL data of guild with iD {0} to the database.'.format(self.guild_id)
