@@ -52,6 +52,7 @@ class Guild(object):
         self.generate_warnings()
         self.update_users_in_db()
         if len(self.csv_data) > 0:
+            print "{0} members were not scraped. Guild ID: {1}".format(len(self.members) - len(self.csv_data),self.guild_id)
             self.write()
         else:
             print 'Not writing a new csv file for this guild, the check of all {0} members returned an error.'.format(len(self.wrong_users))
