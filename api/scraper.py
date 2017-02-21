@@ -52,9 +52,8 @@ class Scraper(object):
         count = 0
         for guild in self.guilds:
             count += 1
-            if time.time() - self.start_time >= MAXIMUM_RUNTIME: return False
-
-            if self.mode in ['production','production_patreon','snapshot_US','snapshot_EU']:
+            if self.mode in ['production','production_patreon']:
+                if time.time() - self.start_time >= MAXIMUM_RUNTIME: return False
                 if self.ids:
                     if str(guild.guild_id) in self.ids:
                         try:
@@ -69,6 +68,21 @@ class Scraper(object):
                     except:
                         print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
 
+            if self.mode in ['snapshot_US','snapshot_EU']:
+                if guild.region == self.mode.split('_')[1]:
+                    if self.ids:
+                        if str(guild.guild_id) in self.ids:
+                            try:
+                                guild.check()
+                                print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                            except:
+                                print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                    else:
+                        try:
+                            guild.check()
+                            print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                        except:
+                            print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
 
             if self.mode == 'debug':
                 if self.ids:
