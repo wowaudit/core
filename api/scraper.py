@@ -28,9 +28,12 @@ class Scraper(object):
             key_code = member[4]
 
             if key_code not in self.done:
-                if self.mode == 'snapshot_EU': self.guilds.append(Guild(member,mode,'EU'))
-                elif self.mode == 'snapshot_US': self.guilds.append(Guild(member,mode,'US'))
-                else: self.guilds.append(Guild(member,mode))
+                if self.mode == 'snapshot_EU':
+                    self.guilds.append(Guild(member,mode,'EU'))
+                elif self.mode == 'snapshot_US':
+                    self.guilds.append(Guild(member,mode,'US'))
+                else:
+                    wself.guilds.append(Guild(member,mode))
                 self.done[key_code] = count
                 count += 1
             else: self.guilds[self.done[key_code]].add_member(member)
@@ -42,7 +45,11 @@ class Scraper(object):
             execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id IN ({1})'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join([str(guild.guild_id) for guild in self.guilds])))
 
     def run(self):
-        if self.mode in ['debug','production','production_patreon','snapshot_EU','snapshot_US']:
+        if self.mode in ['debug','production','production_patreon']:
+            return self.check_all()
+
+        if self.mode in ['snapshot_EU','snapshot_US']:
+            execute_query('UPDATE users SET weekly_snapshot = \'\' WHERE guild_id IN (SELECT guild_id from guilds WHERE region = \'{0}\')'.format(self.mode.split("_")[1]))
             return self.check_all()
 
         if self.mode == "warcraftlogs":

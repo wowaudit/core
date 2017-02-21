@@ -50,6 +50,6 @@ while keep_going:
             time.sleep(sleep_duration)
         else: keep_going = False
     if mode == 'debug': keep_going = True
-    if amount == 'single': keep_going = False
+    if amount == 'single' or mode in ['snapshot_US','snapshot_EU']: keep_going = False
 
 print '{0}. Aborting now.'.format('Reached the maximum runtime' if (time.time() + sleep_duration) - start_time >= MAXIMUM_RUNTIME else 'Done')
