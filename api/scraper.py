@@ -2,6 +2,7 @@
 from guild import Guild
 from execute_query import execute_query
 from constants import *
+from dateutil import tz
 from auth import WCL_KEY
 from json import loads
 import time, requests, datetime
@@ -65,15 +66,19 @@ class Scraper(object):
                     if str(guild.guild_id) in self.ids:
                         try:
                             guild.check()
-                            print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                            print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing. Total time since last refresh was {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                   guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
                         except:
-                            print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                            print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Total time since last refresh is {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                   guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
                 else:
                     try:
                         guild.check()
-                        print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                        print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing. Total time since last refresh was {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                               guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
                     except:
-                        print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                        print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Total time since last refresh is {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                               guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
 
             if self.mode in ['snapshot_US','snapshot_EU']:
                 if guild.region == self.mode.split('_')[1]:
@@ -81,24 +86,30 @@ class Scraper(object):
                         if str(guild.guild_id) in self.ids:
                             try:
                                 guild.check()
-                                print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                                print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing. Total time since last refresh was {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                       guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
                             except:
-                                print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                                print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Total time since last refresh is {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                       guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
                     else:
                         try:
                             guild.check()
-                            print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                            print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing. Total time since last refresh was {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                   guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
                         except:
-                            print 'Encountered an error when checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                            print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Total time since last refresh is {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                   guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
 
             if self.mode == 'debug':
                 if self.ids:
                     if str(guild.guild_id) in self.ids:
                         guild.check()
-                        print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                        print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing. Total time since last refresh was {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                               guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
                 else:
                     guild.check()
-                    print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                    print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing. Total time since last refresh was {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                           guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
 
         return True
 

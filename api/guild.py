@@ -3,6 +3,7 @@ from member import Member
 from constants import *
 from auth import API_KEY, WCL_KEY, PATH_TO_CSV
 from concurrent import futures
+from dateutil import tz
 import requests, datetime, sys
 from execute_query import execute_query
 from writer import write_csv
@@ -23,7 +24,7 @@ class Guild(object):
 
     def add_member(self, data):
         name = data[7]
-        if name not in self.members: self.members[name] = Member(data)
+        if name not in self.members: self.members[name] = Member(data,self.guild_id)
         if self.members[name].status == 'not tracking': self.tracking_all = False
 
     def check(self):
@@ -45,20 +46,24 @@ class Guild(object):
                         self.csv_data.append(processed_data)
                         self.spec_data.append(processed_spec_data)
                         if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
-                        #print u'Progress: {0}/{1}'.format(count,len(self.members))
                     else:
                         self.wrong_users.append(member.user_id)
-                        #print u'Skipped one due to a query error. Progress: {0}/{1}'.format(count,len(self.members))
+                        print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                               self.guild_id,member.user_id,result_code)
                 else:
                     self.wrong_users.append(member.user_id)
+                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                           self.guild_id,member.user_id,result_code)
 
         self.generate_warnings()
         self.update_users_in_db()
         if len(self.csv_data) > 0:
-            print "{0} members out of {1} were not scraped. Guild ID: {2}".format(len(self.members) - len(self.csv_data),len(self.members),self.guild_id)
+            print '[INFO] [{0}][Guild ID: {1}] - Total Members: {2} | Members Refreshed: {3} | Result: {4}{5} success'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                self.guild_id,len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%")
             self.write()
         else:
-            print 'Not writing a new csv file for this guild, the check of all {0} members returned an error.'.format(len(self.wrong_users))
+            print '[ERROR][{0}][Guild ID: {1}] - Total Members: {2} | Members Refreshed: {3} | Result: {4}{5} success'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                self.guild_id,len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%")
 
     def make_request_api(self,user,zone=0):
         if self.members[user].realm: realm = self.members[user].realm.encode('utf-8')
@@ -89,7 +94,8 @@ class Guild(object):
 
             if self.mode != 'debug':
                 execute_query(base_snapshot_query + ' ELSE weekly_snapshot END')
-                print 'Updated the weekly snapshot for the newly added users or because it is wednesday morning for guild with ID {0}.'.format(self.guild_id)
+                print '[INFO] [{0}][Guild ID: {1}] - Updated snapshots for {2} users'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                    self.guild_id,len(self.snapshot_data))
 
         if len(self.spec_data) > 0:
 
@@ -121,7 +127,7 @@ class Guild(object):
 
     def write(self):
         with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
-            write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode)
+            write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode,self.guild_id)
 
     def update_warcraftlogs(self):
         count = 0

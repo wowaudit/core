@@ -76,3 +76,5 @@ ROLES = {'Tank':{'Death Knight':[1],'Monk':[1],'Paladin':[2],'Warrior':[3],'Drui
 DEFAULT_ROLES = {'Death Knight':'Melee','Monk':'Melee','Paladin':'Melee','Warrior':'Melee','Druid':'Melee', \
                  'Demon Hunter':'Melee','Priest':'Ranged','Warlock':'Ranged','Mage':'Ranged','Rogue':'Melee', \
                  'Shaman':'Ranged','Hunter':'Ranged'}
+
+TIME_ZONE = 'Europe/Amsterdam'

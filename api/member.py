@@ -2,15 +2,17 @@
 from constants import *
 import time, datetime
 from execute_query import execute_query
+from dateutil import tz
 from json import loads, dumps
 
 class Member(object):
 
-    def __init__(self,data):
+    def __init__(self,data,guild_id):
         self.user_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
         self.tier_data, self.status, self.warcraftlogs = data[6:]
         self.name = self.name.encode('utf-8')
         self.realm = self.realm
+        self.guild_id = guild_id
 
         self.legendaries = []
         if self.legendary_snapshot:
@@ -81,7 +83,10 @@ class Member(object):
         try:
             ROLES[self.role][CLASSES[data['class']]]
             self.processed_data['role'] = self.role
-        except: self.processed_data['role'] = DEFAULT_ROLES[CLASSES[data['class']]]
+        except:
+            self.processed_data['role'] = DEFAULT_ROLES[CLASSES[data['class']]]
+            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Role set incorrectly for this user. Falling back to default for the class'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                   self.guild_id,self.user_id)
 
     def process_gear_data(self,data):
         self.worst_gem = []
