@@ -53,6 +53,7 @@ class Guild(object):
                         if member.last_refresh:
                                 try:
                                     self.csv_data.append(loads(member.last_refresh))
+                                    self.csv_data[-1][0] = member.name
                                 except:
                                     print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                                                  self.guild_id,member.user_id,member.last_refresh)
@@ -64,6 +65,7 @@ class Guild(object):
                     if member.last_refresh:
                         try:
                             self.csv_data.append(loads(member.last_refresh))
+                            self.csv_data[-1][0] = member.name
                         except:
                             print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                                          self.guild_id,member.user_id,member.last_refresh)
