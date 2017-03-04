@@ -48,16 +48,26 @@ class Guild(object):
                         if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
                     else:
                         self.wrong_users.append(member.user_id)
-                        if member.last_refresh:
-                            self.csv_data.append(loads(member.last_refresh))
                         print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                                self.guild_id,member.user_id,result_code)
+                        if member.last_refresh:
+                                try:
+                                    self.csv_data.append(loads(member.last_refresh))
+                                except:
+                                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                                 self.guild_id,member.user_id,member.last_refresh)
+                                    if self.mode == 'debug': raise Exception
                 else:
-                    if member.last_refresh:
-                        self.csv_data.append(loads(member.last_refresh))
                     self.wrong_users.append(member.user_id)
                     print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                            self.guild_id,member.user_id,result_code)
+                    if member.last_refresh:
+                        try:
+                            self.csv_data.append(loads(member.last_refresh))
+                        except:
+                            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                         self.guild_id,member.user_id,member.last_refresh)
+                            if self.mode == 'debug': raise Exception
 
         self.generate_warnings()
         self.update_users_in_db()
