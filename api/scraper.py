@@ -17,11 +17,11 @@ class Scraper(object):
         self.start_time = start_time
         if self.mode == 'production_patreon':
             data = execute_query('SELECT guilds.guild_id, guilds.name, guilds.region, guilds.realm, guilds.key_code, guilds.last_checked, users.user_id, users.name, users.role, users.weekly_snapshot ' + \
-                                 ', users.legendaries, users.realm, users.per_spec, users.tier_data, users.status, users.warcraftlogs FROM guilds, users WHERE guilds.guild_id = users.guild_id AND guilds.patreon = 1 ORDER BY guilds.last_checked ASC')
+                                 ', users.legendaries, users.realm, users.per_spec, users.tier_data, users.status, users.warcraftlogs, users.last_refresh FROM guilds, users WHERE guilds.guild_id = users.guild_id AND guilds.patreon = 1 ORDER BY guilds.last_checked ASC')
 
         else:
             data = execute_query('SELECT guilds.guild_id, guilds.name, guilds.region, guilds.realm, guilds.key_code, guilds.last_checked, users.user_id, users.name, users.role, users.weekly_snapshot ' + \
-                                 ', users.legendaries, users.realm, users.per_spec, users.tier_data, users.status, users.warcraftlogs FROM guilds, users WHERE guilds.guild_id = users.guild_id ORDER BY guilds.last_checked ASC')
+                                 ', users.legendaries, users.realm, users.per_spec, users.tier_data, users.status, users.warcraftlogs, users.last_refresh FROM guilds, users WHERE guilds.guild_id = users.guild_id ORDER BY guilds.last_checked ASC')
 
         count = 0
         for member in data:

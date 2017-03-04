@@ -45,7 +45,7 @@ HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_i
          'achievement_points','mounts','exalted_amount','unique_pets','lvl_25_pets','realm','legendary_list','neck_enchant','back_enchant','finger1_enchant','finger2_enchant','gem_list', \
          'tier_head','tier_shoulder','tier_back','tier_chest','tier_hands','tier_legs','ap_obtained_total','ap_this_week','spec1_traits','spec1_ilvl',\
          'spec2_traits','spec2_ilvl','spec3_traits','spec3_ilvl','spec4_traits','spec4_ilvl','current_spec_name','highest_ilvl_ever_equipped','main_spec','Cathedral of Eternal Night', \
-         'WCL_id','WCL_Normal_best','WCL_Normal_median','WCL_Normal_average','WCL_Heroic_best','WCL_Heroic_median','WCL_Heroic_average','WCL_Mythic_best','WCL_Mythic_median','WCL_Mythic_average']
+         'WCL_id','WCL_Normal_best','WCL_Normal_median','WCL_Normal_average','WCL_Heroic_best','WCL_Heroic_median','WCL_Heroic_average','WCL_Mythic_best','WCL_Mythic_median','WCL_Mythic_average','user_id']
 RELIC_ILVL = {2:690,3:695,4:700,5:705,7:710,8:715,9:720,10:725,12:730,13:735,14:740,15:745,17:750,18:755,19:760,21:765, \
                22:770,23:775,24:780,26:785,27:790,28:795,29:800,31:805,32:810,33:815,35:820,36:825,37:830,39:835,40:840,42:845,43:850,45:855,46:860,48:865,49:870,51:875, \
                52:880,53:885,55:890,56:895,58:900,59:905,61:910,62:915,64:920,65:925}

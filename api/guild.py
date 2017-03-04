@@ -48,9 +48,13 @@ class Guild(object):
                         if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
                     else:
                         self.wrong_users.append(member.user_id)
+                        if member.last_refresh:
+                            self.csv_data.append(loads(member.last_refresh))
                         print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                                self.guild_id,member.user_id,result_code)
                 else:
+                    if member.last_refresh:
+                        self.csv_data.append(loads(member.last_refresh))
                     self.wrong_users.append(member.user_id)
                     print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                            self.guild_id,member.user_id,result_code)
@@ -107,7 +111,11 @@ class Guild(object):
             for member in self.spec_data:
                 base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(member[0],dumps(member[2]))
 
-            base_spec_query += ' ELSE tier_data END, status = CASE '
+            base_spec_query += ' ELSE tier_data END, last_refresh = CASE '
+            for member in self.csv_data:
+                base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(member[HEADER.index('user_id')],dumps(member).replace("'","\\'"))
+
+            base_spec_query += ' ELSE last_refresh END, status = CASE '
             for member in self.spec_data:
                 base_spec_query += 'WHEN user_id = {0} THEN \'tracking\' '.format(member[0])
 
