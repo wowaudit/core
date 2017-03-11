@@ -87,7 +87,7 @@ class Guild(object):
 
         if self.mode == 'warcraftlogs':
             metric = 'hps' if self.members[user].role == 'Heal' else 'dps'
-            response = requests.get(WCL_URL.format(self.members[user].name.encode('utf-8'),realm.replace("'","").replace(" ","-").replace("(","").replace(")","").encode('utf-8'),self.region,zone,metric,WCL_KEY).replace(" ","%20"))
+            response = requests.get(WCL_URL.format(self.members[user].name.encode('utf-8'),realm.replace("'","").replace("-","").replace(" ","-").replace("(","").replace(")","").encode('utf-8'),self.region,zone,metric,WCL_KEY).replace(" ","%20"))
         else:
             response = requests.get(URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY).replace(" ","%20"))
 
