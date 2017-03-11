@@ -11,7 +11,7 @@ def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data
     miss = 0
     first_row = list(HEADER)
     if mode == 'production_patreon': guild_wide_data = [datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message,"patreon"]
-    else: guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message,"no patreon"]
+    else: guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name.encode('utf-8'),realm.encode('utf-8'),region,version_message,warning_message,"no patreon"]
     first_row[0:len(guild_wide_data)] = guild_wide_data
     writer.writerow(first_row)
 
@@ -20,11 +20,10 @@ def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data
     for row in csv_data:
         new_row = []
         for i in row:
-            if isinstance(i,int) or isinstance(i,float):
-                new_row.append(unicode(i))
+            if isinstance(i,unicode):
+                new_row.append(i.encode('utf-8'))
             else:
-                try: new_row.append(i.encode('utf-8'))
-                except: new_row.append(i)
+                new_row.append(str(i))
 
         if len(new_row) == len(HEADER): writer.writerow(new_row)
         else:

@@ -10,8 +10,6 @@ class Member(object):
     def __init__(self,data,guild_id):
         self.user_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
         self.tier_data, self.status, self.warcraftlogs, self.last_refresh = data[6:]
-        self.name = self.name.encode('utf-8')
-        self.realm = self.realm
         self.guild_id = guild_id
 
         self.legendaries = []

@@ -4,7 +4,7 @@ from auth import HOST, PORT, USER, PASSWORD, DB
 def execute_query(query,vital=True,level=0):
     ''' Executes any given query. Vital queries will be retried upon failure until they succeed. '''
 
-    db = MySQLdb.connect(host=HOST,port=PORT,user=USER,passwd=PASSWORD,db=DB,charset='utf8')
+    db = MySQLdb.connect(host=HOST,port=PORT,user=USER,passwd=PASSWORD,db=DB,charset='utf8',use_unicode=True)
 
     try:
         cursor = db.cursor()

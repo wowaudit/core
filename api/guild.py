@@ -17,8 +17,8 @@ class Guild(object):
         self.tracking_all = True
         self.members = {}
         self.add_member(data)
-        self.name = self.name.encode('utf-8')
-        self.realm = self.realm.encode('utf-8')
+        self.name = self.name
+        self.realm = self.realm
         self.mode = mode
         self.new_snapshot = new_snapshot
 
@@ -51,13 +51,13 @@ class Guild(object):
                         print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                                self.guild_id,member.user_id,result_code)
                         if member.last_refresh:
-                                try:
-                                    self.csv_data.append(loads(member.last_refresh))
-                                    self.csv_data[-1][0] = member.name
-                                except:
-                                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                                                 self.guild_id,member.user_id,member.last_refresh)
-                                    if self.mode == 'debug': raise Exception
+                            try:
+                                self.csv_data.append(loads(member.last_refresh))
+                                self.csv_data[-1][0] = member.name
+                            except:
+                                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                             self.guild_id,member.user_id,member.last_refresh)
+                                if self.mode == 'debug': raise Exception
                 else:
                     self.wrong_users.append(member.user_id)
                     print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
@@ -82,15 +82,14 @@ class Guild(object):
                 self.guild_id,len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%")
 
     def make_request_api(self,user,zone=0):
-        if self.members[user].realm: realm = self.members[user].realm.encode('utf-8')
+        if self.members[user].realm: realm = self.members[user].realm
         else: realm = self.realm
 
         if self.mode == 'warcraftlogs':
             metric = 'hps' if self.members[user].role == 'Heal' else 'dps'
-            print WCL_URL.format(self.members[user].name,realm.replace("'","").replace(" ","-").replace("(","").replace(")",""),self.region,zone,metric,WCL_KEY).replace(" ","%20")
-            response = requests.get(WCL_URL.format(self.members[user].name,realm.replace("'","").replace(" ","-").replace("(","").replace(")",""),self.region,zone,metric,WCL_KEY).replace(" ","%20"))
+            response = requests.get(WCL_URL.format(self.members[user].name.encode('utf-8'),realm.replace("'","").replace(" ","-").replace("(","").replace(")","").encode('utf-8'),self.region,zone,metric,WCL_KEY).replace(" ","%20"))
         else:
-            response = requests.get(URL.format(self.region,realm,self.members[user].name,API_KEY).replace(" ","%20"))
+            response = requests.get(URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY).replace(" ","%20"))
 
         return (response.text,response.status_code,self.members[user],realm)
 
@@ -178,19 +177,19 @@ class Guild(object):
 
     def prepare_warcraftlogs_data(self,data,member):
         for encounter in data:
-            self.processed_data[member.name.decode('utf-8')]['warcraftlogs_id'] = encounter['specs'][0]['data'][0]['character_id']
+            self.processed_data[member.name]['warcraftlogs_id'] = encounter['specs'][0]['data'][0]['character_id']
             stored = False
             for spec in encounter['specs']:
                 if spec['spec'] == member.role:
-                    self.processed_data[member.name.decode('utf-8')][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
+                    self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
                     stored = True
                     break
                 elif spec['spec'] in WCL_ROLES_TO_SPEC_MAP[member.role]:
-                    self.processed_data[member.name.decode('utf-8')][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
+                    self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
                     stored = True
                     break
             if not stored:
-                self.processed_data[member.name.decode('utf-8')][encounter['name']][encounter['difficulty']].update({'best': '-', 'median': '-', 'average': '-'})
+                self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': '-', 'median': '-', 'average': '-'})
 
 
     def process_warcraftlogs_data(self):
