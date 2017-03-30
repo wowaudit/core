@@ -75,7 +75,7 @@ $guild_name = $_POST['guild_name'];
 
 if (in_array(strtolower($_POST['guild_realm']),$valid_realms) && 0 < strlen($guild_name) && strlen($guild_name) < 25) {
 
-$url = str_replace(" ","%20","https://" . $_POST['guild_region'] . ".api.battle.net/wow/guild/" . $_POST['guild_realm'] . "/" . $guild_name . "?locale=en_GB&apikey=xg7qvw9t36rdvwh8u67smuu5v8rbrvge");
+$url = str_replace(" ","%20","https://" . $_POST['guild_region'] . ".api.battle.net/wow/guild/" . $_POST['guild_realm'] . "/" . $guild_name . "?locale=en_GB&apikey=XXX");
 
 $curlSession = curl_init();
 curl_setopt($curlSession, CURLOPT_VERBOSE, true);
