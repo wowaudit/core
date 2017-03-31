@@ -53,7 +53,8 @@ ENCHANTS = {'finger1':{5423:(1,"+150 Crit"),5424:(1,"+150 Haste"),5425:(1,"+150 
              5430:(2,"+200 Versatility")},'finger2':{5423:(1,"+150 Crit"),5424:(1,"+150 Haste"),5425:(1,"+150 Mastery"),5426:(1,"+150 Versatility"),5427:(2,"+200 Crit"),5428:(2,"+200 Haste"),5429:(2,"+200 Mastery"), \
              5430:(2,"+200 Versatility")},'back':{5431:(1,"+150 Strength"),5432:(1,"+150 Agility"),5433:(1,"+150 Intellect"),5434:(2,"+200 Strength"),5435:(2,"+200 Agility"), \
              5436:(2,"+200 Intellect")},'neck':{5437:(2,"Mark of the Claw"),5438:(2,"Mark of the Distant Army"),5439:(2,"Mark of the Hidden Satyr"), \
-             5889:(2,"Mark of the Heavy Hide"),5890:(2,"Mark of the Trained Soldier"),5891:(2,"Mark of the Ancient Priestess")}}
+             5889:(2,"Mark of the Heavy Hide"),5890:(2,"Mark of the Trained Soldier"),5891:(2,"Mark of the Ancient Priestess"),5898:(2,"Mark of the Deadly"), \
+             5895:(2,"Mark of the Master"), 5897:(2,"Mark of the Quick"), 5896:(2,"Mark of the Versatile")}}
 GEMS = {130218:1,130217:1,130216:1,130215:1,130219:2,130220:2,130221:2,130222:2,130246:3,130247:3,130248:3} #1 = 100, 2 = 150, 3 = epic unique
 
 ARTIFACTS = {'Ulthalesh, the Deadwind Harvester':('Affliction',1),'Scepter of Sargeras':('Destruction',2),"Skull of the Man'ari":('Demonology',3), \
