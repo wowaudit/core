@@ -256,17 +256,23 @@ class Member(object):
         self.processed_data['wqs_this_week'] = 0 if self.wq_snapshot == 'not there' else wq_amount-self.wq_snapshot
 
     def process_legendary_data(self,data):
-        flag = False
-        for legendary in self.legendaries_equipped:
-            if legendary not in self.legendaries:
-                flag = True
-        if flag:
-            all_legendaries = set(self.legendaries_equipped + self.legendaries)
-            execute_query('UPDATE users SET legendaries = \'{0}\' WHERE user_id = \'{1}\''.format('|'.join(all_legendaries).replace("'","\\'").decode('utf-8'),self.user_id))
-        else: all_legendaries = self.legendaries
+        try:
+            flag = False
+            for legendary in self.legendaries_equipped:
+                if legendary not in self.legendaries:
+                    flag = True
+            if flag:
+                all_legendaries = set(self.legendaries_equipped + self.legendaries)
+                execute_query('UPDATE users SET legendaries = \'{0}\' WHERE user_id = \'{1}\''.format('|'.join(all_legendaries).replace("'","\\'"),self.user_id))
+            else: all_legendaries = self.legendaries
 
-        self.processed_data['legendary_amount'] = len(all_legendaries)
-        self.processed_data['legendary_list'] = '|'.join(all_legendaries)
+            self.processed_data['legendary_amount'] = len(all_legendaries)
+            self.processed_data['legendary_list'] = '|'.join(all_legendaries)
+
+        #Taiwanese guilds can't handle legendaries for now (TODO)
+        except:
+            self.processed_data['legendary_amount'] = 0
+            self.processed_data['legendary_list'] = ''
 
     def process_nocombat_data(self,data):
         self.processed_data['achievement_points'] = data['achievementPoints']
