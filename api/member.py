@@ -111,7 +111,7 @@ class Member(object):
                 self.processed_data[item + '_quality'] = data['items'][item]['quality']
 
                 if data['items'][item]['itemLevel'] >= 800 and data['items'][item]['quality'] == 5:
-                    self.legendaries_equipped.append('{0}_{1}'.format(data['items'][item]['id'],data['items'][item]['name']))
+                    self.legendaries_equipped.append('{0}_{1}'.format(data['items'][item]['id'],data['items'][item]['name'].encode('utf-8')))
 
             except KeyError:
                 self.processed_data[item + '_ilvl'] = ''

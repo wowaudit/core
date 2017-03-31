@@ -4,7 +4,7 @@ from constants import *
 from auth import API_KEY, WCL_KEY, PATH_TO_CSV
 from concurrent import futures
 from dateutil import tz
-import requests, datetime, sys
+import requests, datetime, sys, copy
 from execute_query import execute_query
 from writer import write_csv
 from json import loads, dumps
@@ -37,7 +37,15 @@ class Guild(object):
         with futures.ThreadPoolExecutor(max_workers=20) as executor:
             tasks = dict((executor.submit(self.make_request_api, user), user) for user in self.members)
             for user in futures.as_completed(tasks):
-                data, result_code, member, realm = user.result()
+                try: data, result_code, member, realm = user.result()
+                except:
+                    data = False
+                    result_code = 'N/A'
+                    member = copy.deepcopy(self.members[self.members.keys()[0]])
+                    member.user_id = 'N/A'
+                    member.last_refresh = False
+                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Internal Futures error.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                           self.guild_id,member.user_id)
                 count += 1
 
                 if data:
