@@ -258,11 +258,11 @@ class Member(object):
     def process_legendary_data(self,data):
         flag = False
         for legendary in self.legendaries_equipped:
-            if legendary not in self.legendaries:
+            if legendary.encode('utf-8') not in self.legendaries:
                 flag = True
         if flag:
             all_legendaries = set(self.legendaries_equipped + self.legendaries)
-            execute_query('UPDATE users SET legendaries = \'{0}\' WHERE user_id = \'{1}\''.format('|'.join(all_legendaries).replace("'","\\'"),self.user_id))
+            execute_query('UPDATE users SET legendaries = \'{0}\' WHERE user_id = \'{1}\''.format('|'.join(all_legendaries).replace("'","\\'").encode('utf-8'),self.user_id))
         else: all_legendaries = self.legendaries
 
         self.processed_data['legendary_amount'] = len(all_legendaries)
