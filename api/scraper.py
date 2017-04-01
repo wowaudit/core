@@ -25,13 +25,15 @@ class Scraper(object):
 
     def allocate(self):
         allocations = MAX_ALLOCATED if self.mode not in ['snapshot_EU','snapshot_US','warcraftlogs'] else 1000000
-        guild_data = [str(guild[0]) for guild in execute_query('SELECT guild_id FROM guilds WHERE patreon = {0} {1} ORDER BY last_checked ASC LIMIT {2}'.format(1 if self.mode == 'production_patreon' else 'patreon', 'AND last_checked > 0' if self.mode == 'debug' else '', allocations))]
+        result = execute_query('SELECT guild_id, last_checked FROM guilds WHERE patreon = {0} {1} ORDER BY last_checked ASC LIMIT {2}'.format(1 if self.mode == 'production_patreon' else 'patreon', 'AND last_checked > 0' if self.mode == 'debug' else '', allocations))
+        guild_data = [str(guild[0]) for guild in result]
+        last_refreshed = [int(guild[1]) for guild in result]
 
         if self.mode in ['production','production_patreon']:
             execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id IN ({1})'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(guild_data)))
 
-        print '[INFO] [{0}] - Allocated and going to refresh the following guild IDs: {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-               ', '.join(guild_data))
+        print '[INFO] [{0}] - Allocated and going to refresh {1} guilds. Time since last refresh: Lowest {2} seconds, Highest {3} seconds, Average {4} seconds. Guild IDs: {5}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+               allocations,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-max(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-min(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-(sum(last_refreshed) / float(len(last_refreshed))),0),', '.join(guild_data))
         self.fetch_select(guild_data)
 
     def store(self,data):
@@ -75,8 +77,8 @@ class Scraper(object):
     def check_single(self,guild,retry=False):
         try:
             guild.check()
-            print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing. Total time since last refresh was {2} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                   guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0))
+            print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                   guild.guild_id)
         except Exception, e:
             if not retry:
                 guild.client = 'concurrent' if guild.client == 'tornado' else 'tornado'
@@ -84,8 +86,8 @@ class Scraper(object):
                        guild.guild_id,guild.client,repr(e))
                 self.check_single(guild,True)
             else:
-                print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Total time since last refresh was {2} seconds. Error: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       guild.guild_id,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-guild.last_checked,0),repr(e))
+                print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Error: {2}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                       guild.guild_id,repr(e))
 
 
     def check_warcraftlogs(self):
