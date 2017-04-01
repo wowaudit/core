@@ -44,7 +44,7 @@ class Scraper(object):
                 elif self.mode == 'snapshot_US':
                     self.guilds.append(Guild(member,self.mode,self.client,'US'))
                 else:
-                    self.guilds.append(Guild(member,self.mode,self.client,))
+                    self.guilds.append(Guild(member,self.mode,self.client))
                 self.done[key_code] = count
                 count += 1
             else: self.guilds[self.done[key_code]].add_member(member)
