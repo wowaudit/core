@@ -30,6 +30,8 @@ class Scraper(object):
         if self.mode in ['production','production_patreon']:
             execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id IN ({1})'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(guild_data)))
 
+        print '[INFO] [{0}] - Allocated and going to refresh the following guild IDs: {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+               ', '.join(guild_data))
         self.fetch_select(guild_data)
 
     def store(self,data):
