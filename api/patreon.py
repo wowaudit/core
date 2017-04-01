@@ -33,8 +33,13 @@ class Patreon():
         self.patreon_id = patreon_id
         self.active = active
         self.pledge = pledge
-        self.full_name = full_name
-        self.discord_name = discord_name
+        try:
+            self.full_name = full_name.encode('utf-8')
+        except: self.full_name = full_name.decode('utf-8').encode('utf-8')
+        try:
+            self.discord_name = discord_name.encode('utf-8')
+        except: self.discord_name = discord_name.decode('utf-8').encode('utf-8')
+
         self.guild_id = guild_id
         self.email = email
         self.manual = manual
