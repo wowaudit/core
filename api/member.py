@@ -12,6 +12,9 @@ class Member(object):
         self.tier_data, self.status, self.warcraftlogs, self.last_refresh = data[6:]
         self.guild_id = guild_id
 
+        #TODO: Strip whitespace on website instead
+        self.name = self.name.replace(' ','')
+
         self.legendaries = []
         if self.legendary_snapshot:
             for legendary in self.legendary_snapshot.split('|'):
