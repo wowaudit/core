@@ -182,6 +182,7 @@ class Guild(object):
 
     def update_warcraftlogs(self):
         self.success = 0
+        self.count = 0
         self.processed_data = {}
         for member in self.members:
             self.processed_data[member] = {}

@@ -44,22 +44,12 @@ except Exception:
 
 start_time = time.time()
 keep_going = True
-sleep_duration = 0
 while keep_going:
-    step_time = time.time()
     guilds = Scraper(mode,guild_ids,start_time,client)
     keep_going = guilds.run()
-
-    if time.time() - step_time < CYCLE_MINIMUM and keep_going:
-        sleep_duration = 3 + CYCLE_MINIMUM - (time.time() - step_time)
-
-        if (time.time() + sleep_duration) - start_time < MAXIMUM_RUNTIME and amount == 'multi':
-            print '[INFO] [{0}] - Full cycle complete faster than the minimum cycle time. Going to sleep for {1} seconds'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),round(sleep_duration,1))
-
-            time.sleep(sleep_duration)
-        else: keep_going = False
+    if time.time() - start_time > MAXIMUM_RUNTIME: keep_going = False
     if mode == 'debug': keep_going = True
     if amount == 'single' or mode in ['snapshot_US','snapshot_EU']: keep_going = False
 
-print '[INFO] [{0}] - {1}. Aborting now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),'Reached the maximum runtime' if (time.time() + sleep_duration) - start_time >= MAXIMUM_RUNTIME else 'Done')
+print '[INFO] [{0}] - {1}. Aborting now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),'Reached the maximum runtime' if (time.time() - start_time >= MAXIMUM_RUNTIME) else 'Done')
 
