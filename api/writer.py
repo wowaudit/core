@@ -7,10 +7,9 @@ def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data
     writer = UnicodeWriter(csvfile,delimiter=',', lineterminator='\n')
     utc_time = datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC'))
     europe_time = utc_time.astimezone(tz.gettz(TIME_ZONE))
-
     miss = 0
     first_row = list(HEADER)
-    if mode == 'production_patreon': guild_wide_data = [datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M'),name,realm,region,version_message,warning_message,"patreon"]
+    if mode == 'production_patreon': guild_wide_data = [datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M'),name.encode('utf-8'),realm.encode('utf-8'),region,version_message,warning_message,"patreon"]
     else: guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name.encode('utf-8'),realm.encode('utf-8'),region,version_message,warning_message,"no patreon"]
     first_row[0:len(guild_wide_data)] = guild_wide_data
     writer.writerow(first_row)

@@ -5,7 +5,7 @@ from constants import *
 from dateutil import tz
 from auth import WCL_KEY
 from json import loads
-import time, requests, datetime
+import time, requests, datetime, logging
 
 class Scraper(object):
 
@@ -79,15 +79,18 @@ class Scraper(object):
             guild.check()
             print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                    guild.guild_id)
-        except Exception, e:
+        except Exception as error:
+            logging.basicConfig(level=logging.DEBUG)
+            logger = logging.getLogger(__name__)
+            logger.exception(error)
             if not retry:
                 guild.client = 'concurrent' if guild.client == 'tornado' else 'tornado'
                 print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, trying with client {2} now. Error: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       guild.guild_id,guild.client,repr(e))
+                       guild.guild_id,guild.client,repr(error))
                 self.check_single(guild,True)
             else:
                 print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Error: {2}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       guild.guild_id,repr(e))
+                       guild.guild_id,repr(error))
 
 
     def check_warcraftlogs(self):
