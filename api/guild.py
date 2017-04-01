@@ -3,6 +3,7 @@ from member import Member
 from constants import *
 from auth import API_KEY, WCL_KEY, PATH_TO_CSV
 from concurrent import futures
+from tornado import ioloop, httpclient
 from dateutil import tz
 import requests, datetime, sys, copy
 from execute_query import execute_query
@@ -11,7 +12,7 @@ from json import loads, dumps
 
 class Guild(object):
 
-    def __init__(self, data, mode, new_snapshot=False):
+    def __init__(self, data, mode, client, new_snapshot=False):
         self.guild_id, self.name, self.region, self.realm, self.key_code, self.last_checked = data[:6]
         self.version_message = "{0}|Your spreadsheet is out of date. Make a copy of the new version on wow.vanlankveld.me.".format(CURRENT_VERSION)
         self.tracking_all = True
@@ -20,6 +21,7 @@ class Guild(object):
         self.name = self.name
         self.realm = self.realm
         self.mode = mode
+        self.client = client
         self.new_snapshot = new_snapshot
 
     def add_member(self, data):
@@ -32,53 +34,8 @@ class Guild(object):
         self.snapshot_data = []
         self.spec_data = []
         self.wrong_users = []
-        count = 0
-
-        with futures.ThreadPoolExecutor(max_workers=20) as executor:
-            tasks = dict((executor.submit(self.make_request_api, user), user) for user in self.members)
-            for user in futures.as_completed(tasks):
-                try: data, result_code, member, realm = user.result()
-                except:
-                    data = False
-                    result_code = 'N/A'
-                    member = copy.deepcopy(self.members[self.members.keys()[0]])
-                    member.user_id = 'N/A'
-                    member.last_refresh = False
-                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Internal Futures error.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                           self.guild_id,member.user_id)
-                count += 1
-
-                if data:
-                    if result_code == 200 and len(loads(data)) > 0:
-                        processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region,self.new_snapshot)
-                        self.csv_data.append(processed_data)
-                        self.spec_data.append(processed_spec_data)
-                        if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
-                    else:
-                        self.wrong_users.append(member.user_id)
-                        print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                               self.guild_id,member.user_id,result_code)
-                        if member.last_refresh:
-                            try:
-                                self.csv_data.append(loads(member.last_refresh))
-                                self.csv_data[-1][0] = member.name
-                            except:
-                                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                                             self.guild_id,member.user_id,member.last_refresh)
-                                if self.mode == 'debug': raise Exception
-                else:
-                    self.wrong_users.append(member.user_id)
-                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                           self.guild_id,member.user_id,result_code)
-                    if member.last_refresh:
-                        try:
-                            self.csv_data.append(loads(member.last_refresh))
-                            self.csv_data[-1][0] = member.name
-                        except:
-                            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                                         self.guild_id,member.user_id,member.last_refresh)
-                            if self.mode == 'debug': raise Exception
-
+        self.count = 0
+        self.with_concurrent() if self.client == 'concurrent' else self.with_tornado()
         self.generate_warnings()
         self.update_users_in_db()
         if len(self.csv_data) > 0:
@@ -89,17 +46,84 @@ class Guild(object):
             print '[ERROR][{0}][Guild ID: {1}] - Total Members: {2} | Members Refreshed: {3} | Result: {4}{5} success'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                 self.guild_id,len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%")
 
-    def make_request_api(self,user,zone=0):
+    def with_tornado(self,zone=0):
+        self.tornado_count = 0
+        self.tornado_results = []
+        self.tornado_params = []
+        http_client = httpclient.AsyncHTTPClient()
+        for user in self.members:
+            self.tornado_count += 1
+            url, realm = self.get_url(user,zone)
+            http_client.fetch(url, callback = lambda response, user=self.members[user], realm=realm: self.handle_request_tornado(response, user, realm), connect_timeout=400, request_timeout=400)
+
+        ioloop.IOLoop.instance().start()
+        for result in self.tornado_results:
+
+            self.process_result(result)
+
+    def handle_request_tornado(self, response, member, realm):
+        ''' Collects the response of each individual request. '''
+        self.tornado_results.append((response.body,response.code,member,realm))
+        self.tornado_count -= 1
+        if self.tornado_count == 0:
+            ioloop.IOLoop.instance().stop()
+
+    def with_concurrent(self,zone=0):
+        with futures.ThreadPoolExecutor(max_workers=10) as executor:
+            tasks = dict((executor.submit(self.handle_request_concurrent, user, zone), user) for user in self.members)
+            for user in futures.as_completed(tasks):
+                self.process_result(user.result())
+
+    def handle_request_concurrent(self,user,zone):
+        url, realm = self.get_url(user,zone)
+        response = requests.get(url)
+        return (response.text,response.status_code,self.members[user],realm)
+
+    def get_url(self,user,zone):
         if self.members[user].realm: realm = self.members[user].realm
         else: realm = self.realm
 
         if self.mode == 'warcraftlogs':
             metric = 'hps' if self.members[user].role == 'Heal' else 'dps'
-            response = requests.get(WCL_URL.format(self.members[user].name.encode('utf-8'),realm.replace("'","").replace("-","").replace(" ","-").replace("(","").replace(")","").encode('utf-8').replace("й","и"),self.region,zone,metric,WCL_KEY).replace(" ","%20"))
+            self.members[user].url = WCL_URL.format(self.members[user].name.encode('utf-8'),realm.replace("'","").replace("-","").replace(" ","-").replace("(","").replace(")","").encode('utf-8').replace("й","и"),self.region,zone,metric,WCL_KEY).replace(" ","%20")
         else:
-            response = requests.get(URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY).replace(" ","%20"))
+            self.members[user].url = URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY).replace(" ","%20")
+        return (self.members[user].url, realm)
 
-        return (response.text,response.status_code,self.members[user],realm)
+    def process_result(self, result):
+        data, result_code, member, realm = result
+        self.count += 1
+        if data:
+            if self.mode == 'warcraftlogs': return self.process_warcraftlogs_result(data, result_code, member)
+            if result_code == 200 and len(loads(data)) > 0:
+                processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region,self.new_snapshot)
+                self.csv_data.append(processed_data)
+                self.spec_data.append(processed_spec_data)
+                if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
+            else:
+                self.wrong_users.append(member.user_id)
+                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                       self.guild_id,member.user_id,result_code)
+                if member.last_refresh:
+                    try:
+                        self.csv_data.append(loads(member.last_refresh))
+                        self.csv_data[-1][0] = member.name
+                    except:
+                        print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                     self.guild_id,member.user_id,member.last_refresh)
+                        if self.mode == 'debug': raise Exception
+        else:
+            self.wrong_users.append(member.user_id)
+            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                   self.guild_id,member.user_id,result_code)
+            if member.last_refresh:
+                try:
+                    self.csv_data.append(loads(member.last_refresh))
+                    self.csv_data[-1][0] = member.name
+                except:
+                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                 self.guild_id,member.user_id,member.last_refresh)
+                    if self.mode == 'debug': raise Exception
 
     def generate_warnings(self):
         if not self.tracking_all:
@@ -157,8 +181,7 @@ class Guild(object):
             write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode,self.guild_id)
 
     def update_warcraftlogs(self):
-        count = 0
-        success = 0
+        self.success = 0
         self.processed_data = {}
         for member in self.members:
             self.processed_data[member] = {}
@@ -167,21 +190,18 @@ class Guild(object):
                     self.processed_data[member][encounter['name']] = {1:{'raid':raid},3:{'raid':raid},4:{'raid':raid},5:{'raid':raid}}
 
         for raid in VALID_RAIDS:
-            with futures.ThreadPoolExecutor(max_workers=20) as executor:
-                tasks = dict((executor.submit(self.make_request_api, user, VALID_RAIDS[raid]['id']), user) for user in self.members)
-                for user in futures.as_completed(tasks):
-                    data, result_code, member, realm = user.result()
-                    count += 1
+            self.with_tornado(VALID_RAIDS[raid]['id'])
 
-                    if result_code == 200 and len(loads(data)) > 0:
-                        try:
-                            self.prepare_warcraftlogs_data(loads(data),member)
-                            success += 1
-                        except: pass
-                    elif result_code != 200:
-                        print u'Skipped one due to a query error. Reason: {0} - Progress: {1}/{2}'.format(result_code,count,len(self.members)*len(VALID_RAIDS))
+        if self.success > 0: self.process_warcraftlogs_data()
 
-        if success > 0: self.process_warcraftlogs_data()
+    def process_warcraftlogs_result(self,data,result_code,member):
+        if result_code == 200 and len(loads(data)) > 0:
+            try:
+                self.prepare_warcraftlogs_data(loads(data),member)
+                self.success += 1
+            except: pass
+        elif result_code != 200:
+            print u'Skipped one due to a query error. Reason: {0} - Progress: {1}/{2}'.format(result_code,self.count,len(self.members)*len(VALID_RAIDS))
 
     def prepare_warcraftlogs_data(self,data,member):
         for encounter in data:

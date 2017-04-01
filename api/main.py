@@ -23,10 +23,12 @@ except Exception:
 
 try:
     amount = str(sys.argv[2])
+    client = 'concurrent' if amount == 'concurrent' else 'tornado'
     if amount != 'single' and amount != 'multi':
         amount = 'multi'
 except Exception:
     amount = 'multi'
+    client = 'tornado'
 
 if mode in ['production','production_patreon']:
     if amount == 'single':
@@ -45,7 +47,7 @@ keep_going = True
 sleep_duration = 0
 while keep_going:
     step_time = time.time()
-    guilds = Scraper(mode,guild_ids,start_time)
+    guilds = Scraper(mode,guild_ids,start_time,client)
     keep_going = guilds.run()
 
     if time.time() - step_time < CYCLE_MINIMUM and keep_going:
