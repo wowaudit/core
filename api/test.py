@@ -9,5 +9,6 @@ try:
 except Exception:
     guild_ids = False
 
-Scraper('warcraftlogs',guild_ids,time.time(),'tornado').run()
-
+start_time = time.time()
+while True:
+    Scraper('debug',guild_ids,start_time,'tornado').run()

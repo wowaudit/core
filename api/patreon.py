@@ -83,5 +83,8 @@ if __name__ == '__main__':
         else:
             query_update.append('({0},{1},{2},\'{3}\',\'{4}\',{5},\'{6}\',{7})'.format(*patreons.everyone[user].get_output()))
 
-    if query_new: execute_query('REPLACE INTO patreons (active,pledge,full_name,discord_name,guild_id,email,manual) VALUES ' + ','.join(query_new),False)
-    if query_update: execute_query('REPLACE INTO patreons VALUES ' + ','.join(query_update),False)
+    if query_new:
+        execute_query('REPLACE INTO patreons (active,pledge,full_name,discord_name,guild_id,email,manual) VALUES ' + ','.join(query_new),False)
+        print 'Added {0} new Patreons!'.format(len(query_new))
+    if query_update:
+        execute_query('REPLACE INTO patreons VALUES ' + ','.join(query_update),False)
