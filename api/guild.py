@@ -61,6 +61,7 @@ class Guild(object):
         for result in self.tornado_results:
             keep_going = self.process_result(result)
             if not keep_going: return False
+        return True
 
     def handle_request_tornado(self, response, member, realm):
         ''' Collects the response of each individual request. '''
@@ -75,6 +76,7 @@ class Guild(object):
             for user in futures.as_completed(tasks):
                 keep_going = self.process_result(user.result())
                 if not keep_going: return False
+        return True
 
     def handle_request_concurrent(self,user,zone):
         url, realm = self.get_url(user,zone)
