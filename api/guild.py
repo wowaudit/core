@@ -5,7 +5,7 @@ from auth import API_KEY, WCL_KEY, PATH_TO_CSV
 from concurrent import futures
 from tornado import ioloop, httpclient
 from dateutil import tz
-import requests, datetime, sys, copy
+import requests, datetime, sys, copy, time
 from execute_query import execute_query
 from writer import write_csv
 from json import loads, dumps
@@ -35,7 +35,8 @@ class Guild(object):
         self.spec_data = []
         self.wrong_users = []
         self.count = 0
-        self.with_concurrent() if self.client == 'concurrent' else self.with_tornado()
+        keep_going = self.with_concurrent() if self.client == 'concurrent' else self.with_tornado()
+        if not keep_going: return False
         self.generate_warnings()
         self.update_users_in_db()
         if len(self.csv_data) > 0:
@@ -58,8 +59,8 @@ class Guild(object):
 
         ioloop.IOLoop.instance().start()
         for result in self.tornado_results:
-
-            self.process_result(result)
+            keep_going = self.process_result(result)
+            if not keep_going: return False
 
     def handle_request_tornado(self, response, member, realm):
         ''' Collects the response of each individual request. '''
@@ -72,7 +73,8 @@ class Guild(object):
         with futures.ThreadPoolExecutor(max_workers=10) as executor:
             tasks = dict((executor.submit(self.handle_request_concurrent, user, zone), user) for user in self.members)
             for user in futures.as_completed(tasks):
-                self.process_result(user.result())
+                keep_going = self.process_result(user.result())
+                if not keep_going: return False
 
     def handle_request_concurrent(self,user,zone):
         url, realm = self.get_url(user,zone)
@@ -100,6 +102,15 @@ class Guild(object):
                 self.csv_data.append(processed_data)
                 self.spec_data.append(processed_spec_data)
                 if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
+            elif result_code == 403:
+                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - API limit reached. Waiting for 1 minute. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                       self.guild_id,member.user_id,result_code)
+                time.sleep(60)
+                print '[INFO] [{0}][Guild ID: {1}] - Waited for 1 minute. Checking this guild again now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                       self.guild_id)
+                self.check()
+                return False
+
             else:
                 self.wrong_users.append(member.user_id)
                 print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
@@ -124,6 +135,7 @@ class Guild(object):
                     print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                                  self.guild_id,member.user_id,member.last_refresh)
                     if self.mode == 'debug': raise Exception
+        return True
 
     def generate_warnings(self):
         if not self.tracking_all:
