@@ -17,4 +17,4 @@ if region == 'US' and datetime.datetime.weekday(datetime.datetime.now()) != 1:
 elif region == 'EU' and datetime.datetime.weekday(datetime.datetime.now()) != 2:
     print "[INFO] [{0}] - It is not Wednesday, snapshots should not be reset for EU. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
     sys.exit()
-else: Scraper('snapshot_{0}'.format(region),guild_ids,start_time,'tornado').run()
+else: Scraper('snapshot_{0}'.format(region),False,time.time(),'tornado').run()
