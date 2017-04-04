@@ -34,11 +34,11 @@ class Patreon():
         self.active = active
         self.pledge = pledge
         try:
-            self.full_name = full_name.encode('utf-8')
-        except: self.full_name = full_name.decode('utf-8').encode('utf-8')
+            self.full_name = full_name.encode('utf-8').replace("'","\\'")
+        except: self.full_name = full_name.decode('utf-8').encode('utf-8').replace("'","\\'")
         try:
-            self.discord_name = discord_name.encode('utf-8')
-        except: self.discord_name = discord_name.decode('utf-8').encode('utf-8')
+            self.discord_name = discord_name.encode('utf-8').replace("'","\\'")
+        except: self.discord_name = discord_name.decode('utf-8').encode('utf-8').replace("'","\\'")
 
         self.guild_id = guild_id
         self.email = email
@@ -47,7 +47,7 @@ class Patreon():
 
     def update(self, data):
         if data[3] != self.pledge: self.pledge = data[3]
-        if '{0} {1}'.format(data[0],data[1]) != self.full_name: self.full_name = '{0} {1}'.format(data[0],data[1])
+        if '{0} {1}'.format(data[0],data[1]) != self.full_name: self.full_name = '{0} {1}'.format(data[0],data[1]).replace("'","\\'")
         self.active = 1
 
     def get_output(self):
