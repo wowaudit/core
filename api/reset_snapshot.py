@@ -10,6 +10,12 @@ try:
 except Exception:
     print 'Please specify a valid region.'
     sys.exit()
+	
+try:
+    guild_ids = str(sys.argv[2]).split(',')
+    print '[INFO] [{0}] - Not using all guild IDs, but only the following: {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),', '.join(guild_ids))
+except Exception:
+    guild_ids = False
 
 if region == 'US' and datetime.datetime.weekday(datetime.datetime.now()) != 1:
     print "[INFO] [{0}] - It is not Tuesday, snapshots should not be reset for US. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
@@ -17,4 +23,6 @@ if region == 'US' and datetime.datetime.weekday(datetime.datetime.now()) != 1:
 elif region == 'EU' and datetime.datetime.weekday(datetime.datetime.now()) != 2:
     print "[INFO] [{0}] - It is not Wednesday, snapshots should not be reset for EU. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
     sys.exit()
-else: Scraper('snapshot_{0}'.format(region),False,time.time(),'tornado').run()
+else:
+	execute_query('UPDATE users SET weekly_snapshot = \'\' WHERE guild_id IN (SELECT guild_id from guilds WHERE region = \'{0}\') AND guild_id IN ({1})'.format(region, ','.join(guild_ids))
+	print '[INFO] [{0}] - Snapshot resetted successfully of region {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),region)

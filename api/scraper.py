@@ -24,7 +24,7 @@ class Scraper(object):
         self.store(data)
 
     def allocate(self):
-        allocations = MAX_ALLOCATED if self.mode not in ['snapshot_EU','snapshot_US','warcraftlogs'] else 1000000
+        allocations = 1000000 if self.mode == 'warcraftlogs' else MAX_ALLOCATED
         result = execute_query('SELECT guild_id, last_checked FROM guilds WHERE patreon = {0} {1} ORDER BY last_checked ASC LIMIT {2}'.format(1 if self.mode == 'production_patreon' else 'patreon', 'AND last_checked > 0' if self.mode == 'debug' else '', allocations))
         guild_data = [str(guild[0]) for guild in result]
         last_refreshed = [int(guild[1]) for guild in result]
@@ -53,10 +53,6 @@ class Scraper(object):
 
     def run(self):
         if self.mode in ['debug','production','production_patreon']:
-            return self.check_all()
-
-        if self.mode in ['snapshot_EU','snapshot_US']:
-            execute_query('UPDATE users SET weekly_snapshot = \'\' WHERE guild_id IN (SELECT guild_id from guilds WHERE region = \'{0}\')'.format(self.mode.split("_")[1]))
             return self.check_all()
 
         if self.mode == "warcraftlogs":
