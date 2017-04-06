@@ -88,3 +88,20 @@ if __name__ == '__main__':
         print 'Added {0} new Patreons!'.format(len(query_new))
     if query_update:
         execute_query('REPLACE INTO patreons VALUES ' + ','.join(query_update),False)
+
+    for signup in execute_query('SELECT * FROM patreon_signups'):
+        signup_id, name, mail, region, realm, guild_name = signup
+        if mail.lower() in [i.lower() for i in patreons.everyone.keys()]:
+
+            guild_id = execute_query('SELECT guild_id FROM guilds WHERE realm = \'{0}\' AND region = \'{1}\' AND name = \'{2}\''.format(realm.replace("'","\\'"),region,guild_name.encode('utf-8')))
+            try:
+                guild_id = guild_id[0][0]
+                go = True
+            except:
+                print 'No guild ID found for this signup entry'
+                go = False
+            if go:
+                execute_query('UPDATE guilds SET patreon = 1 WHERE guild_id = {0}'.format(guild_id))
+                execute_query('UPDATE patreons SET active = 1 AND guild_id = {0} WHERE email = \'{1}\''.format(guild_id,mail))
+                execute_query('DELETE FROM patreon_signups WHERE patreon_email = \'{0}\''.format(mail))
+                print 'Automatically upgraded Patreon status for {0}, guild ID {1}'.format(mail,guild_id)
