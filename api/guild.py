@@ -60,7 +60,7 @@ class Guild(object):
         ioloop.IOLoop.instance().start()
         for result in self.tornado_results:
             keep_going = self.process_result(result)
-            if not keep_going: return False
+            if not keep_going and self.mode != 'warcraftlogs': return False
         return True
 
     def handle_request_tornado(self, response, member, realm):
@@ -75,7 +75,7 @@ class Guild(object):
             tasks = dict((executor.submit(self.handle_request_concurrent, user, zone), user) for user in self.members)
             for user in futures.as_completed(tasks):
                 keep_going = self.process_result(user.result())
-                if not keep_going: return False
+                if not keep_going and self.mode != 'warcraftlogs': return False
         return True
 
     def handle_request_concurrent(self,user,zone):
@@ -214,7 +214,7 @@ class Guild(object):
             try:
                 self.prepare_warcraftlogs_data(loads(data),member)
                 self.success += 1
-            except: pass
+            except: print 'Encountered an error in preparing the WCL data for a user.'
         elif result_code != 200:
             print u'Skipped one due to a query error. Reason: {0} - Progress: {1}/{2}'.format(result_code,self.count,len(self.members)*len(VALID_RAIDS))
 
@@ -236,8 +236,8 @@ class Guild(object):
 
 
     def process_warcraftlogs_data(self):
-        base_spec_query = 'UPDATE users SET warcraftlogs = CASE '
         try:
+            base_spec_query = 'UPDATE users SET warcraftlogs = CASE '
             for member in self.processed_data:
                 try:
                     output = {'character_id': self.processed_data[member]['warcraftlogs_id'],
@@ -265,8 +265,9 @@ class Guild(object):
                                                         except: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],'-'))
 
                     base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(self.members[member]   .user_id,dumps(output).replace("'","\\'"))
-                except: pass
-
+                except: print 'Encountered an error in processing the WCL data of a user.'
             execute_query(base_spec_query + ' ELSE warcraftlogs END',False)
 
-        except: print 'Encountered an error in adding WCL data of guild with iD {0} to the database.'.format(self.guild_id)
+        except: print 'Encountered an error in adding WCL data of guild with ID {0} to the database.'.format(self.guild_id)
+
+        print 'WCL data added to the database succesfully. Used {0} data points, for a total of {1} members.'.format(self.success, len(self.processed_data))
