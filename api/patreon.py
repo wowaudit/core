@@ -93,7 +93,7 @@ if __name__ == '__main__':
         signup_id, name, mail, region, realm, guild_name = signup
         if mail.lower() in [i.lower() for i in patreons.everyone.keys()]:
 
-            guild_id = execute_query('SELECT guild_id FROM guilds WHERE realm = \'{0}\' AND region = \'{1}\' AND name = \'{2}\''.format(realm.replace("'","\\'"),region,guild_name.encode('utf-8')))
+            guild_id = execute_query('SELECT guild_id FROM guilds WHERE realm = \'{0}\' AND region = \'{1}\' AND name = \'{2}\''.format(realm.replace("'","\\'").encode('utf-8'),region,guild_name.encode('utf-8')))
             try:
                 guild_id = guild_id[0][0]
                 go = True
