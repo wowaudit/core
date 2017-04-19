@@ -9,5 +9,5 @@ try:
 except Exception:
     guild_ids = False
 
-Scraper('warcraftlogs',guild_ids,time.time(),'tornado').run()
+Scraper('warcraftlogs',guild_ids,time.time(),'tornado').check_warcraftlogs()
 

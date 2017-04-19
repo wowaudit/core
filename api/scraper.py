@@ -26,15 +26,24 @@ class Scraper(object):
     def allocate(self):
         allocations = 1000000 if self.mode == 'warcraftlogs' else MAX_ALLOCATED
         result = execute_query('SELECT guild_id, last_checked FROM guilds WHERE patreon = {0} {1} ORDER BY last_checked ASC LIMIT {2}'.format(1 if self.mode == 'production_patreon' else 'patreon', 'AND last_checked > 0' if self.mode == 'debug' else '', allocations))
+
+        if self.mode in ['production','production_patreon','debug']: self.allocate_blizzard(result)
+        elif self.mode == 'warcraftlogs': self.allocate_warcraftlogs(result)
+
+    def allocate_blizzard(self,result):
         guild_data = [str(guild[0]) for guild in result]
         last_refreshed = [int(guild[1]) for guild in result]
-
         if self.mode in ['production','production_patreon']:
             execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id IN ({1})'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(guild_data)))
 
         print '[INFO] [{0}] - Allocated and going to refresh {1} guilds. Time since last refresh: Lowest {2} seconds, Highest {3} seconds, Average {4} seconds. Guild IDs: {5}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-               allocations,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-max(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-min(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-(sum(last_refreshed) / float(len(last_refreshed))),0),', '.join(guild_data))
+               MAX_ALLOCATED,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-max(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-min(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-(sum(last_refreshed) / float(len(last_refreshed))),0),', '.join(guild_data))
+
         self.fetch_select(guild_data)
+
+    def allocate_warcraftlogs(self,result):
+        self.wcl_guilds = [str(guild[0]) for guild in result]
+        print '[INFO] [{0}] - Allocated and going to refresh WCL data of {1} guilds.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),len(self.wcl_guilds))
 
     def store(self,data):
         count = 0
@@ -52,11 +61,7 @@ class Scraper(object):
             else: self.guilds[self.done[key_code]].add_member(member)
 
     def run(self):
-        if self.mode in ['debug','production','production_patreon']:
-            return self.check_all()
-
-        if self.mode == "warcraftlogs":
-            self.check_warcraftlogs()
+        return self.check_all()
 
     def check_all(self):
         if self.ids: return self.check_select()
@@ -91,17 +96,28 @@ class Scraper(object):
 
     def check_warcraftlogs(self):
         count = 0
-        for guild in self.guilds:
-            try:
+        if self.ids:
+            for guild in self.guilds:
                 count += 1
-                if self.ids:
-                    if str(guild.guild_id) in self.ids:
-                        guild.update_warcraftlogs()
-                        print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
-                else:
+                try:
                     guild.update_warcraftlogs()
                     print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
-            except:
-                print 'Encountered an error in checking the WCL data of guild with ID {0}'.format(guild.guild_id)
+                except:
+                    print 'Encountered an error in checking the WCL data of guild with ID {0}'.format(guild.guild_id)
 
+        else:
+            while self.wcl_guilds:
+                subset = self.wcl_guilds[:25]
+                self.fetch_select(subset)
+                for guild in self.guilds:
+                    count += 1
+                    try:
+                        guild.update_warcraftlogs()
+                        print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                    except:
+                        print 'Encountered an error in checking the WCL data of guild with ID {0}'.format(guild.guild_id)
 
+                del self.wcl_guilds[:25]
+                self.guilds = []
+                count = 0
+                print 'Cycle of 25 guilds complete. Continuing.'
