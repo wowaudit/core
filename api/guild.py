@@ -91,7 +91,7 @@ class Guild(object):
             metric = 'hps' if self.members[user].role == 'Heal' else 'dps'
             self.members[user].url = WCL_URL.format(self.members[user].name.encode('utf-8'),realm.replace("'","").replace("-","").replace(" ","-").replace("(","").replace(")","").encode('utf-8').replace("й","и"),self.region,zone,metric,WCL_KEY).replace(" ","%20")
         else:
-            self.members[user].url = URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY).replace(" ","%20")
+            self.members[user].url = URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY[self.mode]).replace(" ","%20")
         return (self.members[user].url, realm)
 
     def process_result(self, result):
