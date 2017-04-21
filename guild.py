@@ -9,6 +9,7 @@ import requests, datetime, sys, copy, time
 from execute_query import execute_query
 from writer import write_csv
 from json import loads, dumps
+from google.cloud import storage
 
 class Guild(object):
 
@@ -193,6 +194,9 @@ class Guild(object):
     def write(self):
         with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
             write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode,self.guild_id)
+        bucket = storage.Client().get_bucket('wowcsv')
+        gcloud_path = bucket.blob('{1}.csv'.format(self.key_code))
+        gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
 
     def update_warcraftlogs(self):
         self.success = 0
