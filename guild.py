@@ -195,11 +195,11 @@ class Guild(object):
         with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
             write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode,self.guild_id)
         bucket = storage.Client().get_bucket('wowcsv')
+        old_gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
+        old_gcloud_path.delete() # Work around to avoid caching
         gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
-        gcloud_path.delete() # Work around to avoid caching
-        gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
-        gcloud_path.make_public()
         gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
+        gcloud_path.make_public()
 
     def update_warcraftlogs(self):
         self.success = 0
