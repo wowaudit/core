@@ -196,7 +196,8 @@ class Guild(object):
             write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode,self.guild_id)
         bucket = storage.Client().get_bucket('wowcsv')
         old_gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
-        old_gcloud_path.delete() # Work around to avoid caching
+        try: old_gcloud_path.delete() # Work around to avoid caching
+        except: pass # Will throw an error if no csv file exists yet
         gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
         gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
         gcloud_path.make_public()
