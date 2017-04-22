@@ -14,7 +14,7 @@ keep_going = True
 while keep_going:
     guilds = Scraper('production',guild_ids,start_time,'tornado')
     keep_going = guilds.run()
-    if guild_ids: keep_going = False
+    if time.time() - start_time > MAXIMUM_RUNTIME or guild_ids: keep_going = False
 
 print '[INFO] [{0}] - {1}. Aborting now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),'Reached the maximum runtime' if (time.time() - start_time >= MAXIMUM_RUNTIME) else 'Done')
 
