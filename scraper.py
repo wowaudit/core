@@ -20,7 +20,7 @@ class Scraper(object):
 
     def fetch_select(self,guilds):
         data = execute_query('SELECT guilds.guild_id, guilds.name, guilds.region, guilds.realm, guilds.key_code, guilds.last_checked, users.user_id, users.name, users.role, users.weekly_snapshot ' + \
-                             ', users.legendaries, users.realm, users.per_spec, users.tier_data, users.status, users.warcraftlogs, users.last_refresh FROM guilds, users WHERE guilds.guild_id = users.guild_id AND users.guild_id IN ({0})'.format(','.join(guilds)))
+                             ', users.legendaries, users.realm, users.per_spec, users.tier_data, users.status, users.warcraftlogs, users.last_refresh, users.old_snapshots FROM guilds, users WHERE guilds.guild_id = users.guild_id AND users.guild_id IN ({0})'.format(','.join(guilds)))
         self.store(data)
 
     def allocate(self):

@@ -9,7 +9,7 @@ class Member(object):
 
     def __init__(self,data,guild_id):
         self.user_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
-        self.tier_data, self.status, self.warcraftlogs, self.last_refresh = data[6:]
+        self.tier_data, self.status, self.warcraftlogs, self.last_refresh, self.old_snapshots = data[6:]
         self.guild_id = guild_id
 
         #TODO: Strip whitespace on website instead
@@ -32,6 +32,11 @@ class Member(object):
         try: self.tier_data = loads(self.tier_data)
         except: self.tier_data = {"head":0,"shoulder":0,"back":0,"chest":0,"hands":0,"legs":0}
 
+        try:
+            self.old_snapshots = [loads(week) for week in self.old_snapshots.split('|')]
+        except:
+            self.old_snapshots = []
+
         self.specs = {}
         count = 1
 
@@ -50,7 +55,7 @@ class Member(object):
             self.specs = {1:(0,0),2:(0,0),3:(0,0),4:(0,0)}
             self.max_ilvl = 0
 
-    def check(self,data,realm,region,new_snapshot):
+    def check(self,data,realm,region):
         self.processed_data = {}
         spec_information = []
 
@@ -64,7 +69,8 @@ class Member(object):
         self.process_legendary_data(data)
         self.process_nocombat_data(data)
         self.process_spec_data(data)
-        self.update_stored_data(region,new_snapshot)
+        self.update_stored_data()
+        self.process_old_snapshots()
 
         self.build_from_header()
 
@@ -292,6 +298,19 @@ class Member(object):
         self.processed_data['unique_pets'] = unique_pets
         self.processed_data['lvl_25_pets'] = level_25_pets
 
+    def process_old_snapshots(self):
+        self.processed_data['historical_wqs_done'] = []
+        self.processed_data['historical_ap_gained'] = []
+        self.processed_data['historical_dungeons_done'] = []
+        if len(self.old_snapshots) > 1:
+            for i, week in enumerate(self.old_snapshots[1:]):
+                self.processed_data['historical_wqs_done'].append(str(week['wqs'] - self.old_snapshots[i]['wqs']))
+                self.processed_data['historical_ap_gained'].append(str(week['ap'] - self.old_snapshots[i]['ap']))
+                self.processed_data['historical_dungeons_done'].append(str(week['dungeons'] - self.old_snapshots[i]['dungeons']))
+        self.processed_data['historical_wqs_done'] = '|'.join(self.processed_data['historical_wqs_done'])
+        self.processed_data['historical_ap_gained'] = '|'.join(self.processed_data['historical_ap_gained'])
+        self.processed_data['historical_dungeons_done'] = '|'.join(self.processed_data['historical_dungeons_done'])
+
     def process_spec_data(self,data):
         #Spec data
         self.spec_output = []
@@ -318,17 +337,12 @@ class Member(object):
         self.processed_data['main_spec'] = max_spec[0]
         self.spec_data = [self.user_id,'|'.join(self.spec_output),self.tier_data]
 
-    def update_stored_data(self,region,new_snapshot):
+    def update_stored_data(self):
         #Sets updated snapshot data if a new snapshot has to be made
-        if new_snapshot and region == new_snapshot:
-            self.snapshot_data = (self.user_id,{'dungeons': self.processed_data['dungeons_done_total'],
-                                                'wqs': self.processed_data['wqs_done_total'],
-                                                'ap': self.processed_data['ap_obtained_total']})
-
-        elif self.dungeon_snapshot == 'not there' or self.wq_snapshot == 'not there' or self.ap_snapshot == 'not there':
+        if self.dungeon_snapshot == 'not there' or self.wq_snapshot == 'not there' or self.ap_snapshot == 'not there':
             self.snapshot_data = (self.user_id,{
                 'dungeons': self.processed_data['dungeons_done_total'] if self.dungeon_snapshot == 'not there' else self.dungeon_snapshot,
                 'wqs': self.processed_data['wqs_done_total'] if self.wq_snapshot == 'not there' else self.wq_snapshot,
                 'ap': self.processed_data['ap_obtained_total'] if self.ap_snapshot == 'not there' else self.ap_snapshot})
-
+            self.old_snapshots.append(self.snapshot_data[1])
         else: self.snapshot_data = False

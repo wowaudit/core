@@ -13,7 +13,7 @@ from google.cloud import storage
 
 class Guild(object):
 
-    def __init__(self, data, mode, client, new_snapshot=False):
+    def __init__(self, data, mode, client):
         self.guild_id, self.name, self.region, self.realm, self.key_code, self.last_checked = data[:6]
         self.version_message = "{0}|Your spreadsheet is out of date. Make a copy of the new version on wow.vanlankveld.me.".format(CURRENT_VERSION)
         self.tracking_all = True
@@ -23,7 +23,6 @@ class Guild(object):
         self.realm = self.realm
         self.mode = mode
         self.client = client
-        self.new_snapshot = new_snapshot
 
     def add_member(self, data):
         name = data[7]
@@ -101,7 +100,7 @@ class Guild(object):
         if data:
             if self.mode == 'warcraftlogs': return self.process_warcraftlogs_result(data, result_code, member)
             if result_code == 200 and len(loads(data)) > 0:
-                processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region,self.new_snapshot)
+                processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region)
                 self.csv_data.append(processed_data)
                 self.spec_data.append(processed_spec_data)
                 if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
@@ -152,12 +151,18 @@ class Guild(object):
         if self.snapshot_data:
             base_snapshot_query = 'UPDATE users SET weekly_snapshot = CASE '
             for member in self.snapshot_data:
-                base_snapshot_query += 'WHEN user_id = \'{0}\' THEN \'{1}\' '.format(member[0],dumps(member[1]))
+                base_snapshot_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(member[0],dumps(member[1]))
 
             if self.mode != 'debug':
                 execute_query(base_snapshot_query + ' ELSE weekly_snapshot END')
                 print '[INFO] [{0}][Guild ID: {1}] - Updated snapshots for {2} users'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
                     self.guild_id,len(self.snapshot_data))
+
+            old_snapshot_query = 'UPDATE users SET old_snapshots = CASE '
+            for member in self.members:
+                old_snapshot_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(self.members[member].user_id,'|'.join([dumps(week) for week in self.members[member].old_snapshots]))
+
+            if self.mode != 'debug': execute_query(old_snapshot_query + ' ELSE old_snapshots END')
 
         if len(self.spec_data) > 0:
 
