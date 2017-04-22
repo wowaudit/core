@@ -7,7 +7,7 @@ from execute_query import execute_query
 start_time = time.time()
 keep_going = True
 while keep_going:
-    guild_ids = [str(i[0]) for i in execute_query('SELECT guild_id FROM pending_changes')]
+    guild_ids = [str(i[0]) for i in execute_query('SELECT guild_id FROM pending_changes LIMIT {0}'.format(MAX_ALLOCATED))]
     if not guild_ids:
         print 'No pending guilds. Sleeping for one minute.'
         time.sleep(60)
