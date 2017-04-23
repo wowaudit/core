@@ -2,8 +2,9 @@ import socket
 
 instance = socket.gethostname().split('-')[0]
 
-if instance == 'production': import production.py
-elif instance == 'productionpatreon': import production_patreon.py
-elif instance == 'productionpending': import production_pending.py
-elif instance == 'warcraftlogs': import warcraftlogs.py
-elif instance == 'debug': import test.py
+if instance == 'production': import production
+elif instance == 'productionpatreon': import production_patreon
+elif instance == 'productionpending': import production_pending
+elif instance == 'warcraftlogs': import warcraftlogs
+elif instance == 'debug': import test
+else: import test
