@@ -4,14 +4,14 @@
 # Debug mode: has limited exception handling in order to debug errors, does not write to database so does not impact production
 #             Avoid using the debug mode on production server as to not overwrite production csv files
 # Production mode: regular mode used in production
-MODES = ["debug","production","production_patreon","warcraftlogs","snapshot_US","snapshot_EU"]
+MODES = ["debug","production","production_patreon","warcraftlogs","snapshot_US","snapshot_EU"] #Deprecated
 
 CURRENT_VERSION = "2"
 CYCLE_MINIMUM = 120 #seconds
 MAXIMUM_RUNTIME = 3500 #seconds
 MAX_ALLOCATED = 10 #guilds
 TIER_IDS = range(138309,138381) #Tier 19
-REPUTATIONS = {1859:'nightfallen',1948:'valarjar',1894:'wardens',1883:'dreamweavers',1828:'highmountain_tribe',1900:'court_of_farondis'}
+REPUTATIONS = {1859:'nightfallen',1948:'valarjar',1894:'wardens',1883:'dreamweavers',1828:'highmountain_tribe',1900:'court_of_farondis',2018:'talons_vengeance',2045:'legionfall'}
 CLASSES = {1:'Warrior',2:'Paladin',3:'Hunter',4:'Rogue',5:'Priest',6:'Death Knight',7:'Shaman',8:'Mage',9:'Warlock',10:'Monk',11:'Druid',12:'Demon Hunter'}
 ITEMS = ['head','neck','shoulder','back','chest','wrist','hands','waist','legs','feet','finger1','finger2','trinket1','trinket2']
 STANDINGS = {0:'Hated',1:'Hostile',2:'Unfriendly',3:'Neutral',4:'Friendly',5:'Honored',6:'Revered',7:'Exalted'}
@@ -46,7 +46,7 @@ HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_i
          'tier_head','tier_shoulder','tier_back','tier_chest','tier_hands','tier_legs','ap_obtained_total','ap_this_week','spec1_traits','spec1_ilvl',\
          'spec2_traits','spec2_ilvl','spec3_traits','spec3_ilvl','spec4_traits','spec4_ilvl','current_spec_name','highest_ilvl_ever_equipped','main_spec','Cathedral of Eternal Night', \
          'WCL_id','WCL_Normal_best','WCL_Normal_median','WCL_Normal_average','WCL_Heroic_best','WCL_Heroic_median','WCL_Heroic_average','WCL_Mythic_best','WCL_Mythic_median','WCL_Mythic_average', \
-         'user_id', 'historical_wqs_done', 'historical_ap_gained', 'historical_dungeons_done']
+         'user_id', 'historical_wqs_done', 'historical_ap_gained', 'historical_dungeons_done','talons_vengeance_standing','talons_vengeance_value','legionfall_standing','legionfall_value']
 RELIC_ILVL = {2:690,3:695,4:700,5:705,7:710,8:715,9:720,10:725,12:730,13:735,14:740,15:745,17:750,18:755,19:760,21:765, \
                22:770,23:775,24:780,26:785,27:790,28:795,29:800,31:805,32:810,33:815,35:820,36:825,37:830,39:835,40:840,42:845,43:850,45:855,46:860,48:865,49:870,51:875, \
                52:880,53:885,55:890,56:895,58:900,59:905,61:910,62:915,64:920,65:925}
