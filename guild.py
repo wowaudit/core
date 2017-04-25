@@ -99,32 +99,36 @@ class Guild(object):
         self.count += 1
         if data:
             if self.mode == 'warcraftlogs': return self.process_warcraftlogs_result(data, result_code, member)
-            if result_code == 200 and len(loads(data)) > 0:
-                processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region)
-                self.csv_data.append(processed_data)
-                self.spec_data.append(processed_spec_data)
-                if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
-            elif result_code == 403:
-                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - API limit reached. Waiting for 1 minute. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       self.guild_id,member.user_id,result_code)
-                time.sleep(60)
-                print '[INFO] [{0}][Guild ID: {1}] - Waited for 1 minute. Checking this guild again now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       self.guild_id)
-                self.check()
-                return False
+            try:
+                if result_code == 200 and len(loads(data)) > 0:
+                    processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region)
+                    self.csv_data.append(processed_data)
+                    self.spec_data.append(processed_spec_data)
+                    if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
+                elif result_code == 403:
+                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - API limit reached. Waiting for 1 minute. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                           self.guild_id,member.user_id,result_code)
+                    time.sleep(60)
+                    print '[INFO] [{0}][Guild ID: {1}] - Waited for 1 minute. Checking this guild again now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                           self.guild_id)
+                    self.check()
+                    return False
 
-            else:
-                self.wrong_users.append(member.user_id)
-                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       self.guild_id,member.user_id,result_code)
-                if member.last_refresh:
-                    try:
-                        self.csv_data.append(loads(member.last_refresh))
-                        self.csv_data[-1][0] = member.name
-                    except:
-                        print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                                     self.guild_id,member.user_id,member.last_refresh)
-                        if self.mode == 'debug': raise Exception
+                else:
+                    self.wrong_users.append(member.user_id)
+                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                           self.guild_id,member.user_id,result_code)
+                    if member.last_refresh:
+                        try:
+                            self.csv_data.append(loads(member.last_refresh))
+                            self.csv_data[-1][0] = member.name
+                        except:
+                            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                                         self.guild_id,member.user_id,member.last_refresh)
+                            if self.mode == 'debug': raise Exception
+            except:
+                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in processing API result. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+                             self.guild_id,member.user_id,data)
         else:
             self.wrong_users.append(member.user_id)
             print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
