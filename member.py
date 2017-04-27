@@ -264,6 +264,15 @@ class Member(object):
         self.processed_data['wqs_done_total'] = wq_amount
         self.processed_data['wqs_this_week'] = 0 if self.wq_snapshot == 'not there' else wq_amount-self.wq_snapshot
 
+        paragon_amount = 0
+        for criteria in range(36330,36337):
+            try: paragon_amount += data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(criteria)]
+            except: pass # Catch error that is raised when quantity is 0
+
+        # For some reason the first 10 completions are removed from the criterias when the achievement is completed
+        if 11653 in data['achievements']['achievementsCompleted']: paragon_amount += 10
+        self.processed_data['paragon_amount'] = paragon_amount
+
     def process_legendary_data(self,data):
         try:
             flag = False
