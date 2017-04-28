@@ -9,12 +9,13 @@ import requests, datetime, sys, copy, time
 from execute_query import execute_query
 from writer import write_csv, log
 from json import loads, dumps
-from google.cloud import storage
+try: from google.cloud import storage
+except: print 'Google Cloud library not found. Assuming test environment.'
 
 class Guild(object):
 
     def __init__(self, data, mode, client):
-        self.guild_id, self.name, self.region, self.realm, self.key_code, self.last_checked = data[:6]
+        self.guild_id, self.name, self.region, self.realm, self.key_code, self.last_checked, self.patreon = data[:7]
         self.version_message = "{0}|Your spreadsheet is out of date. Make a copy of the new version on wow.vanlankveld.me.".format(CURRENT_VERSION)
         self.tracking_all = True
         self.members = {}
@@ -25,7 +26,7 @@ class Guild(object):
         self.client = client
 
     def add_member(self, data):
-        name = data[7]
+        name = data[8]
         if name not in self.members: self.members[name] = Member(data,self.guild_id)
         if self.members[name].status == 'not tracking': self.tracking_all = False
 
@@ -39,8 +40,10 @@ class Guild(object):
         if not keep_going: return False
         self.generate_warnings()
         self.update_users_in_db()
+
         log('info',self.guild_id,'Total Members: {0} | Members Refreshed: {1} | Result: {2}{3} success'.format( \
             len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%"))
+        if len(self.csv_data) > 0: self.write()
 
     def with_tornado(self,zone=0):
         self.tornado_count = 0
@@ -197,13 +200,15 @@ class Guild(object):
 
     def write(self):
         with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
-            write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.mode,self.guild_id)
-        bucket = storage.Client().get_bucket('wowcsv')
-        gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
-        gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
-        gcloud_path.cache_control = 'no-cache'
-        gcloud_path.patch()
-        gcloud_path.make_public()
+            write_csv(csvfile,self.name,self.realm,self.region,self.version_message,self.warning_message,self.csv_data,self.patreon,self.guild_id)
+
+        if self.mode != 'debug':
+            bucket = storage.Client().get_bucket('wowcsv')
+            gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
+            gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
+            gcloud_path.cache_control = 'no-cache'
+            gcloud_path.patch()
+            gcloud_path.make_public()
 
     def update_warcraftlogs(self):
         self.success = 0
