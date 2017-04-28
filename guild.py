@@ -7,7 +7,7 @@ from tornado import ioloop, httpclient
 from dateutil import tz
 import requests, datetime, sys, copy, time
 from execute_query import execute_query
-from writer import write_csv
+from writer import write_csv, log
 from json import loads, dumps
 from google.cloud import storage
 
@@ -39,13 +39,8 @@ class Guild(object):
         if not keep_going: return False
         self.generate_warnings()
         self.update_users_in_db()
-        if len(self.csv_data) > 0:
-            print '[INFO] [{0}][Guild ID: {1}] - Total Members: {2} | Members Refreshed: {3} | Result: {4}{5} success'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                self.guild_id,len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%")
-            self.write()
-        else:
-            print '[ERROR][{0}][Guild ID: {1}] - Total Members: {2} | Members Refreshed: {3} | Result: {4}{5} success'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                self.guild_id,len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%")
+        log('info',self.guild_id,'Total Members: {0} | Members Refreshed: {1} | Result: {2}{3} success'.format( \
+            len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%"))
 
     def with_tornado(self,zone=0):
         self.tornado_count = 0

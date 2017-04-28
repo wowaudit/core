@@ -3,6 +3,14 @@ import csv, codecs, cStringIO, datetime
 from dateutil import tz
 from constants import HEADER, TIME_ZONE
 
+def log(level,guild_id,message,user_id = False):
+    print '{0}[{1}][Guild ID: {2}]{3} - {4}'.format(
+            {'info':'[INFO] ','error':'[ERROR]'}[level],
+            datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
+            guild_id,
+            '[User ID: {0}]'.format(user_id) if user_id else '',
+            message )
+
 def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data,mode,guild_id):
     writer = UnicodeWriter(csvfile,delimiter=',', lineterminator='\n')
     utc_time = datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC'))
