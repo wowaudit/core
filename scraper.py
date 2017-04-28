@@ -5,6 +5,7 @@ from constants import *
 from dateutil import tz
 from auth import WCL_KEY
 from json import loads
+from writer import log
 import time, requests, datetime, logging
 
 class Scraper(object):
@@ -31,8 +32,12 @@ class Scraper(object):
         if self.mode in ['production','production_patreon','warcraftlogs']:
             execute_query('UPDATE guilds SET last_checked{0} = {1} WHERE guild_id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(guild_data)))
 
-        print '[INFO] [{0}] - Allocated and going to refresh {1} guilds. Time since last refresh: Lowest {2} seconds, Highest {3} seconds, Average {4} seconds. Guild IDs: {5}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-               MAX_ALLOCATED,round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-max(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-min(last_refreshed),0),round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-(sum(last_refreshed) / float(len(last_refreshed))),0),', '.join(guild_data))
+        log('info','Allocated and going to refresh {0} guilds. Time since last refresh: Lowest {1} seconds, Highest {2} seconds, Average {3} seconds.'.format(
+            MAX_ALLOCATED,
+            round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-max(last_refreshed),0),
+            round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-min(last_refreshed),0),
+            round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-(sum(last_refreshed) / float(len(last_refreshed))),0)),
+            ', '.join(guild_data))
 
         self.fetch_select(guild_data)
 
@@ -64,29 +69,23 @@ class Scraper(object):
     def check_single(self,guild,retry=False):
         try:
             guild.check()
-            print '[INFO] [{0}][Guild ID: {1}] - Finished refreshing.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                   guild.guild_id)
+            log('info','Finished refreshing.',guild.guild_id)
         except Exception as error:
             logging.basicConfig(level=logging.DEBUG)
             logger = logging.getLogger(__name__)
             logger.exception(error)
             if not retry:
                 guild.client = 'concurrent' if guild.client == 'tornado' else 'tornado'
-                print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, trying with client {2} now. Error: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       guild.guild_id,guild.client,repr(error))
+                log('error','Encountered an error, trying with client {0} now. Error: {1}'.format(guild.client,repr(error)),guild.guild_id)
                 self.check_single(guild,True)
             else:
-                print '[ERROR][{0}][Guild ID: {1}] - Encountered an error, did not refresh. Error: {2}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                       guild.guild_id,repr(error))
-
+                log('error','Encountered an error, did not refresh. Error: {0}'.format(repr(error)),guild.guild_id)
 
     def check_warcraftlogs(self):
-        count = 0
         for guild in self.guilds:
-            count += 1
             try:
                 guild.update_warcraftlogs()
-                print 'Finished checking guild with ID {0}. Progress in this cycle: {1}/{2}'.format(guild.guild_id,count,len(self.guilds))
+                log('info','Finished refreshing this guild.',guild.guild_id)
             except:
-                print 'Encountered an error in checking the WCL data of guild with ID {0}'.format(guild.guild_id)
+                log('error','Encountered an error in refreshing the WCL data of this guild.',guild.guild_id)
         return True

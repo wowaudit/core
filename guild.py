@@ -41,8 +41,8 @@ class Guild(object):
         self.generate_warnings()
         self.update_users_in_db()
 
-        log('info',self.guild_id,'Total Members: {0} | Members Refreshed: {1} | Result: {2}{3} success'.format( \
-            len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%"))
+        log('info','Total Members: {0} | Members Refreshed: {1} | Result: {2}{3} success'.format( \
+            len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%"),self.guild_id)
         if len(self.csv_data) > 0: self.write()
 
     def with_tornado(self,zone=0):
@@ -104,40 +104,32 @@ class Guild(object):
                     self.spec_data.append(processed_spec_data)
                     if processed_snapshot_data: self.snapshot_data.append(processed_snapshot_data)
                 elif result_code == 403:
-                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - API limit reached. Waiting for 1 minute. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                           self.guild_id,member.user_id,result_code)
+                    log('error','API limit reached. Waiting for 1 minute. Status code: {0}'.format(result_code),self.guild_id,member.user_id)
                     time.sleep(60)
-                    print '[INFO] [{0}][Guild ID: {1}] - Waited for 1 minute. Checking this guild again now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                           self.guild_id)
+                    log('info','Waited for 1 minute. Checking this guild again now.',self.guild_id)
                     self.check()
                     return False
 
                 else:
                     self.wrong_users.append(member.user_id)
-                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Could not fetch user data. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                           self.guild_id,member.user_id,result_code)
+                    log('error','Could not fetch user data. Status code: {0}'.format(result_code),self.guild_id,member.user_id)
                     if member.last_refresh:
                         try:
                             self.csv_data.append(loads(member.last_refresh))
                             self.csv_data[-1][0] = member.name
                         except:
-                            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                                         self.guild_id,member.user_id,member.last_refresh)
-                            if self.mode == 'debug': raise Exception
+                            log('error','Error in loading old user data. Data: {0}'.format(member.last_refresh[:100]),self.guild_id,member.user_id)
             except:
-                print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in processing API result. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                             self.guild_id,member.user_id,data)
+                log('error','Error in processing API result. Data: {0}'.format(data[:100]),self.guild_id,member.user_id)
         else:
             self.wrong_users.append(member.user_id)
-            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - No data returned by API. Status code: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                   self.guild_id,member.user_id,result_code)
+            log('error','No data returned by API. Status code: {0}'.format(result_code),self.guild_id,member.user_id)
             if member.last_refresh:
                 try:
                     self.csv_data.append(loads(member.last_refresh))
                     self.csv_data[-1][0] = member.name
                 except:
-                    print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Error in loading old user data. Data: {3}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                                 self.guild_id,member.user_id,member.last_refresh)
+                    log('error','Error in loading old user data. Data: {0}'.format(member.last_refresh[:100]),self.guild_id,member.user_id)
                     if self.mode == 'debug': raise Exception
         return True
 
@@ -157,8 +149,7 @@ class Guild(object):
 
             if self.mode != 'debug':
                 execute_query(base_snapshot_query + ' ELSE weekly_snapshot END')
-                print '[INFO] [{0}][Guild ID: {1}] - Updated snapshots for {2} users'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                    self.guild_id,len(self.snapshot_data))
+                log('info','Updated snapshots for {0} users'.format(len(self.snapshot_data)),self.guild_id)
 
             old_snapshot_query = 'UPDATE users SET old_snapshots = CASE '
             for member in self.members:
@@ -230,9 +221,9 @@ class Guild(object):
             try:
                 self.prepare_warcraftlogs_data(loads(data),member)
                 self.success += 1
-            except: print 'Encountered an error in preparing the WCL data for a user.'
+            except: log('error','Encountered an error in preparing the WCL data for this user.',self.guild_id,member.user_id)
         elif result_code != 200:
-            print u'Skipped one due to a query error. Reason: {0} - Progress: {1}/{2}'.format(result_code,self.count,len(self.members)*len(VALID_RAIDS))
+            log('error','The API call returned an error. Result code: {0}'.format(result_code),self.guild_id,member.user_id)
 
     def prepare_warcraftlogs_data(self,data,member):
         for encounter in data:
@@ -280,10 +271,10 @@ class Guild(object):
                                                         try: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],self.processed_data[member][encounter['name']][difficulty][metric]))
                                                         except: output['{0}_{1}'.format(metric,difficulty)].append('{0}@{1}_{2}'.format(self.processed_data[member][encounter['name']][difficulty]['raid'],encounter['name'],'-'))
 
-                    base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(self.members[member]   .user_id,dumps(output).replace("'","\\'"))
-                except: print 'Encountered an error in processing the WCL data of a user.'
+                    base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(self.members[member].user_id,dumps(output).replace("'","\\'"))
+                except: log('error','Encountered an error in processing the WCL data of a user.',self.guild_id)
             execute_query(base_spec_query + ' ELSE warcraftlogs END',False)
 
-        except: print 'Encountered an error in adding WCL data of guild with ID {0} to the database.'.format(self.guild_id)
+        except: log('error','Encountered an error in adding the WCL data of this guild to the database.',self.guild_id)
 
-        print 'WCL data added to the database succesfully. Used {0} data points, for a total of {1} members.'.format(self.success, len(self.processed_data))
+        log('info','WCL data added to the database succesfully. Used {0} data points, for a total of {1} members.'.format(self.success, len(self.processed_data)),self.guild_id)

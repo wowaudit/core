@@ -4,6 +4,7 @@ import time, datetime
 from execute_query import execute_query
 from dateutil import tz
 from json import loads, dumps
+from writer import log
 
 class Member(object):
 
@@ -93,8 +94,7 @@ class Member(object):
             self.processed_data['role'] = self.role
         except:
             self.processed_data['role'] = DEFAULT_ROLES[CLASSES[data['class']]]
-            print '[ERROR][{0}][Guild ID: {1}][User ID: {2}] - Role set incorrectly for this user. Falling back to default for the class'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-                   self.guild_id,self.user_id)
+            log('error','Role set incorrectly for this user. Falling back to default for the class',self.guild_id,self.user_id)
 
     def process_gear_data(self,data):
         self.worst_gem = []

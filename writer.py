@@ -3,11 +3,11 @@ import csv, codecs, cStringIO, datetime
 from dateutil import tz
 from constants import HEADER, TIME_ZONE
 
-def log(level,guild_id,message,user_id = False):
-    print '{0}[{1}][Guild ID: {2}]{3} - {4}'.format(
+def log(level,message,guild_id = False,user_id = False):
+    print '{0}[{1}]{2}{3} - {4}'.format(
             {'info':'[INFO] ','error':'[ERROR]'}[level],
             datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),
-            guild_id,
+            '[Guild ID: {0}]'.format(guild_id) if guild_id else '',
             '[User ID: {0}]'.format(user_id) if user_id else '',
             message )
 
@@ -34,9 +34,9 @@ def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data
         if len(new_row) == len(HEADER): writer.writerow(new_row)
         else:
             miss += 1
-            print '[ERROR][{0}][Guild ID: {1}] - Data row and header mismatch. Not writing this row'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),guild_id)
+            log('error','Data row and header mismatch. Not writing this row',guild_id)
 
-    print '[INFO] [{0}][Guild ID: {1}] - CSV file written successfully, total rows: {2}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),guild_id,len(csv_data) - miss)
+    log('info','CSV file written successfully, total rows: {0}'.format(len(csv_data) - miss),guild_id)
 
 class UnicodeWriter:
 

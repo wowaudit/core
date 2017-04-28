@@ -2,10 +2,11 @@ from constants import *
 import sys, time, datetime
 from scraper import Scraper
 from dateutil import tz
+from writer import log
 
 try:
     guild_ids = str(sys.argv[1]).split(',')
-    print '[INFO] [{0}] - Not using all guild IDs, but only the following: {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),', '.join(guild_ids))
+    log('info','Not using all guild IDs, but only the following: {0}'.format(', '.join(guild_ids)))
 except Exception:
     guild_ids = False
 
@@ -16,5 +17,5 @@ while keep_going:
     keep_going = guilds.run()
     if time.time() - start_time > MAXIMUM_RUNTIME or guild_ids: keep_going = False
 
-print '[INFO] [{0}] - {1}. Aborting now.'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),'Reached the maximum runtime' if (time.time() - start_time >= MAXIMUM_RUNTIME) else 'Done')
+log('info','{0}. Aborting now.'.format('Reached the maximum runtime' if (time.time() - start_time >= MAXIMUM_RUNTIME) else 'Done'))
 
