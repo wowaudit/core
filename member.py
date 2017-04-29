@@ -329,9 +329,9 @@ class Member(object):
         self.processed_data['historical_dungeons_done'] = []
         if len(self.old_snapshots) > 1:
             for i, week in enumerate(self.old_snapshots[1:]):
-                self.processed_data['historical_wqs_done'].append(str(week['wqs'] - self.old_snapshots[i]['wqs']))
-                self.processed_data['historical_ap_gained'].append(str(week['ap'] - self.old_snapshots[i]['ap']))
-                self.processed_data['historical_dungeons_done'].append(str(week['dungeons'] - self.old_snapshots[i]['dungeons']))
+                self.processed_data['historical_wqs_done'].insert(0,str(week['wqs'] - self.old_snapshots[i]['wqs']))
+                self.processed_data['historical_ap_gained'].insert(0,str(week['ap'] - self.old_snapshots[i]['ap']))
+                self.processed_data['historical_dungeons_done'].insert(0,str(week['dungeons'] - self.old_snapshots[i]['dungeons']))
         self.processed_data['historical_wqs_done'] = '|'.join(self.processed_data['historical_wqs_done'])
         self.processed_data['historical_ap_gained'] = '|'.join(self.processed_data['historical_ap_gained'])
         self.processed_data['historical_dungeons_done'] = '|'.join(self.processed_data['historical_dungeons_done'])
