@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from constants import *
-import time, datetime
+import time, datetime, itertools
 from execute_query import execute_query
 from dateutil import tz
 from json import loads, dumps
@@ -8,10 +8,11 @@ from writer import log
 
 class Member(object):
 
-    def __init__(self,data,guild_id):
+    def __init__(self,data,guild_id,last_reset):
         self.user_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
         self.tier_data, self.status, self.warcraftlogs, self.last_refresh, self.old_snapshots = data[7:]
         self.guild_id = guild_id
+        self.last_reset = last_reset
 
         #TODO: Strip whitespace on website instead
         self.name = self.name.replace(' ','')
@@ -225,16 +226,20 @@ class Member(object):
         self.processed_data['exalted_amount'] = exalted_rep_amount / len(REPUTATIONS)
 
     def process_dungeon_data(self,data):
+        BOSS_IDS = [[boss['raid_ids'].values() for boss in raid['encounters']] for raid in VALID_RAIDS]
+        for i in range(2): BOSS_IDS = list(itertools.chain.from_iterable(BOSS_IDS)) # Flatten the list
         dungeon_list = {}
+        raid_list = {}
         dungeon_count = 0
-        id_count = 1
-        dungeon_data = data['statistics']['subCategories'][5]['subCategories'][6]['statistics']
-        for dungeon in dungeon_data:
-            if dungeon['id'] in MYTHIC_DUNGEONS:
-                dungeon_count += dungeon['quantity']
-                try: self.processed_data[MYTHIC_DUNGEONS[dungeon['id']]] += dungeon['quantity'] #For dungeons with multiple entries
-                except: self.processed_data[MYTHIC_DUNGEONS[dungeon['id']]] = dungeon['quantity']
-            id_count += 1
+        instance_data = data['statistics']['subCategories'][5]['subCategories'][6]['statistics']
+        for instance in instance_data:
+            if instance['id'] in MYTHIC_DUNGEONS:
+                dungeon_count += instance['quantity']
+                try: self.processed_data[MYTHIC_DUNGEONS[instance['id']]] += instance['quantity'] #For dungeons with multiple entries
+                except: self.processed_data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity']
+
+            if instance['id'] in BOSS_IDS:
+                raid_list[instance['id']] = (instance['quantity'], 1 if (instance['lastUpdated'] / 1000) > self.last_reset else 0)
 
         self.processed_data['dungeons_done_total'] = dungeon_count
         if self.dungeon_snapshot != 'not there': self.processed_data['dungeons_this_week'] = dungeon_count-self.dungeon_snapshot
@@ -242,6 +247,16 @@ class Member(object):
 
         #Future dungeons with unknown ID that are already added in front-end
         self.processed_data['Cathedral of Eternal Night'] = 0
+
+        # Process raids data
+        raid_output = {'raids_normal':[],'raids_normal_weekly':[],'raids_heroic':[],'raids_heroic_weekly':[],'raids_mythic':[],'raids_mythic_weekly':[]}
+        for raid in VALID_RAIDS:
+            for encounter in raid['encounters']:
+                for difficulty in encounter['raid_ids']:
+                    raid_output['raids_{0}'.format(difficulty)].append(str(raid_list[encounter['raid_ids'][difficulty]][0]))
+                    raid_output['raids_{0}_weekly'.format(difficulty)].append(str(raid_list[encounter['raid_ids'][difficulty]][1]))
+        for metric in raid_output: self.processed_data[metric] = '|'.join(raid_output[metric])
+
 
     def process_warcraftlogs_data(self,data):
         if self.warcraftlogs:

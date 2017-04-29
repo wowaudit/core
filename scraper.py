@@ -5,8 +5,8 @@ from constants import *
 from dateutil import tz
 from auth import WCL_KEY
 from json import loads
-from writer import log
-import time, requests, datetime, logging
+from writer import log, error
+import time, requests, datetime
 
 class Scraper(object):
 
@@ -70,22 +70,19 @@ class Scraper(object):
         try:
             guild.check()
             log('info','Finished refreshing.',guild.guild_id)
-        except Exception as error:
-            logging.basicConfig(level=logging.DEBUG)
-            logger = logging.getLogger(__name__)
-            logger.exception(error)
+        except Exception as e:
             if not retry:
                 guild.client = 'concurrent' if guild.client == 'tornado' else 'tornado'
-                log('error','Encountered an error, trying with client {0} now. Error: {1}'.format(guild.client,repr(error)),guild.guild_id)
+                log('error','Encountered an error, trying with client {0} now. Error: {1}'.format(guild.client,error(e)),guild.guild_id)
                 self.check_single(guild,True)
             else:
-                log('error','Encountered an error, did not refresh. Error: {0}'.format(repr(error)),guild.guild_id)
+                log('error','Encountered an error, did not refresh. Error: {0}'.format(error(e)),guild.guild_id)
 
     def check_warcraftlogs(self):
         for guild in self.guilds:
             try:
                 guild.update_warcraftlogs()
                 log('info','Finished refreshing this guild.',guild.guild_id)
-            except:
-                log('error','Encountered an error in refreshing the WCL data of this guild.',guild.guild_id)
+            except Exception as e:
+                log('error','Encountered an error in refreshing the WCL data of this guild. Error: {0}'.format(error(e)),guild.guild_id)
         return True

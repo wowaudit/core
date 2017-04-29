@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
-import csv, codecs, cStringIO, datetime
+import csv, codecs, cStringIO, datetime, logging
 from dateutil import tz
-from constants import HEADER, TIME_ZONE
+from constants import HEADER, TIME_ZONE, VALID_RAIDS
+
+def error(message):
+    logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger(__name__)
+    logger.exception(message)
+    return repr(message)
 
 def log(level,message,guild_id = False,user_id = False):
     print '{0}[{1}]{2}{3} - {4}'.format(
@@ -11,17 +17,23 @@ def log(level,message,guild_id = False,user_id = False):
             '[User ID: {0}]'.format(user_id) if user_id else '',
             message )
 
-def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data,patreon,guild_id):
+def write_csv(csvfile,guild):
     writer = UnicodeWriter(csvfile,delimiter=',', lineterminator='\n')
     utc_time = datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC'))
     europe_time = utc_time.astimezone(tz.gettz(TIME_ZONE))
     miss = 0
     first_row = list(HEADER)
-    guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),name.encode('utf-8'),realm.encode('utf-8'),region,version_message,warning_message,"patreon" if patreon else "no patreon"]
+    guild_wide_data = [europe_time.strftime('%d-%m %H:%M'),guild.name.encode('utf-8'),guild.realm.encode('utf-8'),guild.region,
+                       guild.version_message,guild.warning_message,"patreon" if guild.patreon else "no patreon"]
     first_row[0:len(guild_wide_data)] = guild_wide_data
+    raids_header = []
+    for raid in VALID_RAIDS:
+        raids_header.append("{0}@{1}".format('_'.join([boss['name'] for boss in raid['encounters']]),raid['name']))
+    first_row[142] = '|'.join(raids_header)
+
     writer.writerow(first_row)
 
-    csv_data = sorted(csv_data,key=lambda x: x[0])
+    csv_data = sorted(guild.csv_data,key=lambda x: x[0])
 
     for row in csv_data:
         new_row = []
@@ -34,9 +46,9 @@ def write_csv(csvfile,name,realm,region,version_message,warning_message,csv_data
         if len(new_row) == len(HEADER): writer.writerow(new_row)
         else:
             miss += 1
-            log('error','Data row and header mismatch. Not writing this row',guild_id)
+            log('error','Data row and header mismatch. Not writing this row',guild.guild_id)
 
-    log('info','CSV file written successfully, total rows: {0}'.format(len(csv_data) - miss),guild_id)
+    log('info','CSV file written successfully, total rows: {0}'.format(len(csv_data) - miss),guild.guild_id)
 
 class UnicodeWriter:
 
