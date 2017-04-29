@@ -16,7 +16,7 @@ class Guild(object):
 
     def __init__(self, data, mode, client):
         self.guild_id, self.name, self.region, self.realm, self.key_code, self.last_checked, self.patreon = data[:7]
-        self.version_message = "{0}|Your spreadsheet is out of date. Make a copy of the new version on wow.vanlankveld.me.".format(CURRENT_VERSION)
+        self.version_message = "{0}|Your spreadsheet is out of date, Warcraft Logs will not work in the old version. Make a new copy at http://wow.vanlankveld.me/copy".format(CURRENT_VERSION)
         self.last_reset = self.reset_timestamp()
         self.tracking_all = True
         self.members = {}
