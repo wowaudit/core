@@ -215,7 +215,8 @@ class Member(object):
                 if rep_data['standing'] == 7: exalted_rep_amount += 1
                 if rep_data['id'] == reputation:
                     self.processed_data['{0}_standing'.format(REPUTATIONS[reputation])] = STANDINGS[rep_data['standing']]
-                    self.processed_data['{0}_value'.format(REPUTATIONS[reputation])] = rep_data['value']
+                    # API started always returning 0 as value when Exalted (possibly due to Paragon system). Passing static 999 to make the sheet prettier.
+                    self.processed_data['{0}_value'.format(REPUTATIONS[reputation])] = 999 if rep_data['standing'] == 7 else rep_data['value']
                     rep_value += ( ( rep_data['standing'] - 2 ) + ( float(rep_data['value']) / REP_AMOUNT[rep_data['standing']] ) )
                     match = True
 

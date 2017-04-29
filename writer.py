@@ -28,8 +28,8 @@ def write_csv(csvfile,guild):
     first_row[0:len(guild_wide_data)] = guild_wide_data
     raids_header = []
     for raid in VALID_RAIDS:
-        raids_header.append("{0}@{1}".format('_'.join([boss['name'] for boss in raid['encounters']]),raid['name']))
-    first_row[142] = '|'.join(raids_header)
+        raids_header.append("{0}@{1}@".format('_'.join([boss['name'] for boss in raid['encounters']]),raid['name']))
+    first_row[142] = ''.join(raids_header)
 
     writer.writerow(first_row)
 

@@ -6,5 +6,3 @@ if instance == 'production': import production
 elif instance == 'productionpatreon': import production_patreon
 elif instance == 'productionpending': import production_pending
 elif instance == 'warcraftlogs': import warcraftlogs
-elif instance == 'debug': import test
-else: import test
