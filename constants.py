@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-CURRENT_VERSION = "2"
+CURRENT_VERSION = "3"
 CYCLE_MINIMUM = 120 #seconds
 MAXIMUM_RUNTIME = 3500 #seconds
 MAX_ALLOCATED = 2 #guilds
