@@ -261,7 +261,8 @@ class Guild(object):
                         for encounter in raid['encounters']:
                             try: output[metric].append(str(int(self.processed_data[member][encounter['name']][int(metric.split('_')[1])][metric.split('_')[0]])))
                             except: output[metric].append('-')
-                output['character_id'] = self.processed_data[member]['warcraftlogs_id']
+                try: output['character_id'] = self.processed_data[member]['warcraftlogs_id']
+                except: output['character_id'] = ''
                 base_spec_query += 'WHEN user_id = {0} THEN \'{1}\' '.format(self.members[member].user_id,dumps(output).replace("'","\\'"))
 
             execute_query(base_spec_query + ' ELSE warcraftlogs END',False)
