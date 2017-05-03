@@ -32,7 +32,7 @@ class Guild(object):
         if self.members[name].status == 'not tracking': self.tracking_all = False
 
     def reset_timestamp(self):
-        times = {'EU':{'hour':5,'day':2},'US':{'hour':11,'day':1}}
+        times = {'EU':{'hour':5,'day':2},'US':{'hour':11,'day':1},'TW':{'hour':5,'day':2}}
         last_reset_datetime = datetime.datetime.utcnow()
 
         if last_reset_datetime.weekday() == times[self.region]['day']:
