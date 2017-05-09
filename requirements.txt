@@ -1,0 +1,6 @@
+mysql-python
+tornado
+futures
+google-cloud
+python-dateutil
+pympler
