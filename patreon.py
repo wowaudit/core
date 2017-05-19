@@ -24,7 +24,9 @@ class Patreons():
     def canceled_patreons(self):
         canceled = []
         for user in self.everyone:
-            if not self.everyone[user].still_patreon: canceled.append(self.everyone[user])
+            if not self.everyone[user].still_patreon:
+                if self.everyone[user].active == 1:
+                    canceled.append(self.everyone[user])
         return canceled
 
 class Patreon():
@@ -63,13 +65,13 @@ if __name__ == '__main__':
         for row in reader:
             if row[-1]:
                 email = row[2]
-                if email not in patreons.everyone.keys(): patreons.add_new(row)
+                if email not in patreons.everyone.keys():
+                    patreons.add_new(row)
                 else: patreons.everyone[email].update(row)
-
                 patreons.everyone[email].still_patreon = True
 
     for user in patreons.canceled_patreons():
-        execute_query('UPDATE patreons SET active = 0 WHERE email = \'{0}\''.format(user.email))
+        execute_query('UPDATE patreons SET active = 0 WHERE patreon_id = {0}'.format(user.patreon_id))
         if user.guild_id:
             execute_query('UPDATE guilds SET patreon = 0 WHERE guild_id = {0}'.format(user.guild_id))
             print 'Revoked Patreon access of user with guild ID {0}'.format(user.guild_id)
@@ -105,3 +107,5 @@ if __name__ == '__main__':
                 execute_query('UPDATE patreons SET active = 1 AND guild_id = {0} WHERE email = \'{1}\''.format(guild_id,mail))
                 execute_query('DELETE FROM patreon_signups WHERE patreon_email = \'{0}\''.format(mail))
                 print 'Automatically upgraded Patreon status for {0}, guild ID {1}'.format(mail,guild_id)
+
+    print 'Done!'
