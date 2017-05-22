@@ -48,8 +48,6 @@ def write_csv(csvfile,guild):
             miss += 1
             log('error','Data row and header mismatch. Not writing this row',guild.guild_id)
 
-    log('info','CSV file written successfully, total rows: {0}'.format(len(csv_data) - miss),guild.guild_id)
-
 class UnicodeWriter:
 
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):

@@ -58,7 +58,11 @@ class Guild(object):
 
         log('info','Total Members: {0} | Members Refreshed: {1} | Result: {2}{3} success'.format( \
             len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%"),self.guild_id)
-        if len(self.csv_data) > 0: self.write()
+        if len(self.csv_data) > 0:
+            self.write(False)
+            for copy in range(1,13):
+                self.write(copy)
+            log('info','CSV files written successfully.',self.guild_id)
 
     def with_tornado(self,zone=0):
         self.tornado_count = 0
@@ -104,7 +108,7 @@ class Guild(object):
             metric = 'hps' if self.members[user].role == 'Heal' else 'dps'
             self.members[user].url = WCL_URL.format(self.members[user].name.encode('utf-8'),realm.replace("'","").replace("-","").replace(" ","-").replace("(","").replace(")","").encode('utf-8').replace("й","и"),self.region,zone,metric,WCL_KEY).replace(" ","%20")
         else:
-            self.members[user].url = URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY[self.mode]).replace(" ","%20")
+            self.members[user].url = URL.format(self.region,realm.encode('utf-8'),self.members[user].name.encode('utf-8'),API_KEY[self.region.upper()][self.mode]).replace(" ","%20")
         return (self.members[user].url, realm)
 
     def process_result(self, result):
@@ -227,17 +231,20 @@ class Guild(object):
 
         if self.mode != 'debug': execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id = {1}'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),self.guild_id))
 
-    def write(self):
-        with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
+    def write(self, copy):
+        with open('{0}{1}{2}.csv'.format(PATH_TO_CSV,self.key_code,"_{0}".format(copy) if copy else ""),'w+') as csvfile:
             write_csv(csvfile,self)
 
         if self.mode != 'debug':
-            bucket = storage.Client().get_bucket('wowcsv')
-            gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
-            gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
-            gcloud_path.cache_control = 'no-cache'
-            gcloud_path.patch()
-            gcloud_path.make_public()
+            try:
+                bucket = storage.Client().get_bucket('wowcsv')
+                gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
+                gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
+                gcloud_path.cache_control = 'no-cache'
+                gcloud_path.patch()
+                gcloud_path.make_public()
+            except:
+                log('error','The Google Cloud storage service appears to be unavailable. File is not written.',self.guild_id)
 
     def update_warcraftlogs(self):
         self.success = 0
