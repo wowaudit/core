@@ -59,10 +59,8 @@ class Guild(object):
         log('info','Total Members: {0} | Members Refreshed: {1} | Result: {2}{3} success'.format( \
             len(self.members),len(self.csv_data), round(float(len(self.csv_data)) / float(len(self.members)) * 100,0), "%"),self.guild_id)
         if len(self.csv_data) > 0:
-            self.write(False)
-            for copy in range(1,13):
-                self.write(copy)
-            log('info','CSV files written successfully.',self.guild_id)
+            self.write()
+            log('info','CSV file written successfully.',self.guild_id)
 
     def with_tornado(self,zone=0):
         self.tornado_count = 0
@@ -231,8 +229,8 @@ class Guild(object):
 
         if self.mode != 'debug': execute_query('UPDATE guilds SET last_checked = {0} WHERE guild_id = {1}'.format((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),self.guild_id))
 
-    def write(self, copy):
-        with open('{0}{1}{2}.csv'.format(PATH_TO_CSV,self.key_code,"_{0}".format(copy) if copy else ""),'w+') as csvfile:
+    def write(self):
+        with open('{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),'w+') as csvfile:
             write_csv(csvfile,self)
 
         if self.mode != 'debug':
