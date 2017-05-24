@@ -6,7 +6,7 @@ from execute_query import execute_query
 
 try:
     region = str(sys.argv[1])
-    if region not in ['EU','US']: raise Exception
+    if region not in ['EU','US','TW','KR']: raise Exception
     print '[INFO] [{0}] - Going to reset the snapshot of region {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),region)
 except Exception:
     print 'Please specify a valid region.'
@@ -28,6 +28,12 @@ else:
         sys.exit()
     elif region == 'EU' and datetime.datetime.weekday(datetime.datetime.now()) != 2:
         print "[INFO] [{0}] - It is not Wednesday, snapshots should not be reset for EU. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
+        sys.exit()
+    elif region == 'KR' and datetime.datetime.weekday(datetime.datetime.now()) != 3:
+        print "[INFO] [{0}] - It is not Thursday, snapshots should not be reset for KR. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
+        sys.exit()
+    elif region == 'TW' and datetime.datetime.weekday(datetime.datetime.now()) != 3:
+        print "[INFO] [{0}] - It is not Thursday, snapshots should not be reset for TW. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
         sys.exit()
     else:
         execute_query('UPDATE users SET weekly_snapshot = \'\' WHERE guild_id IN (SELECT guild_id from guilds WHERE region = \'{0}\')'.format(region))

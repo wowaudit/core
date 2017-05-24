@@ -11,7 +11,7 @@ STANDINGS = {0:'Hated',1:'Hostile',2:'Unfriendly',3:'Neutral',4:'Friendly',5:'Ho
 REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold',
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
-URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}"
+URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}&locale=en_GB"
 WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&partition=2&api_key={5}"
 WCL_ZONES_URL = "https://www.warcraftlogs.com:443/v1/zones?api_key={0}"
 VALID_RAIDS = [ {'name':'Emerald Nightmare','id':10, u'encounters':[{u'id': 1853, u'name': u'Nythendra','raid_ids':{'normal':10912,'heroic':10913,'mythic':10914}},
