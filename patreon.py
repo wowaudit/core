@@ -6,14 +6,14 @@ import csv
 class Patreons():
 
     def __init__(self):
-        data = execute_query('SELECT patreon_id, email, pledge, full_name, active, discord_name, guild_id, manual FROM patreons')
+        data = execute_query('SELECT patreon_id, email, pledge, full_name, active, discord_name, team_id, manual FROM patreons')
         self.everyone = {}
         for patreon in data:
             self.add_existing(patreon)
 
     def add_existing(self,data):
-        patreon_id, email, pledge, full_name, active, discord_name, guild_id, manual = data
-        self.everyone[email] = Patreon(patreon_id, email, pledge, full_name, active, discord_name, guild_id, manual, False if not manual else True)
+        patreon_id, email, pledge, full_name, active, discord_name, team_id, manual = data
+        self.everyone[email] = Patreon(patreon_id, email, pledge, full_name, active, discord_name, team_id, manual, False if not manual else True)
 
     def add_new(self,data):
         email = data[2]
@@ -23,15 +23,15 @@ class Patreons():
 
     def canceled_patreons(self):
         canceled = []
-        for user in self.everyone:
-            if not self.everyone[user].still_patreon:
-                if self.everyone[user].active == 1:
-                    canceled.append(self.everyone[user])
+        for character in self.everyone:
+            if not self.everyone[character].still_patreon:
+                if self.everyone[character].active == 1:
+                    canceled.append(self.everyone[character])
         return canceled
 
 class Patreon():
 
-    def __init__(self, patreon_id, email, pledge, full_name, active = 1, discord_name = '', guild_id = 0, manual = 0, still_patreon = True):
+    def __init__(self, patreon_id, email, pledge, full_name, active = 1, discord_name = '', team_id = 0, manual = 0, still_patreon = True):
         self.patreon_id = patreon_id
         self.active = active
         self.pledge = pledge
@@ -42,7 +42,7 @@ class Patreon():
             self.discord_name = discord_name.encode('utf-8').replace("'","\\'")
         except: self.discord_name = discord_name.decode('utf-8').encode('utf-8').replace("'","\\'")
 
-        self.guild_id = guild_id
+        self.team_id = team_id
         self.email = email
         self.manual = manual
         self.still_patreon = still_patreon
@@ -53,7 +53,7 @@ class Patreon():
         self.active = 1
 
     def get_output(self):
-        return [self.patreon_id, self.active, self.pledge, self.full_name, self.discord_name, self.guild_id, self.email, self.manual]
+        return [self.patreon_id, self.active, self.pledge, self.full_name, self.discord_name, self.team_id, self.email, self.manual]
 
 if __name__ == '__main__':
 
@@ -70,42 +70,42 @@ if __name__ == '__main__':
                 else: patreons.everyone[email].update(row)
                 patreons.everyone[email].still_patreon = True
 
-    for user in patreons.canceled_patreons():
-        execute_query('UPDATE patreons SET active = 0 WHERE patreon_id = {0}'.format(user.patreon_id))
-        if user.guild_id:
-            execute_query('UPDATE guilds SET patreon = 0 WHERE guild_id = {0}'.format(user.guild_id))
-            print 'Revoked Patreon access of user with guild ID {0}'.format(user.guild_id)
+    for character in patreons.canceled_patreons():
+        execute_query('UPDATE patreons SET active = 0 WHERE patreon_id = {0}'.format(character.patreon_id))
+        if character.team_id:
+            execute_query('UPDATE teams SET patreon = 0 WHERE team_id = {0}'.format(character.team_id))
+            print 'Revoked Patreon access of character with team ID {0}'.format(character.team_id)
         patreons.everyone.pop(email,None)
 
     query_new = []
     query_update = []
-    for user in patreons.everyone:
-        if patreons.everyone[user].patreon_id == 'new':
-            query_new.append('({0},{1},\'{2}\',\'{3}\',{4},\'{5}\',{6})'.format(*patreons.everyone[user].get_output()[1:]))
+    for character in patreons.everyone:
+        if patreons.everyone[character].patreon_id == 'new':
+            query_new.append('({0},{1},\'{2}\',\'{3}\',{4},\'{5}\',{6})'.format(*patreons.everyone[character].get_output()[1:]))
         else:
-            query_update.append('({0},{1},{2},\'{3}\',\'{4}\',{5},\'{6}\',{7})'.format(*patreons.everyone[user].get_output()))
+            query_update.append('({0},{1},{2},\'{3}\',\'{4}\',{5},\'{6}\',{7})'.format(*patreons.everyone[character].get_output()))
 
     if query_new:
-        execute_query('REPLACE INTO patreons (active,pledge,full_name,discord_name,guild_id,email,manual) VALUES ' + ','.join(query_new),False)
+        execute_query('REPLACE INTO patreons (active,pledge,full_name,discord_name,team_id,email,manual) VALUES ' + ','.join(query_new),False)
         print 'Added {0} new Patreons!'.format(len(query_new))
     if query_update:
         execute_query('REPLACE INTO patreons VALUES ' + ','.join(query_update),False)
 
     for signup in execute_query('SELECT * FROM patreon_signups'):
-        signup_id, name, mail, region, realm, guild_name = signup
+        signup_id, name, mail, region, realm, team_name = signup
         if mail.lower() in [i.lower() for i in patreons.everyone.keys()]:
 
-            guild_id = execute_query('SELECT guild_id FROM guilds WHERE realm = \'{0}\' AND region = \'{1}\' AND name = \'{2}\''.format(realm.replace("'","\\'").encode('utf-8'),region,guild_name.encode('utf-8')))
+            team_id = execute_query('SELECT team_id FROM teams WHERE realm = \'{0}\' AND region = \'{1}\' AND name = \'{2}\''.format(realm.replace("'","\\'").encode('utf-8'),region,team_name.encode('utf-8')))
             try:
-                guild_id = guild_id[0][0]
+                team_id = team_id[0][0]
                 go = True
             except:
-                print 'No guild ID found for this signup entry'
+                print 'No team ID found for this signup entry'
                 go = False
             if go:
-                execute_query('UPDATE guilds SET patreon = 1 WHERE guild_id = {0}'.format(guild_id))
-                execute_query('UPDATE patreons SET active = 1 AND guild_id = {0} WHERE email = \'{1}\''.format(guild_id,mail))
+                execute_query('UPDATE teams SET patreon = 1 WHERE team_id = {0}'.format(team_id))
+                execute_query('UPDATE patreons SET active = 1 AND team_id = {0} WHERE email = \'{1}\''.format(team_id,mail))
                 execute_query('DELETE FROM patreon_signups WHERE patreon_email = \'{0}\''.format(mail))
-                print 'Automatically upgraded Patreon status for {0}, guild ID {1}'.format(mail,guild_id)
+                print 'Automatically upgraded Patreon status for {0}, team ID {1}'.format(mail,team_id)
 
     print 'Done!'

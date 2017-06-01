@@ -13,14 +13,14 @@ except Exception:
     sys.exit()
 
 try:
-    guild_ids = str(sys.argv[2]).split(',')
-    print '[INFO] [{0}] - Not using all guild IDs, but only the following: {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),', '.join(guild_ids))
+    team_ids = str(sys.argv[2]).split(',')
+    print '[INFO] [{0}] - Not using all team IDs, but only the following: {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),', '.join(team_ids))
 except Exception:
-    guild_ids = False
+    team_ids = False
 
-if guild_ids:
-    execute_query('UPDATE users SET weekly_snapshot = \'\' WHERE guild_id IN ({0})'.format(','.join(guild_ids)))
-    print '[INFO] [{0}] - Snapshot resetted successfully for guilds {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),','.join(guild_ids)   )
+if team_ids:
+    execute_query('UPDATE characters SET weekly_snapshot = \'\' WHERE team_id IN ({0})'.format(','.join(team_ids)))
+    print '[INFO] [{0}] - Snapshot resetted successfully for teams {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),','.join(team_ids)   )
 
 else:
     if region == 'US' and datetime.datetime.weekday(datetime.datetime.now()) != 1:
@@ -36,5 +36,5 @@ else:
         print "[INFO] [{0}] - It is not Thursday, snapshots should not be reset for TW. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
         sys.exit()
     else:
-        execute_query('UPDATE users SET weekly_snapshot = \'\' WHERE guild_id IN (SELECT guild_id from guilds WHERE region = \'{0}\')'.format(region))
+        execute_query('UPDATE characters SET weekly_snapshot = \'\' WHERE team_id IN (SELECT team_id from teams WHERE region = \'{0}\')'.format(region))
         print '[INFO] [{0}] - Snapshot resetted successfully of region {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),region)

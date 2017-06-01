@@ -8,10 +8,10 @@ from writer import log
 
 class Member(object):
 
-    def __init__(self,data,guild_id,last_reset):
-        self.user_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
+    def __init__(self,data,team_id,last_reset):
+        self.character_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
         self.tier_data, self.status, self.warcraftlogs, self.last_refresh, self.old_snapshots = data[7:]
-        self.guild_id = guild_id
+        self.team_id = team_id
         self.last_reset = last_reset
 
         #TODO: Strip whitespace on website instead
@@ -88,14 +88,13 @@ class Member(object):
         self.processed_data['class'] = CLASSES[data['class']]
         self.processed_data['realm'] = realm
         self.processed_data['rank'] = '' #Deprecated and not used in any production spreadsheet. Can be replaced with new data.
-        self.processed_data['user_id'] = self.user_id
+        self.processed_data['character_id'] = self.character_id
 
         try:
             ROLES[self.role][CLASSES[data['class']]]
             self.processed_data['role'] = self.role
         except:
             self.processed_data['role'] = DEFAULT_ROLES[CLASSES[data['class']]]
-            log('error','Role set incorrectly for this user. Falling back to default for the class',self.guild_id,self.user_id)
 
     def process_gear_data(self,data):
         self.worst_gem = []
@@ -297,13 +296,13 @@ class Member(object):
                     flag = True
             if flag:
                 all_legendaries = set(self.legendaries_equipped + self.legendaries)
-                execute_query('UPDATE users SET legendaries = \'{0}\' WHERE user_id = \'{1}\''.format('|'.join(all_legendaries).replace("'","\\'"),self.user_id))
+                execute_query('UPDATE characters SET legendaries = \'{0}\' WHERE id = \'{1}\''.format('|'.join(all_legendaries).replace("'","\\'"),self.character_id))
             else: all_legendaries = self.legendaries
 
             self.processed_data['legendary_amount'] = len(all_legendaries)
             self.processed_data['legendary_list'] = '|'.join(all_legendaries)
 
-        #Taiwanese guilds can't handle legendaries for now (TODO)
+        #Taiwanese teams can't handle legendaries for now (TODO)
         except:
             self.processed_data['legendary_amount'] = 0
             self.processed_data['legendary_list'] = ''
@@ -360,12 +359,12 @@ class Member(object):
         self.spec_output.append(str(max(float(self.max_ilvl),float(self.processed_data['ilvl']))))
         self.processed_data['highest_ilvl_ever_equipped'] = max(float(self.max_ilvl),float(self.processed_data['ilvl']))
         self.processed_data['main_spec'] = max_spec[0]
-        self.spec_data = [self.user_id,'|'.join(self.spec_output),self.tier_data]
+        self.spec_data = [self.character_id,'|'.join(self.spec_output),self.tier_data]
 
     def update_stored_data(self):
         #Sets updated snapshot data if a new snapshot has to be made
         if self.dungeon_snapshot == 'not there' or self.wq_snapshot == 'not there' or self.ap_snapshot == 'not there':
-            self.snapshot_data = (self.user_id,{
+            self.snapshot_data = (self.character_id,{
                 'dungeons': self.processed_data['dungeons_done_total'] if self.dungeon_snapshot == 'not there' else self.dungeon_snapshot,
                 'wqs': self.processed_data['wqs_done_total'] if self.wq_snapshot == 'not there' else self.wq_snapshot,
                 'ap': self.processed_data['ap_obtained_total'] if self.ap_snapshot == 'not there' else self.ap_snapshot})
