@@ -4,7 +4,7 @@ from dateutil import tz
 from constants import HEADER, TIME_ZONE, VALID_RAIDS
 
 def error(message):
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.ERROR)
     logger = logging.getLogger(__name__)
     logger.exception(message)
     return repr(message)

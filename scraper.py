@@ -21,16 +21,16 @@ class Scraper(object):
 
     def fetch_select(self,teams):
         data = execute_query('SELECT teams.id, guilds.name, guilds.region, guilds.realm, teams.key_code, teams.last_refreshed, guilds.patreon, characters.id, characters.name, characters.role, characters.weekly_snapshot ' + \
-                             ', characters.legendaries, characters.realm, characters.per_spec, characters.tier_data, characters.status, characters.warcraftlogs, characters.last_refresh, characters.old_snapshots FROM teams, characters, guilds WHERE teams.id = characters.team_id AND characters.team_id IN ({0} AND teams.guild_id = guilds.id)'.format(','.join(teams)))
+                             ', characters.legendaries, characters.realm, characters.per_spec, characters.tier_data, characters.status, characters.warcraftlogs, characters.last_refresh, characters.old_snapshots FROM teams, characters, guilds WHERE teams.id = characters.team_id AND characters.active = 1 AND characters.team_id IN ({0}) AND teams.guild_id = guilds.id'.format(','.join(teams)))
         self.store(data)
 
     def allocate(self):
-        result = execute_query('SELECT id, last_refreshed{0} FROM teams WHERE patreon {1} {2} ORDER BY last_refreshed{0} ASC LIMIT {3}'.format('_wcl' if self.mode == 'warcraftlogs' else '','= 1' if self.mode == 'production_patreon' else 'IN (0,1)', 'AND last_refreshed > 0' if self.mode == 'debug' else '', MAX_ALLOCATED))
+        result = execute_query('SELECT teams.id, teams.last_refreshed{0} FROM teams, guilds WHERE guilds.patreon {1} {2} AND teams.guild_id = guilds.id ORDER BY last_refreshed{0} ASC LIMIT {3}'.format('_wcl' if self.mode == 'warcraftlogs' else '','>= 1' if self.mode == 'production_patreon' else 'IN (0,1,3)', 'AND last_refreshed > 0' if self.mode == 'debug' else '', MAX_ALLOCATED))
 
         team_data = [str(team[0]) for team in result]
         last_refreshed = [int(team[1]) for team in result]
         if self.mode in ['production','production_patreon','warcraftlogs']:
-            execute_query('UPDATE teams SET last_refreshed{0} = {1} WHERE team_id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(team_data)))
+            execute_query('UPDATE teams SET last_refreshed{0} = {1} WHERE id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(team_data)))
 
         log('info','Allocated and going to refresh {0} teams. Time since last refresh: Lowest {1} seconds, Highest {2} seconds, Average {3} seconds.'.format(
             MAX_ALLOCATED,

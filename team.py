@@ -32,7 +32,7 @@ class team(object):
         if self.members[name].status == 'not tracking': self.tracking_all = False
 
     def reset_timestamp(self):
-        times = {'EU':{'hour':5,'day':2},'US':{'hour':11,'day':1},'TW':{'hour':5,'day':2}}
+        times = {'EU':{'hour':5,'day':2},'US':{'hour':11,'day':1},'TW':{'hour':5,'day':2},'KR':{'hour':5,'day':2}}
         last_reset_datetime = datetime.datetime.utcnow()
 
         if last_reset_datetime.weekday() == times[self.region]['day']:
@@ -109,12 +109,14 @@ class team(object):
             self.members[character].url = URL.format(self.region,self.to_slug(realm).encode('utf-8'),self.members[character].name.encode('utf-8'),API_KEY[self.region.upper()][self.mode]).replace(" ","%20")
         return (self.members[character].url, realm)
 
+
     def to_slug(self, realm):
-        realm = realm.replace("'","")
-        realm = realm.replace("-","")
-        realm = realm.replace(" ","-")
-        realm = realm.replace("(","")
-        realm = realm.replace(")","")
+        realm = realm.replace(u"'",u"")
+        realm = realm.replace(u"-",u"")
+        realm = realm.replace(u" ",u"-")
+        realm = realm.replace(u"(",u"")
+        realm = realm.replace(u")",u"")
+        realm = realm.replace(u'\xea',u"e")
         realm = realm.lower()
         return realm
 
