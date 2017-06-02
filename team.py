@@ -12,10 +12,10 @@ from json import loads, dumps
 try: from google.cloud import storage
 except: print 'Google Cloud library not found. Assuming test environment.'
 
-class team(object):
+class Team(object):
 
     def __init__(self, data, mode, client):
-        self.team_id, self.name, self.region, self.realm, self.key_code, self.last_refreshed, self.patreon = data[:7]
+        self.team_id, self.name, self.region, self.realm, self.key_code, self.last_refreshed, self.last_refreshed_wcl, self.patreon = data[:8]
         self.version_message = "{0}|Your spreadsheet is out of date, Warcraft Logs will not work in the old version. Make a new copy at http://wow.vanlankveld.me/copy".format(CURRENT_VERSION)
         self.last_reset = self.reset_timestamp()
         self.tracking_all = True
@@ -27,7 +27,7 @@ class team(object):
         self.client = client
 
     def add_member(self, data):
-        name = data[8]
+        name = data[9]
         if name not in self.members: self.members[name] = Member(data,self.team_id,self.last_reset)
         if self.members[name].status == 'not tracking': self.tracking_all = False
 
@@ -169,14 +169,15 @@ class team(object):
                     stored = False
                     if encounter['difficulty'] >= 3: # Exclude Looking for Raid data
                         for spec in encounter['specs']:
-                            if spec['spec'] == member.role:
-                                self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
-                                stored = True
-                                break
-                            elif spec['spec'] in WCL_ROLES_TO_SPEC_MAP[member.role]:
-                                self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
-                                stored = True
-                                break
+                            if member.role:
+                                if spec['spec'] == member.role:
+                                    self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
+                                    stored = True
+                                    break
+                                elif spec['spec'] in WCL_ROLES_TO_SPEC_MAP[member.role]:
+                                    self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': spec['best_historical_percent'], 'median': spec['historical_median'], 'average': spec['historical_avg']})
+                                    stored = True
+                                    break
                         if not stored:
                             self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': '-', 'median': '-', 'average': '-'})
                 self.success += 1
@@ -266,17 +267,26 @@ class team(object):
                     self.processed_data[member][encounter['name']] = {3:{'raid':raid},4:{'raid':raid},5:{'raid':raid}}
 
         for raid in VALID_RAIDS:
-            self.with_tornado(raid['id'])
+            if datetime.datetime.utcnow().weekday() in raid['days']:
+                self.with_tornado(raid['id'])
 
         if self.success > 0:
             base_spec_query = 'UPDATE characters SET warcraftlogs = CASE '
             for member in self.processed_data:
+                if self.members[member].warcraftlogs:
+                    data = loads(self.members[member].warcraftlogs)
+                else:
+                    data = False
                 output = {'best_3': [],'best_4': [],'best_5': [],'median_3': [],'median_4': [],'median_5': [],'average_3': [],'average_4': [],'average_5': []}
                 for metric in output:
                     for raid in VALID_RAIDS:
-                        for encounter in raid['encounters']:
+                        for index, encounter in enumerate(raid['encounters']):
                             try: output[metric].append(str(int(self.processed_data[member][encounter['name']][int(metric.split('_')[1])][metric.split('_')[0]])))
-                            except: output[metric].append('-')
+                            except:
+                                if data:
+                                    output[metric].append(data[metric][index])
+                                else:
+                                    output[metric].append('-')
                 try: output['character_id'] = self.processed_data[member]['warcraftlogs_id']
                 except: output['character_id'] = ''
                 base_spec_query += 'WHEN id = {0} THEN \'{1}\' '.format(self.members[member].character_id,dumps(output).replace("'","\\'"))
