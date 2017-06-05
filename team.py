@@ -15,7 +15,7 @@ except: print 'Google Cloud library not found. Assuming test environment.'
 class Team(object):
 
     def __init__(self, data, mode, client):
-        self.team_id, self.name, self.region, self.realm, self.key_code, self.last_refreshed, self.last_refreshed_wcl, self.patreon = data[:8]
+        self.team_id, self.name, self.region, self.realm, self.key_code, self.last_refreshed, self.last_refreshed_wcl, self.patreon, self.team_name = data[:9]
         self.version_message = "{0}|Your spreadsheet is out of date, Warcraft Logs will not work in the old version. Make a new copy at http://wow.vanlankveld.me/copy".format(CURRENT_VERSION)
         self.last_reset = self.reset_timestamp()
         self.tracking_all = True
@@ -27,7 +27,7 @@ class Team(object):
         self.client = client
 
     def add_member(self, data):
-        name = data[9]
+        name = data[10]
         if name not in self.members: self.members[name] = Member(data,self.team_id,self.last_reset)
         if self.members[name].status == 'not tracking': self.tracking_all = False
 

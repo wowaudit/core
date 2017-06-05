@@ -10,7 +10,7 @@ class Member(object):
 
     def __init__(self,data,team_id,last_reset):
         self.character_id, self.name, self.role, self.snapshot, self.legendary_snapshot, self.realm, self.spec_stored_data, \
-        self.tier_data, self.status, self.warcraftlogs, self.last_refresh, self.old_snapshots = data[8:]
+        self.tier_data, self.status, self.warcraftlogs, self.last_refresh, self.old_snapshots = data[9:]
         self.team_id = team_id
         self.last_reset = last_reset
 

@@ -24,7 +24,7 @@ def write_csv(csvfile,team):
     miss = 0
     first_row = list(HEADER)
     team_wide_data = [europe_time.strftime('%d-%m %H:%M'),team.name.encode('utf-8'),team.realm.encode('utf-8'),team.region,
-                       team.version_message,team.warning_message,"patreon" if team.patreon else "no patreon"]
+                       team.version_message,team.warning_message,"patreon" if team.patreon else "no patreon", team.team_name.encode('utf-8')]
     first_row[0:len(team_wide_data)] = team_wide_data
     raids_header = []
     for raid in VALID_RAIDS:
