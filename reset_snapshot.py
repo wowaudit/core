@@ -36,5 +36,5 @@ else:
         print "[INFO] [{0}] - It is not Thursday, snapshots should not be reset for TW. Aborting now.".format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'))
         sys.exit()
     else:
-        execute_query('UPDATE characters SET weekly_snapshot = \'\' WHERE team_id IN (SELECT team_id from teams WHERE guild_id IN (SELECT id FROM guilds WHERE region = \'{0}\'))'.format(region))
+        execute_query('UPDATE characters SET weekly_snapshot = \'\' WHERE team_id IN (SELECT id from teams WHERE guild_id IN (SELECT id FROM guilds WHERE region = \'{0}\'))'.format(region))
         print '[INFO] [{0}] - Snapshot resetted successfully of region {1}'.format(datetime.datetime.utcnow().replace(tzinfo=tz.gettz('UTC')).astimezone(tz.gettz(TIME_ZONE)).strftime('%d-%m %H:%M:%S'),region)
