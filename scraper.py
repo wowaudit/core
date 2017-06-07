@@ -85,7 +85,7 @@ class Scraper(object):
                 try:
                     team.update_warcraftlogs()
                     log('info','Finished refreshing this team.',team.team_id)
-                    execute_query('UPDATE teams SET last_refreshed_wcl = {0} WHERE id IN ({1})'.format((datetime.datetime.utcnow()-datetime.datetime(2017,1,1)).total_seconds(),','.join(self.selection)))
+                    execute_query('UPDATE teams SET last_refreshed_wcl = {0} WHERE id = {1}'.format((datetime.datetime.utcnow()-datetime.datetime(2017,1,1)).total_seconds(),team.team_id))
                 except Exception as e:
                     log('error','Encountered an error in refreshing the WCL data of this team. Error: {0}'.format(error(e)),team.team_id)
             else:
