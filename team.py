@@ -16,7 +16,7 @@ class Team(object):
 
     def __init__(self, data, mode, client):
         self.team_id, self.name, self.region, self.realm, self.key_code, self.last_refreshed, self.last_refreshed_wcl, self.patreon, self.team_name = data[:9]
-        self.version_message = "{0}|Your spreadsheet is out of date, Warcraft Logs will not work in the old version. Make a new copy at http://wow.vanlankveld.me/copy".format(CURRENT_VERSION)
+        self.version_message = "{0}|Your spreadsheet is out of date, Warcraft Logs will not work in the old version. Make a new copy at https://wowaudit.com/copy".format(CURRENT_VERSION)
         self.last_reset = self.reset_timestamp()
         self.tracking_all = True
         self.members = {}
@@ -187,9 +187,9 @@ class Team(object):
 
     def generate_warnings(self):
         if not self.tracking_all:
-            self.warning_message = "warning|Not all added members are being tracked. Please check wow.vanlankveld.me and update the list of members."
+            self.warning_message = "warning|Not all added members are being tracked. Please check wowaudit.com and update the list of members."
         elif len(self.wrong_characters) > 0:
-            self.warning_message = "warning|Not all added members have a valid role for their class. Please check wow.vanlankveld.me and update the list of members."
+            self.warning_message = "warning|Not all added members have a valid role for their class. Please check wowaudit.com and update the list of members."
         else:
             self.warning_message = "good|All added members are being tracked, there are no problems!"
 
