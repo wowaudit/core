@@ -27,19 +27,19 @@ class Scraper(object):
     def allocate(self):
         result = execute_query('SELECT teams.id, teams.last_refreshed{0} FROM teams, guilds WHERE guilds.patreon {1} {2} AND teams.guild_id = guilds.id ORDER BY last_refreshed{0} ASC LIMIT {3}'.format('_wcl' if self.mode == 'warcraftlogs' else '','>= 1' if self.mode == 'production_patreon' else 'IN (0,1,3)', 'AND last_refreshed > 0' if self.mode == 'debug' else '', MAX_ALLOCATED))
 
-        self.selection = [str(team[0]) for team in result]
+        self.ids = [str(team[0]) for team in result]
         last_refreshed = [int(team[1]) for team in result]
         if self.mode in ['production','production_patreon']:
-            execute_query('UPDATE teams SET last_refreshed{0} = {1} WHERE id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(self.selection)))
+            execute_query('UPDATE teams SET last_refreshed{0} = {1} WHERE id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(self.ids)))
 
         log('info','Allocated and going to refresh {0} teams. Time since last refresh: Lowest {1} seconds, Highest {2} seconds, Average {3} seconds.'.format(
             MAX_ALLOCATED,
             round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-max(last_refreshed),0),
             round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-min(last_refreshed),0),
             round((datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds()-(sum(last_refreshed) / float(len(last_refreshed))),0)),
-            ', '.join(self.selection))
+            ', '.join(self.ids))
 
-        self.fetch_select(self.selection)
+        self.fetch_select(self.ids)
 
     def store(self,data):
         count = 0
@@ -85,11 +85,12 @@ class Scraper(object):
                 try:
                     team.update_warcraftlogs()
                     log('info','Finished refreshing this team.',team.team_id)
-                    execute_query('UPDATE teams SET last_refreshed_wcl = {0} WHERE id = {1}'.format((datetime.datetime.utcnow()-datetime.datetime(2017,1,1)).total_seconds(),team.team_id))
                 except Exception as e:
                     log('error','Encountered an error in refreshing the WCL data of this team. Error: {0}'.format(error(e)),team.team_id)
             else:
+                self.ids.remove(str(team.team_id))
                 log('info','Not refreshing this guild now, it has only been {0} hours since it was last refreshed.'.format(hours_since_last),team.team_id)
                 time.sleep(5)
-
+        if self.ids:
+            execute_query('UPDATE teams SET last_refreshed_wcl = {0} WHERE id IN ({1})'.format((datetime.datetime.utcnow()-datetime.datetime(2017,1,1)).total_seconds(),','.join(self.ids)))
         return True
