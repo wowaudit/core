@@ -75,7 +75,7 @@ class Team(object):
         ioloop.IOLoop.instance().start()
         for result in self.tornado_results:
             keep_going = self.process_result(result)
-            if not keep_going and self.mode != 'warcraftlogs': return False
+            if not keep_going: return False
         return True
 
     def handle_request_tornado(self, response, member, realm):
@@ -90,7 +90,7 @@ class Team(object):
             tasks = dict((executor.submit(self.handle_request_concurrent, character, zone), character) for character in self.members)
             for character in futures.as_completed(tasks):
                 keep_going = self.process_result(character.result())
-                if not keep_going and self.mode != 'warcraftlogs': return False
+                if not keep_going: return False
         return True
 
     def handle_request_concurrent(self,character,zone):
@@ -182,8 +182,14 @@ class Team(object):
                             self.processed_data[member.name][encounter['name']][encounter['difficulty']].update({'best': '-', 'median': '-', 'average': '-'})
                 self.success += 1
             except Exception as e: log('error','Processing the API result of this character failed. Error: {0}'.format(error(e)),self.team_id,member.character_id)
+
+        elif result_code == 429:
+            log('info','Rate limit exceeded. Pausing for 1 minute and then retrying this guild.',self.team_id,member.character_id)
+            return False
+
         elif result_code != 200:
             log('error','The API call returned an error. Result code: {0}'.format(result_code),self.team_id,member.character_id)
+        return True
 
     def generate_warnings(self):
         if not self.tracking_all:
@@ -268,7 +274,10 @@ class Team(object):
 
         for raid in VALID_RAIDS:
             if datetime.datetime.utcnow().weekday() in raid['days']:
-                self.with_tornado(raid['id'])
+                keep_going = self.with_tornado(raid['id'])
+                if not keep_going:
+                    time.sleep(60)
+                    return self.update_warcraftlogs()
 
         if self.success > 0:
             base_spec_query = 'UPDATE characters SET warcraftlogs = CASE '
