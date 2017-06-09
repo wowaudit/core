@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from member import Member
 from constants import *
-from auth import API_KEY, WCL_KEY, PATH_TO_CSV
+from auth import *
 from concurrent import futures
 from tornado import ioloop, httpclient
 from dateutil import tz
@@ -11,7 +11,11 @@ from writer import write_csv, log, error
 from json import loads, dumps
 try: from google.cloud import storage
 except: print 'Google Cloud library not found. Assuming test environment.'
-
+try:
+    from azure.storage.blob import BlockBlobService
+    from azure.storage.blob import ContentSettings
+    uploader = BlockBlobService(account_name=AZURE_NAME, account_key=AZURE_KEY)
+except: print 'Azure Storage library could not be loaded. Not using Azure storage now.'
 class Team(object):
 
     def __init__(self, data, mode, client):
@@ -252,6 +256,8 @@ class Team(object):
             write_csv(csvfile,self)
 
         if self.mode != 'debug':
+            try: uploader.create_blob_from_path('wowcsv',self.key_code + '.csv','{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),content_settings=ContentSettings(content_type='application/CSV'))
+            except: pass
             try:
                 bucket = storage.Client().get_bucket('wowcsv')
                 gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
