@@ -11,7 +11,7 @@ STANDINGS = {0:'Hated',1:'Hostile',2:'Unfriendly',3:'Neutral',4:'Friendly',5:'Ho
 REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold',
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
-URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets&apikey={3}&locale=en_GB"
+URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets,pvp&apikey={3}&locale=en_GB"
 WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&partition=2&api_key={5}"
 WCL_ZONES_URL = "https://www.warcraftlogs.com:443/v1/zones?api_key={0}"
 VALID_RAIDS = [ {'name':'Emerald Nightmare','days':[1],'id':10,
@@ -57,7 +57,8 @@ HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_i
          'spec2_traits','spec2_ilvl','spec3_traits','spec3_ilvl','spec4_traits','spec4_ilvl','current_spec_name','highest_ilvl_ever_equipped','main_spec','Cathedral of Eternal Night',
          'WCL_id','WCL_Normal_best','WCL_Normal_median','WCL_Normal_average','WCL_Heroic_best','WCL_Heroic_median','WCL_Heroic_average','WCL_Mythic_best','WCL_Mythic_median','WCL_Mythic_average',
          'character_id', 'historical_wqs_done', 'historical_ap_gained', 'historical_dungeons_done','talons_vengeance_standing','talons_vengeance_value','legionfall_standing','legionfall_value','paragon_amount',
-         'raids_normal','raids_normal_weekly','raids_heroic','raids_heroic_weekly','raids_mythic','raids_mythic_weekly']
+         'raids_normal','raids_normal_weekly','raids_heroic','raids_heroic_weekly','raids_mythic','raids_mythic_weekly','prestige','2v2_rating','2v2_season_played','2v2_week_played','honorable_kills',
+         '3v3_rating','3v3_season_played','3v3_week_played','RBG_rating','RBG_season_played','RBG_week_played','max_2v2_rating','max_3v3_rating']
 RELIC_ILVL = {2:690,3:695,4:700,5:705,7:710,8:715,9:720,10:725,12:730,13:735,14:740,15:745,17:750,18:755,19:760,21:765,
                22:770,23:775,24:780,26:785,27:790,28:795,29:800,31:805,32:810,33:815,35:820,36:825,37:830,39:835,40:840,42:845,43:850,45:855,46:860,48:865,49:870,51:875,
                52:880,53:885,55:890,56:895,58:900,59:905,61:910,62:915,64:920,65:925}

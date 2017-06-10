@@ -68,6 +68,7 @@ class Member(object):
         self.process_dungeon_data(data)
         self.process_warcraftlogs_data(data)
         self.process_wq_data(data)
+        self.process_pvp_data(data)
         self.process_legendary_data(data)
         self.process_nocombat_data(data)
         self.process_spec_data(data)
@@ -89,6 +90,7 @@ class Member(object):
         self.processed_data['realm'] = realm
         self.processed_data['rank'] = '' #Deprecated and not used in any production spreadsheet. Can be replaced with new data.
         self.processed_data['character_id'] = self.character_id
+        self.processed_data['honorable_kills'] = data['totalHonorableKills']
 
         try:
             ROLES[self.role][CLASSES[data['class']]]
@@ -257,6 +259,18 @@ class Member(object):
                     raid_output['raids_{0}_weekly'.format(difficulty)].append(str(raid_list[encounter['raid_ids'][difficulty]][1]))
         for metric in raid_output: self.processed_data[metric] = '|'.join(raid_output[metric])
 
+    def process_pvp_data(self,data):
+        try:
+            self.processed_data['prestige'] = data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(31773)]
+        except:
+            self.processed_data['prestige'] = 0
+
+        for bracket in ['2v2','3v3','RBG']:
+            self.processed_data['{0}_rating'.format(bracket)] = data['pvp']['brackets']['ARENA_BRACKET_{0}'.format(bracket)]['rating']
+            self.processed_data['{0}_season_played'.format(bracket)] = data['pvp']['brackets']['ARENA_BRACKET_{0}'.format(bracket)]['seasonPlayed']
+            self.processed_data['{0}_week_played'.format(bracket)] = data['pvp']['brackets']['ARENA_BRACKET_{0}'.format(bracket)]['weeklyPlayed']
+        self.processed_data['max_2v2_rating'] = data['statistics']['subCategories'][9]['subCategories'][0]['statistics'][24]['quantity']
+        self.processed_data['max_3v3_rating'] = data['statistics']['subCategories'][9]['subCategories'][0]['statistics'][23]['quantity']
 
     def process_warcraftlogs_data(self,data):
         if self.warcraftlogs:
