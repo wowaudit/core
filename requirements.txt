@@ -1,6 +1,6 @@
 mysql-python
 tornado
 futures
-google-cloud
+azure
 python-dateutil
 pympler

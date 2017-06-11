@@ -9,13 +9,10 @@ import requests, datetime, sys, copy, time
 from execute_query import execute_query
 from writer import write_csv, log, error
 from json import loads, dumps
-try: from google.cloud import storage
-except: print 'Google Cloud library not found. Assuming test environment.'
-try:
-    from azure.storage.blob import BlockBlobService
-    from azure.storage.blob import ContentSettings
-    uploader = BlockBlobService(account_name=AZURE_NAME, account_key=AZURE_KEY)
-except: print 'Azure Storage library could not be loaded. Not using Azure storage now.'
+from azure.storage.blob import BlockBlobService
+from azure.storage.blob import ContentSettings
+uploader = BlockBlobService(account_name=AZURE_NAME, account_key=AZURE_KEY)
+
 class Team(object):
 
     def __init__(self, data, mode, client):
@@ -262,16 +259,7 @@ class Team(object):
 
         if self.mode != 'debug':
             try: uploader.create_blob_from_path('wowcsv',self.key_code + '.csv','{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),content_settings=ContentSettings(content_type='application/CSV'))
-            except: pass
-            try:
-                bucket = storage.Client().get_bucket('wowcsv')
-                gcloud_path = bucket.blob('{0}.csv'.format(self.key_code))
-                gcloud_path.upload_from_filename(filename='{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
-                gcloud_path.cache_control = 'no-cache'
-                gcloud_path.patch()
-                gcloud_path.make_public()
-            except:
-                log('error','The Google Cloud storage service appears to be unavailable. File is not written.',self.team_id)
+            except: log('error','The Azure storage service appears to be unavailable. File is not written.',self.team_id)
 
     def update_warcraftlogs(self):
         self.success = 0
