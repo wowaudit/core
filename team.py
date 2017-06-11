@@ -54,6 +54,7 @@ class Team(object):
         self.snapshot_data = []
         self.spec_data = []
         self.wrong_characters = []
+        self.errored_characters = []
         self.count = 0
         keep_going = self.with_concurrent() if self.client == 'concurrent' else self.with_tornado()
         if not keep_going: return False
@@ -144,6 +145,7 @@ class Team(object):
 
                 else:
                     if result_code == 404: self.wrong_characters.append(member.character_id)
+                    if result_code == 500 or result_code == 504: self.errored_characters.append(member.character_id)
                     log('error','Could not fetch character data. Status code: {0}'.format(result_code),self.team_id,member.character_id)
                     if member.last_refresh:
                         try:
@@ -240,9 +242,12 @@ class Team(object):
             for member in self.wrong_characters:
                 base_spec_query += 'WHEN id = {0} THEN \'not tracking\' '.format(member)
 
+            for member in self.errored_characters:
+                base_spec_query += 'WHEN id = {0} THEN \'temporarily unavailable\' '.format(member)
+
             if self.mode != 'debug': execute_query(base_spec_query + ' ELSE status END',False)
 
-        elif len(self.wrong_characters) > 0:
+        elif (len(self.wrong_characters) + len(self.errored_characters)) > 0:
             base_spec_query = 'UPDATE characters SET status = CASE '
             for member in self.wrong_characters:
                 base_spec_query += 'WHEN id = {0} THEN \'not tracking\' '.format(member)
