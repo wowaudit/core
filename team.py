@@ -119,6 +119,7 @@ class Team(object):
         realm = realm.replace(u"(",u"")
         realm = realm.replace(u")",u"")
         realm = realm.replace(u'\xea',u"e")
+        realm = realm.replace(u'\xe0',u"a")
         realm = realm.lower()
         return realm
 
