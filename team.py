@@ -288,14 +288,16 @@ class Team(object):
                     data = False
                 output = {'best_3': [],'best_4': [],'best_5': [],'median_3': [],'median_4': [],'median_5': [],'average_3': [],'average_4': [],'average_5': []}
                 for metric in output:
+                    offset = 0
                     for raid in VALID_RAIDS:
                         for index, encounter in enumerate(raid['encounters']):
                             try: output[metric].append(str(int(self.processed_data[member][encounter['name']][int(metric.split('_')[1])][metric.split('_')[0]])))
                             except:
                                 if data:
-                                    output[metric].append(data[metric][index])
+                                    output[metric].append(data[metric][index + offset])
                                 else:
                                     output[metric].append('-')
+                        offset += len(raid['encounters'])
                 try: output['character_id'] = self.processed_data[member]['warcraftlogs_id']
                 except: output['character_id'] = ''
                 base_spec_query += 'WHEN id = {0} THEN \'{1}\' '.format(self.members[member].character_id,dumps(output).replace("'","\\'"))
