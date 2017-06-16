@@ -25,11 +25,17 @@ class Scraper(object):
         self.store(data)
 
     def allocate(self):
-        result = execute_query('SELECT teams.id, teams.last_refreshed{0} FROM teams, guilds WHERE guilds.patreon {1} {2} AND teams.guild_id = guilds.id ORDER BY last_refreshed{0} ASC LIMIT {3}'.format('_wcl' if self.mode == 'warcraftlogs' else '','>= 1' if self.mode == 'production_patreon' else 'IN (0,1,3)', 'AND last_refreshed > 0' if self.mode == 'debug' else '', MAX_ALLOCATED))
+        if self.mode == 'production_patreon':
+            patreon_level = '>= 1'
+        elif self.mode == 'production_platinum':
+            patreon_level = '= 10'
+        else:
+            patreon_level = 'IN (0,1,3,10)'
+        result = execute_query('SELECT teams.id, teams.last_refreshed{0} FROM teams, guilds WHERE guilds.patreon {1} {2} AND teams.guild_id = guilds.id ORDER BY last_refreshed{0} ASC LIMIT {3}'.format('_wcl' if self.mode == 'warcraftlogs' else '',patreon_level, 'AND last_refreshed > 0' if self.mode == 'debug' else '', MAX_ALLOCATED))
 
         self.ids = [str(team[0]) for team in result]
         last_refreshed = [int(team[1]) for team in result]
-        if self.mode in ['production','production_patreon']:
+        if self.mode in ['production','production_patreon','production_platinum']:
             execute_query('UPDATE teams SET last_refreshed{0} = {1} WHERE id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(self.ids)))
 
         log('info','Allocated and going to refresh {0} teams. Time since last refresh: Lowest {1} seconds, Highest {2} seconds, Average {3} seconds.'.format(
