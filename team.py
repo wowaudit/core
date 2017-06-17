@@ -203,6 +203,7 @@ class Team(object):
             except: self.processed_data[member.name]['raider_io_score'] = '-'
         else:
             self.processed_data[member.name]['raider_io_score'] = '-'
+        self.success += 1
         return True
 
     def generate_warnings(self):
