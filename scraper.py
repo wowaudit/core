@@ -84,12 +84,12 @@ class Scraper(object):
             else:
                 log('error','Encountered an error, did not refresh. Error: {0}'.format(error(e)),team.team_id)
 
-    def check_warcraftlogs(self):
+    def check_warcraftlogs(self,override=False):
         for team in self.teams:
             hours_since_last = int(((datetime.datetime.utcnow()-datetime.datetime(2017,1,1)).total_seconds() - team.last_refreshed_wcl) / 3600)
-            if hours_since_last > 22: #Don't refresh a guild more often than once every 22 hours
+            if hours_since_last > 22 or override: #Don't refresh a guild more often than once every 22 hours
                 try:
-                    team.update_warcraftlogs()
+                    team.update_warcraftlogs(override)
                     log('info','Finished refreshing this team.',team.team_id)
                 except Exception as e:
                     log('error','Encountered an error in refreshing the WCL data of this team. Error: {0}'.format(error(e)),team.team_id)

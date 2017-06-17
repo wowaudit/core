@@ -17,7 +17,7 @@ class Team(object):
 
     def __init__(self, data, mode, client):
         self.team_id, self.name, self.region, self.realm, self.key_code, self.last_refreshed, self.last_refreshed_wcl, self.patreon, self.team_name = data[:9]
-        self.version_message = "{0}|Your spreadsheet is out of date, Warcraft Logs will not work in the old version. Make a new copy at https://wowaudit.com/copy".format(CURRENT_VERSION)
+        self.version_message = "{0}|Your spreadsheet is out of date, if you are still using version 4.0 you may see old data, blank sheets, and error notification mails from Google; please make a new copy at https://wowaudit.com/copy. In case you get these mails you should revoke authorisation of all scripts called Refresh first, at https://myaccount.google.com/permissions".format(CURRENT_VERSION)
         self.last_reset = self.reset_timestamp()
         self.tracking_all = True
         self.members = {}
@@ -107,10 +107,11 @@ class Team(object):
         if self.mode == 'warcraftlogs':
             metric = 'hps' if self.members[character].role == 'Heal' else 'dps'
             self.members[character].url = WCL_URL.format(self.members[character].name.encode('utf-8'),self.to_slug(realm).encode('utf-8'),self.region,zone,metric,WCL_KEY).replace(" ","%20")
+        elif self.mode == 'raiderio':
+            self.members[character].url = RAIDER_IO_URL.format(self.region,self.to_slug(realm).encode('utf-8'),self.members[character].name.encode('utf-8'))
         else:
             self.members[character].url = URL.format(self.region,self.to_slug(realm).encode('utf-8'),self.members[character].name.encode('utf-8'),API_KEY[self.region.upper()][self.mode]).replace(" ","%20")
         return (self.members[character].url, realm)
-
 
     def to_slug(self, realm):
         realm = realm.replace(u"'",u"")
@@ -128,6 +129,7 @@ class Team(object):
         self.count += 1
         if data:
             if self.mode == 'warcraftlogs': return self.process_warcraftlogs_result(data, result_code, member)
+            if self.mode == 'raiderio': return self.process_raiderio_result(data, result_code, member)
             try:
                 if result_code == 200 and len(loads(data)) > 0:
                     processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region)
@@ -193,6 +195,14 @@ class Team(object):
 
         elif result_code != 200:
             log('error','The API call returned an error. Result code: {0}'.format(result_code),self.team_id,member.character_id)
+        return True
+
+    def process_raiderio_result(self,data,result_code,member):
+        if result_code == 200:
+            try: self.processed_data[member.name]['raider_io_score'] = loads(data)['mythic_plus_scores']['all']
+            except: self.processed_data[member.name]['raider_io_score'] = '-'
+        else:
+            self.processed_data[member.name]['raider_io_score'] = '-'
         return True
 
     def generate_warnings(self):
@@ -262,7 +272,7 @@ class Team(object):
             try: uploader.create_blob_from_path('wowcsv',self.key_code + '.csv','{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),content_settings=ContentSettings(content_type='application/CSV'))
             except: log('error','The Azure storage service appears to be unavailable. File is not written.',self.team_id)
 
-    def update_warcraftlogs(self):
+    def update_warcraftlogs(self,override):
         self.success = 0
         self.count = 0
         self.processed_data = {}
@@ -273,11 +283,15 @@ class Team(object):
                     self.processed_data[member][encounter['name']] = {3:{'raid':raid},4:{'raid':raid},5:{'raid':raid}}
 
         for raid in VALID_RAIDS:
-            if datetime.datetime.utcnow().weekday() in raid['days']:
+            if datetime.datetime.utcnow().weekday() in raid['days'] or override:
                 keep_going = self.with_tornado(raid['id'])
                 if not keep_going:
                     time.sleep(60)
-                    return self.update_warcraftlogs()
+                    return self.update_warcraftlogs(override)
+
+        self.mode = 'raiderio'
+        self.with_tornado()
+        self.mode = 'warcraftlogs'
 
         if self.success > 0:
             base_spec_query = 'UPDATE characters SET warcraftlogs = CASE '
@@ -294,12 +308,16 @@ class Team(object):
                             try: output[metric].append(str(int(self.processed_data[member][encounter['name']][int(metric.split('_')[1])][metric.split('_')[0]])))
                             except:
                                 if data:
-                                    output[metric].append(data[metric][index + offset])
+                                    try: output[metric].append(data[metric][index + offset])
+                                    except: output[metric].append('-')
                                 else:
                                     output[metric].append('-')
                         offset += len(raid['encounters'])
                 try: output['character_id'] = self.processed_data[member]['warcraftlogs_id']
                 except: output['character_id'] = ''
+                try: output['raider_io_score'] = self.processed_data[member]['raider_io_score']
+                except: output['raider_io_score'] = ''
+
                 base_spec_query += 'WHEN id = {0} THEN \'{1}\' '.format(self.members[member].character_id,dumps(output).replace("'","\\'"))
 
             execute_query(base_spec_query + ' ELSE warcraftlogs END',False)

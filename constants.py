@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-CURRENT_VERSION = "4"
+CURRENT_VERSION = "5"
 CYCLE_MINIMUM = 120 #seconds
 MAXIMUM_RUNTIME = 3500 #seconds
 MAX_ALLOCATED = 2 #teams
@@ -12,8 +12,9 @@ REP_AMOUNT = {0:36000,1:3000,2:3000,3:3000,4:6000,5:12000,6:21000,7:999}
 MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Neltharion\'s Lair',10889:'Halls of Valor',10892:'Violet Hold',10895:'Violet Hold',
                    10898:'Vault of the Wardens',10901:'Black Rook Hold',10904:'Maw of Souls',10907:'Arcway',10910:'Court of Stars',11406:'Karazhan'}
 URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets,pvp&apikey={3}&locale=en_GB"
-WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&partition=2&api_key={5}"
+WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&api_key={5}"
 WCL_ZONES_URL = "https://www.warcraftlogs.com:443/v1/zones?api_key={0}"
+RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={0}&realm={1}&name={2}&fields=mythic_plus_scores"
 VALID_RAIDS = [ {'name':'Emerald Nightmare','days':[1],'id':10,
                  u'encounters':[{u'id': 1853, u'name': u'Nythendra','raid_ids':{'normal':10912,'heroic':10913,'mythic':10914}},
                 {u'id': 1876, u'name': u'Elerethe Renferal','raid_ids':{'normal':10921,'heroic':10922,'mythic':10923}},
@@ -26,7 +27,7 @@ VALID_RAIDS = [ {'name':'Emerald Nightmare','days':[1],'id':10,
                  u'encounters':   [{u'id': 1958, u'name': u'Odyn','raid_ids':{'normal':11408,'heroic':11409,'mythic':11410}},
                 {u'id': 1962, u'name': u'Guarm','raid_ids':{'normal':11412,'heroic':11413,'mythic':11414}},
                 {u'id': 2008, u'name': u'Helya','raid_ids':{'normal':11416,'heroic':11417,'mythic':11418}}]},
-                {'name':'The Nighthold','days':[0,1,2,3,4,5,6],'id':11,
+                {'name':'The Nighthold','days':[1],'id':11,
                  u'encounters': [{u'id': 1849, u'name': u'Skorpyron','raid_ids':{'normal':10941,'heroic':10942,'mythic':10943}},
                 {u'id': 1865, u'name': u'Chronomatic Anomaly','raid_ids':{'normal':10945,'heroic':10946,'mythic':10947}},
                 {u'id': 1867, u'name': u'Trilliax','raid_ids':{'normal':10949,'heroic':10950,'mythic':10951}},
@@ -36,7 +37,17 @@ VALID_RAIDS = [ {'name':'Emerald Nightmare','days':[1],'id':10,
                 {u'id': 1842, u'name': u'Krosus','raid_ids':{'normal':10970,'heroic':10971,'mythic':10972}},
                 {u'id': 1886, u'name': u"High Botanist Tel'arn",'raid_ids':{'normal':10962,'heroic':10963,'mythic':10964}},
                 {u'id': 1872, u'name': u'Grand Magistrix Elisande','raid_ids':{'normal':10974,'heroic':10975,'mythic':10976}},
-                {u'id': 1866, u'name': u"Gul'dan",'raid_ids':{'normal':10978,'heroic':10979,'mythic':10980}}]}]
+                {u'id': 1866, u'name': u"Gul'dan",'raid_ids':{'normal':10978,'heroic':10979,'mythic':10980}}]},
+                {'name':'Tomb of Sargeras','days':[2,3,4,5,6],'id':13,
+                 u'encounters': [{u'id': 2032, u'name': u'Goroth','raid_ids':{'normal':11878,'heroic':11879,'mythic':11880}},
+                {u'id': 2048, u'name': u'Demonic Inquisition','raid_ids':{'normal':11882,'heroic':11883,'mythic':11884}},
+                {u'id': 2036, u'name': u'Harjatan','raid_ids':{'normal':11886,'heroic':11887,'mythic':11888}},
+                {u'id': 2037, u'name': u"Mistress Sassz'ine",'raid_ids':{'normal':11894,'heroic':11895,'mythic':11896}},
+                {u'id': 2050, u'name': u'Sisters of the Moon','raid_ids':{'normal':11890,'heroic':11891,'mythic':11892}},
+                {u'id': 2054, u'name': u'The Desolate Host','raid_ids':{'normal':11898,'heroic':11899,'mythic':11900}},
+                {u'id': 2052, u'name': u'Maiden of Vigilance','raid_ids':{'normal':11902,'heroic':11903,'mythic':11904}},
+                {u'id': 2038, u'name': u"Fallen Avatar",'raid_ids':{'normal':11906,'heroic':11907,'mythic':11908}},
+                {u'id': 2051, u'name': u"Kil'jaeden",'raid_ids':{'normal':11910,'heroic':11911,'mythic':11912}}]}]
 RAID_DIFFICULTIES = {3:'Normal',4:'Heroic',5:'Mythic'}
 WCL_ROLES_TO_SPEC_MAP = {'Heal':['Restoration','Holy','Discipline','Mistweaver'],
                          'Tank':['Blood','Vengeance','Protection','Brewmaster','Guardian'],
@@ -58,7 +69,7 @@ HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_i
          'WCL_id','WCL_Normal_best','WCL_Normal_median','WCL_Normal_average','WCL_Heroic_best','WCL_Heroic_median','WCL_Heroic_average','WCL_Mythic_best','WCL_Mythic_median','WCL_Mythic_average',
          'character_id', 'historical_wqs_done', 'historical_ap_gained', 'historical_dungeons_done','talons_vengeance_standing','talons_vengeance_value','legionfall_standing','legionfall_value','paragon_amount',
          'raids_normal','raids_normal_weekly','raids_heroic','raids_heroic_weekly','raids_mythic','raids_mythic_weekly','prestige','2v2_rating','2v2_season_played','2v2_week_played','honorable_kills',
-         '3v3_rating','3v3_season_played','3v3_week_played','RBG_rating','RBG_season_played','RBG_week_played','max_2v2_rating','max_3v3_rating']
+         '3v3_rating','3v3_season_played','3v3_week_played','RBG_rating','RBG_season_played','RBG_week_played','max_2v2_rating','max_3v3_rating','m+_score']
 RELIC_ILVL = {2:690,3:695,4:700,5:705,7:710,8:715,9:720,10:725,12:730,13:735,14:740,15:745,17:750,18:755,19:760,21:765,
                22:770,23:775,24:780,26:785,27:790,28:795,29:800,31:805,32:810,33:815,35:820,36:825,37:830,39:835,40:840,42:845,43:850,45:855,46:860,48:865,49:870,51:875,
                52:880,53:885,55:890,56:895,58:900,59:905,61:910,62:915,64:920,65:925}

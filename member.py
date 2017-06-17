@@ -276,8 +276,10 @@ class Member(object):
         if self.warcraftlogs:
             data = loads(self.warcraftlogs)
             self.processed_data['WCL_id'] = data['character_id']
+            try: self.processed_data['m+_score'] = data['raider_io_score']
+            except: self.processed_data['m+_score'] = 0
             for difficulty in data:
-                if data[difficulty] != self.processed_data['WCL_id']:
+                if data[difficulty] != data['character_id'] and data[difficulty] != data['raider_io_score']:
                     self.processed_data['WCL_{0}_{1}'.format(RAID_DIFFICULTIES[int(difficulty.split('_')[1])],difficulty.split('_')[0])] = '|'.join(data[difficulty])
         else:
             self.processed_data['WCL_id'] = ''

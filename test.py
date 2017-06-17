@@ -15,7 +15,7 @@ except Exception:
 start_time = time.time()
 while True:
     Scraper('debug',team_ids,start_time,'tornado').run()
-    sum1 = summary.summarize(muppy.get_objects())
-    summary.print_(sum1)
-    tracker.print_diff()
-    print 'Amount of objects in memory: {0}'.format(len(muppy.get_objects()))
+    # sum1 = summary.summarize(muppy.get_objects())
+    # summary.print_(sum1)
+    # tracker.print_diff()
+    # print 'Amount of objects in memory: {0}'.format(len(muppy.get_objects()))
