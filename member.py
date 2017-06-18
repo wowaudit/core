@@ -275,11 +275,12 @@ class Member(object):
     def process_warcraftlogs_data(self,data):
         if self.warcraftlogs:
             data = loads(self.warcraftlogs)
+            try: raider_io_data = data['raider_io_score']
+            except: raider_io_data = 0
             self.processed_data['WCL_id'] = data['character_id']
-            try: self.processed_data['m+_score'] = data['raider_io_score']
-            except: self.processed_data['m+_score'] = 0
+            self.processed_data['m+_score'] = raider_io_data
             for difficulty in data:
-                if data[difficulty] != data['character_id'] and data[difficulty] != data['raider_io_score']:
+                if data[difficulty] != data['character_id'] and data[difficulty] != raider_io_data:
                     self.processed_data['WCL_{0}_{1}'.format(RAID_DIFFICULTIES[int(difficulty.split('_')[1])],difficulty.split('_')[0])] = '|'.join(data[difficulty])
         else:
             self.processed_data['WCL_id'] = ''
