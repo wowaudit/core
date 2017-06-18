@@ -284,6 +284,7 @@ class Member(object):
                     self.processed_data['WCL_{0}_{1}'.format(RAID_DIFFICULTIES[int(difficulty.split('_')[1])],difficulty.split('_')[0])] = '|'.join(data[difficulty])
         else:
             self.processed_data['WCL_id'] = ''
+            self.processed_data['m+_score'] = ''
             for difficulty in ['best_3','best_4','best_5','median_3','median_4','median_5','average_3','average_4','average_5']:
                 self.processed_data['WCL_{0}_{1}'.format(RAID_DIFFICULTIES[int(difficulty.split('_')[1])],difficulty.split('_')[0])] = ''
 
