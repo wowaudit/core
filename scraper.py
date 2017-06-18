@@ -36,7 +36,7 @@ class Scraper(object):
         self.ids = [str(team[0]) for team in result]
         last_refreshed = [int(team[1]) for team in result]
         if self.mode in ['production','production_patreon','production_platinum']:
-            execute_query('UPDATE teams SET last_refreshed{0} = {1} WHERE id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.now()-datetime.datetime(2017,1,1)).total_seconds(),','.join(self.ids)))
+            execute_query('UPDATE teams SET last_refreshed{0} = {1} WHERE id IN ({2})'.format('_wcl' if self.mode == 'warcraftlogs' else '',(datetime.datetime.utcnow()-datetime.datetime(2017,1,1)).total_seconds(),','.join(self.ids)))
 
         log('info','Allocated and going to refresh {0} teams. Time since last refresh: Lowest {1} seconds, Highest {2} seconds, Average {3} seconds.'.format(
             MAX_ALLOCATED,

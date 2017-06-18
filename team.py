@@ -156,7 +156,7 @@ class Team(object):
             except Exception as e:
                 log('error','Error in processing API result. Error: {0}'.format(error(e)),self.team_id,member.character_id)
         else:
-            self.wrong_characters.append(member.character_id)
+            self.errored_characters.append(member.character_id)
             log('error','No data returned by API. Status code: {0}'.format(result_code),self.team_id,member.character_id)
             if member.last_refresh:
                 try:
