@@ -111,12 +111,8 @@ class Member(object):
                 if int(data['items'][item]['id']) in TIER_IDS:
                     self.tier_data[item] = int(data['items'][item]['itemLevel'])
 
-                if 3529 in data['items'][item]['bonusLists']: #Workaround for Armory returning Legendary ilvl wrong
-                    self.ilvl += 940
-                    self.processed_data[item + '_ilvl'] = 940
-                else:
-                    self.ilvl += data['items'][item]['itemLevel']
-                    self.processed_data[item + '_ilvl'] = data['items'][item]['itemLevel']
+                self.ilvl += data['items'][item]['itemLevel']
+                self.processed_data[item + '_ilvl'] = data['items'][item]['itemLevel']
                 self.processed_data[item + '_id'] = data['items'][item]['id']
                 self.processed_data[item + '_name'] = data['items'][item]['name']
                 self.processed_data[item + '_quality'] = data['items'][item]['quality']
