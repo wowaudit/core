@@ -10,9 +10,7 @@ from execute_query import execute_query
 from writer import write_csv, log, error
 from json import loads, dumps
 from minio import Minio
-from minio.policy import Policy
 minioClient = Minio('minio.wowaudit.com',access_key=MINIO_ACCESS,secret_key=MINIO_SECRET,secure=False)
-
 
 class Team(object):
 
