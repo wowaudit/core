@@ -9,14 +9,10 @@ import requests, datetime, sys, copy, time
 from execute_query import execute_query
 from writer import write_csv, log, error
 from json import loads, dumps
-from azure.storage.blob import BlockBlobService
-from azure.storage.blob import ContentSettings
-uploader = BlockBlobService(account_name=AZURE_NAME, account_key=AZURE_KEY)
-try:
-    from minio import Minio
-    from minio.policy import Policy
-    minioClient = Minio('minio.wowaudit.com',access_key=MINIO_ACCESS,secret_key=MINIO_SECRET,secure=False)
-except: print "Loading the Minio client failed. Not storing files in Minio."
+from minio import Minio
+from minio.policy import Policy
+minioClient = Minio('minio.wowaudit.com',access_key=MINIO_ACCESS,secret_key=MINIO_SECRET,secure=False)
+
 
 class Team(object):
 
@@ -277,9 +273,6 @@ class Team(object):
         if self.mode != 'debug':
             try: minioClient.fput_object('wowcsv',self.key_code + '.csv','{0}{1}.csv'.format(PATH_TO_CSV,self.key_code))
             except: log('error','The Minio storage service appears to be unavailable. File is not written.',self.team_id)
-
-            try: uploader.create_blob_from_path('wowcsv',self.key_code + '.csv','{0}{1}.csv'.format(PATH_TO_CSV,self.key_code),content_settings=ContentSettings(content_type='application/CSV'))
-            except: log('error','The Azure storage service appears to be unavailable. File is not written.',self.team_id)
 
     def update_warcraftlogs(self,override):
         self.success = 0
