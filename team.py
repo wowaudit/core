@@ -6,6 +6,7 @@ from concurrent import futures
 from tornado import ioloop, httpclient
 from dateutil import tz
 import requests, datetime, sys, copy, time
+from urllib import quote
 from execute_query import execute_query
 from writer import write_csv, log, error
 from json import loads, dumps
@@ -71,8 +72,7 @@ class Team(object):
         for character in self.members:
             self.tornado_count += 1
             url, realm = self.get_url(character,zone)
-            http_client.fetch(url, callback = lambda response, character=self.members[character], realm=realm: self.handle_request_tornado(response, character, realm), connect_timeout=400, request_timeout=400)
-
+            http_client.fetch(quote(url,"/:?&="), callback = lambda response, character=self.members[character], realm=realm: self.handle_request_tornado(response, character, realm), connect_timeout=400, request_timeout=400)
         ioloop.IOLoop.instance().start()
         for result in self.tornado_results:
             keep_going = self.process_result(result)
@@ -126,9 +126,9 @@ class Team(object):
     def process_result(self, result):
         data, result_code, member, realm = result
         self.count += 1
+        if self.mode == 'warcraftlogs': return self.process_warcraftlogs_result(data, result_code, member)
+        if self.mode == 'raiderio': return self.process_raiderio_result(data, result_code, member)
         if data:
-            if self.mode == 'warcraftlogs': return self.process_warcraftlogs_result(data, result_code, member)
-            if self.mode == 'raiderio': return self.process_raiderio_result(data, result_code, member)
             try:
                 if result_code == 200 and len(loads(data)) > 0:
                     processed_data, processed_spec_data, processed_snapshot_data = member.check(loads(data),realm,self.region)
