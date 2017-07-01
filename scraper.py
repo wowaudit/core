@@ -31,7 +31,7 @@ class Scraper(object):
             patreon_level = '= 10'
         else:
             patreon_level = 'IN (0,1,3,10)'
-        result = execute_query('SELECT teams.id, teams.last_refreshed{0} FROM teams, guilds WHERE guilds.patreon {1} {2} AND teams.guild_id = guilds.id ORDER BY last_refreshed{0} ASC LIMIT {3}'.format('_wcl' if self.mode == 'warcraftlogs' else '',patreon_level, 'AND last_refreshed > 0' if self.mode == 'debug' else '', MAX_ALLOCATED))
+        result = execute_query('SELECT teams.id, teams.last_refreshed{0} FROM teams, guilds WHERE guilds.patreon {1} {2} AND teams.guild_id = guilds.id AND guilds.active = 1 ORDER BY last_refreshed{0} ASC LIMIT {3}'.format('_wcl' if self.mode == 'warcraftlogs' else '',patreon_level, 'AND last_refreshed > 0' if self.mode == 'debug' else '', MAX_ALLOCATED))
 
         self.ids = [str(team[0]) for team in result]
         last_refreshed = [int(team[1]) for team in result]
