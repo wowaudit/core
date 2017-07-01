@@ -294,7 +294,7 @@ class Team(object):
                     self.processed_data[member][encounter['name']] = {3:{'raid':raid},4:{'raid':raid},5:{'raid':raid}}
 
         for raid in VALID_RAIDS:
-            if datetime.datetime.utcnow().weekday() in raid['days'] or override:
+            if datetime.datetime.utcnow().weekday() in raid['days']:
                 keep_going = self.with_tornado(raid['id'])
                 if not keep_going:
                     time.sleep(60)
