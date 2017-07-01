@@ -17,7 +17,7 @@ class Team(object):
 
     def __init__(self, data, mode, client):
         self.team_id, self.name, self.region, self.realm, self.key_code, self.last_refreshed, self.last_refreshed_wcl, self.patreon, self.team_name = data[:9]
-        self.version_message = "{0}|Your spreadsheet is out of date, if you are still using version 4.0 you may see old data, blank sheets, and error notification mails from Google; please make a new copy at https://wowaudit.com/copy. In case you get these mails you should revoke authorisation of all scripts called Refresh first, at https://myaccount.google.com/permissions".format(CURRENT_VERSION)
+        self.version_message = "{0}|Your spreadsheet is out of date, for more features make a new copy at https://wowaudit.com/copy".format(CURRENT_VERSION)
         self.last_reset = self.reset_timestamp()
         self.tracking_all = True
         self.members = {}
@@ -105,23 +105,12 @@ class Team(object):
 
         if self.mode == 'warcraftlogs':
             metric = 'hps' if self.members[character].role == 'Heal' else 'dps'
-            self.members[character].url = WCL_URL.format(self.members[character].name.encode('utf-8'),self.to_slug(realm).encode('utf-8'),self.region,zone,metric,WCL_KEY).replace(" ","%20")
+            self.members[character].url = WCL_URL.format(self.members[character].name.encode('utf-8'),self.members[character].to_slug(realm).encode('utf-8'),self.region,zone,metric,WCL_KEY).replace(" ","%20")
         elif self.mode == 'raiderio':
-            self.members[character].url = RAIDER_IO_URL.format(self.region,self.to_slug(realm).encode('utf-8'),self.members[character].name.encode('utf-8'))
+            self.members[character].url = RAIDER_IO_URL.format(self.region,self.members[character].to_slug(realm).encode('utf-8'),self.members[character].name.encode('utf-8'))
         else:
-            self.members[character].url = URL.format(self.region,self.to_slug(realm).encode('utf-8'),self.members[character].name.encode('utf-8'),API_KEY[self.region.upper()][self.mode]).replace(" ","%20")
+            self.members[character].url = URL.format(self.region,self.members[character].to_slug(realm).encode('utf-8'),self.members[character].name.encode('utf-8'),API_KEY[self.region.upper()][self.mode]).replace(" ","%20")
         return (self.members[character].url, realm)
-
-    def to_slug(self, realm):
-        realm = realm.replace(u"'",u"")
-        realm = realm.replace(u"-",u"")
-        realm = realm.replace(u" ",u"-")
-        realm = realm.replace(u"(",u"")
-        realm = realm.replace(u")",u"")
-        realm = realm.replace(u'\xea',u"e")
-        realm = realm.replace(u'\xe0',u"a")
-        realm = realm.lower()
-        return realm
 
     def process_result(self, result):
         data, result_code, member, realm = result
@@ -193,15 +182,37 @@ class Team(object):
             return False
 
         elif result_code != 200:
-            log('error','The API call returned an error. Result code: {0}'.format(result_code),self.team_id,member.character_id)
+            log('error','The WCL API call returned an error. Result code: {0}'.format(result_code),self.team_id,member.character_id)
         return True
 
     def process_raiderio_result(self,data,result_code,member):
-        if result_code == 200:
-            try: self.processed_data[member.name]['raider_io_score'] = loads(data)['mythic_plus_scores']['all']
-            except: self.processed_data[member.name]['raider_io_score'] = '-'
-        else:
+        logged = False
+        try:
+            if result_code == 200:
+                try: loaded_data = loads(data)
+                except:
+                    logged = log('error','The Raider.io data could not be loaded.',self.team_id,member.character_id)
+                    raise Exception
+
+                try: self.processed_data[member.name]['raider_io_score'] = loaded_data['mythic_plus_scores']['all']
+                except: self.processed_data[member.name]['raider_io_score'] = 0
+
+                try: self.processed_data[member.name]['weekly_highest_m'] = loaded_data['mythic_plus_weekly_highest_level_runs'][0]['mythic_level']
+                except: self.processed_data[member.name]['weekly_highest_m'] = 0
+
+                try: self.processed_data[member.name]['season_highest_m'] = loaded_data['mythic_plus_highest_level_runs'][0]['mythic_level']
+                except: self.processed_data[member.name]['season_highest_m'] = 0
+
+            else:
+                logged = log('error','The Raider.io API call returned an error. Result code: {0}'.format(result_code),self.team_id,member.character_id)
+                raise Exception
+
+        except:
+            if not logged: log('error','Unknown error processing the Raider.io data.',self.team_id,member.character_id)
             self.processed_data[member.name]['raider_io_score'] = '-'
+            self.processed_data[member.name]['weekly_highest_m'] = '-'
+            self.processed_data[member.name]['season_highest_m'] = '-'
+
         self.success += 1
         return True
 
@@ -317,6 +328,10 @@ class Team(object):
                 except: output['character_id'] = ''
                 try: output['raider_io_score'] = self.processed_data[member]['raider_io_score']
                 except: output['raider_io_score'] = ''
+                try: output['weekly_highest_m'] = self.processed_data[member]['weekly_highest_m']
+                except: output['weekly_highest_m'] = ''
+                try: output['season_highest_m'] = self.processed_data[member]['season_highest_m']
+                except: output['season_highest_m'] = ''
 
                 base_spec_query += 'WHEN id = {0} THEN \'{1}\' '.format(self.members[member].character_id,dumps(output).replace("'","\\'"))
 

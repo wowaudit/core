@@ -88,7 +88,7 @@ class Member(object):
         self.processed_data['name'] = data['name']
         self.processed_data['class'] = CLASSES[data['class']]
         self.processed_data['realm'] = realm
-        self.processed_data['rank'] = '' #Deprecated and not used in any production spreadsheet. Can be replaced with new data.
+        self.processed_data['realm_slug'] = self.to_slug(realm)
         self.processed_data['character_id'] = self.character_id
         self.processed_data['honorable_kills'] = data['totalHonorableKills']
 
@@ -245,6 +245,7 @@ class Member(object):
 
         #Future dungeons with unknown ID that are already added in front-end
         self.processed_data['Cathedral of Eternal Night'] = 0
+        self.processed_data['Seat of the Triumvirate'] = 0
 
         # Process raids data
         raid_output = {'raids_normal':[],'raids_normal_weekly':[],'raids_heroic':[],'raids_heroic_weekly':[],'raids_mythic':[],'raids_mythic_weekly':[]}
@@ -271,12 +272,15 @@ class Member(object):
     def process_warcraftlogs_data(self,data):
         if self.warcraftlogs:
             data = loads(self.warcraftlogs)
-            try: raider_io_data = data['raider_io_score']
-            except: raider_io_data = 0
+            try: self.processed_data['m+_score'] = data['raider_io_score']
+            except: self.processed_data['m+_score'] = 0
+            try: self.processed_data['weekly_highest_m+'] = data['weekly_highest_m']
+            except: self.processed_data['weekly_highest_m+'] = "-"
+            try: self.processed_data['season_highest_m+'] = data['season_highest_m']
+            except: self.processed_data['season_highest_m+'] = "-"
             self.processed_data['WCL_id'] = data['character_id']
-            self.processed_data['m+_score'] = raider_io_data
             for difficulty in data:
-                if data[difficulty] != data['character_id'] and data[difficulty] != raider_io_data:
+                if difficulty in ['best_3','best_4','best_5','median_3','median_4','median_5','average_3','average_4','average_5']:
                     self.processed_data['WCL_{0}_{1}'.format(RAID_DIFFICULTIES[int(difficulty.split('_')[1])],difficulty.split('_')[0])] = '|'.join(data[difficulty])
         else:
             self.processed_data['WCL_id'] = ''
@@ -384,3 +388,15 @@ class Member(object):
                 'ap': self.processed_data['ap_obtained_total'] if self.ap_snapshot == 'not there' else self.ap_snapshot})
             self.old_snapshots.append(self.snapshot_data[1])
         else: self.snapshot_data = False
+
+
+    def to_slug(self, realm):
+        realm = realm.replace(u"'",u"")
+        realm = realm.replace(u"-",u"")
+        realm = realm.replace(u" ",u"-")
+        realm = realm.replace(u"(",u"")
+        realm = realm.replace(u")",u"")
+        realm = realm.replace(u'\xea',u"e")
+        realm = realm.replace(u'\xe0',u"a")
+        realm = realm.lower()
+        return realm

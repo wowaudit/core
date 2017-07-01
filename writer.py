@@ -16,6 +16,7 @@ def log(level,message,team_id = False,character_id = False):
             '[Team ID: {0}]'.format(team_id) if team_id else '',
             '[Character ID: {0}]'.format(character_id) if character_id else '',
             message )
+    return True
 
 def write_csv(csvfile,team):
     writer = UnicodeWriter(csvfile,delimiter=',', lineterminator='\n')

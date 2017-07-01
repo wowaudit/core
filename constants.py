@@ -14,7 +14,7 @@ MYTHIC_DUNGEONS = {10880:'Eye of Azshara',10883:'Darkheart Thicket',10886:'Nelth
 URL = "https://{0}.api.battle.net/wow/character/{1}/{2}?fields=items,reputation,audit,statistics,achievements,pets,pvp&apikey={3}&locale=en_GB"
 WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&api_key={5}"
 WCL_ZONES_URL = "https://www.warcraftlogs.com:443/v1/zones?api_key={0}"
-RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={0}&realm={1}&name={2}&fields=mythic_plus_scores"
+RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={0}&realm={1}&name={2}&fields=mythic_plus_scores,mythic_plus_highest_level_runs,mythic_plus_weekly_highest_level_runs"
 VALID_RAIDS = [ {'name':'Emerald Nightmare','days':[1],'id':10,
                  u'encounters':[{u'id': 1853, u'name': u'Nythendra','raid_ids':{'normal':10912,'heroic':10913,'mythic':10914}},
                 {u'id': 1876, u'name': u'Elerethe Renferal','raid_ids':{'normal':10921,'heroic':10922,'mythic':10923}},
@@ -53,7 +53,7 @@ WCL_ROLES_TO_SPEC_MAP = {'Heal':['Restoration','Holy','Discipline','Mistweaver']
                          'Tank':['Blood','Vengeance','Protection','Brewmaster','Guardian'],
                          'Melee':['Outlaw','Subtlety','Assassination','Feral','Windwalker','Havoc','Enhancement','Survival','Arms','Fury','Retribution','Unholy','Frost'],
                          'Ranged':['Shadow','Affliction','Demonology','Destruction','Arcane','Fire','Frost','Balance','Marksmanship','BeastMastery','Elemental']}
-HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_ilvl','head_id','head_name','head_quality','neck_ilvl','neck_id','neck_name','neck_quality',
+HEADER = ['name','class','realm_slug','ilvl','equipped_traits','artifact_ilvl','head_ilvl','head_id','head_name','head_quality','neck_ilvl','neck_id','neck_name','neck_quality',
          'shoulder_ilvl','shoulder_id','shoulder_name','shoulder_quality','back_ilvl','back_id','back_name','back_quality','chest_ilvl','chest_id','chest_name','chest_quality',
          'wrist_ilvl','wrist_id','wrist_name','wrist_quality','hands_ilvl','hands_id','hands_name','hands_quality','waist_ilvl','waist_id','waist_name','waist_quality',
          'legs_ilvl','legs_id','legs_name','legs_quality','feet_ilvl','feet_id','feet_name','feet_quality','finger1_ilvl','finger1_id','finger1_name','finger1_quality','finger2_ilvl',
@@ -69,7 +69,7 @@ HEADER = ['name','class','rank','ilvl','equipped_traits','artifact_ilvl','head_i
          'WCL_id','WCL_Normal_best','WCL_Normal_median','WCL_Normal_average','WCL_Heroic_best','WCL_Heroic_median','WCL_Heroic_average','WCL_Mythic_best','WCL_Mythic_median','WCL_Mythic_average',
          'character_id', 'historical_wqs_done', 'historical_ap_gained', 'historical_dungeons_done','talons_vengeance_standing','talons_vengeance_value','legionfall_standing','legionfall_value','paragon_amount',
          'raids_normal','raids_normal_weekly','raids_heroic','raids_heroic_weekly','raids_mythic','raids_mythic_weekly','prestige','2v2_rating','2v2_season_played','2v2_week_played','honorable_kills',
-         '3v3_rating','3v3_season_played','3v3_week_played','RBG_rating','RBG_season_played','RBG_week_played','max_2v2_rating','max_3v3_rating','m+_score']
+         '3v3_rating','3v3_season_played','3v3_week_played','RBG_rating','RBG_season_played','RBG_week_played','max_2v2_rating','max_3v3_rating','m+_score','weekly_highest_m+','season_highest_m+','Seat of the Triumvirate']
 RELIC_ILVL = {2:690,3:695,4:700,5:705,7:710,8:715,9:720,10:725,12:730,13:735,14:740,15:745,17:750,18:755,19:760,21:765,
                22:770,23:775,24:780,26:785,27:790,28:795,29:800,31:805,32:810,33:815,35:820,36:825,37:830,39:835,40:840,42:845,43:850,45:855,46:860,48:865,49:870,51:875,
                52:880,53:885,55:890,56:895,58:900,59:905,61:910,62:915,64:920,65:925,67:930,68:935,70:940,71:945,72:950,74:955}
