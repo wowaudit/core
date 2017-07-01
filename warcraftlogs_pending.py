@@ -14,7 +14,7 @@ while keep_going:
         time.sleep(60)
     else:
         teams = Scraper('warcraftlogs',team_ids,start_time,'tornado')
-        keep_going = teams.check_warcraftlogs(override)
+        keep_going = teams.check_warcraftlogs(True)
         execute_query('DELETE FROM pending_changes_wcl WHERE team_id IN ({0})'.format(','.join(team_ids)))
     if time.time() - start_time > MAXIMUM_RUNTIME: keep_going = False
 
