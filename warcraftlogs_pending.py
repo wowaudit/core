@@ -13,6 +13,7 @@ while keep_going:
         log('info','No pending teams. Sleeping for one minute.')
         time.sleep(60)
     else:
+        log('info','Refreshing {0} pending teams.'.format(len(team_ids)))
         teams = Scraper('warcraftlogs',team_ids,start_time,'tornado')
         keep_going = teams.check_warcraftlogs(True)
         execute_query('DELETE FROM pending_changes_wcl WHERE team_id IN ({0})'.format(','.join(team_ids)))
