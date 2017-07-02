@@ -1,3 +1,11 @@
+GIT
+  remote: git://github.com/Sheday/rbattlenet.git
+  revision: 05783e845d6a2e077ad9a5b12468f6a0db0a8e2d
+  specs:
+    rbattlenet (1.1.2)
+      httparty (~> 0.13.6)
+      typhoeus
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -28,8 +36,7 @@ GEM
     multi_xml (0.6.0)
     mysql2 (0.4.7)
     rake (12.0.0)
-    rbattlenet (1.1.2)
-      httparty (~> 0.13.6)
+    require_all (1.4.0)
     thread_safe (0.3.6)
     typhoeus (1.1.2)
       ethon (>= 0.9.0)
@@ -44,7 +51,8 @@ DEPENDENCIES
   activerecord-import
   mysql2
   rake
-  rbattlenet
+  rbattlenet!
+  require_all
   typhoeus
 
 BUNDLED WITH
