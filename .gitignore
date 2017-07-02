@@ -4,3 +4,4 @@ csv
 api/auth.py
 web/db.php
 auth.py
+.bin

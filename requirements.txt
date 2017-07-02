@@ -1,6 +1,0 @@
-mysql-python
-tornado
-futures
-azure
-python-dateutil
-pympler
