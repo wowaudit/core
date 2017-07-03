@@ -1,14 +1,18 @@
 module Audit
   class Character < Sequel::Model
-    attr_accessor :uri, :result
 
     def process_result(response)
-      sleep(0.1)
-      @result = response
+      if response.code == 200
+        puts response.body
+      end
     end
 
     def realm_slug
-      Realm.new.to_slug(realm)
+      Realm.to_slug realm
+    end
+
+    def set_uri(uri)
+      self.instance_variable_set("@uri", uri)
     end
   end
 end
