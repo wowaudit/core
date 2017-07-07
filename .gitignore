@@ -1,8 +1,5 @@
-*.pyc
 .DS_Store
-csv
-api/auth.py
-web/db.php
-auth.py
 .bin
-config
+config/database.yml
+config/keys.yml
+config/storage.yml

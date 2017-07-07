@@ -1,0 +1,7 @@
+adapter: mysql2
+encoding: utf8
+pool: 50
+username:
+password:
+database:
+socket:
