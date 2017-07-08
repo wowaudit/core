@@ -1,10 +1,18 @@
 module Audit
   class Character < Sequel::Model
-    attr_accessor :output, :processed_data
+    attr_accessor :output, :processed_data, :tier_data, :gems, :ilvl, :legendaries_equipped
 
     def init
+      #Main variables
       self.output = []
       self.processed_data = {}
+
+      #Variables for gear data
+      self.tier_data = {"head" => 0, "shoulder" =>, "back" => 0,
+                        "chest" => 0, "hands" => 0, "legs" => 0}
+      self.gems = []
+      self.ilvl = 0.0
+      self.legendaries_equipped = []
     end
 
     def process_result(response)
@@ -17,6 +25,7 @@ module Audit
 
     def process(response)
       BasicData.add(self, response)
+      GearData.add(self, response)
     end
 
     def to_output

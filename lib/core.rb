@@ -38,3 +38,4 @@ require_relative('./models/team')
 
 #Sections
 require_relative('./sections/basic_data')
+require_relative('./sections/gear_data')
