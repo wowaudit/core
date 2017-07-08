@@ -16,11 +16,12 @@ module Audit
         worker.schedule = nil
         worker.save_changes
 
-        self.refresh(schedule)
       else
-        #TODO: If there is no schedule available, fetch
-        #the longest not refreshed guild and refresh it
+        #TODO: Make sure other workers don't schedule the same work
+        schedule = Scheduler.schedule_work(instance)
       end
+
+      self.refresh(schedule)
       p "cycle done"
     end
   end
