@@ -7,8 +7,13 @@ require 'mysql2'
 require 'yaml'
 require 'csv'
 
+#Utilities
+require_relative('./utils/audit')
+require_relative('./utils/logger')
+require_relative('./utils/scheduler')
+require_relative('./utils/writer')
+
 #File Storage
-require_relative('./writer')
 storage_data = YAML::load(File.open('config/storage.yml'))
 Aws.config.update(
   endpoint: storage_data["endpoint"],
@@ -25,19 +30,11 @@ BNET_KEY = YAML::load(File.open('config/keys.yml'))["bnet_key"]
 require_relative('./constants/constants.rb')
 
 #Models
+require_relative('./models/character')
 require_relative('./models/realm')
 require_relative('./models/guild')
+require_relative('./models/schedule')
 require_relative('./models/team')
-require_relative('./models/character')
 
 #Sections
 require_relative('./sections/basic_data')
-
-module Audit
-
-  def self.refresh(teams)
-    teams.split(',').each do |team|
-      Audit::Team.where(id: team.to_i).first.refresh
-    end
-  end
-end
