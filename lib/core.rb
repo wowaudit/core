@@ -1,4 +1,5 @@
-#Dependencies
+# Dependencies
+require 'require_all'
 require 'sequel'
 require 'rbattlenet'
 require 'typhoeus'
@@ -7,13 +8,7 @@ require 'mysql2'
 require 'yaml'
 require 'csv'
 
-#Utilities
-require_relative('./utils/audit')
-require_relative('./utils/logger')
-require_relative('./utils/scheduler')
-require_relative('./utils/writer')
-
-#File Storage
+# File Storage
 storage_data = YAML::load(File.open('config/storage.yml'))
 Aws.config.update(
   endpoint: storage_data["endpoint"],
@@ -24,18 +19,15 @@ Aws.config.update(
 STORAGE = Aws::S3::Resource.new
 BUCKET = storage_data["bucket"]
 
-#Constants
+# Connections
+keys = YAML::load(File.open('config/keys.yml'))
+BNET_KEY = keys["bnet_key"]
+WCL_KEY = keys["wcl_key"]
+RAIDERIO_KEY = keys["raiderio_key"]
 DB = Sequel.connect(YAML::load(File.open('config/database.yml')))
-BNET_KEY = YAML::load(File.open('config/keys.yml'))["bnet_key"]
-require_relative('./constants/constants.rb')
 
-#Models
-require_relative('./models/character')
-require_relative('./models/realm')
-require_relative('./models/guild')
-require_relative('./models/schedule')
-require_relative('./models/team')
-
-#Sections
-require_relative('./sections/basic_data')
-require_relative('./sections/gear_data')
+# Modules
+require_rel 'constants'
+require_rel 'models'
+require_rel 'sections'
+require_rel 'utils'

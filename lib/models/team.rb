@@ -8,6 +8,7 @@ module Audit
       RBattlenet.set_region(region: region, locale: "en_GB")
       result = RBattlenet::Wow::Character.find_all(characters,
         fields: ["items","reputation","audit","statistics","achievements","pets","pvp"])
+      #TODO: Save all updated character values in one transaction / activerecord-import
       Writer.write(self, result)
     end
 

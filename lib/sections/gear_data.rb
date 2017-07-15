@@ -9,16 +9,16 @@ module Audit
           check_legendary(item, data, character)
           character.ilvl += data['items'][item]['itemLevel']
 
-          character.processed_data[item + '_ilvl'] = data['items'][item]['itemLevel']
-          character.processed_data[item + '_id'] = data['items'][item]['id']
-          character.processed_data[item + '_name'] = data['items'][item]['name']
-          character.processed_data[item + '_quality'] = data['items'][item]['quality']
+          character.data[item + '_ilvl'] = data['items'][item]['itemLevel']
+          character.data[item + '_id'] = data['items'][item]['id']
+          character.data[item + '_name'] = data['items'][item]['name']
+          character.data[item + '_quality'] = data['items'][item]['quality']
 
         rescue
-          character.processed_data[item + '_ilvl'] = ''
-          character.processed_data[item + '_id'] = ''
-          character.processed_data[item + '_name'] = ''
-          character.processed_data[item + '_quality'] = ''
+          character.data[item + '_ilvl'] = ''
+          character.data[item + '_id'] = ''
+          character.data[item + '_name'] = ''
+          character.data[item + '_quality'] = ''
         end
       end
 
@@ -26,12 +26,14 @@ module Audit
       character.ilvl += (data['items']['mainHand']['itemLevel']*2) rescue nil
 
       if character.tier_data.include? item
-        character.processed_data["tier_#{item}"] = character.tier_data[item]
+        character.data["tier_#{item}"] = character.tier_data[item]
       end
 
-      character.processed_data['ilvl'] = (character.ilvl / ITEMS.length + 2).round(2)
-      character.processed_data['empty_sockets'] = data['audit']['emptySockets']
-      character.processed_data['gem_list'] = '|'.join(character.gems)
+      character.data['ilvl'] = (character.ilvl / ITEMS.length + 2).round(2)
+      character.max_ilvl = [character.data['ilvl'], character.max_ilvl].max
+
+      character.data['empty_sockets'] = data['audit']['emptySockets']
+      character.data['gem_list'] = '|'.join(character.gems)
     end
 
     def check_enchant(item, data, character)
@@ -39,14 +41,14 @@ module Audit
 
       if ENCHANTS.include? item
         begin
-          character.processed_data["enchant_quality_#{item}"] =
+          character.data["enchant_quality_#{item}"] =
             ENCHANTS[item][data['items'][item]['tooltipParams']['enchant']][0]
 
-          character.processed_data["#{item}_enchant"] =
+          character.data["#{item}_enchant"] =
             ENCHANTS[item][data['items'][item]['tooltipParams']['enchant']][1]
         rescue
-          character.processed_data["enchant_quality_#{item}"] = 0
-          character.processed_data["#{item}_enchant"] = ''
+          character.data["enchant_quality_#{item}"] = 0
+          character.data["#{item}_enchant"] = ''
         end
       end
     end
