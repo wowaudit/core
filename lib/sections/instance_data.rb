@@ -7,11 +7,11 @@ module Audit
           boss['raid_ids']
         }
       }.flatten
-      boss_ids = encounters.map{ |encounter| encounter.values }
+      boss_ids = encounters.map{ |encounter| encounter.values }.flatten
       raid_list = {}
-      raid_output = {'raids_normal':[],'raids_normal_weekly':[],
-                     'raids_heroic':[],'raids_heroic_weekly':[],
-                     'raids_mythic':[],'raids_mythic_weekly':[]}
+      raid_output = {'raids_normal' => [],'raids_normal_weekly' => [],
+                     'raids_heroic' => [],'raids_heroic_weekly' => [],
+                     'raids_mythic' => [],'raids_mythic_weekly' => []}
       dungeon_list = {}
       dungeon_count = 0
       instance_data = data['statistics']['subCategories'][5]['subCategories'][6]['statistics']
@@ -28,22 +28,24 @@ module Audit
         if boss_ids.include?(instance['id'])
           raid_list[instance['id']] = [
             instance['quantity'],
-            (instance['lastUpdated'] / 1000) > character.last_reset ? 1 : 0
+            (instance['lastUpdated'] / 1000) > Audit.timestamp ? 1 : 0
           ]
         end
       end
 
       character.data['dungeons_done_total'] = dungeon_count
       character.data['dungeons_this_week'] =
-        character.dungeon_snapshot ? dungeon_count-self.dungeon_snapshot : 0
+        character.dungeon_snapshot ? dungeon_count - character.dungeon_snapshot : 0
 
       #Future dungeons with unknown ID that are already added in front-end
       character.data['Cathedral of Eternal Night'] = 0
       character.data['Seat of the Triumvirate'] = 0
 
-      encounters.each do |difficulty, encounter|
-        raid_output["raids_#{difficulty}"] << raid_list[encounter][0]
-        raid_output["raids_#{difficulty}_weekly"] << raid_list[encounter][1]
+      encounters.each do |encounter|
+        encounter.each do |difficulty, id|
+          raid_output["raids_#{difficulty}"] << raid_list[id][0]
+          raid_output["raids_#{difficulty}_weekly"] << raid_list[id][1]
+        end
       end
 
       raid_output.each do |metric, data|
@@ -54,11 +56,18 @@ module Audit
       self.add_raiderio_data(character)
     end
 
-    def add_warcraftlogs_data(character)
+    def self.add_warcraftlogs_data(character)
       if character.warcraftlogs
-        character.data['WCL_id'] = character.warcraftlogs['id']
+        data = JSON.parse character.warcraftlogs
+        character.data['WCL_id'] = data['character_id']
+        data.delete('character_id')
 
-        character.warcraftlogs['metrics'].each do |metric, values|
+        #Temporary
+        data.delete('raider_io_score')
+        data.delete('weekly_highest_m')
+        data.delete('season_highest_m')
+
+        data.each do |metric, values|
           difficulty = RAID_DIFFICULTIES[metric.split('_')[1].to_i]
           character.data["WCL_#{difficulty}_#{metric.split('_')[0]}"] = values.join('|')
         end
@@ -69,19 +78,28 @@ module Audit
          'average_3','average_4','average_5'
         ].each do |metric|
           character.data["WCL_#{difficulty}_#{metric.split('_')[0]}"] = ''
+        end
       end
     end
 
-    def add_raiderio_data(character)
+    def self.add_raiderio_data(character)
       if character.raiderio
-        character.data['m+_score'] = character.raiderio['score']
-        character.data['weekly_highest_m+'] = character.raiderio['weekly_highest_m']
-        character.data['season_highest_m+'] = character.raiderio['season_highest_m']
+        data = JSON.parse character.raiderio
+
+        character.data['m+_score'] = data['score']
+        character.data['weekly_highest_m+'] = data['weekly_highest']
+        character.data['season_highest_m+'] = data['season_highest']
       else
         character.data['m+_score'] = ''
         character.data['weekly_highest_m+'] = "-"
         character.data['season_highest_m+'] = "-"
       end
+
+    #Temporary
+    rescue
+      character.data['m+_score'] = ''
+      character.data['weekly_highest_m+'] = "-"
+      character.data['season_highest_m+'] = "-"
     end
   end
 end

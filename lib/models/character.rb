@@ -1,16 +1,13 @@
 module Audit
   class Character < Sequel::Model
-    attr_accessor :output, :data, :tier_data, :gems, :ilvl, :spec_id,
+    attr_accessor :output, :data, :tier_pieces, :gems, :ilvl, :spec_id,
                   :legendaries_equipped, :ap_snapshot, :wq_snapshot,
-                  :dungeon_snapshot, :old_snapshots, :specs,
-                  :max_ilvl, :last_reset, :warcraftlogs,
-                  :raiderio
+                  :dungeon_snapshot, :specs, :max_ilvl
 
     def init
       # Main variables
       self.output = []
       self.data = {}
-      self.last_reset = "" #TODO
 
       # Variables for gear data
       self.gems = []
@@ -20,34 +17,32 @@ module Audit
 
       load_persistent_data
       load_snapshots
-      load_warcraftlogs_data
-      load_raiderio_data
     end
 
     def load_snapshots
-      #TODO
-      self.ap_snapshot = ''
-      self.wq_snapshot = ''
-      self.dungeon_snapshot = ''
-      self.old_snapshots = ''
+      snapshot = JSON.parse weekly_snapshot rescue {}
+      historical_snapshots = old_snapshots.split('|') rescue []
+
+      self.ap_snapshot = snapshot['ap']
+      self.wq_snapshot = snapshot['wqs']
+      self.dungeon_snapshot = snapshot['dungeons']
+      self.old_snapshots = historical_snapshots.map{ |week| JSON.parse week }
     end
 
     def load_persistent_data
-      #TODO
-      self.specs = {}
-      self.max_ilvl = 0
-      self.tier_data = {"head" => 0, "shoulder" =>, "back" => 0,
-                        "chest" => 0, "hands" => 0, "legs" => 0}
-    end
+      self.specs = {1 => [0,0], 2 => [0,0], 3 => [0,0], 4 => [0,0]}
+      if per_spec and per_spec != 'None'
+        spec_data = per_spec.split('|')
+        spec_data[0...-1].map{ |spec| spec.split('_')}.each_with_index do |data, index|
+          self.specs[index + 1] = data
+        end
+      end
 
-    def load_warcraftlogs_data
-      #TODO
-      self.warcraftlogs = false
-    end
-
-    def load_raiderio_data
-      #TODO
-      self.raiderio = false
+      self.max_ilvl = spec_data[-1].to_i rescue 0
+      self.tier_pieces = JSON.parse tier_data rescue {
+        "head" => 0, "shoulder" => 0, "back" => 0,
+        "chest" => 0, "hands" => 0, "legs" => 0
+      }
     end
 
     def process_result(response)
@@ -77,7 +72,13 @@ module Audit
     end
 
     def update_snapshots
-      #TODO
+      if !self.ap_snapshot or !self.wq_snapshot or !self.dungeon_snapshot
+        weekly_snapshot = {
+          'dungeons' => self.dungeon_snapshot || self.data['dungeons_done_total'],
+          'wqs' => self.wq_snapshot || self.data['wqs_done_total'],
+          'ap' => self.ap_snapshot || self.data['ap_obtained_total']
+        }
+      end
     end
 
     def to_output

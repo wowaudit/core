@@ -25,15 +25,12 @@ module Audit
       #Weapon ilvl is counted twice to normalise between 1H and 2H specialisations
       character.ilvl += (data['items']['mainHand']['itemLevel']*2) rescue nil
 
-      if character.tier_data.include? item
-        character.data["tier_#{item}"] = character.tier_data[item]
-      end
-
       character.data['ilvl'] = (character.ilvl / ITEMS.length + 2).round(2)
       character.max_ilvl = [character.data['ilvl'], character.max_ilvl].max
 
       character.data['empty_sockets'] = data['audit']['emptySockets']
-      character.data['gem_list'] = '|'.join(character.gems)
+      character.data['gem_list'] = character.gems.join('|')
+      character.tier_data = JSON.generate character.tier_pieces
     end
 
     def check_enchant(item, data, character)
@@ -55,7 +52,11 @@ module Audit
 
     def check_tier(item, data, character)
       if TIER_IDS.include? data['items'][item]['id'].to_i
-        character.tier_data[item] = data['items'][item]['itemLevel'].to_i
+        character.tier_pieces[item] = data['items'][item]['itemLevel'].to_i
+      end
+
+      if character.tier_pieces.include? item
+        character.data["tier_#{item}"] = character.tier_pieces[item]
       end
     end
 

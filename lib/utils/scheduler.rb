@@ -10,7 +10,6 @@ module Audit
         schedule.each do |worker|
           worker.schedule ||= self.schedule_work(worker).to_json
           worker.save_changes
-          end
         end
         sleep 1
       end

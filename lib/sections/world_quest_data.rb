@@ -13,6 +13,7 @@ module Audit
       (36330..36336).to_a.each do |chest|
         criteria = data['achievements']['criteria'].index(chest)
         paragon_amount += data['achievements']['criteriaQuantity'][criteria] rescue 0
+      end
 
       # For some reason the first 10 completions are removed
       # from the criterias when the achievement is completed

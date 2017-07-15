@@ -6,9 +6,15 @@ module Audit
       # is called from within the RBattlenet library
       RBattlenet.authenticate(api_key: BNET_KEY)
       RBattlenet.set_region(region: region, locale: "en_GB")
+      Audit.timestamp = region
       result = RBattlenet::Wow::Character.find_all(characters,
         fields: ["items","reputation","audit","statistics","achievements","pets","pvp"])
-      #TODO: Save all updated character values in one transaction / activerecord-import
+
+      DB.transaction do
+        result.each do |uri, character|
+          #character.save
+        end
+      end
       Writer.write(self, result)
     end
 

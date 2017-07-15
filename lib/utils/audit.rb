@@ -1,4 +1,5 @@
 module Audit
+  @@time_since_reset = nil
 
   def self.refresh(teams)
     teams.each do |team|
@@ -24,5 +25,17 @@ module Audit
       self.refresh(schedule)
       p "cycle done"
     end
+  end
+
+  def self.timestamp
+    @@time_since_reset
+  end
+
+  def self.timestamp=(region)
+    # Get the timestamp of the last weekly reset for a region
+    time = DateTime.parse(Time.now.utc.to_s)
+    time = time - time.wday + WEEKLY_RESET[region]['day']
+    time = time - (HOUR * time.hour) + (HOUR * WEEKLY_RESET[region]['hour'])
+    @@time_since_reset = time.to_time.to_i
   end
 end
