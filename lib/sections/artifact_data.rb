@@ -9,10 +9,10 @@ module Audit
 
         # Find if the character has an Artifact weapon equipped
         # And whether it is a main-hand or off-hand Artifact
-        if data['items']['mainHand']['artifactTraits']
+        if data['items']['mainHand']['artifactTraits'].any?
           weapon = 'mainHand'
         else
-          data['items']['offHand']['artifactTraits'] ? 'offHand' : false rescue false
+          weapon = data['items']['offHand']['artifactTraits'] ? 'offHand' : false rescue false
         end
 
         if weapon

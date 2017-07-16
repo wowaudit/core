@@ -19,7 +19,16 @@ module Audit
     end
 
     def characters
-      @characters ||= Character.where(:team_id => id)
+      @characters ||= Character.where(:team_id => id).to_a
+      @characters.each_with_index do |character, index|
+        @characters[index].realm = character.realm.empty? ? realm : character.realm
+      end
+
+      @characters
+    end
+
+    def realm
+      @realm ||= Guild.where(:id => guild_id).first.realm
     end
 
     def region

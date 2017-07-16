@@ -6,7 +6,7 @@ module Audit
       rep_value = 0
       exalted_rep_amount = 0
 
-      REPUTATIONS.each do |reputation|
+      REPUTATIONS.each do |reputation, name|
         match = false
 
         data['reputation'].each do |rep_data|
@@ -16,10 +16,10 @@ module Audit
             # Exalted level value is always 0 since patch 7.2
             # Still passing 999 as the value because the spreadsheet
             # assumes it's the maximum for Exalted level reputations
-            character.data["#{REPUTATIONS[reputation]}_standing"] =
+            character.data["#{name}_standing"] =
               STANDINGS[rep_data['standing']]
 
-            character.data["#{REPUTATIONS[reputation]}_value"] =
+            character.data["#{name}_value"] =
               rep_data['standing'] == 7 ? 999 : rep_data['value']
 
             rep_value += ( ( rep_data['standing'] - 2 ) +
@@ -30,8 +30,8 @@ module Audit
         end
 
         if not match
-          character.data["#{REPUTATIONS[reputation]}_standing"] = 'Neutral'
-          character.data["#{REPUTATIONS[reputation]}_value"] = 0
+          character.data["#{name}_standing"] = 'Neutral'
+          character.data["#{name}_value"] = 0
         end
       end
 

@@ -1,7 +1,7 @@
 CURRENT_VERSION = "5"
 
 TIME_ZONE = 'Europe/Amsterdam'
-HOUR = 1.0 / 24
+HOUR = (1.0 / 24)
 
 WCL_URL = "https://www.warcraftlogs.com=>443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&api_key={5}"
 
@@ -13,19 +13,19 @@ RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={0}&realm={1
 WEEKLY_RESET = {
   'EU' => {
     'hour' => 5,
-    'day' => 2
+    'day' => "Wednesday"
   },
   'US' => {
     'hour' => 11,
-    'day' => 1
+    'day' => "Tuesday"
   },
   'KR' => {
     'hour' => 2,
-    'day' => 3
+    'day' => "Thursday"
   },
   'TW' => {
     'hour' => 2,
-    'day' => 3
+    'day' => "Thursday"
   }
 }
 
