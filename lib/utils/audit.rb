@@ -19,18 +19,20 @@ module Audit
       worker = Schedule.where(:name => instance).first
       if worker.schedule
         schedule = JSON.parse worker.schedule
+        Logger.g(INFO_STARTING_SCHEDULE << "Teams: #{schedule.join(', ')}")
 
-        #Ask for a new schedule
+        # Ask for a new schedule
         worker.schedule = nil
         worker.save_changes
 
       else
-        #TODO: Make sure other workers don't schedule the same work
+        # Schedule own work if no schedule is available
         schedule = Scheduler.schedule_work(instance)
+        Logger.g(INFO_NO_SCHEDULE << "Teams: #{schedule.join(', ')}")
       end
 
       self.refresh(schedule)
-      p "cycle done"
+      Logger.g(INFO_FINISHED_SCHEDULE)
     end
   end
 

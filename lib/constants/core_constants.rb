@@ -3,6 +3,8 @@ CURRENT_VERSION = "5"
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
 
+SCHEDULER_PAUSE_AFTER_CYCLE = 1 #seconds
+
 WCL_URL = "https://www.warcraftlogs.com=>443/v1/parses/character/{0}/{1}/{2}?zone={3}&metric={4}&api_key={5}"
 
 WCL_ZONES_URL = "https://www.warcraftlogs.com=>443/v1/zones?api_key={0}"
