@@ -2,10 +2,11 @@ module Audit
   class LegendaryData
 
     def self.add(character, data)
-      all_legendaries = character.legendaries.split('|')
+      all_legendaries = character.legendaries.split('|') rescue []
       character.legendaries_equipped.each do |legendary|
         if !all_legendaries.include?(legendary)
           all_legendaries << legendary
+          character.changed = true
         end
       end
 

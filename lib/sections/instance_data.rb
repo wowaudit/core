@@ -77,6 +77,7 @@ module Audit
          'median_3','median_4','median_5',
          'average_3','average_4','average_5'
         ].each do |metric|
+          difficulty = RAID_DIFFICULTIES[metric.split('_')[1].to_i]
           character.data["WCL_#{difficulty}_#{metric.split('_')[0]}"] = ''
         end
       end
@@ -87,19 +88,12 @@ module Audit
         data = JSON.parse character.raiderio
 
         character.data['m+_score'] = data['score']
-        character.data['weekly_highest_m+'] = data['weekly_highest']
         character.data['season_highest_m+'] = data['season_highest']
       else
         character.data['m+_score'] = ''
-        character.data['weekly_highest_m+'] = "-"
         character.data['season_highest_m+'] = "-"
       end
-
-    #Temporary
-    rescue
-      character.data['m+_score'] = ''
-      character.data['weekly_highest_m+'] = "-"
-      character.data['season_highest_m+'] = "-"
+      character.data['weekly_highest_m+'] = character.raiderio_weekly
     end
   end
 end

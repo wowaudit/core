@@ -193,3 +193,5 @@ ARTIFACTS = {
   "Strom'kar, the Warbreaker" => ['Arms', 2],
   "Scale of the Earth-Warder" => ['Protection', 3]
 }
+
+BLANK_TIER_DATA = "{\"head\": 0, \"shoulder\": 0, \"back\": 0, \"chest\": 0, \"hands\": 0, \"legs\": 0}"

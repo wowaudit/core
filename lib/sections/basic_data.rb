@@ -14,6 +14,7 @@ module Audit
         ROLES[character.role][CLASSES[data['class']]]
         character.data['role'] = character.role
       rescue
+        $errors[:role] += 1
         character.data['role'] = DEFAULT_ROLES[CLASSES[data['class']]]
       end
     end

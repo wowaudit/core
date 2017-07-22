@@ -6,10 +6,10 @@ module Audit
       ap = []
       dungeons = []
 
-      character.old_snapshots.drop(1).each_with_index do |week, index|
-        wqs.insert(0, week['wqs'] - character.old_snapshots[index]['wqs'])
-        ap.insert(0, week['ap'] - character.old_snapshots[index]['ap'])
-        dungeons.insert(0, week['dungeons'] - character.old_snapshots[index]['dungeons'])
+      character.historical_snapshots.drop(1).each_with_index do |week, index|
+        wqs.insert(0, week['wqs'] - character.historical_snapshots[index]['wqs'])
+        ap.insert(0, week['ap'] - character.historical_snapshots[index]['ap'])
+        dungeons.insert(0, week['dungeons'] - character.historical_snapshots[index]['dungeons'])
       end
 
       character.data['historical_wqs_done'] = wqs.join('|')

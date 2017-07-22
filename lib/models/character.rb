@@ -2,12 +2,14 @@ module Audit
   class Character < Sequel::Model
     attr_accessor :output, :data, :tier_pieces, :gems, :ilvl, :spec_id,
                   :legendaries_equipped, :ap_snapshot, :wq_snapshot,
-                  :dungeon_snapshot, :specs, :max_ilvl
+                  :dungeon_snapshot, :specs, :max_ilvl, :changed,
+                  :historical_snapshots
 
     def init
       # Main variables
       self.output = []
       self.data = {}
+      self.changed = false
 
       # Variables for gear data
       self.gems = []
@@ -20,13 +22,13 @@ module Audit
     end
 
     def load_snapshots
-      snapshot = JSON.parse weekly_snapshot rescue {}
+      snapshot = JSON.parse weekly_snapshot || "{}"
       historical_snapshots = old_snapshots.split('|') rescue []
 
       self.ap_snapshot = snapshot['ap']
       self.wq_snapshot = snapshot['wqs']
       self.dungeon_snapshot = snapshot['dungeons']
-      self.old_snapshots = historical_snapshots.map{ |week| JSON.parse week }
+      self.historical_snapshots = historical_snapshots.map{ |week| JSON.parse week }
     end
 
     def load_persistent_data
@@ -39,10 +41,7 @@ module Audit
       end
 
       self.max_ilvl = spec_data[-1].to_i rescue 0
-      self.tier_pieces = JSON.parse tier_data rescue {
-        "head" => 0, "shoulder" => 0, "back" => 0,
-        "chest" => 0, "hands" => 0, "legs" => 0
-      }
+      self.tier_pieces = JSON.parse ( tier_data || BLANK_TIER_DATA )
     end
 
     def process_result(response)
@@ -52,8 +51,12 @@ module Audit
         process(JSON.parse response.body)
         update_snapshots
         to_output
+      elsif response.code != 403
+        raise ApiLimitReachedException
       else
+        Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
         set_status(response.code)
+        self.output = ( JSON.parse last_refresh ) rescue nil
       end
     end
 
@@ -73,11 +76,18 @@ module Audit
 
     def update_snapshots
       if !self.ap_snapshot or !self.wq_snapshot or !self.dungeon_snapshot
-        weekly_snapshot = {
+        new_snapshot = {
           'dungeons' => self.dungeon_snapshot || self.data['dungeons_done_total'],
           'wqs' => self.wq_snapshot || self.data['wqs_done_total'],
           'ap' => self.ap_snapshot || self.data['ap_obtained_total']
         }
+        self.weekly_snapshot = JSON.generate new_snapshot
+        if self.old_snapshots.is_a? String
+          self.old_snapshots << "|#{self.weekly_snapshot}"
+        else
+          self.old_snapshots = self.weekly_snapshot
+        end
+        self.changed = true
       end
     end
 
@@ -90,11 +100,14 @@ module Audit
     def set_status(code)
       if code == 404
         self.status = "doesn't exist"
+        $errors[:tracking] += 1
       elsif code.to_s[0] == "5"
         self.status = "temporarily unavailable"
       else
         self.status = "not tracking"
+        $errors[:tracking] += 1
       end
+      self.changed = true
     end
 
     def realm_slug

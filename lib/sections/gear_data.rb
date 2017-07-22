@@ -29,7 +29,7 @@ module Audit
 
       character.data['empty_sockets'] = data['audit']['emptySockets']
       character.data['gem_list'] = character.gems.join('|')
-      character.tier_data = JSON.generate character.tier_pieces
+      character.tier_data = JSON.generate character.tier_pieces rescue byebug
     end
 
     def self.check_enchant(item, data, character)
@@ -53,6 +53,7 @@ module Audit
     def self.check_tier(item, data, character)
       if TIER_IDS.include? data['items'][item]['id'].to_i
         character.tier_pieces[item] = data['items'][item]['itemLevel'].to_i
+        character.changed = true
       end
 
       if character.tier_pieces.include? item

@@ -5,8 +5,10 @@ require 'rbattlenet'
 require 'typhoeus'
 require 'aws-sdk'
 require 'date'
+require 'byebug'
 require 'mysql2'
 require 'yaml'
+require 'tzinfo'
 require 'csv'
 
 # File Storage
@@ -26,6 +28,7 @@ BNET_KEY = keys["bnet_key"]
 WCL_KEY = keys["wcl_key"]
 RAIDERIO_KEY = keys["raiderio_key"]
 DB = Sequel.connect(YAML::load(File.open('config/database.yml')))
+DB2 = Mysql2::Client.new(YAML::load(File.open('config/database.yml')))
 
 # Modules
 require_rel 'constants'
