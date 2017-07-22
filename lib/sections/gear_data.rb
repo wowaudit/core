@@ -52,8 +52,10 @@ module Audit
 
     def self.check_tier(item, data, character)
       if TIER_IDS.include? data['items'][item]['id'].to_i
-        character.tier_pieces[item] = data['items'][item]['itemLevel'].to_i
-        character.changed = true
+        if character.tier_pieces[item] != data['items'][item]['itemLevel'].to_i
+          character.changed = true
+          character.tier_pieces[item] = data['items'][item]['itemLevel'].to_i
+        end
       end
 
       if character.tier_pieces.include? item
