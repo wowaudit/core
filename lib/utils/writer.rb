@@ -71,5 +71,22 @@ module Audit
       Logger.t(INFO_TEAM_UPDATED +
         "Updated additional data for #{changed_characters.length} characters", team_id)
     end
+
+    def self.update_db_raiderio(characters)
+      query = "UPDATE characters SET raiderio = CASE "
+      characters.each do |character|
+        query << "WHEN id = #{character.id} THEN '#{JSON.generate character.raiderio}' " if character.changed
+      end
+
+      query << " ELSE raiderio END, raiderio_weekly = CASE "
+      characters.each do |character|
+        query << "WHEN id = #{character.id} THEN #{character.raiderio_weekly} " if character.changed
+      end
+      query << " ELSE raiderio_weekly END"
+
+      DB2.query(query, :async => true)
+      Logger.g(INFO_TEAM_UPDATED +
+        "Updated Raider.io data for #{characters.length} characters")
+    end
   end
 end

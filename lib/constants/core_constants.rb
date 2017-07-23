@@ -9,7 +9,7 @@ WCL_URL = "https://www.warcraftlogs.com=>443/v1/parses/character/{0}/{1}/{2}?zon
 
 WCL_ZONES_URL = "https://www.warcraftlogs.com=>443/v1/zones?api_key={0}"
 
-RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={0}&realm={1}&name={2}&fields=mythic_plus_scores,mythic_plus_highest_level_runs,mythic_plus_weekly_highest_level_runs"
+RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={region}&realm={realm}&name={name}&fields=mythic_plus_scores,mythic_plus_highest_level_runs,mythic_plus_weekly_highest_level_runs"
 
 # UTC times
 WEEKLY_RESET = {

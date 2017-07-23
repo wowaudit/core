@@ -36,6 +36,26 @@ module Audit
     end
   end
 
+  def self.refresh_raiderio(teams)
+    loop do
+      begin
+        schedule = teams || Scheduler.schedule_raiderio_work
+        Logger.g(INFO_STARTING_SCHEDULE << "Teams: #{schedule.join(', ')}")
+        schedule.each do |team|
+          team = Team.where(:id => team).first
+          team.refresh_raiderio
+        end
+        break if teams
+
+      rescue ApiLimitReachedException
+        Logger.g(ERROR_API_LIMIT_REACHED)
+        sleep(60)
+        redo
+      end
+      Logger.g(INFO_FINISHED_SCHEDULE)
+    end
+  end
+
   def self.timestamp
     @@time_since_reset
   end

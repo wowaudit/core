@@ -34,5 +34,13 @@ module Audit
       Logger.g(INFO_SCHEDULER_ADDED << "Worker: #{worker} | Teams: #{teams.join(', ')}")
       teams
     end
+
+    def self.schedule_raiderio_work
+      teams = Team.reverse(:last_refreshed_raiderio).limit(5).map{ |team| team.id }
+    end
+
+    def self.schedule_wcl_work
+      teams = Team.reverse(:last_refreshed_WCL).limit(5).map{ |team| team.id }
+    end
   end
 end

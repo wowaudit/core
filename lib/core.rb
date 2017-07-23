@@ -26,7 +26,6 @@ BUCKET = storage_data["bucket"]
 keys = YAML::load(File.open('config/keys.yml'))
 BNET_KEY = keys["bnet_key"]
 WCL_KEY = keys["wcl_key"]
-RAIDERIO_KEY = keys["raiderio_key"]
 DB = Sequel.connect(YAML::load(File.open('config/database.yml')))
 DB2 = Mysql2::Client.new(YAML::load(File.open('config/database.yml')))
 
