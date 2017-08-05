@@ -28,7 +28,7 @@ module Audit
       query << " ELSE per_spec END, last_refresh = CASE "
       result.each do |character|
         output = JSON.generate character.output
-        query << "WHEN id = #{character.id} THEN #{output.gsub(/'/) {|s| "\\'"}} "
+        query << "WHEN id = #{character.id} THEN #{self.escape(output)} "
       end
 
       changed_characters = result.select{ |c| c.changed }
@@ -42,7 +42,7 @@ module Audit
         # Update the owned Legendaries for changed characters
         query << " ELSE status END, legendaries = CASE "
         changed_characters.each do |character|
-          query << "WHEN id = #{character.id} THEN '#{character.legendaries.gsub(/'/) {|s| "\\'"}}' "
+          query << "WHEN id = #{character.id} THEN '#{self.escape(character.legendaries)}' "
         end
 
         # Update the weekly snapshot for changed characters
@@ -67,7 +67,7 @@ module Audit
         query << " ELSE last_refresh END"
       end
 
-      DB2.query(query, :async => true)
+      self.query(query)
       Logger.t(INFO_TEAM_UPDATED +
         "Updated additional data for #{changed_characters.length} characters", team_id)
     end
@@ -84,9 +84,20 @@ module Audit
       end
       query << " ELSE raiderio_weekly END"
 
-      DB2.query(query, :async => true)
+      self.query(query)
       Logger.g(INFO_TEAM_UPDATED +
         "Updated Raider.io data for #{characters.length} characters")
+    end
+
+    def self.query(query, async = true)
+      # Await completion of the previous async query
+      DB2.async_result
+
+      DB2.query(query, :async => async)
+    end
+
+    def self.escape(string)
+      string.gsub(/'/) {|s| "\\'"}
     end
   end
 end

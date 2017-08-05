@@ -16,31 +16,25 @@ module Audit
     end
 
     def self.schedule_work(worker)
-      type = worker.name.split('-').first
+      #TODO: Only select active teams and just schedule regardless of type in one method
+      type, patreon, instance = worker.name.split('-')
+      type = (type == "bnet" ? "" : "_#{type}")
 
-      if type == "regular"
-        teams = Team.reverse(:last_refreshed).limit(5)
-      elsif type == "platinum"
-        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 10).reverse(:last_refreshed).limit(5)
+      if patreon == "regular"
+        teams = Team.reverse(:"last_refreshed#{type}").limit(5)
+      elsif patreon == "platinum"
+        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 10).reverse(:"last_refreshed#{type}").limit(5)
       else
-        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 1..10).reverse(:last_refreshed).limit(5)
+        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 1..10).reverse(:"last_refreshed#{type}").limit(5)
       end
       teams = teams.map{ |team| team.id }
 
       # Manual query since Sequel does not support
       # single update queries for multiple objects
-      DB2.query("UPDATE teams SET last_refreshed = #{Audit.now.to_i} WHERE id IN (#{teams.join(',')})")
+      Writer.query("UPDATE teams SET last_refreshed#{type} = #{Audit.now.to_i} WHERE id IN (#{teams.join(',')})", false)
 
-      Logger.g(INFO_SCHEDULER_ADDED << "Worker: #{worker} | Teams: #{teams.join(', ')}")
+      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker} | Teams: #{teams.join(', ')}")
       teams
-    end
-
-    def self.schedule_raiderio_work
-      teams = Team.reverse(:last_refreshed_raiderio).limit(5).map{ |team| team.id }
-    end
-
-    def self.schedule_wcl_work
-      teams = Team.reverse(:last_refreshed_WCL).limit(5).map{ |team| team.id }
     end
   end
 end

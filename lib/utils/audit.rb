@@ -1,11 +1,11 @@
 module Audit
   @@time_since_reset = nil
 
-  def self.refresh(teams)
+  def self.refresh(teams, type)
     teams.each do |team|
       begin
         Logger.t(INFO_TEAM_STARTING, team.to_i)
-        Team.where(id: team.to_i).first.refresh
+        Team.refresh(team.to_i, type)
       rescue ApiLimitReachedException
         Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
         sleep(60)
@@ -19,7 +19,7 @@ module Audit
       worker = Schedule.where(:name => instance).first
       if worker.schedule
         schedule = JSON.parse worker.schedule
-        Logger.g(INFO_STARTING_SCHEDULE << "Teams: #{schedule.join(', ')}")
+        Logger.g(INFO_STARTING_SCHEDULE + "Teams: #{schedule.join(', ')}")
 
         # Ask for a new schedule
         worker.schedule = nil
@@ -27,31 +27,21 @@ module Audit
 
       else
         # Schedule own work if no schedule is available
+        Logger.g(INFO_NO_SCHEDULE + "Teams: #{schedule.join(', ')}")
         schedule = Scheduler.schedule_work(instance)
-        Logger.g(INFO_NO_SCHEDULE << "Teams: #{schedule.join(', ')}")
       end
 
-      self.refresh(schedule)
+      self.refresh(schedule, instance.split('-').first)
       Logger.g(INFO_FINISHED_SCHEDULE)
     end
   end
 
-  def self.refresh_raiderio(teams)
+  def self.refresh_without_schedule(instance, teams = nil)
     loop do
-      begin
-        schedule = teams || Scheduler.schedule_raiderio_work
-        Logger.g(INFO_STARTING_SCHEDULE << "Teams: #{schedule.join(', ')}")
-        schedule.each do |team|
-          team = Team.where(:id => team).first
-          team.refresh_raiderio
-        end
-        break if teams
+      schedule = teams || Scheduler.schedule_work(instance)
+      Logger.g(INFO_STARTING_SCHEDULE + "Teams: #{schedule.join(', ')}")
 
-      rescue ApiLimitReachedException
-        Logger.g(ERROR_API_LIMIT_REACHED)
-        sleep(60)
-        redo
-      end
+      self.refresh(schedule, instance.split('-').first)
       Logger.g(INFO_FINISHED_SCHEDULE)
     end
   end

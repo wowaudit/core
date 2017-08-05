@@ -1,9 +1,5 @@
 module Audit
-  class Character < Sequel::Model
-    attr_accessor :output, :data, :tier_pieces, :gems, :ilvl, :spec_id,
-                  :legendaries_equipped, :ap_snapshot, :wq_snapshot,
-                  :dungeon_snapshot, :specs, :max_ilvl, :changed,
-                  :historical_snapshots
+  class CharacterBnet < Character
 
     def init
       # Main variables
@@ -42,23 +38,6 @@ module Audit
 
       self.max_ilvl = spec_data[-1].to_i rescue 0
       self.tier_pieces = JSON.parse ( tier_data || BLANK_TIER_DATA )
-    end
-
-    def process_raiderio_result(response)
-      if response.code == 200
-        data = JSON.parse response.body
-        self.raiderio = {
-          :score => (data['mythic_plus_scores']['all'] rescue 0),
-          :season_highest => (data['mythic_plus_highest_level_runs'][0]['mythic_level'] rescue 0)
-        }
-        self.raiderio_weekly = data['mythic_plus_weekly_highest_level_runs'][0]['mythic_level'].to_i rescue 0
-        self.changed = true
-      elsif response.code == 403
-        raise ApiLimitReachedException
-      else
-        Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
-        self.changed = false
-      end
     end
 
     def process_result(response)
@@ -125,10 +104,6 @@ module Audit
         $errors[:tracking] += 1
       end
       self.changed = true
-    end
-
-    def realm_slug
-      Realm.to_slug realm
     end
   end
 end

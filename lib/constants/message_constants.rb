@@ -24,11 +24,11 @@ ERROR_TEAM = "Encountered an error in refreshing this team. "
 
 ERROR_CHARACTER = "Encountered an error in refreshing this character. "
 
-INFO_NO_SCHEDULE = "No work found. Generated a new schedule. "
-
 INFO_STARTING_SCHEDULE = "Going to refresh according to the schedule. "
 
 INFO_FINISHED_SCHEDULE = "Finished all guilds on the schedule. "
+
+INFO_NO_SCHEDULE = "No work found. Generated own schedule. "
 
 INFO_SCHEDULER_ADDED = "Assigned schedule to worker. "
 
