@@ -89,6 +89,18 @@ module Audit
         "Updated Raider.io data for #{characters.length} characters")
     end
 
+    def self.update_db_wcl(output, characters)
+      query = "UPDATE characters SET warcraftlogs = CASE "
+      characters.each do |character|
+        query << "WHEN id = #{character.id} THEN '#{JSON.generate output[character.id]}' "
+      end
+      query << " ELSE warcraftlogs END"
+
+      self.query(query)
+      Logger.g(INFO_TEAM_UPDATED +
+        "Updated Warcraft Logs data for #{characters.length} characters")
+    end
+
     def self.query(query, async = true)
       # Await completion of the previous async query
       DB2.async_result

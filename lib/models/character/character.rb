@@ -8,5 +8,13 @@ module Audit
     def realm_slug
       Realm.to_slug realm
     end
+
+    def wcl_parsed
+      @warcraftlogs_parsed ||= JSON.parse warcraftlogs
+    end
+
+    def raiderio_parsed
+      @raiderio_parsed ||= JSON.parse raiderio
+    end
   end
 end

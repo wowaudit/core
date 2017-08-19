@@ -1,7 +1,7 @@
 module Audit
   class CharacterRaiderio < Character
 
-    def process_raiderio_result(response)
+    def process_result(response)
       if response.code == 200
         data = JSON.parse response.body
         self.raiderio = {

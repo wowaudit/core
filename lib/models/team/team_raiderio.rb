@@ -10,7 +10,7 @@ module Audit
         uri["{name}"] = CGI.escape(character.name)
         request = Typhoeus::Request.new(uri)
         request.on_complete do |response|
-          character.process_raiderio_result(response)
+          character.process_result(response)
         end
         hydra.queue(request)
       end

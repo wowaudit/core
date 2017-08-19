@@ -16,7 +16,7 @@ module Audit
     end
 
     def self.schedule_work(worker)
-      #TODO: Only select active teams and just schedule regardless of type in one method
+      #TODO: Only select active teams
       type, patreon, instance = worker.name.split('-')
       type = (type == "bnet" ? "" : "_#{type}")
 

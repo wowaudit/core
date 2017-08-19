@@ -58,25 +58,22 @@ module Audit
 
     def self.add_warcraftlogs_data(character)
       if character.warcraftlogs
-        data = JSON.parse character.warcraftlogs
-        character.data['WCL_id'] = data['character_id']
+
+        #Temporary (change WCL_id to the new database field)
+        character.data['WCL_id'] = character.wcl_parsed['character_id']
         data.delete('character_id')
 
-        #Temporary
-        data.delete('raider_io_score')
-        data.delete('weekly_highest_m')
-        data.delete('season_highest_m')
+        character.wcl_parsed.delete('raider_io_score')
+        character.wcl_parsed.delete('weekly_highest_m')
+        character.wcl_parsed.delete('season_highest_m')
 
-        data.each do |metric, values|
+        character.wcl_parsed.each do |metric, values|
           difficulty = RAID_DIFFICULTIES[metric.split('_')[1].to_i]
           character.data["WCL_#{difficulty}_#{metric.split('_')[0]}"] = values.join('|')
         end
       else
         character.data['WCL_id'] = ''
-        ['best_3','best_4','best_5',
-         'median_3','median_4','median_5',
-         'average_3','average_4','average_5'
-        ].each do |metric|
+        WCL_METRICS.each_key do |metric|
           difficulty = RAID_DIFFICULTIES[metric.split('_')[1].to_i]
           character.data["WCL_#{difficulty}_#{metric.split('_')[0]}"] = ''
         end
@@ -85,10 +82,8 @@ module Audit
 
     def self.add_raiderio_data(character)
       if character.raiderio
-        data = JSON.parse character.raiderio
-
-        character.data['m+_score'] = data['score']
-        character.data['season_highest_m+'] = data['season_highest']
+        character.data['m+_score'] = character.raiderio_parsed['score']
+        character.data['season_highest_m+'] = character.raiderio_parsed['season_highest']
       else
         character.data['m+_score'] = ''
         character.data['season_highest_m+'] = "-"

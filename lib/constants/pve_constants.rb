@@ -150,3 +150,15 @@ VALID_RAIDS = [{
     }
   }]
 }]
+
+WCL_METRICS = {
+  'best_3' => [],
+  'best_4' => [],
+  'best_5' => [],
+  'median_3' => [],
+  'median_4' => [],
+  'median_5' => [],
+  'average_3' => [],
+  'average_4' => [],
+  'average_5' => []
+}
