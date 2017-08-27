@@ -41,7 +41,7 @@ module Audit
     def uri(character, zone)
       uri = WCL_URL[0 .. WCL_URL.length]
       uri["{region}"] = region
-      uri["{realm}"] = character.realm || Realm.to_slug(realm)
+      uri["{realm}"] = Realm.to_slug(character.realm || realm)
       uri["{name}"] = CGI.escape(character.name)
       uri["{zone}"] = zone.to_s
       uri["{metric}"] = character.wcl_role

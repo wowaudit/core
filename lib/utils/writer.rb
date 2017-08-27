@@ -73,7 +73,7 @@ module Audit
     end
 
     def self.update_db_raiderio(characters)
-      if characters.map{ |character| character.changed ? 1 : 0 }.inject(:+) > 0
+      if characters.any? && characters.map{ |character| character.changed ? 1 : 0 }.inject(:+) > 0
         query = "UPDATE characters SET raiderio = CASE "
         characters.each do |character|
           query << "WHEN id = #{character.id} THEN '#{JSON.generate character.raiderio}' " if character.changed

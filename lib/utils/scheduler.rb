@@ -21,7 +21,7 @@ module Audit
       type = (type == "bnet" ? "" : "_#{type}")
 
       if patreon == "regular"
-        teams = Team.order(:"last_refreshed#{type}").limit(5)
+        teams = Team.join(:guilds, :id => :guild_id).where(:active => 1).order(:"last_refreshed#{type}").limit(5)
       elsif patreon == "platinum"
         teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 10).order(:"last_refreshed#{type}").limit(5)
       else
