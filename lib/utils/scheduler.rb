@@ -17,15 +17,15 @@ module Audit
 
     def self.schedule_work(worker)
       #TODO: Only select active teams
-      type, patreon, instance = worker.name.split('-')
+      type, patreon, instance = worker.split('-')
       type = (type == "bnet" ? "" : "_#{type}")
 
       if patreon == "regular"
-        teams = Team.reverse(:"last_refreshed#{type}").limit(5)
+        teams = Team.order(:"last_refreshed#{type}").limit(5)
       elsif patreon == "platinum"
-        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 10).reverse(:"last_refreshed#{type}").limit(5)
+        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 10).order(:"last_refreshed#{type}").limit(5)
       else
-        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 1..10).reverse(:"last_refreshed#{type}").limit(5)
+        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 1..10).order(:"last_refreshed#{type}").limit(5)
       end
       teams = teams.map{ |team| team.id }
 

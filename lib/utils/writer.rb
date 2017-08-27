@@ -73,20 +73,22 @@ module Audit
     end
 
     def self.update_db_raiderio(characters)
-      query = "UPDATE characters SET raiderio = CASE "
-      characters.each do |character|
-        query << "WHEN id = #{character.id} THEN '#{JSON.generate character.raiderio}' " if character.changed
-      end
+      if characters.map{ |character| character.changed ? 1 : 0 }.inject(:+) > 0
+        query = "UPDATE characters SET raiderio = CASE "
+        characters.each do |character|
+          query << "WHEN id = #{character.id} THEN '#{JSON.generate character.raiderio}' " if character.changed
+        end
 
-      query << " ELSE raiderio END, raiderio_weekly = CASE "
-      characters.each do |character|
-        query << "WHEN id = #{character.id} THEN #{character.raiderio_weekly} " if character.changed
-      end
-      query << " ELSE raiderio_weekly END"
+        query << " ELSE raiderio END, raiderio_weekly = CASE "
+        characters.each do |character|
+          query << "WHEN id = #{character.id} THEN #{character.raiderio_weekly} " if character.changed
+        end
+        query << " ELSE raiderio_weekly END"
 
-      self.query(query)
-      Logger.g(INFO_TEAM_UPDATED +
-        "Updated Raider.io data for #{characters.length} characters")
+        self.query(query)
+        Logger.g(INFO_TEAM_UPDATED +
+          "Updated Raider.io data for #{characters.length} characters")
+      end
     end
 
     def self.update_db_wcl(output, characters)

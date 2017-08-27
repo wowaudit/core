@@ -10,7 +10,9 @@ module Audit
         }
         self.raiderio_weekly = data['mythic_plus_weekly_highest_level_runs'][0]['mythic_level'].to_i rescue 0
         self.changed = true
-      elsif response.code == 403
+      elsif response.code == 403 or response.code == 0
+        # Treat response code of 0 as API Limit, to reduce
+        # load on RaiderIO's API (it's a sign of too many requests)
         raise ApiLimitReachedException
       else
         Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
