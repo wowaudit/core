@@ -33,13 +33,16 @@ module Audit
         end
       end
 
+      DUNGEONS_BY_ACHIEVEMENT.each do |key, dungeon|
+        criteria = data['achievements']['criteria'].index(key)
+        completions = data['achievements']['criteriaQuantity'][criteria] rescue 0
+        character.data[dungeon] = completions
+        dungeon_count += completions
+      end
+
       character.data['dungeons_done_total'] = dungeon_count
       character.data['dungeons_this_week'] =
         character.dungeon_snapshot ? dungeon_count - character.dungeon_snapshot : 0
-
-      #Future dungeons with unknown ID that are already added in front-end
-      character.data['Cathedral of Eternal Night'] = 0
-      character.data['Seat of the Triumvirate'] = 0
 
       encounters.each do |encounter|
         encounter.each do |difficulty, id|

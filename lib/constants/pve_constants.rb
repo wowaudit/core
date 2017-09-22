@@ -13,6 +13,13 @@ MYTHIC_DUNGEONS = {
   11406 => 'Karazhan'
 }
 
+# Patch dungeons are not trackable through statistics,
+# but they can be tracked through the achievement criteria
+DUNGEONS_BY_ACHIEVEMENT = {
+  36216 => 'Cathedral of Eternal Night',
+  37273 => 'Seat of the Triumvirate'
+}
+
 RAID_DIFFICULTIES = {
   3 => 'Normal',
   4 => 'Heroic',
