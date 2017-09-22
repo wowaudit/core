@@ -16,6 +16,7 @@ module Audit
       dungeon_count = 0
       instance_data = data['statistics']['subCategories'][5]['subCategories'][6]['statistics']
 
+      # Track Dungeon count through the statistics
       instance_data.each do |instance|
         if MYTHIC_DUNGEONS.include?(instance['id'])
           dungeon_count += instance['quantity']
@@ -33,6 +34,7 @@ module Audit
         end
       end
 
+      # Patch dungeons haven't been added to statistics, but can be tracked using criterias
       DUNGEONS_BY_ACHIEVEMENT.each do |key, dungeon|
         criteria = data['achievements']['criteria'].index(key)
         completions = data['achievements']['criteriaQuantity'][criteria] rescue 0
