@@ -95,7 +95,7 @@ module Audit
 
     def set_status(code)
       if code == 404
-        self.status = "doesn't exist"
+        self.status = "does not exist"
         $errors[:tracking] += 1
       elsif code.to_s[0] == "5"
         self.status = "temporarily unavailable"

@@ -16,6 +16,8 @@ INFO_TEAM_STARTING = "Going to refresh this team now. "
 
 INFO_TEAM_REFRESHED = "Finished refreshing the team's data. "
 
+INFO_TEAM_EMPTY = "This team is empty, there is nothing to refresh. "
+
 INFO_TEAM_UPDATED = "Stored the team's data in the database. "
 
 INFO_TEAM_WRITTEN = "Wrote and uploaded the CSV file to the server. All done now. "
