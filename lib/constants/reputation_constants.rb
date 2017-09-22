@@ -6,7 +6,9 @@ REPUTATIONS = {
   1900 => 'court_of_farondis',
   1948 => 'valarjar',
   2018 => 'talons_vengeance',
-  2045 => 'legionfall'
+  2045 => 'legionfall',
+  2165 => 'army_of_the_light',
+  2170 => 'argussian_reach'
 }
 
 STANDINGS = {

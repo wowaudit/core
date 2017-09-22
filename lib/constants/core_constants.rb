@@ -212,5 +212,9 @@ HEADER = [
   'm+_score',
   'weekly_highest_m+',
   'season_highest_m+',
-  'Seat of the Triumvirate'
+  'Seat of the Triumvirate',
+  'army_of_the_light_standing',
+  'army_of_the_light_value',
+  'argussian_reach_standing',
+  'argussian_reach_value'
 ]
