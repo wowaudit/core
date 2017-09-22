@@ -28,7 +28,7 @@ module Audit
       query << " ELSE per_spec END, last_refresh = CASE "
       result.each do |character|
         output = JSON.generate character.output
-        query << "WHEN id = #{character.id} THEN #{self.escape(output)} "
+        query << "WHEN id = #{character.id} THEN '#{self.escape(output)}' "
       end
 
       changed_characters = result.select{ |c| c.changed }
