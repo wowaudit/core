@@ -16,8 +16,7 @@ module Audit
     end
 
     def self.schedule_work(worker)
-      #TODO: Only select active teams
-      type, patreon, instance = worker.split('-')
+      type, patreon, instance = worker.name.split('-')
       type = (type == "bnet" ? "" : "_#{type}")
 
       if patreon == "regular"
@@ -33,7 +32,7 @@ module Audit
       # single update queries for multiple objects
       Writer.query("UPDATE teams SET last_refreshed#{type} = #{Audit.now.to_i} WHERE id IN (#{teams.join(',')})", false)
 
-      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker} | Teams: #{teams.join(', ')}")
+      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.name} | Teams: #{teams.join(', ')}")
       teams
     end
   end

@@ -27,8 +27,8 @@ module Audit
 
       else
         # Schedule own work if no schedule is available
-        Logger.g(INFO_NO_SCHEDULE + "Teams: #{schedule.join(', ')}")
-        schedule = Scheduler.schedule_work(instance)
+        Logger.g(INFO_NO_SCHEDULE)
+        schedule = Scheduler.schedule_work(worker)
       end
 
       self.refresh(schedule, instance.split('-').first)

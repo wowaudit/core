@@ -28,7 +28,7 @@ INFO_STARTING_SCHEDULE = "Going to refresh according to the schedule. "
 
 INFO_FINISHED_SCHEDULE = "Finished all guilds on the schedule. "
 
-INFO_NO_SCHEDULE = "No work found. Generated own schedule. "
+INFO_NO_SCHEDULE = "No work found. Generating own schedule. "
 
 INFO_SCHEDULER_ADDED = "Assigned schedule to worker. "
 
