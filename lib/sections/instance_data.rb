@@ -64,9 +64,8 @@ module Audit
     def self.add_warcraftlogs_data(character)
       if character.warcraftlogs
 
-        #Temporary (change WCL_id to the new database field)
         character.data['WCL_id'] = character.wcl_parsed['character_id']
-        data.delete('character_id')
+        character.wcl_parsed.delete('character_id')
 
         character.wcl_parsed.delete('raider_io_score')
         character.wcl_parsed.delete('weekly_highest_m')
