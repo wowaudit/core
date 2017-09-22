@@ -10,7 +10,7 @@ module Audit
         character.wq_snapshot ? character.data['wqs_done_total'] - character.wq_snapshot : 0
 
       paragon_amount = 0
-      (36330..36336).to_a.each do |chest|
+      ((36330..36336).to_a + (37309..37315).to_a).each do |chest|
         criteria = data['achievements']['criteria'].index(chest)
         paragon_amount += data['achievements']['criteriaQuantity'][criteria] rescue 0
       end
