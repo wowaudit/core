@@ -5,6 +5,7 @@ module Audit
       if response.code == 200
         data = JSON.parse response.body
         output = parse_result(data, output) unless data.empty?
+        self.changed = !data.empty?
       elsif response.code == 403
         raise ApiLimitReachedException
       else

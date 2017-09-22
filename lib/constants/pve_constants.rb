@@ -22,7 +22,7 @@ RAID_DIFFICULTIES = {
 TIER_IDS = (147121..147192).to_a #Tier 20
 
 VALID_RAIDS = [{
-  'name' => 'Emerald Nightmare', 'days' => [], 'id' => 10,
+  'name' => 'Emerald Nightmare', 'days' => [], 'id' => 10, 'partition' => 1,
   'encounters' => [{
     'id' => 1853, 'name' => 'Nythendra', 'raid_ids' => {
       'normal' => 10912, 'heroic' => 10913, 'mythic' => 10914
@@ -53,7 +53,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Trial of Valor', 'days' => [], 'id' => 12,
+  'name' => 'Trial of Valor', 'days' => [], 'id' => 12, 'partition' => 1,
   'encounters' => [{
     'id' => 1958, 'name' => 'Odyn', 'raid_ids' => {
       'normal' => 11408, 'heroic' => 11409, 'mythic' => 11410
@@ -68,7 +68,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'The Nighthold', 'days' => [], 'id' => 11,
+  'name' => 'The Nighthold', 'days' => [], 'id' => 11, 'partition' => 1,
   'encounters' => [{
     'id' => 1849, 'name' => 'Skorpyron', 'raid_ids' => {
       'normal' => 10941, 'heroic' => 10942, 'mythic' => 10943
@@ -111,7 +111,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Tomb of Sargeras', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 13,
+  'name' => 'Tomb of Sargeras', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 13, 'partition' => 2,
   'encounters' => [{
     'id' => 2032, 'name' => 'Goroth', 'raid_ids' => {
       'normal' => 11878, 'heroic' => 11879, 'mythic' => 11880

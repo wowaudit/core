@@ -22,7 +22,7 @@ module Audit
         template = { 3 => {}, 4 => {}, 5 => {} }
         VALID_RAIDS.each_with_index do |raid, raid_index|
           if raid['days'].include? Time.now.wday
-            self.zones << raid['id']
+            self.zones << raid
           end
           raid['encounters'].each_with_index do |encounter, encounter_index|
             RAID_DIFFICULTIES.each_key do |difficulty|
@@ -43,8 +43,9 @@ module Audit
       uri["{region}"] = region
       uri["{realm}"] = Realm.to_slug(character.realm || realm)
       uri["{name}"] = CGI.escape(character.name)
-      uri["{zone}"] = zone.to_s
+      uri["{zone}"] = zone["id"].to_s
       uri["{metric}"] = character.wcl_role
+      uri["{partition}"] = zone["partition"].to_s
       uri
     end
 

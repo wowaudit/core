@@ -92,15 +92,17 @@ module Audit
     end
 
     def self.update_db_wcl(output, characters)
-      query = "UPDATE characters SET warcraftlogs = CASE "
-      characters.each do |character|
-        query << "WHEN id = #{character.id} THEN '#{JSON.generate output[character.id]}' "
-      end
-      query << " ELSE warcraftlogs END"
+      if characters.any? && characters.map{ |character| character.changed ? 1 : 0 }.inject(:+) > 0
+        query = "UPDATE characters SET warcraftlogs = CASE "
+        characters.each do |character|
+          query << "WHEN id = #{character.id} THEN '#{JSON.generate output[character.id]}' " if character.changed
+        end
+        query << " ELSE warcraftlogs END"
 
-      self.query(query)
-      Logger.g(INFO_TEAM_UPDATED +
-        "Updated Warcraft Logs data for #{characters.length} characters")
+        self.query(query)
+        Logger.g(INFO_TEAM_UPDATED +
+          "Updated Warcraft Logs data for #{characters.length} characters")
+      end
     end
 
     def self.query(query, async = true)
