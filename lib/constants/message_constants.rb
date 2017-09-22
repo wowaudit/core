@@ -22,7 +22,7 @@ INFO_TEAM_UPDATED = "Stored the team's data in the database. "
 
 INFO_TEAM_WRITTEN = "Wrote and uploaded the CSV file to the server. All done now. "
 
-ERROR_TEAM = "Encountered an error in refreshing this team. "
+ERROR_TEAM = "Encountered an error in refreshing this team: "
 
 ERROR_CHARACTER = "Encountered an error in refreshing this character. "
 

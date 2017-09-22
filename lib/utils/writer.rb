@@ -6,7 +6,7 @@ module Audit
       data = CSV.generate do |csv|
         csv << header
         result.sort_by{|c| c[1].name}.each do |uri, character|
-          csv << character.output
+          csv << character.output if character.output
         end
       end
       file.put(body: data)
@@ -27,7 +27,7 @@ module Audit
       # Store entire output in case the next cycle fails for a character
       query << " ELSE per_spec END, last_refresh = CASE "
       result.each do |character|
-        output = JSON.generate character.output
+        output = (JSON.generate character.output rescue "")
         query << "WHEN id = #{character.id} THEN '#{self.escape(output)}' "
       end
 

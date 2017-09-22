@@ -37,7 +37,7 @@ module Audit
       end
 
       self.max_ilvl = spec_data[-1].to_i rescue 0
-      self.tier_pieces = JSON.parse ( tier_data || BLANK_TIER_DATA )
+      self.tier_pieces = JSON.parse (tier_data.to_s.empty? ? BLANK_TIER_DATA : tier_data)
     end
 
     def process_result(response)

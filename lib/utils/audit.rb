@@ -10,6 +10,8 @@ module Audit
         Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
         sleep(60)
         redo
+      rescue
+        Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
       end
     end
   end
