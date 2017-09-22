@@ -10,10 +10,9 @@ module Audit
       character.data['honorable_kills'] = data['totalHonorableKills']
 
       #Parse the role if it's valid, otherwise use the default role
-      begin
-        ROLES[character.role][CLASSES[data['class']]]
+      if ROLES[character.role][CLASSES[data['class']]]
         character.data['role'] = character.role
-      rescue
+      else
         $errors[:role] += 1
         character.data['role'] = DEFAULT_ROLES[CLASSES[data['class']]]
       end
