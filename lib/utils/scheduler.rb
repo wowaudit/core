@@ -22,15 +22,15 @@ module Audit
       if patreon == "regular"
         teams = Writer.query("SELECT t.id, t.last_refreshed#{type}, g.active FROM teams t
                               INNER JOIN guilds g ON g.id = t.guild_id WHERE g.active = 1
-                              ORDER BY t.last_refreshed_wcl LIMIT 5", false).to_a
+                              ORDER BY t.last_refreshed#{type} ASC LIMIT 5", false).to_a
       elsif patreon == "platinum"
         teams = Writer.query("SELECT t.id, t.last_refreshed#{type}, g.patreon FROM teams t
                               INNER JOIN guilds g ON g.id = t.guild_id WHERE g.patreon >= 10
-                              ORDER BY t.last_refreshed_wcl LIMIT 5", false).to_a
+                              ORDER BY t.last_refreshed#{type} ASC LIMIT 5", false).to_a
       else
         teams = Writer.query("SELECT t.id, t.last_refreshed#{type}, g.patreon FROM teams t
                               INNER JOIN guilds g ON g.id = t.guild_id WHERE g.patreon >= 1
-                              ORDER BY t.last_refreshed_wcl LIMIT 5", false).to_a
+                              ORDER BY t.last_refreshed#{type} ASC LIMIT 5", false).to_a
       end
       team_ids = teams.map{ |team| team["id"] }
 

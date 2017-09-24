@@ -10,7 +10,7 @@ module Audit
           output = parse_result(data, output)
           self.changed = true
         end
-      elsif response.code == 403
+      elsif response.code == 403 or response.code == 429
         raise ApiLimitReachedException
       else
         Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
