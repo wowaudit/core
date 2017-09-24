@@ -12,6 +12,10 @@ ROLE_WARNING = "warning|Not all added members have a valid role for their class.
 
 ERROR_API_LIMIT_REACHED = "API limit reached. Waiting one minute before trying again. "
 
+ERROR_TEAM = "Encountered an error in refreshing this team: "
+
+ERROR_CHARACTER = "Encountered an error in refreshing this character. "
+
 INFO_TEAM_STARTING = "Going to refresh this team now. "
 
 INFO_TEAM_REFRESHED = "Finished refreshing the team's data. "
@@ -22,17 +26,13 @@ INFO_TEAM_UPDATED = "Stored the team's data in the database. "
 
 INFO_TEAM_WRITTEN = "Wrote and uploaded the CSV file to the server. All done now. "
 
-ERROR_TEAM = "Encountered an error in refreshing this team: "
-
-ERROR_CHARACTER = "Encountered an error in refreshing this character. "
-
 INFO_STARTING_SCHEDULE = "Going to refresh according to the schedule. "
 
 INFO_FINISHED_SCHEDULE = "Finished all guilds on the schedule. "
 
 INFO_NO_SCHEDULE = "No work found. Generating own schedule. "
 
-INFO_TIME_SINCE_LAST_REFRESH = "Time since last refresh for these teams is (on average)"
+INFO_TIME_SINCE_LAST_REFRESH = "Time since last refresh for these teams is (on average) "
 
 INFO_SCHEDULER_ADDED = "Assigned schedule to worker. "
 

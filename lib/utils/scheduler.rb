@@ -6,7 +6,6 @@ module Audit
         schedule = Schedule.all
 
         schedule.each do |worker|
-          Logger.g(INFO_WORKER_BUSY + "Worker: #{worker.name}") if worker.schedule
           worker.schedule ||= Scheduler.schedule_work(worker).to_json
           worker.save_changes
         end
