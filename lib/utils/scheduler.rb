@@ -20,20 +20,32 @@ module Audit
       type = (type == "bnet" ? "" : "_#{type}")
 
       if patreon == "regular"
-        teams = Team.join(:guilds, :id => :guild_id).where(:active => 1).order(:"last_refreshed#{type}").limit(5)
+        teams = Writer.query("SELECT t.id, t.last_refreshed#{type}, g.active FROM teams t
+                              INNER JOIN guilds g ON g.id = t.guild_id WHERE g.active = 1
+                              ORDER BY t.last_refreshed_wcl LIMIT 5", false).to_a
       elsif patreon == "platinum"
-        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 10).order(:"last_refreshed#{type}").limit(5)
+        teams = Writer.query("SELECT t.id, t.last_refreshed#{type}, g.patreon FROM teams t
+                              INNER JOIN guilds g ON g.id = t.guild_id WHERE g.patreon >= 10
+                              ORDER BY t.last_refreshed_wcl LIMIT 5", false).to_a
       else
-        teams = Team.join(:guilds, :id => :guild_id).where(:patreon => 1..10).order(:"last_refreshed#{type}").limit(5)
+        teams = Writer.query("SELECT t.id, t.last_refreshed#{type}, g.patreon FROM teams t
+                              INNER JOIN guilds g ON g.id = t.guild_id WHERE g.patreon >= 1
+                              ORDER BY t.last_refreshed_wcl LIMIT 5", false).to_a
       end
-      teams = teams.map{ |team| team.id }
+      team_ids = teams.map{ |team| team["id"] }
 
       # Manual query since Sequel does not support
       # single update queries for multiple objects
-      Writer.query("UPDATE teams SET last_refreshed#{type} = #{Audit.now.to_i} WHERE id IN (#{teams.join(',')})", false)
+      Writer.query("UPDATE teams SET last_refreshed#{type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})", false)
+      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.name} | Teams: #{team_ids.join(', ')}")
 
-      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.name} | Teams: #{teams.join(', ')}")
-      teams
+      # Log the average time since last refresh in a pretty way. TODO: Refactor since it's quite ugly code
+      time = teams.map{ |team| Audit.now.to_i - team["last_refreshed#{type}"] }.inject{ |sum, el| sum + el }.to_f / 5 rescue 0
+      time_log = Time.at(time).utc.strftime("%e days, %H hours, %M minutes and %S seconds")
+      time_log[1] = (time_log[1].to_i - 1).to_s
+      Logger.g(INFO_TIME_SINCE_LAST_REFRESH + time_log)
+
+      team_ids
     end
   end
 end

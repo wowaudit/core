@@ -4,8 +4,12 @@ module Audit
     def process_result(response, output)
       if response.code == 200
         data = JSON.parse response.body
-        output = parse_result(data, output) unless data.empty?
-        self.changed = !data.empty?
+        if data.empty? or (data["hidden"] rescue false)
+          self.changed = false
+        else
+          output = parse_result(data, output)
+          self.changed = true
+        end
       elsif response.code == 403
         raise ApiLimitReachedException
       else
@@ -20,14 +24,14 @@ module Audit
 
       data.reject{ |encounter| encounter['difficulty'] < 3 }.each do |encounter|
         encounter['specs'].each do |spec|
-          if spec['spec'] == self.role || ROLES_TO_SPEC[self.role].include?(spec['spec'])
+          if spec['spec'][0..3] == self.role[0..3] || ROLES_TO_SPEC[self.role].include?(spec['spec'])
             output[encounter['difficulty']][encounter['name']].merge!({
               'best' => spec['best_historical_percent'],
               'median' => spec['historical_median'],
               'average' => spec['historical_avg']
             })
             break
-          end
+          end rescue nil
         end
       end
       transform(output)

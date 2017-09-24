@@ -32,6 +32,8 @@ INFO_FINISHED_SCHEDULE = "Finished all guilds on the schedule. "
 
 INFO_NO_SCHEDULE = "No work found. Generating own schedule. "
 
+INFO_TIME_SINCE_LAST_REFRESH = "Time since last refresh for these teams is (on average)"
+
 INFO_SCHEDULER_ADDED = "Assigned schedule to worker. "
 
 INFO_SCHEDULER_CYCLE_DONE = "Finished assigning schedules to all workers. Pausing for #{SCHEDULER_PAUSE_AFTER_CYCLE} second. "
