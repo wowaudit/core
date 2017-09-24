@@ -18,6 +18,13 @@ module Audit
       new_header[5] = team.warning
       new_header[6] = team.patreon > 0 ? "patreon" : "no patreon"
 
+      # Add raid bosses to header, spreadsheet relies on it being in the 141th column
+      data = []
+      VALID_RAIDS.each do |raid|
+        data << "#{raid['encounters'].map{|boss| boss['name']}.join('_')}@#{raid['name']}@"
+      end
+      new_header[142] = data.join("")
+
       new_header
     end
   end
