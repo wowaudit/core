@@ -30,7 +30,7 @@ module Audit
       else
         # Schedule own work if no schedule is available
         Logger.g(INFO_NO_SCHEDULE)
-        schedule = Scheduler.schedule_work(worker)
+        schedule = Scheduler.schedule_work(instance)
       end
 
       self.refresh(schedule, instance.split('-').first)

@@ -6,7 +6,7 @@ module Audit
         schedule = Schedule.all
 
         schedule.each do |worker|
-          worker.schedule ||= Scheduler.schedule_work(worker).to_json
+          worker.schedule ||= Scheduler.schedule_work(worker.name).to_json
           worker.save_changes
         end
         Logger.g(INFO_SCHEDULER_CYCLE_DONE)
@@ -15,7 +15,7 @@ module Audit
     end
 
     def self.schedule_work(worker)
-      type, patreon, instance = worker.name.split('-')
+      type, patreon, instance = worker.split('-')
       type = (type == "bnet" ? "" : "_#{type}")
 
       if patreon == "regular"
@@ -36,7 +36,7 @@ module Audit
       # Manual query since Sequel does not support
       # single update queries for multiple objects
       Writer.query("UPDATE teams SET last_refreshed#{type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})", false)
-      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.name} | Teams: #{team_ids.join(', ')}")
+      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker} | Teams: #{team_ids.join(', ')}")
 
       # Log the average time since last refresh in a pretty way. TODO: Refactor since it's quite ugly code
       time = teams.map{ |team| Audit.now.to_i - team["last_refreshed#{type}"] }.inject{ |sum, el| sum + el }.to_f / 5 rescue 0
