@@ -1,4 +1,4 @@
-# World of Warcraft Audit - Scraper
+# World of Warcraft Audit
 This is the back-end scraper engine that generates CSV files for the World of Warcraft Audit Spreadsheet, 
 found at https://wowaudit.com. The code is open-source and while it's possible for you to play around with,
 it's not built with individual use in mind. Therefore, setting up the scripts can be difficult.
