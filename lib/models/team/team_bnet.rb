@@ -25,7 +25,9 @@ module Audit
     end
 
     def warning
-      if $errors[:tracking] > 0
+      if days_remaining <= 7
+        INACTIVE_WARNING
+      elsif $errors[:tracking] > 0
         TRACK_WARNING
       elsif $errors[:role] > 0
         ROLE_WARNING

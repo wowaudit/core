@@ -37,5 +37,19 @@ module Audit
     def patreon
       guild_data("patreon")
     end
+
+    def updated_at
+      guild_data("updated_at")
+    end
+
+    def days_remaining
+      if patreon
+        60
+      elsif updated_at
+        60 - (Date.today - updated_at.to_date).to_i
+      else
+        0
+      end
+    end
   end
 end

@@ -4,6 +4,8 @@ VERSION_MESSAGE = "Your spreadsheet is out of date, for more features make a new
 
 NO_WARNING = "good|All added members are being tracked, there are no problems!"
 
+INACTIVE_WARNING = "warning|Your sheet has stopped refreshing or will in a few days. Please check wowaudit.com and press the 'Keep/Resume Refreshing' button."
+
 TRACK_WARNING = "warning|Not all added members are being tracked. Please check wowaudit.com and update the list of members."
 
 ROLE_WARNING = "warning|Not all added members have a valid role for their class. Please check wowaudit.com and update the list of members."
