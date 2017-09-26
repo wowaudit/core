@@ -97,6 +97,7 @@ ENCHANTS = {
     5431 => [1, "+150 Strength"],
     5432 => [1, "+150 Agility"],
     5433 => [1, "+150 Intellect"],
+    5311 => [2, "Gift of Haste"],
     5434 => [2, "+200 Strength"],
     5435 => [2, "+200 Agility"],
     5436 => [2, "+200 Intellect"]
