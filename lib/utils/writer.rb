@@ -18,58 +18,25 @@ module Audit
       # in one single query, therefore the update query
       # is created manually to massively improve the speed
 
-      # Update specialisation data
-      query = "UPDATE characters SET per_spec = CASE "
-      result.each do |character|
-        query << "WHEN id = #{character.id} THEN '#{character.per_spec}' "
-      end
+      overall_query = {per_spec: [], last_refresh: []}
+      changes_query = {status: [], legendaries: [], weekly_snapshot: [], old_snapshots: [], tier_data: []}
 
-      # Store entire output in case the next cycle fails for a character
-      query << " ELSE per_spec END, last_refresh = CASE "
+      # Update specialisation data and store entire output in case the next cycle fails for a character
       result.each do |character|
         output = (JSON.generate character.output rescue "")
-        query << "WHEN id = #{character.id} THEN '#{self.escape(output)}' "
+        overall_query[:last_refresh] << "WHEN id = #{character.id} THEN '#{self.escape(output)}' "
+        overall_query[:per_spec] << "WHEN id = #{character.id} THEN '#{character.per_spec}' "
       end
 
-      changed_characters = result.select{ |c| c.changed }
-      if changed_characters.any?
-        # Update the tracking status for changed characters
-        query << " ELSE last_refresh END, status = CASE "
-        changed_characters.each do |character|
-          query << "WHEN id = #{character.id} THEN '#{character.status}' "
-        end
-
-        # Update the owned Legendaries for changed characters
-        query << " ELSE status END, legendaries = CASE "
-        changed_characters.each do |character|
-          query << "WHEN id = #{character.id} THEN '#{self.escape(character.legendaries)}' "
-        end
-
-        # Update the weekly snapshot for changed characters
-        query << " ELSE legendaries END, weekly_snapshot = CASE "
-        changed_characters.each do |character|
-          query << "WHEN id = #{character.id} THEN '#{character.weekly_snapshot}' "
-        end
-
-        # Update the historical snapshots for changed characters
-        query << " ELSE weekly_snapshot END, old_snapshots = CASE "
-        changed_characters.each do |character|
-          query << "WHEN id = #{character.id} THEN '#{character.old_snapshots}' "
-        end
-
-        # Update the owned tier pieces data for changed characters
-        query << " ELSE old_snapshots END, tier_data = CASE "
-        changed_characters.each do |character|
-          query << "WHEN id = #{character.id} THEN '#{character.tier_data}' "
-        end
-        query << " ELSE tier_data END"
-      else
-        query << " ELSE last_refresh END"
+      result.select{ |c| c.changed }.each do |character|
+        changes_query[:status] << "WHEN id = #{character.id} THEN '#{character.status}' "
+        changes_query[:legendaries] << "WHEN id = #{character.id} THEN '#{self.escape(character.legendaries)}' "
+        changes_query[:weekly_snapshot] << "WHEN id = #{character.id} THEN '#{character.weekly_snapshot}' "
+        changes_query[:old_snapshots] << "WHEN id = #{character.id} THEN '#{character.old_snapshots}' "
+        changes_query[:tier_data] << "WHEN id = #{character.id} THEN '#{character.tier_data}' "
       end
 
-      self.query(query)
-      Logger.t(INFO_TEAM_UPDATED +
-        "Updated additional data for #{changed_characters.length} characters", team_id)
+      [overall_query, changes_query[:status].any? ? changes_query : nil]
     end
 
     def self.update_db_raiderio(characters)
@@ -103,6 +70,43 @@ module Audit
         Logger.g(INFO_TEAM_UPDATED +
           "Updated Warcraft Logs data for #{characters.length} characters")
       end
+    end
+
+    def self.bnet_query(query)
+      query_string = "UPDATE characters SET per_spec = CASE "
+
+      query.each do |team|
+        team[0][:per_spec].each do |snippet|
+          query_string << snippet
+        end
+      end
+
+      query_string << " ELSE per_spec END, last_refresh = CASE "
+      query.each do |team|
+        team[0][:last_refresh].each do |snippet|
+          query_string << snippet
+        end
+      end
+
+      previous_col = "last_refresh"
+      if query.map{ |t| t[1] }.any?
+        [:status, :legendaries, :weekly_snapshot, :old_snapshots, :tier_data].each do |col|
+          query_string << " ELSE #{previous_col} END, #{col.to_s} = CASE "
+          previous_col = col.to_s
+
+          query.each do |team|
+            if team[1]
+              team[1][col].each do |snippet|
+                query_string << snippet
+              end
+            end
+          end
+        end
+      end
+      query_string << " ELSE #{previous_col} END"
+
+      self.query(query_string)
+      Logger.g(INFO_TEAM_UPDATED)
     end
 
     def self.query(query, async = true)

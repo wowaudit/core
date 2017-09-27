@@ -2,10 +2,12 @@ module Audit
   @@time_since_reset = nil
 
   def self.refresh(teams, type)
+    query = []
     teams.each do |team|
       begin
         Logger.t(INFO_TEAM_STARTING, team.to_i)
-        Team.refresh(team.to_i, type)
+        query_string = Team.refresh(team.to_i, type)
+        query << query_string if query_string
       rescue ApiLimitReachedException
         Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
         sleep(60)
@@ -14,6 +16,7 @@ module Audit
         Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
       end
     end
+    Writer.bnet_query(query) if query.any?
   end
 
   def self.refresh_from_schedule(instance)
