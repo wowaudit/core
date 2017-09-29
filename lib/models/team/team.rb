@@ -43,7 +43,7 @@ module Audit
     end
 
     def days_remaining
-      if patreon
+      if patreon > 0
         60
       elsif updated_at
         60 - (Date.today - updated_at.to_date).to_i
