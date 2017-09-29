@@ -175,7 +175,7 @@ ARTIFACTS = {
 
   # Priest
   "Light's Wrath" => ['Discipline', 1],
-  "T'uure, Beacon of the Naar" => ['Holy', 2],
+  "T'uure, Beacon of the Naaru" => ['Holy', 2],
   "Xal'atath, Blade of the Black Empire" => ['Shadow', 3],
 
   # Shaman
