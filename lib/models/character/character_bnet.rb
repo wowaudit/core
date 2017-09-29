@@ -44,16 +44,22 @@ module Audit
       init
       if response.code == 200
         self.status = "tracking"
-        process(JSON.parse response.body)
+        data = JSON.parse response.body
+
+        data.any? ? process(data) : return_error(response)
         update_snapshots
         to_output
       elsif response.code == 403
         raise ApiLimitReachedException
       else
-        Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
-        set_status(response.code)
-        self.output = ( JSON.parse last_refresh ) rescue nil
+        return_error(response)
       end
+    end
+
+    def return_error(response)
+      Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
+      set_status(response.code)
+      self.output = ( JSON.parse last_refresh ) rescue nil
     end
 
     def process(response)
