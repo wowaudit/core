@@ -117,7 +117,7 @@ module Audit
     end
 
     def self.escape(string)
-      string.gsub(/'/) {|s| "\\'"}
+      string.gsub(/'/) {|s| "\\'"} rescue ""
     end
   end
 end
