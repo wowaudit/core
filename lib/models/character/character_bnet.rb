@@ -43,6 +43,7 @@ module Audit
     def process_result(response)
       init
       if response.code == 200
+        self.changed = true if self.status != "tracking"
         self.status = "tracking"
         data = JSON.parse response.body
 
