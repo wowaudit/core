@@ -12,10 +12,10 @@ module Audit
       end
 
       character.data['max_2v2_rating'] =
-        data['statistics']['subCategories'][9]['subCategories'][0]['statistics'][24]['quantity']
+        data['statistics']['subCategories'][9]['subCategories'][0]['statistics'][25]['quantity']
 
       character.data['max_3v3_rating'] =
-        data['statistics']['subCategories'][9]['subCategories'][0]['statistics'][23]['quantity']
+        data['statistics']['subCategories'][9]['subCategories'][0]['statistics'][24]['quantity']
     end
   end
 end
