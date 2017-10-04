@@ -95,8 +95,10 @@ module Audit
     end
 
     def to_output
-      HEADER.each do |value|
-        self.output << self.data[value]
+      if self.output
+        HEADER.each do |value|
+          self.output << self.data[value]
+        end
       end
     end
 
