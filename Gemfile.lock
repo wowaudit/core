@@ -17,6 +17,7 @@ GEM
     aws-sdk-resources (2.10.21)
       aws-sdk-core (= 2.10.21)
     aws-sigv4 (1.0.1)
+    byebug (9.0.6)
     ethon (0.10.1)
       ffi (>= 1.3.0)
     ffi (1.9.18)
@@ -40,6 +41,7 @@ PLATFORMS
 
 DEPENDENCIES
   aws-sdk
+  byebug
   mysql2
   rbattlenet!
   require_all
