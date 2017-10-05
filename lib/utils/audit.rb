@@ -57,11 +57,9 @@ module Audit
 
   def self.timestamp=(region)
     # Get the timestamp of the last weekly reset for a region
-    reset_day = Date.parse(WEEKLY_RESET[region]['day'])
-    delta = (reset_day == Date.today ? 0 : 7)
-    reset_day -= delta
-    time = reset_day.to_datetime + (HOUR * WEEKLY_RESET[region]['hour'])
-    @@time_since_reset = time.to_time.to_i
+    reset_time = DateTime.parse(WEEKLY_RESET[region]['day']) + (HOUR * WEEKLY_RESET[region]['hour'])
+    reset_time -= (DateTime.now > reset_time ? 0 : 7)
+    @@time_since_reset = reset_time.to_time.to_i
   end
 
   def self.now
