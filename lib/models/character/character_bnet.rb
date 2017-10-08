@@ -19,7 +19,7 @@ module Audit
 
     def load_snapshots
       snapshot = JSON.parse (weekly_snapshot.to_s.empty? ? "{}" : weekly_snapshot)
-      historical_snapshots = old_snapshots.split('|') rescue []
+      historical_snapshots = (old_snapshots.split('|') rescue []).reject{ |week| week == "" }
 
       self.ap_snapshot = snapshot['ap']
       self.wq_snapshot = snapshot['wqs']
