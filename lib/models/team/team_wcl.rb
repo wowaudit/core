@@ -8,7 +8,7 @@ module Audit
       # load on the Warcraft Logs API would be too high
       characters.each do |character|
         self.zones.to_set.each do |zone|
-          response = HTTParty.get(uri(character, zone))
+          response = Typhoeus.get(uri(character, zone))
           self.output[character.id] = character.process_result(response, self.output[character.id])
         end
       end
@@ -41,8 +41,8 @@ module Audit
     def uri(character, zone)
       uri = WCL_URL[0 .. WCL_URL.length]
       uri["{region}"] = region
-      uri["{realm}"] = Realm.to_slug(character.realm || realm)
-      uri["{name}"] = CGI.escape(character.name)
+      uri["{realm}"] = Realm.wcl_realm(character.realm || realm)
+      uri["{name}"] = character.name
       uri["{zone}"] = zone["id"].to_s
       uri["{metric}"] = character.wcl_role
       uri["{partition}"] = zone["partition"].to_s

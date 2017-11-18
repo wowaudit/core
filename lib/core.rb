@@ -9,6 +9,7 @@ require 'mysql2'
 require 'yaml'
 require 'tzinfo'
 require 'csv'
+require 'byebug'
 
 # File Storage
 storage_data = YAML::load(File.open('config/storage.yml'))

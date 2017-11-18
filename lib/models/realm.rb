@@ -10,5 +10,9 @@ module Audit
       slug = slug.gsub("à","a")
       slug.downcase
     end
+
+    def self.wcl_realm(realm)
+      Realm.where(name: realm).first.wcl_name
+    end
   end
 end
