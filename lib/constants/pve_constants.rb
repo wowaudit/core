@@ -118,7 +118,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Tomb of Sargeras', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 13, 'partition' => 2,
+  'name' => 'Tomb of Sargeras', 'days' => [], 'id' => 13, 'partition' => 2,
   'encounters' => [{
     'id' => 2032, 'name' => 'Goroth', 'raid_ids' => {
       'normal' => 11878, 'heroic' => 11879, 'mythic' => 11880
@@ -154,6 +154,53 @@ VALID_RAIDS = [{
   }, {
     'id' => 2051, 'name' => "Kil'jaeden", 'raid_ids' => {
       'normal' => 11910, 'heroic' => 11911, 'mythic' => 11912
+    }
+  }]
+}, {
+  'name' => 'Antorus, the Burning Throne', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 17, 'partition' => 1,
+  'encounters' => [{
+    'id' => 2076, 'name' => 'Garothi Worldbreaker', 'raid_ids' => {
+      'normal' => 11954, 'heroic' => 11955, 'mythic' => 11956
+    }
+  }, {
+    'id' => 2074, 'name' => 'Hounds of Sargeras', 'raid_ids' => {
+      'normal' => 11957, 'heroic' => 11958, 'mythic' => 11959
+    }
+  }, {
+    'id' => 2070, 'name' => 'Antoran High Command', 'raid_ids' => {
+      'normal' => 11960, 'heroic' => 11961, 'mythic' => 11962
+    }
+  }, {
+    'id' => 2064, 'name' => 'Portal Keeper Hasabel', 'raid_ids' => {
+      'normal' => 11963, 'heroic' => 11964, 'mythic' => 11965
+    }
+  }, {
+    'id' => 2075, 'name' => "Eonar", 'raid_ids' => {
+      'normal' => 11966, 'heroic' => 11967, 'mythic' => 11968
+    }
+  }, {
+    'id' => 2082, 'name' => 'Imonar the Soulhunter', 'raid_ids' => {
+      'normal' => 11969, 'heroic' => 11970, 'mythic' => 11971
+    }
+  }, {
+    'id' => 2088, 'name' => "Kin'garoth", 'raid_ids' => {
+      'normal' => 11972, 'heroic' => 11973, 'mythic' => 11974
+    }
+  }, {
+    'id' => 2069, 'name' => 'Varimathras', 'raid_ids' => {
+      'normal' => 11975, 'heroic' => 11976, 'mythic' => 11977
+    }
+  }, {
+    'id' => 2073, 'name' => "The Coven of Shivarra", 'raid_ids' => {
+      'normal' => 11978, 'heroic' => 11979, 'mythic' => 11980
+    }
+  }, {
+    'id' => 2063, 'name' => 'Aggramar', 'raid_ids' => {
+      'normal' => 11981, 'heroic' => 11982, 'mythic' => 11983
+    }
+  }, {
+    'id' => 2092, 'name' => "Argus the Unmaker", 'raid_ids' => {
+      'normal' => 11984, 'heroic' => 11985, 'mythic' => 11986
     }
   }]
 }]
