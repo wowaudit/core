@@ -157,7 +157,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Antorus, the Burning Throne', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 17, 'partition' => 1,
+  'name' => 'Antorus', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 17, 'partition' => 1,
   'encounters' => [{
     'id' => 2076, 'name' => 'Garothi Worldbreaker', 'raid_ids' => {
       'normal' => 11954, 'heroic' => 11955, 'mythic' => 11956
