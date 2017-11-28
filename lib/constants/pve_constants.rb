@@ -26,7 +26,8 @@ RAID_DIFFICULTIES = {
   5 => 'Mythic'
 }
 
-TIER_IDS = (147121..147192).to_a #Tier 20
+TIER_IDS = (152112..152183).to_a #Tier 21
+
 
 VALID_RAIDS = [{
   'name' => 'Emerald Nightmare', 'days' => [], 'id' => 10, 'partition' => 1,
