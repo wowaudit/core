@@ -56,7 +56,7 @@ module Audit
     end
 
     def verify(metric, index, value)
-      (value == "-" ? self.wcl_parsed[metric][index] : value.round) rescue value
+      ((value == "-" ? self.wcl_parsed[metric][index] : value.round) rescue value) || "-"
     end
 
     def wcl_role

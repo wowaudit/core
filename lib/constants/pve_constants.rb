@@ -164,7 +164,7 @@ VALID_RAIDS = [{
       'normal' => 11954, 'heroic' => 11955, 'mythic' => 11956
     }
   }, {
-    'id' => 2074, 'name' => 'Felhounds of Sargeras', 'raid_ids' => {
+    'id' => 2074, 'name' => 'Hounds of Sargeras', 'raid_ids' => {
       'normal' => 11957, 'heroic' => 11958, 'mythic' => 11959
     }
   }, {
@@ -176,7 +176,7 @@ VALID_RAIDS = [{
       'normal' => 11963, 'heroic' => 11964, 'mythic' => 11965
     }
   }, {
-    'id' => 2075, 'name' => "The Defense of Eonar", 'raid_ids' => {
+    'id' => 2075, 'name' => "Eonar", 'raid_ids' => {
       'normal' => 11966, 'heroic' => 11967, 'mythic' => 11968
     }
   }, {
