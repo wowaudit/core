@@ -1,4 +1,4 @@
-CURRENT_VERSION = "5.3"
+CURRENT_VERSION = "5.4"
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -8,6 +8,18 @@ SCHEDULER_PAUSE_AFTER_CYCLE = 1 #seconds
 WCL_URL = "https://www.warcraftlogs.com:443/v1/parses/character/{name}/{realm}/{region}?zone={zone}&metric={metric}&partition={partition}&api_key=#{WCL_KEY}"
 
 RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={region}&realm={realm}&name={name}&fields=mythic_plus_scores,mythic_plus_highest_level_runs,mythic_plus_weekly_highest_level_runs"
+
+BNET_FIELDS = [
+  "items",
+  "reputation",
+  "audit",
+  "statistics",
+  "achievements",
+  "pets",
+  "pvp",
+  "mounts",
+  "feed"
+]
 
 # UTC times
 WEEKLY_RESET = {
@@ -216,5 +228,9 @@ HEADER = [
   'army_of_the_light_standing',
   'army_of_the_light_value',
   'argussian_reach_standing',
-  'argussian_reach_value'
+  'argussian_reach_value',
+  'pantheon_trinket_ilvl',
+  'pantheon_trinket_type',
+  'guldan_mount',
+  'argus_mount'
 ]

@@ -25,6 +25,8 @@ module Audit
       self.wq_snapshot = snapshot['wqs']
       self.dungeon_snapshot = snapshot['dungeons']
       self.historical_snapshots = historical_snapshots.map{ |week| JSON.parse week }
+      self.all_legendaries = legendaries.split('|') rescue []
+      self.legendary_ids = self.all_legendaries.map{ |l| l.split('_').first.to_i }
     end
 
     def load_persistent_data
@@ -38,6 +40,7 @@ module Audit
 
       self.max_ilvl = spec_data[-1].to_i rescue 0
       self.tier_pieces = JSON.parse (tier_data.to_s.empty? ? BLANK_TIER_DATA : tier_data)
+      self.tier_pieces["trinket"] = "0_None" unless self.tier_pieces["trinket"]
     end
 
     def process_result(response)

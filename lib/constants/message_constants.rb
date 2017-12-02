@@ -41,3 +41,5 @@ INFO_SCHEDULER_ADDED = "Assigned schedule to worker. "
 INFO_SCHEDULER_CYCLE_DONE = "Finished assigning schedules to all workers. Pausing for #{SCHEDULER_PAUSE_AFTER_CYCLE} second. "
 
 INFO_WORKER_BUSY = "This worker hasn't started working on the newest schedule yet. "
+
+INFO_ITEM_QUERY = "New legendary item discovered through the feed. Querying item info."

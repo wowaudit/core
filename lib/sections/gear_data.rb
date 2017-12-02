@@ -2,11 +2,20 @@ module Audit
   class GearData
 
     def self.add(character, data)
+      #Check activity feed
+      data['feed'].select{ |item| item["type"] == "LOOT" }.each do |item|
+        self.check_tier_from_feed(item, data, character)
+        self.check_legendary_from_feed(item, data, character)
+        self.check_pantheon_from_feed(item, data, character)
+      end
+
+      # Check equipped gear
       ITEMS.each do |item|
         begin
           self.check_enchant(item, data, character)
           self.check_tier(item, data, character)
           self.check_legendary(item, data, character)
+          self.check_pantheon(item, data, character) if (["trinket1", "trinket2"].include? item)
           character.ilvl += data['items'][item]['itemLevel']
 
           character.data[item + '_ilvl'] = data['items'][item]['itemLevel']
@@ -22,7 +31,7 @@ module Audit
         end
       end
 
-      #Weapon ilvl is counted twice to normalise between 1H and 2H specialisations
+      # Weapon ilvl is counted twice to normalise between 1H and 2H specialisations
       character.ilvl += (data['items']['mainHand']['itemLevel']*2) rescue 0
       character.data['ilvl'] = (character.ilvl / (ITEMS.length + 2)).round(2)
       character.max_ilvl = [character.data['ilvl'], character.max_ilvl].max
@@ -51,7 +60,7 @@ module Audit
     end
 
     def self.check_tier(item, data, character)
-      if TIER_IDS.include? data['items'][item]['id'].to_i
+      if TIER_IDS_MAPPED.keys.include? data['items'][item]['id'].to_i
         if character.tier_pieces[item] != data['items'][item]['itemLevel'].to_i
           character.changed = true
           character.tier_pieces[item] = data['items'][item]['itemLevel'].to_i
@@ -63,10 +72,51 @@ module Audit
       end
     end
 
+    def self.check_tier_from_feed(item, data, character)
+      if TIER_IDS_MAPPED.keys.include? item["itemId"].to_i
+        if character.tier_pieces[TIER_IDS_MAPPED[item["itemId"].to_i]] < (BASE_ILVL[item["context"]] || 915)
+          character.changed = true
+          character.tier_pieces[TIER_IDS_MAPPED[item["itemId"].to_i]] = (BASE_ILVL[item["context"]] || 915)
+        end
+      end
+    end
+
     def self.check_legendary(item, data, character)
       if data['items'][item]['itemLevel'] >= 800 && data['items'][item]['quality'] == 5
         character.legendaries_equipped <<
           "#{data['items'][item]['id']}_#{data['items'][item]['name']}"
+      end
+    end
+
+    def self.check_legendary_from_feed(item, data, character)
+      if (item["bonusLists"].include? 3630) && (item["context"] == "")
+        unless character.legendary_ids.include? item["itemId"]
+          Logger.c(INFO_ITEM_QUERY, character.id)
+          item_info = RBattlenet::Wow::Item.find(id: item["itemId"])
+          character.legendaries_equipped <<
+            "#{item["itemId"]}_#{item_info["name"]}"
+        end
+      end
+    end
+
+    def self.check_pantheon(item, data, character)
+      if PANTHEON_TRINKETS.keys.include? data['items'][item]['id'].to_i
+        if character.tier_pieces["trinket"].split("_").first.to_i < data['items'][item]['itemLevel'].to_i
+          character.changed = true
+          character.tier_pieces["trinket"] =
+            "#{data['items'][item]['itemLevel']}_#{PANTHEON_TRINKETS[data['items'][item]['id'].to_i]}"
+        end
+      end
+      character.data["pantheon_trinket_ilvl"] = character.tier_pieces["trinket"].split("_")[0]
+      character.data["pantheon_trinket_type"] = character.tier_pieces["trinket"].split("_")[1]
+    end
+
+    def self.check_pantheon_from_feed(item, data, character)
+      if PANTHEON_TRINKETS.keys.include? item["itemId"]
+        if character.tier_pieces["trinket"].split("_").first.to_i < 940
+          character.changed = true
+          character.tier_pieces["trinket"] = "940_#{PANTHEON_TRINKETS[item["itemId"].to_i]}"
+        end
       end
     end
   end

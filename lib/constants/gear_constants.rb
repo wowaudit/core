@@ -205,4 +205,13 @@ ARTIFACTS = {
   "Scale of the Earth-Warder" => ['Protection', 3]
 }
 
-BLANK_TIER_DATA = "{\"head\": 0, \"shoulder\": 0, \"back\": 0, \"chest\": 0, \"hands\": 0, \"legs\": 0}"
+PANTHEON_TRINKETS = {
+  154172 => "Wildcard",
+  154173 => "Tank",
+  154174 => "Agility",
+  154175 => "Heal",
+  154176 => "Strength",
+  154177 => "Intellect"
+}
+
+BLANK_TIER_DATA = "{\"head\": 0, \"shoulder\": 0, \"back\": 0, \"chest\": 0, \"hands\": 0, \"legs\": 0, \"trinket\": \"0_None\"}"

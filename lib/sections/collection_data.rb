@@ -22,6 +22,10 @@ module Audit
 
       character.data['unique_pets'] = unique_pets
       character.data['lvl_25_pets'] = level_25_pets
+
+      mounts = data["mounts"]["collected"].map{ |m| m["itemId"] }
+      character.data['guldan_mount'] = (mounts.include? 137575) ? "yes" : "no"
+      character.data['argus_mount'] = (mounts.include? 152789) ? "yes" : "no"
     end
   end
 end

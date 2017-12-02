@@ -27,7 +27,13 @@ RAID_DIFFICULTIES = {
 }
 
 TIER_IDS = (152112..152183).to_a #Tier 21
+TIER_IDS_MAPPED = Hash[*TIER_IDS.zip(['chest', 'back', 'hands', 'head', 'legs', 'shoulder'] * 12).flatten]
 
+BASE_ILVL = {
+  "raid-normal" => 930,
+  "raid-heroic" => 945,
+  "raid-mythic" => 960
+}
 
 VALID_RAIDS = [{
   'name' => 'Emerald Nightmare', 'days' => [], 'id' => 10, 'partition' => 1,

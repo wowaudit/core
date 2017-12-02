@@ -10,7 +10,7 @@ module Audit
       $errors = { :tracking => 0, :role => 0 }
       if characters.any?
         result = RBattlenet::Wow::Character.find_all(characters,
-          fields: ["items","reputation","audit","statistics","achievements","pets","pvp"])
+          fields: BNET_FIELDS)
         Logger.t(INFO_TEAM_REFRESHED, id)
 
         Writer.write(self, result, HeaderData.altered_header(self))
