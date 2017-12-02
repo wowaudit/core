@@ -3,3 +3,4 @@
 config/database.yml
 config/keys.yml
 config/storage.yml
+deploy.sh
