@@ -26,7 +26,6 @@ module Audit
       self.dungeon_snapshot = snapshot['dungeons']
       self.historical_snapshots = historical_snapshots.map{ |week| JSON.parse week }
       self.all_legendaries = legendaries.split('|') rescue []
-      self.legendary_ids = self.all_legendaries.map{ |l| l.split('_').first.to_i }
     end
 
     def load_persistent_data

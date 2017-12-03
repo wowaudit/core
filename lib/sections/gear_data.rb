@@ -83,19 +83,13 @@ module Audit
 
     def self.check_legendary(item, data, character)
       if data['items'][item]['itemLevel'] >= 800 && data['items'][item]['quality'] == 5
-        character.legendaries_equipped <<
-          "#{data['items'][item]['id']}_#{data['items'][item]['name']}"
+        character.legendaries_equipped << "#{data['items'][item]['id']}_#{data['items'][item]['name']}"
       end
     end
 
     def self.check_legendary_from_feed(item, data, character)
-      if (item["bonusLists"].include? 3630) && (item["context"] == "")
-        unless character.legendary_ids.include? item["itemId"]
-          Logger.c(INFO_ITEM_QUERY, character.id)
-          item_info = RBattlenet::Wow::Item.find(id: item["itemId"])
-          character.legendaries_equipped <<
-            "#{item["itemId"]}_#{item_info["name"]}"
-        end
+      if LEGENDARIES.keys.include? item["itemId"]
+        character.legendaries_equipped << "#{item["itemId"]}_#{LEGENDARIES[item["itemId"]]}"
       end
     end
 
