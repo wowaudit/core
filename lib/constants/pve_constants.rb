@@ -298,3 +298,5 @@ WCL_METRICS = {
   'average_4' => [],
   'average_5' => []
 }
+
+WCL_IDS = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["id"]  } }.flatten

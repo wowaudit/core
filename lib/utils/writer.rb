@@ -14,29 +14,24 @@ module Audit
     end
 
     def self.update_db(result, team_id)
-      # Sequel does not support saving multiple objects
-      # in one single query, therefore the update query
-      # is created manually to massively improve the speed
-
-      overall_query = {per_spec: [], last_refresh: []}
-      changes_query = {status: [], legendaries: [], weekly_snapshot: [], old_snapshots: [], tier_data: []}
+      # Update status in SQL database
+      # since it's shown on the website
+      if result.select{ |c| c.changed }.any?
+        query_string = "UPDATE characters SET status = CASE "
+        result.select{ |c| c.changed }.each do |character|
+          query_string << "WHEN id = #{character.id} THEN '#{character.status}' "
+        end
+        query_string << "ELSE status END"
+        self.query(query_string)
+      end
 
       # Update specialisation data and store entire output in case the next cycle fails for a character
+      arango_data = []
       result.each do |character|
-        output = (JSON.generate character.output rescue "")
-        overall_query[:last_refresh] << "WHEN id = #{character.id} THEN '#{self.escape(output)}' "
-        overall_query[:per_spec] << "WHEN id = #{character.id} THEN '#{character.per_spec}' "
+        arango_data << character.update
       end
 
-      result.select{ |c| c.changed }.each do |character|
-        changes_query[:status] << "WHEN id = #{character.id} THEN '#{character.status}' "
-        changes_query[:legendaries] << "WHEN id = #{character.id} THEN '#{self.escape(character.legendaries)}' "
-        changes_query[:weekly_snapshot] << "WHEN id = #{character.id} THEN '#{character.weekly_snapshot}' "
-        changes_query[:old_snapshots] << "WHEN id = #{character.id} THEN '#{character.old_snapshots}' "
-        changes_query[:tier_data] << "WHEN id = #{character.id} THEN '#{character.tier_data}' "
-      end
-
-      [overall_query, changes_query[:status].any? ? changes_query : nil]
+      Arango.update(arango_data)
     end
 
     def self.update_db_raiderio(characters)
@@ -70,43 +65,6 @@ module Audit
         Logger.g(INFO_TEAM_UPDATED +
           "Updated Warcraft Logs data for #{characters.length} characters")
       end
-    end
-
-    def self.bnet_query(query)
-      query_string = "UPDATE characters SET per_spec = CASE "
-
-      query.each do |team|
-        team[0][:per_spec].each do |snippet|
-          query_string << snippet
-        end
-      end
-
-      query_string << " ELSE per_spec END, last_refresh = CASE "
-      query.each do |team|
-        team[0][:last_refresh].each do |snippet|
-          query_string << snippet
-        end
-      end
-
-      previous_col = "last_refresh"
-      if query.map{ |t| t[1] }.any?
-        [:status, :legendaries, :weekly_snapshot, :old_snapshots, :tier_data].each do |col|
-          query_string << " ELSE #{previous_col} END, #{col.to_s} = CASE "
-          previous_col = col.to_s
-
-          query.each do |team|
-            if team[1]
-              team[1][col].each do |snippet|
-                query_string << snippet
-              end
-            end
-          end
-        end
-      end
-      query_string << " ELSE #{previous_col} END"
-
-      self.query(query_string)
-      Logger.g(INFO_TEAM_UPDATED)
     end
 
     def self.query(query, async = true)

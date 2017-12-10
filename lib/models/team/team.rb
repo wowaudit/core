@@ -12,9 +12,15 @@ module Audit
 
     def characters(characters)
       characters.each_with_index do |character, index|
-        characters[index].realm = character.realm.to_s.empty? ? realm : character.realm
+        character.realm = character.realm.to_s.empty? ? realm : character.realm
+        character.details = character_details[character.id].to_h
+        character.verify_details
       end
       characters.select{ |character| character.active }
+    end
+
+    def character_details
+      @character_details ||= Arango.get_characters(id)
     end
 
     def guild_data(type)

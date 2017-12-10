@@ -214,8 +214,6 @@ PANTHEON_TRINKETS = {
   154177 => "Intellect"
 }
 
-BLANK_TIER_DATA = "{\"head\": 0, \"shoulder\": 0, \"back\": 0, \"chest\": 0, \"hands\": 0, \"legs\": 0, \"trinket\": \"0_None\"}"
-
 # Activity feed does not have this information
 # To save on requests, a generated mapping is stored here
 LEGENDARIES = {

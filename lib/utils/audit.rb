@@ -6,8 +6,7 @@ module Audit
     teams.each do |team|
       begin
         Logger.t(INFO_TEAM_STARTING, team.to_i)
-        query_string = Team.refresh(team.to_i, type)
-        query << query_string if query_string
+        Team.refresh(team.to_i, type)
       rescue ApiLimitReachedException
         Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
         sleep(60)
@@ -16,7 +15,6 @@ module Audit
         Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
       end
     end
-    Writer.bnet_query(query) if query.any?
   end
 
   def self.refresh_from_schedule(instance)
@@ -55,11 +53,21 @@ module Audit
     @@time_since_reset
   end
 
+  def self.week
+    @@week_number
+  end
+
+  def self.year
+    @@year_number
+  end
+
   def self.timestamp=(region)
-    # Get the timestamp of the last weekly reset for a region
+    # Get the timestamp of the last weekly reset for a region, and set the current week number
     reset_time = DateTime.parse(WEEKLY_RESET[region]['day']) + (HOUR * WEEKLY_RESET[region]['hour'])
     reset_time -= (DateTime.now > reset_time ? 0 : 7)
     @@time_since_reset = reset_time.to_time.to_i
+    @@week_number = reset_time.cweek.to_s
+    @@year_number = reset_time.year.to_s
   end
 
   def self.now

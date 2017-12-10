@@ -2,7 +2,7 @@ module Audit
   class GearData
 
     def self.add(character, data)
-      #Check activity feed
+      # Check activity feed
       data['feed'].select{ |item| item["type"] == "LOOT" }.each do |item|
         self.check_tier_from_feed(item, data, character)
         self.check_legendary_from_feed(item, data, character)
@@ -38,7 +38,6 @@ module Audit
 
       character.data['empty_sockets'] = data['audit']['emptySockets']
       character.data['gem_list'] = character.gems.join('|')
-      character.tier_data = JSON.generate character.tier_pieces
     end
 
     def self.check_enchant(item, data, character)
@@ -61,22 +60,20 @@ module Audit
 
     def self.check_tier(item, data, character)
       if TIER_IDS_MAPPED.keys.include? data['items'][item]['id'].to_i
-        if character.tier_pieces[item] != data['items'][item]['itemLevel'].to_i
-          character.changed = true
-          character.tier_pieces[item] = data['items'][item]['itemLevel'].to_i
+        if character.details['tier_data'][item] != data['items'][item]['itemLevel'].to_i
+          character.details['tier_data'][item] = data['items'][item]['itemLevel'].to_i
         end
       end
 
-      if character.tier_pieces.include? item
-        character.data["tier_#{item}"] = character.tier_pieces[item]
+      if character.details['tier_data'].include? item
+        character.data["tier_#{item}"] = character.details['tier_data'][item]
       end
     end
 
     def self.check_tier_from_feed(item, data, character)
       if TIER_IDS_MAPPED.keys.include? item["itemId"].to_i
-        if character.tier_pieces[TIER_IDS_MAPPED[item["itemId"].to_i]] < (BASE_ILVL[item["context"]] || 915)
-          character.changed = true
-          character.tier_pieces[TIER_IDS_MAPPED[item["itemId"].to_i]] = (BASE_ILVL[item["context"]] || 915)
+        if character.details['tier_data'][TIER_IDS_MAPPED[item["itemId"].to_i]] < (BASE_ILVL[item["context"]] || 915)
+          character.details['tier_data'][TIER_IDS_MAPPED[item["itemId"].to_i]] = (BASE_ILVL[item["context"]] || 915)
         end
       end
     end
@@ -95,21 +92,20 @@ module Audit
 
     def self.check_pantheon(item, data, character)
       if PANTHEON_TRINKETS.keys.include? data['items'][item]['id'].to_i
-        if character.tier_pieces["trinket"].split("_").first.to_i < data['items'][item]['itemLevel'].to_i
-          character.changed = true
-          character.tier_pieces["trinket"] =
-            "#{data['items'][item]['itemLevel']}_#{PANTHEON_TRINKETS[data['items'][item]['id'].to_i]}"
+        if character.details['pantheon_trinket']['ilvl'].to_i < data['items'][item]['itemLevel'].to_i
+          character.details['pantheon_trinket']['ilvl'] = data['items'][item]['itemLevel']
+          character.details['pantheon_trinket']['type'] = PANTHEON_TRINKETS[data['items'][item]['id'].to_i]
         end
       end
-      character.data["pantheon_trinket_ilvl"] = character.tier_pieces["trinket"].split("_")[0]
-      character.data["pantheon_trinket_type"] = character.tier_pieces["trinket"].split("_")[1]
+      character.data["pantheon_trinket_ilvl"] = character.details['pantheon_trinket']['ilvl']
+      character.data["pantheon_trinket_type"] = character.details['pantheon_trinket']['type']
     end
 
     def self.check_pantheon_from_feed(item, data, character)
       if PANTHEON_TRINKETS.keys.include? item["itemId"]
-        if character.tier_pieces["trinket"].split("_").first.to_i < 940
-          character.changed = true
-          character.tier_pieces["trinket"] = "940_#{PANTHEON_TRINKETS[item["itemId"].to_i]}"
+        if character.details['pantheon_trinket']['ilvl'].to_i < 940
+          character.details['pantheon_trinket']['ilvl'] = 940
+          character.details['pantheon_trinket']['type'] = PANTHEON_TRINKETS[item["itemId"].to_i]
         end
       end
     end

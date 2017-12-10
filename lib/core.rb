@@ -1,6 +1,7 @@
 # Dependencies
 require 'require_all'
 require 'sequel'
+require 'arangorb'
 require 'rbattlenet'
 require 'typhoeus'
 require 'aws-sdk'
@@ -31,6 +32,19 @@ begin
   # Connections
   DB = Sequel.connect(YAML::load(File.open('config/database.yml')))
   DB2 = Mysql2::Client.new(YAML::load(File.open('config/database.yml')))
+
+  db_config = YAML::load(File.open('config/arangodb.yml'))
+  ArangoServer.default_server(
+    user: db_config['user'],
+    password: db_config['password'],
+    server: db_config['server'],
+    port: db_config['port']
+  )
+  ArangoServer.database = db_config['database']
+  ArangoServer.collection = db_config['collection']
+  ArangoServer.user = db_config['user']
+  ArangoServer.async = true
+  ADB = ArangoCollection.new
 
   # Modules
   require_rel 'constants'
