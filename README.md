@@ -1,5 +1,5 @@
 # World of Warcraft Audit
-This is the back-end scraper engine that generates CSV files for the World of Warcraft Audit Spreadsheet, 
+This is the back-end scraper engine that generates CSV files for the World of Warcraft Audit Spreadsheet,
 found at https://wowaudit.com. The code is open-source and while it's possible for you to play around with,
 it's not built with individual use in mind. Therefore, setting up the scripts can be difficult.
 
@@ -11,12 +11,13 @@ it's not built with individual use in mind. Therefore, setting up the scripts ca
 
 2. Enter the various credentials (and remove `template` from the file names):
 
-        Enter your database credentials in `config/database.yml`.
+        Enter your SQL credentials in `config/database.yml`
+        Enter your ArangoDB credentials in `config/arangodb.yml`
 
         In `config/keys.yml`:
         $ bnet_key: <your battle.net API key>
         $ wcl_key: <your Warcraft Logs API key>
-        
+
         The generated CSV files will be uploaded to a S3 server that you configure, so they can be
         easily fetched by the spreadsheet. In `config/storage.yml` you can enter your S3 credentials.
 
