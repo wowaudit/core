@@ -4,7 +4,7 @@ module Audit
     def self.get_characters(team_id)
       ArangoServer.async = false
       ADB.documentsMatch(match: { team_id: team_id }).map do |character|
-        [character.body["character_id"], character.body]
+        [character.body["character_id"], character.body.to_h]
       end.to_h
     end
 

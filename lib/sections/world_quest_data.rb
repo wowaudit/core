@@ -3,11 +3,10 @@ module Audit
 
     def self.add(character, data)
       wq_data = data['achievements']['criteria'].index(33094)
-      character.data['wqs_done_total'] =
-        data['achievements']['criteriaQuantity'][wq_data] rescue 0
-
+      wqs = data['achievements']['criteriaQuantity'][wq_data] rescue 0
+      character.data['wqs_done_total'] = wqs
       character.data['wqs_this_week'] =
-        character.wq_snapshot ? character.data['wqs_done_total'] - character.wq_snapshot : 0
+        wqs - character.details['snapshots'][Audit.year][Audit.week]['wqs'] rescue 0
 
       paragon_amount = 0
       ((36330..36336).to_a + (37309..37315).to_a).each do |chest|
@@ -23,8 +22,3 @@ module Audit
     end
   end
 end
-
-
-
-
-

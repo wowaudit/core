@@ -2,11 +2,11 @@ module Audit
   class TeamBnet < Team
 
     def refresh
+      Audit.timestamp = region
       # Forked library, processing the result of each Character
       # is called from within the RBattlenet library
       RBattlenet.authenticate(api_key: BNET_KEY)
       RBattlenet.set_region(region: region, locale: "en_GB")
-      Audit.timestamp = region
       $errors = { :tracking => 0, :role => 0 }
       if characters.any?
         result = RBattlenet::Wow::Character.find_all(characters,
@@ -14,7 +14,7 @@ module Audit
         Logger.t(INFO_TEAM_REFRESHED, id)
 
         Writer.write(self, result, HeaderData.altered_header(self))
-        Writer.update_db(result.map { |uri, character| character }, id)
+        Writer.update_db(result.map { |uri, character| character }, true)
       else
         Logger.t(INFO_TEAM_EMPTY, id)
       end

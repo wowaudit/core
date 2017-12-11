@@ -34,8 +34,8 @@ module Audit
       # Weapon ilvl is counted twice to normalise between 1H and 2H specialisations
       character.ilvl += (data['items']['mainHand']['itemLevel']*2) rescue 0
       character.data['ilvl'] = (character.ilvl / (ITEMS.length + 2)).round(2)
-      character.max_ilvl = [character.data['ilvl'], character.max_ilvl].max
 
+      character.details['max_ilvl'] = [character.data['ilvl'], character.details['max_ilvl'].to_i].max
       character.data['empty_sockets'] = data['audit']['emptySockets']
       character.data['gem_list'] = character.gems.join('|')
     end
@@ -80,13 +80,13 @@ module Audit
 
     def self.check_legendary(item, data, character)
       if data['items'][item]['itemLevel'] >= 800 && data['items'][item]['quality'] == 5
-        character.legendaries_equipped << "#{data['items'][item]['id']}_#{data['items'][item]['name']}"
+        character.legendaries_equipped << data['items'][item]['id'].to_i
       end
     end
 
     def self.check_legendary_from_feed(item, data, character)
       if LEGENDARIES.keys.include? item["itemId"]
-        character.legendaries_equipped << "#{item["itemId"]}_#{LEGENDARIES[item["itemId"]]}"
+        character.legendaries_equipped << item["itemId"].to_i
       end
     end
 

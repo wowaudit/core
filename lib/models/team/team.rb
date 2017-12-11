@@ -13,7 +13,7 @@ module Audit
     def characters(characters)
       characters.each_with_index do |character, index|
         character.realm = character.realm.to_s.empty? ? realm : character.realm
-        character.details = character_details[character.id].to_h
+        character.details = character_details[character.id]
         character.verify_details
       end
       characters.select{ |character| character.active }

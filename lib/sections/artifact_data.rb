@@ -53,11 +53,11 @@ module Audit
       end
 
       ap_data = data['achievements']['criteria'].index(30103)
-      character.data['ap_obtained_total'] =
-        data['achievements']['criteriaQuantity'][ap_data] rescue 0
-
+      ap = data['achievements']['criteriaQuantity'][ap_data] rescue 0
+      character.data['ap_obtained_total'] = ap
       character.data['ap_this_week'] =
-        character.ap_snapshot ? character.data['ap_obtained_total'] - character.ap_snapshot : 0
+        ap - character.details['snapshots'][Audit.year][Audit.week]['ap'] rescue 0
+
     end
   end
 end

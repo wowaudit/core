@@ -1,41 +1,18 @@
 module Audit
   class TeamWcl < Team
-    attr_accessor :output, :zones
 
     def refresh
-      prepare
+      Audit.timestamp = region
       # Requests are not made in parallel, otherwise
       # load on the Warcraft Logs API would be too high
       characters.each do |character|
-        self.zones.to_set.each do |zone|
+        VALID_RAIDS.select{ |r| r['days'].include? Time.now.wday }.each do |zone|
           response = Typhoeus.get(uri(character, zone))
-          self.output[character.id] = character.process_result(response, self.output[character.id])
+          character.process_result(response)
         end
       end
-      Writer.update_db_wcl(self.output, characters)
-    end
-
-    def prepare
-      self.output = {}
-      self.zones = []
-      characters.each do |character|
-        template = { 3 => {}, 4 => {}, 5 => {} }
-        VALID_RAIDS.each_with_index do |raid, raid_index|
-          if raid['days'].include? Time.now.wday
-            self.zones << raid
-          end
-          raid['encounters'].each_with_index do |encounter, encounter_index|
-            RAID_DIFFICULTIES.each_key do |difficulty|
-              template[difficulty][encounter['name']] = {
-                'best' => '-',
-                'median' => '-',
-                'average' => '-'
-              }
-            end
-          end
-        end
-        self.output[character.id] = template
-      end
+      Logger.t(INFO_TEAM_REFRESHED, id)
+      Writer.update_db(characters)
     end
 
     def uri(character, zone)

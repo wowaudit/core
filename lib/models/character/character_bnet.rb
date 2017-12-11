@@ -40,7 +40,6 @@ module Audit
     def process(response)
       BasicData.add(self, response)
       GearData.add(self, response)
-      # Continue refactoring here
       ArtifactData.add(self, response)
       ReputationData.add(self, response)
       InstanceData.add(self, response)

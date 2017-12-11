@@ -44,7 +44,7 @@ module Audit
 
       character.data['dungeons_done_total'] = dungeon_count
       character.data['dungeons_this_week'] =
-        character.dungeon_snapshot ? dungeon_count - character.dungeon_snapshot : 0
+        dungeon_count - character.details['snapshots'][Audit.year][Audit.week]['dungeons'] rescue 0
 
       encounters.each do |encounter|
         encounter.each do |difficulty, id|
@@ -62,37 +62,28 @@ module Audit
     end
 
     def self.add_warcraftlogs_data(character)
-      if character.warcraftlogs
+      character.data['WCL_id'] = character.details['warcraftlogs_id']
 
-        character.data['WCL_id'] = character.wcl_parsed['character_id']
-        character.wcl_parsed.delete('character_id')
-
-        character.wcl_parsed.delete('raider_io_score')
-        character.wcl_parsed.delete('weekly_highest_m')
-        character.wcl_parsed.delete('season_highest_m')
-
-        character.wcl_parsed.each do |metric, values|
-          difficulty = RAID_DIFFICULTIES[metric.split('_')[1].to_i]
-          character.data["WCL_#{difficulty}_#{metric.split('_')[0]}"] = values.join('|')
-        end
-      else
-        character.data['WCL_id'] = ''
-        WCL_METRICS.each_key do |metric|
-          difficulty = RAID_DIFFICULTIES[metric.split('_')[1].to_i]
-          character.data["WCL_#{difficulty}_#{metric.split('_')[0]}"] = ''
+      RAID_DIFFICULTIES.each_key do |diff|
+        ['best', 'average', 'median'].each do |metric|
+          output = []
+          WCL_IDS.each do |boss|
+            output << (character.details['warcraftlogs'][diff.to_s][boss][metric] rescue '-')
+          end
+          character.data["WCL_#{RAID_DIFFICULTIES[diff]}_#{metric}"] = output.join('|')
         end
       end
     end
 
     def self.add_raiderio_data(character)
-      if character.raiderio
-        character.data['m+_score'] = character.raiderio_parsed['score']
-        character.data['season_highest_m+'] = character.raiderio_parsed['season_highest']
-      else
-        character.data['m+_score'] = ''
-        character.data['season_highest_m+'] = "-"
-      end
-      character.data['weekly_highest_m+'] = character.raiderio_weekly
+      character.data['m+_score'] =
+        (character.details['raiderio']['score'] rescue '')
+
+      character.data['season_highest_m+'] =
+        (character.details['raiderio']['season_highest'] rescue '-')
+
+      character.data['weekly_highest_m+'] =
+        (character.details['raiderio']['weekly_highest'] rescue 0)
     end
   end
 end

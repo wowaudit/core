@@ -257,7 +257,7 @@ VALID_RAIDS = [{
       'normal' => 11963, 'heroic' => 11964, 'mythic' => 11965
     }
   }, {
-    'id' => 2075, 'name' => "The Defense of Eonar", 'raid_ids' => {
+    'id' => 2075, 'name' => "Eonar the Life-Binder", 'raid_ids' => {
       'normal' => 11966, 'heroic' => 11967, 'mythic' => 11968
     }
   }, {
@@ -287,16 +287,6 @@ VALID_RAIDS = [{
   }]
 }]
 
-WCL_METRICS = {
-  'best_3' => [],
-  'best_4' => [],
-  'best_5' => [],
-  'median_3' => [],
-  'median_4' => [],
-  'median_5' => [],
-  'average_3' => [],
-  'average_4' => [],
-  'average_5' => []
-}
-
-WCL_IDS = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["id"]  } }.flatten
+WCL_IDS = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["id"].to_s } }.flatten
+WCL_NAMES = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["name"] } }.flatten
+WCL_MAP = Hash[WCL_NAMES.zip(WCL_IDS)]

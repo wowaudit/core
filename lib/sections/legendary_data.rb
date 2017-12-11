@@ -2,16 +2,18 @@ module Audit
   class LegendaryData
 
     def self.add(character, data)
-      character.legendaries_equipped.each do |legendary|
-        if !character.all_legendaries.include?(legendary)
-          character.all_legendaries << legendary
-          character.changed = true
+      character.legendaries_equipped.uniq.each do |legendary|
+        if !character.owned_legendaries.include? legendary
+          character.details['legendaries'] << {
+            id: legendary,
+            name: LEGENDARIES[legendary]
+          }
         end
       end
 
-      character.data['legendary_amount'] = character.all_legendaries.length
-      character.data['legendary_list'] = character.all_legendaries.join('|')
-      character.legendaries = character.all_legendaries.join('|')
+      character.data['legendary_amount'] = character.details['legendaries'].size
+      character.data['legendary_list'] =
+        character.details['legendaries'].map{ |l| "#{l['id']}_#{l['name']}"}.join('|')
     end
   end
 end

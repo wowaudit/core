@@ -2,19 +2,24 @@ module Audit
   class Character < Sequel::Model
     attr_accessor :output, :data, :tier_pieces, :gems, :ilvl, :spec_id,
                   :legendaries_equipped, :ap_snapshot, :wq_snapshot,
-                  :dungeon_snapshot, :specs, :max_ilvl, :changed,
-                  :historical_snapshots, :all_legendaries, :details
+                  :dungeon_snapshot, :specs, :changed, :details
 
     def realm_slug
       Realm.to_slug realm
     end
 
-    def wcl_parsed
-      @warcraftlogs_parsed ||= JSON.parse warcraftlogs
+    def owned_legendaries
+      @owned_legendaries ||= details['legendaries'].map{ |l| l['id'].to_i }
     end
 
-    def raiderio_parsed
-      @raiderio_parsed ||= JSON.parse raiderio
+    def historical_snapshots
+      return @historical_snapshots if @historical_snapshots
+      @historical_snapshots = []
+      details['snapshots'].keys.sort_by(&:to_i).each do |year|
+        details['snapshots'][year].keys.sort_by(&:to_i).each do |week|
+          @historical_snapshots << details['snapshots'][year][week]
+        end
+      end
     end
 
     def update
@@ -22,6 +27,7 @@ module Audit
         team_id: team_id,
         character_id: id,
         warcraftlogs_id: details["warcraftlogs_id"],
+        max_ilvl: details['max_ilvl'],
         legendaries: details["legendaries"],
         snapshots: details["snapshots"],
         tier_data: details["tier_data"],
@@ -29,15 +35,16 @@ module Audit
         pantheon_trinket: details["pantheon_trinket"],
         raiderio: details["raiderio"],
         warcraftlogs: details["warcraftlogs"],
-        last_refresh: ([HEADER, output].transpose.to_h rescue false
+        last_refresh: ([HEADER, output].transpose.to_h rescue false)
       })
     end
 
     def verify_details
-      # Set ids if not present
+      # Set ids and max item level if not present
       details['team_id'] = team_id if !details['team_id']
       details['character_id'] = id if !details['character_id']
       details['warcraftlogs_id'] = nil if !details['warcraftlogs_id']
+      details['max_ilvl'] = 0 if !details['max_ilvl']
 
       # Initialise snapshots if not present
       if !details['snapshots'].is_a? Hash
@@ -80,15 +87,6 @@ module Audit
       # Initialise Warcraft Logs data if not present
       if !details['warcraftlogs'].is_a? Hash
         details['warcraftlogs'] = {3 => {}, 4 => {}, 5 => {}}
-        details['warcraftlogs'].keys.each do |metric|
-          WCL_IDS.each do |id|
-            details['warcraftlogs'][metric][id] = {
-              best: '-',
-              median: '-',
-              average: '-'
-            }
-          end
-        end
       end
 
       # Initialise spec data if not present
