@@ -58,29 +58,29 @@ module Audit
       # Initialise tier data if not present
       if !details['tier_data'].is_a? Hash
         details['tier_data'] = {
-          head: 0,
-          shoulder: 0,
-          back: 0,
-          chest: 0,
-          hands: 0,
-          legs: 0
+          'head' => 0,
+          'shoulder' => 0,
+          'back' => 0,
+          'chest' => 0,
+          'hands' => 0,
+          'legs' => 0
         }
       end
 
       # Initialise pantheon trinket data if not present
       if !details['pantheon_trinket'].is_a? Hash
-        details['pantehon_trinket'] = {
-          type: 'None',
-          ilvl: 0
+        details['pantheon_trinket'] = {
+          'type' => 'None',
+          'ilvl' => 0
         }
       end
 
       # Initialise Raider.io data if not present
       if !details['raiderio'].is_a? Hash
         details['raiderio'] = {
-          score: 0,
-          season_highest: 0,
-          weekly_highest: 0
+          'score' => 0,
+          'season_highest' => 0,
+          'weekly_highest' => 0
         }
       end
 
@@ -92,10 +92,10 @@ module Audit
       # Initialise spec data if not present
       if !details['spec_data'].is_a? Hash
         details['spec_data'] = {
-          '1' => { traits: 0, ilvl: 0 },
-          '2' => { traits: 0, ilvl: 0 },
-          '3' => { traits: 0, ilvl: 0 },
-          '4' => { traits: 0, ilvl: 0 }
+          '1' => { 'traits' => 0, 'ilvl' => 0 },
+          '2' => { 'traits' => 0, 'ilvl' => 0 },
+          '3' => { 'traits' => 0, 'ilvl' => 0 },
+          '4' => { 'traits' => 0, 'ilvl' => 0 }
         }
       end
 

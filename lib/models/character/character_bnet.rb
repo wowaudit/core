@@ -34,7 +34,7 @@ module Audit
     def return_error(response)
       Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
       set_status(response.code)
-      self.output = details['last_refresh'] if details['last_refresh']
+      to_output(details['last_refresh']) if details['last_refresh']
     end
 
     def process(response)
@@ -61,7 +61,7 @@ module Audit
       end
     end
 
-    def to_output
+    def to_output(data = self.data)
       if self.output
         HEADER.each do |value|
           self.output << self.data[value]
