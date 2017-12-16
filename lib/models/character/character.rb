@@ -20,6 +20,7 @@ module Audit
           @historical_snapshots << details['snapshots'][year][week]
         end
       end
+      @historical_snapshots
     end
 
     def update
