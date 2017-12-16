@@ -19,9 +19,9 @@ module Audit
         encounter['specs'].each do |spec|
           if spec['spec'][0..3] == self.role[0..3] || ROLES_TO_SPEC[self.role].include?(spec['spec'])
             details['warcraftlogs'][encounter['difficulty'].to_s][WCL_MAP[encounter['name']]] = {
-              best: spec['best_historical_percent'].round,
-              median: spec['historical_median'].round,
-              average: spec['historical_avg'].round
+              'best' => spec['best_historical_percent'].round,
+              'median' => spec['historical_median'].round,
+              'average' => spec['historical_avg'].round
             }
             break
           end rescue nil

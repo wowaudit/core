@@ -4,15 +4,13 @@ def copy_all
   characters = Audit::Character.all
   docs = []
   characters.each do |character|
-    if character.id > 120000
-      docs << transform_and_create(character)
-      puts "Created document for character #{character.id}"
+    docs << transform_and_create(character)
+    puts "Created document for character #{character.id}"
 
-      if docs.size % 100 == 0
-        ADB.create_document document: docs
-        puts "Stored documents for 100 characters"
-        docs = []
-      end
+    if docs.size % 100 == 0
+      ADB.create_document document: docs
+      puts "Stored documents for 100 characters"
+      docs = []
     end
   end
   ADB.create_document document: docs
@@ -54,7 +52,7 @@ def transform_and_create(character)
   end
 
   # Transform raider.io data to the new format
-  new_format_raiderio = JSON.parse character.raiderio rescue {}
+  new_format_raiderio = (JSON.parse character.raiderio rescue {})
   new_format_raiderio['weekly_highest'] = character.raiderio_weekly
 
   # Transform Warcraft Logs data to the new format

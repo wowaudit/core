@@ -54,9 +54,9 @@ module Audit
     def update_snapshots
       if !details['snapshots'][Audit.year].include? Audit.week
         details['snapshots'][Audit.year][Audit.week] = {
-          dungeons: self.data['dungeons_done_total'],
-          wqs: self.data['wqs_done_total'],
-          ap: self.data['ap_obtained_total']
+          'dungeons' => self.data['dungeons_done_total'],
+          'wqs' => self.data['wqs_done_total'],
+          'ap' => self.data['ap_obtained_total']
         }
       end
     end

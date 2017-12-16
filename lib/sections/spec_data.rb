@@ -10,8 +10,8 @@ module Audit
           character.data["spec#{spec}_traits"] = character.data['equipped_traits']
           character.data["spec#{spec}_ilvl"] = character.data['ilvl']
           character.details['spec_data'][spec.to_s] = {
-            traits: character.data['equipped_traits'],
-            ilvl: character.data['ilvl']
+            'traits' => character.data['equipped_traits'],
+            'ilvl' => character.data['ilvl']
           }
         else
           character.data["spec#{spec}_traits"] = character.details['spec_data'][spec.to_s]['traits']

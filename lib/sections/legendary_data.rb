@@ -5,8 +5,8 @@ module Audit
       character.legendaries_equipped.uniq.each do |legendary|
         if !character.owned_legendaries.include? legendary
           character.details['legendaries'] << {
-            id: legendary,
-            name: LEGENDARIES[legendary]
+            'id' => legendary,
+            'name' => LEGENDARIES[legendary]
           }
         end
       end
