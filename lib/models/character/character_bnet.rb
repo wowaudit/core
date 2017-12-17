@@ -64,7 +64,7 @@ module Audit
     def to_output(data = self.data)
       if self.output
         HEADER.each do |value|
-          self.output << self.data[value]
+          self.output << data[value]
         end
       end
     end
