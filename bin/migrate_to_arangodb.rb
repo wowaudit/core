@@ -7,7 +7,7 @@ def copy_all
     docs << transform_and_create(character)
     puts "Created document for character #{character.id}"
 
-    if docs.size % 100 == 0
+    if docs.size % 250 == 0
       ADB.create_document document: docs
       puts "Stored documents for 100 characters"
       docs = []

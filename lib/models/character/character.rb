@@ -24,7 +24,8 @@ module Audit
     end
 
     def update
-      ArangoDocument.new(key: id.to_s, body: {
+      {
+        _key: id.to_s,
         team_id: team_id,
         character_id: id,
         warcraftlogs_id: details["warcraftlogs_id"],
@@ -37,7 +38,7 @@ module Audit
         raiderio: details["raiderio"],
         warcraftlogs: details["warcraftlogs"],
         last_refresh: ([HEADER, output].transpose.to_h rescue false)
-      })
+      }
     end
 
     def verify_details
@@ -87,7 +88,7 @@ module Audit
 
       # Initialise Warcraft Logs data if not present
       if !details['warcraftlogs'].is_a? Hash
-        details['warcraftlogs'] = {3 => {}, 4 => {}, 5 => {}}
+        details['warcraftlogs'] = { '3' => {}, '4' => {}, '5' => {} }
       end
 
       # Initialise spec data if not present
