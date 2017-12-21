@@ -25,7 +25,7 @@ module Audit
         self.query(query_string)
       end
 
-      # Update specialisation data and store entire output in case the next cycle fails for a character
+      # Update data
       arango_data = []
       result.each do |character|
         arango_data << character.update

@@ -23,24 +23,6 @@ module Audit
       @historical_snapshots
     end
 
-    def update
-      {
-        _key: id.to_s,
-        team_id: team_id,
-        character_id: id,
-        warcraftlogs_id: details["warcraftlogs_id"],
-        max_ilvl: details['max_ilvl'],
-        legendaries: details["legendaries"],
-        snapshots: details["snapshots"],
-        tier_data: details["tier_data"],
-        spec_data: details["spec_data"],
-        pantheon_trinket: details["pantheon_trinket"],
-        raiderio: details["raiderio"],
-        warcraftlogs: details["warcraftlogs"],
-        last_refresh: ([HEADER, output].transpose.to_h rescue false)
-      }
-    end
-
     def verify_details
       # Set ids and max item level if not present
       details['team_id'] = team_id if !details['team_id']

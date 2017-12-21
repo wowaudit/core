@@ -20,5 +20,12 @@ module Audit
         Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
       end
     end
+
+    def update
+      {
+        _key: id.to_s,
+        raiderio: details["raiderio"]
+      }
+    end
   end
 end

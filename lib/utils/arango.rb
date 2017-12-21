@@ -10,7 +10,7 @@ module Audit
 
     def self.update(documents)
       ArangoServer.async = true
-      ADB.importJSON body: documents, onDuplicate: 'replace'
+      ADB.importJSON body: documents, onDuplicate: 'update'
     end
   end
 end

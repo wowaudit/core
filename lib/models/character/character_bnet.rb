@@ -81,5 +81,20 @@ module Audit
       end
       self.changed = true
     end
+
+    def update
+      {
+        _key: id.to_s,
+        team_id: team_id,
+        character_id: id,
+        max_ilvl: details['max_ilvl'],
+        legendaries: details["legendaries"],
+        snapshots: details["snapshots"],
+        tier_data: details["tier_data"],
+        spec_data: details["spec_data"],
+        pantheon_trinket: details["pantheon_trinket"],
+        last_refresh: ([HEADER, output].transpose.to_h rescue false)
+      }
+    end
   end
 end
