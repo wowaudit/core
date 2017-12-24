@@ -6,7 +6,7 @@ module Audit
       data = CSV.generate do |csv|
         csv << header
         result.sort_by{|c| c[1].name}.each do |uri, character|
-          csv << character.output if character.output
+          csv << character.output if character.output.any?
         end
       end
       file.put(body: data)
