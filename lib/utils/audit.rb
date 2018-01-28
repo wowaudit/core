@@ -9,7 +9,7 @@ module Audit
         Team.refresh(team.to_i, type)
       rescue ApiLimitReachedException
         Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
-        sleep(60)
+        sleep 60
         redo
       rescue
         Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)

@@ -8,7 +8,14 @@ module Audit
         uri["{region}"] = region
         uri["{realm}"] = Realm.to_slug(character.realm || realm)
         uri["{name}"] = CGI.escape(character.name)
-        character.process_result(Typhoeus.get(uri))
+
+        begin
+          character.process_result(Typhoeus.get(uri))
+        rescue ApiLimitReachedException
+          Logger.t(ERROR_API_LIMIT_REACHED, id)
+          sleep 5
+          retry
+        end
       end
 
       Logger.t(INFO_TEAM_REFRESHED, id)

@@ -7,8 +7,14 @@ module Audit
       # load on the Warcraft Logs API would be too high
       characters.each do |character|
         VALID_RAIDS.select{ |r| r['days'].include? Time.now.wday }.each do |zone|
-          response = Typhoeus.get(uri(character, zone))
-          character.process_result(response)
+          begin
+            response = Typhoeus.get(uri(character, zone))
+            character.process_result(response)
+          rescue ApiLimitReachedException
+            Logger.t(ERROR_API_LIMIT_REACHED, id)
+            sleep 5
+            retry
+          end
         end
       end
       Logger.t(INFO_TEAM_REFRESHED, id)
