@@ -3,7 +3,7 @@ module Audit
 
     class << self
       def deactivate_guilds
-        Guild.all.each {|g| g.set_inactive if g.days_remaining <= 0}
+        Guild.all.each {|g| g.set_inactive if (g.days_remaining <= 0 && g.active == 1 )}
       end
     end
 
