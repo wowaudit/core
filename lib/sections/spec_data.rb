@@ -3,7 +3,7 @@ module Audit
 
     def self.add(character, data)
       spec_output = []
-      max_spec = [0,0]
+      max_spec = [1,0]
 
       (1..4).to_a.each do |spec|
         if spec == character.spec_id

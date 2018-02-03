@@ -24,7 +24,7 @@ module Audit
           end
 
           total_traits -= data['items'][weapon]['relics'].length
-          character.data['equipped_traits'] = total_traits
+          character.data['equipped_traits'] = [total_traits, 0].max
 
           (1..3).to_a.each do |relic|
             character.data["relic#{relic}_ilvl"] =
