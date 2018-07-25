@@ -24,8 +24,15 @@ module Audit
       character.data['lvl_25_pets'] = level_25_pets
 
       mounts = data["mounts"]["collected"].map{ |m| m["itemId"] }
-      character.data['guldan_mount'] = (mounts.include? 137575) ? "yes" : "no"
-      character.data['argus_mount'] = (mounts.include? 152789) ? "yes" : "no"
+      # The API sometimes incorrectly returns an empty set for mount IDs
+      # When this happens, use historical data instead.
+      if mounts.any?
+        character.data['guldan_mount'] = (mounts.include? 137575) ? "yes" : "no"
+        character.data['argus_mount'] = (mounts.include? 152789) ? "yes" : "no"
+      else
+        character.data['guldan_mount'] = (character.last_refresh['guldan_mount'] || "no")
+        character.data['argus_mount'] = (character.last_refresh['argus_mount'] || "no")
+      end
     end
   end
 end

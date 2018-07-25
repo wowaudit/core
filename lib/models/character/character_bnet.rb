@@ -14,6 +14,10 @@ module Audit
       self.spec_id = 1
     end
 
+    def last_refresh
+      details['last_refresh'] || {}
+    end
+
     def process_result(response)
       init
       if response.code == 200
