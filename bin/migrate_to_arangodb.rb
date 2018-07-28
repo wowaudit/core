@@ -57,7 +57,6 @@ def transform_and_create(character)
 
   # Transform Warcraft Logs data to the new format
   wcl_data = JSON.parse character.warcraftlogs rescue nil
-  warcraftlogs_id = wcl_data["character_id"] rescue nil
   new_format_wcl = {3 => {}, 4 => {}, 5 => {}}
   new_format_wcl.keys.each do |metric|
     WCL_IDS.each do |id|
@@ -86,7 +85,6 @@ def transform_and_create(character)
   ArangoDocument.new(key: character.id.to_s, body: {
     team_id: character.team_id,
     character_id: character.id,
-    warcraftlogs_id: warcraftlogs_id,
     legendaries: new_format_legendaries,
     snapshots: new_format_snapshots,
     tier_data: new_format_tier,

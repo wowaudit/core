@@ -27,7 +27,6 @@ module Audit
       # Set ids and max item level if not present
       details['team_id'] = team_id if !details['team_id']
       details['character_id'] = id if !details['character_id']
-      details['warcraftlogs_id'] = nil if !details['warcraftlogs_id']
       details['max_ilvl'] = 0 if !details['max_ilvl']
 
       # Initialise snapshots if not present

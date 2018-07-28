@@ -62,7 +62,7 @@ module Audit
     end
 
     def self.add_warcraftlogs_data(character)
-      character.data['WCL_id'] = character.details['warcraftlogs_id']
+      character.data['WCL_id'] = "" # TODO: Legacy, remove
 
       RAID_DIFFICULTIES.each_key do |diff|
         ['best', 'average', 'median'].each do |metric|

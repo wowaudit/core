@@ -4,7 +4,7 @@ module Audit
     def process_result(response)
       if response.code == 200
         data = JSON.parse response.body
-        parse_result(data) unless data.empty? or (data["hidden"] rescue false)
+        store_result(data) unless (data["hidden"] rescue false)
       elsif response.code == 403 or response.code == 429
         raise ApiLimitReachedException
       else
@@ -13,19 +13,33 @@ module Audit
       end
     end
 
-    def parse_result(data)
-      details['warcraftlogs_id'] = data[0]['specs'][0]['data'][0]['character_id']
-      data.reject{ |encounter| encounter['difficulty'] < 3 }.each do |encounter|
-        encounter['specs'].each do |spec|
-          if spec['spec'][0..3] == self.role[0..3] || ROLES_TO_SPEC[self.role].include?(spec['spec'])
-            details['warcraftlogs'][encounter['difficulty'].to_s][WCL_MAP[encounter['name']]] = {
-              'best' => spec['best_historical_percent'].round,
-              'median' => spec['historical_median'].round,
-              'average' => spec['historical_avg'].round
-            }
-            break
-          end rescue nil
+    def store_result(data)
+      percentiles = { 3 => {}, 4 => {}, 5 => {} }
+      data.reject{ |parse| parse['difficulty'] < 3 }.each do |parse|
+        next unless ROLES_TO_SPEC[self.role].include?(parse['spec'])
+        (percentiles[parse['difficulty']][parse['encounterID'].to_s] ||= []) << parse['percentile']
+      end
+
+      percentiles.each do |difficulty, encounters|
+        WCL_IDS.each do |encounter_id|
+          details['warcraftlogs'][difficulty.to_s][encounter_id] = calculated_percentiles(encounters[encounter_id])
         end
+      end
+    end
+
+    def calculated_percentiles(percentiles)
+      if percentiles
+        {
+          'best' => percentiles.max,
+          'median' => percentiles.median,
+          'average' => percentiles.mean
+        }
+      else
+        {
+          'best' => '-',
+          'median' => '-',
+          'average' => '-'
+        }
       end
     end
 
@@ -36,10 +50,8 @@ module Audit
     def update
       {
         _key: id.to_s,
-        warcraftlogs_id: details["warcraftlogs_id"],
         warcraftlogs: details["warcraftlogs"]
       }
     end
   end
 end
-

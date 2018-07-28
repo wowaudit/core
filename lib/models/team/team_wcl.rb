@@ -12,7 +12,7 @@ module Audit
             character.process_result(response)
           rescue ApiLimitReachedException
             Logger.t(ERROR_API_LIMIT_REACHED, id)
-            sleep 5
+            sleep 10
             retry
           end
         end

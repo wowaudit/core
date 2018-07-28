@@ -239,7 +239,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Antorus', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 17, 'partition' => 1,
+  'name' => 'Antorus', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 17, 'partition' => 3,
   'encounters' => [{
     'id' => 2076, 'name' => 'Garothi Worldbreaker', 'raid_ids' => {
       'normal' => 11954, 'heroic' => 11955, 'mythic' => 11956
@@ -288,5 +288,3 @@ VALID_RAIDS = [{
 }]
 
 WCL_IDS = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["id"].to_s } }.flatten
-WCL_NAMES = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["name"] } }.flatten
-WCL_MAP = Hash[WCL_NAMES.zip(WCL_IDS)]
