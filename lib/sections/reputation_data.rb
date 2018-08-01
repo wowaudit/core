@@ -23,8 +23,7 @@ module Audit
               rep_data['standing'] == 7 ? 999 : rep_data['value']
 
             rep_value += ( ( rep_data['standing'] - 2 ) +
-                           ( rep_data['value'].to_f /
-                            REP_AMOUNT[rep_data['standing']].to_f ) )
+                           ( rep_data['value'].to_f / REP_AMOUNT[rep_data['standing']].to_f ) )
             match = true
           end
         end
@@ -35,7 +34,7 @@ module Audit
         end
       end
 
-      character.data['reputation_ranking'] = rep_value #Deprecated
+      character.data['reputation_ranking'] = rep_value #TODO: Legacy, remove
       character.data['exalted_amount'] = exalted_rep_amount / REPUTATIONS.length
     end
   end

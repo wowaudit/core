@@ -21,6 +21,7 @@ DUNGEONS_BY_ACHIEVEMENT = {
 }
 
 RAID_DIFFICULTIES = {
+  1 => 'Raid Finder',
   3 => 'Normal',
   4 => 'Heroic',
   5 => 'Mythic'

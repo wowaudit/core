@@ -69,7 +69,7 @@ module Audit
 
       # Initialise Warcraft Logs data if not present
       if !details['warcraftlogs'].is_a? Hash
-        details['warcraftlogs'] = { '3' => {}, '4' => {}, '5' => {} }
+        details['warcraftlogs'] = { '1' => {}, '3' => {}, '4' => {}, '5' => {} }
       end
 
       # Initialise spec data if not present

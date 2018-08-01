@@ -65,12 +65,11 @@ module Audit
       character.data['WCL_id'] = "" # TODO: Legacy, remove
 
       RAID_DIFFICULTIES.each_key do |diff|
-        ['best', 'average', 'median'].each do |metric|
-          output = []
-          WCL_IDS.each do |boss|
-            output << (character.details['warcraftlogs'][diff.to_s][boss][metric] rescue '-')
-          end
-          character.data["WCL_#{RAID_DIFFICULTIES[diff]}_#{metric}"] = output.join('|')
+        output = []
+        WCL_IDS.each do |boss|
+          output << (character.details['warcraftlogs'][diff.to_s][boss] rescue '-')
+        end
+        character.data["WCL_#{RAID_DIFFICULTIES[diff]}"] = output.join('|')
         end
       end
     end
