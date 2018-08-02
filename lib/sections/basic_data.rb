@@ -5,6 +5,7 @@ module Audit
       character.data['name'] = data['name']
       character.data['class'] = CLASSES[data['class']]
       character.data['realm'] = character.realm
+      character.data['faction'] = "" #TODO: Add data source
       character.data['realm_slug'] = character.realm_slug
       character.data['character_id'] = character.id
       character.data['honorable_kills'] = data['totalHonorableKills']

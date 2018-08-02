@@ -2,20 +2,10 @@ module Audit
   class GearData
 
     def self.add(character, data)
-      # Check activity feed
-      data['feed'].select{ |item| item["type"] == "LOOT" }.each do |item|
-        self.check_tier_from_feed(item, data, character)
-        self.check_legendary_from_feed(item, data, character)
-        self.check_pantheon_from_feed(item, data, character)
-      end
-
       # Check equipped gear
       ITEMS.each do |item|
         begin
           self.check_enchant(item, data, character)
-          self.check_tier(item, data, character)
-          self.check_legendary(item, data, character)
-          self.check_pantheon(item, data, character) if (["trinket1", "trinket2"].include? item)
           character.ilvl += data['items'][item]['itemLevel']
 
           character.data[item + '_ilvl'] = data['items'][item]['itemLevel']
@@ -54,58 +44,6 @@ module Audit
         rescue
           character.data["enchant_quality_#{item}"] = 0
           character.data["#{item}_enchant"] = ''
-        end
-      end
-    end
-
-    def self.check_tier(item, data, character)
-      if TIER_IDS_MAPPED.keys.include? data['items'][item]['id'].to_i
-        if character.details['tier_data'][item] != data['items'][item]['itemLevel'].to_i
-          character.details['tier_data'][item] = data['items'][item]['itemLevel'].to_i
-        end
-      end
-
-      if character.details['tier_data'].include? item
-        character.data["tier_#{item}"] = character.details['tier_data'][item]
-      end
-    end
-
-    def self.check_tier_from_feed(item, data, character)
-      if TIER_IDS_MAPPED.keys.include? item["itemId"].to_i
-        if character.details['tier_data'][TIER_IDS_MAPPED[item["itemId"].to_i]] < (BASE_ILVL[item["context"]] || 915)
-          character.details['tier_data'][TIER_IDS_MAPPED[item["itemId"].to_i]] = (BASE_ILVL[item["context"]] || 915)
-        end
-      end
-    end
-
-    def self.check_legendary(item, data, character)
-      if data['items'][item]['itemLevel'] >= 800 && data['items'][item]['quality'] == 5
-        character.legendaries_equipped << data['items'][item]['id'].to_i
-      end
-    end
-
-    def self.check_legendary_from_feed(item, data, character)
-      if LEGENDARIES.keys.include? item["itemId"]
-        character.legendaries_equipped << item["itemId"].to_i
-      end
-    end
-
-    def self.check_pantheon(item, data, character)
-      if PANTHEON_TRINKETS.keys.include? data['items'][item]['id'].to_i
-        if character.details['pantheon_trinket']['ilvl'].to_i < data['items'][item]['itemLevel'].to_i
-          character.details['pantheon_trinket']['ilvl'] = data['items'][item]['itemLevel']
-          character.details['pantheon_trinket']['type'] = PANTHEON_TRINKETS[data['items'][item]['id'].to_i]
-        end
-      end
-      character.data["pantheon_trinket_ilvl"] = character.details['pantheon_trinket']['ilvl']
-      character.data["pantheon_trinket_type"] = character.details['pantheon_trinket']['type']
-    end
-
-    def self.check_pantheon_from_feed(item, data, character)
-      if PANTHEON_TRINKETS.keys.include? item["itemId"]
-        if character.details['pantheon_trinket']['ilvl'].to_i < 940
-          character.details['pantheon_trinket']['ilvl'] = 940
-          character.details['pantheon_trinket']['type'] = PANTHEON_TRINKETS[item["itemId"].to_i]
         end
       end
     end
