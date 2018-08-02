@@ -26,6 +26,7 @@ module Audit
       character.data['ilvl'] = (character.ilvl / (ITEMS.length + 2)).round(2)
 
       character.details['max_ilvl'] = [character.data['ilvl'], character.details['max_ilvl'].to_i].max
+      character.data['highest_ilvl_ever_equipped'] = character.details['max_ilvl']
       character.data['empty_sockets'] = data['audit']['emptySockets']
       character.data['gem_list'] = character.gems.join('|')
     end

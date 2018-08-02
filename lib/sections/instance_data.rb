@@ -9,9 +9,10 @@ module Audit
       }.flatten
       boss_ids = encounters.map{ |encounter| encounter.values }.flatten
       raid_list = {}
-      raid_output = {'raids_normal' => [],'raids_normal_weekly' => [],
-                     'raids_heroic' => [],'raids_heroic_weekly' => [],
-                     'raids_mythic' => [],'raids_mythic_weekly' => []}
+      raid_output = {'raids_raid_finder' => [], 'raids_raid_finder_weekly' => [],
+                     'raids_normal' => [],      'raids_normal_weekly' => [],
+                     'raids_heroic' => [],      'raids_heroic_weekly' => [],
+                     'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
       dungeon_count = 0
       instance_data = data['statistics']['subCategories'][5]['subCategories'][6]['statistics']
@@ -32,14 +33,6 @@ module Audit
             (instance['lastUpdated'] / 1000) > Audit.timestamp ? 1 : 0
           ]
         end
-      end
-
-      # Patch dungeons haven't been added to statistics, but can be tracked using criterias
-      DUNGEONS_BY_ACHIEVEMENT.each do |key, dungeon|
-        criteria = data['achievements']['criteria'].index(key)
-        completions = data['achievements']['criteriaQuantity'][criteria] rescue 0
-        character.data[dungeon] = completions
-        dungeon_count += completions
       end
 
       character.data['dungeons_done_total'] = dungeon_count
@@ -70,7 +63,6 @@ module Audit
           output << (character.details['warcraftlogs'][diff.to_s][boss] rescue '-')
         end
         character.data["WCL_#{RAID_DIFFICULTIES[diff]}"] = output.join('|')
-        end
       end
     end
 

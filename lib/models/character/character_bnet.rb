@@ -46,12 +46,10 @@ module Audit
       GearData.add(self, response)
       ArtifactData.add(self, response)
       ReputationData.add(self, response)
+      PvPData.add(self, response)
       InstanceData.add(self, response)
       WorldQuestData.add(self, response)
-      PvPData.add(self, response)
-      LegendaryData.add(self, response)
       CollectionData.add(self, response)
-      SpecData.add(self, response)
       HistoricalData.add(self, response)
     end
 

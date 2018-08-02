@@ -1,6 +1,6 @@
 ITEMS = [
   'mainhand',
-  'offhand'
+  'offhand',
   'head',
   'neck',
   'shoulder',
