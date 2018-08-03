@@ -2,8 +2,8 @@ module Audit
   class PvPData
 
     def self.add(character, data)
-      byebug
       character.data['honor_level'] = character.details["honor_level"] || "-"
+      character.data['honorable_kills'] = data['totalHonorableKills']
 
       ['2v2','3v3','RBG'].each do |bracket|
         character.data["#{bracket}_rating"] = data['pvp']['brackets']["ARENA_BRACKET_#{bracket}"]['rating']

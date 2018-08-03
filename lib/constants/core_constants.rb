@@ -152,7 +152,7 @@ HEADER = [
   'dungeons_this_week',
   'wqs_done_total',
   'wqs_this_week',
-  '', # Arbitrary placeholder
+  'note',
   'achievement_points',
   'mounts',
   'exalted_amount',
@@ -165,6 +165,7 @@ HEADER = [
   'finger1_enchant',
   'finger2_enchant',
   'gem_list', # IMPORTANT: Data is shifted after this column
+  'rank',
   'ap_obtained_total',
   'ap_this_week',
   'current_spec_name',
