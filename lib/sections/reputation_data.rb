@@ -6,7 +6,7 @@ module Audit
       rep_value = 0
       exalted_rep_amount = 0
 
-      REPUTATIONS.each do |reputation, name|
+      REPUTATIONS[character.data['faction']].each do |reputation, name|
         match = false
 
         data['reputation'].each do |rep_data|

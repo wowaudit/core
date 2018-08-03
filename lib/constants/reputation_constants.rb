@@ -1,14 +1,20 @@
 REPUTATIONS = {
-  2160 => 'proudmoore_taljani', # Proudmoore Admirality
-  2156 => 'proudmoore_taljani', # Taljani's Expedition
-  2159 => '7th_legion_zandalari', # 7th Legion
-  2103 => '7th_legion_zandalari', # Zandalari Empire
-  2162 => 'storms_wake_voldunai', # Storm's Wake
-  2158 => 'storms_wake_voldunai', # Voldunai
-  2161 => 'order_of_embers_honorbound', # Order of Embers
-  2157 => 'order_of_embers_honorbound_standing', # The Honorbound
-  2164 => 'champions_of_azeroth', # Champions of Azeroth
-  2163 => 'tortollan_seekers' # Tortollan Seekers
+  'Alliance' => {
+    2160 => 'proudmoore_taljani', # Proudmoore Admirality
+    2159 => '7th_legion_zandalari', # 7th Legion
+    2162 => 'storms_wake_voldunai', # Storm's Wake
+    2161 => 'order_of_embers_honorbound', # Order of Embers
+    2164 => 'champions_of_azeroth', # Champions of Azeroth
+    2163 => 'tortollan_seekers' # Tortollan Seekers
+  },
+  'Horde' => {
+    2156 => 'proudmoore_taljani', # Taljani's Expedition
+    2103 => '7th_legion_zandalari', # Zandalari Empire
+    2158 => 'storms_wake_voldunai', # Voldunai
+    2157 => 'order_of_embers_honorbound_standing', # The Honorbound
+    2164 => 'champions_of_azeroth', # Champions of Azeroth
+    2163 => 'tortollan_seekers' # Tortollan Seekers
+  }
 }
 
 STANDINGS = {
