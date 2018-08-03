@@ -5,7 +5,7 @@ module Audit
       character.data['name'] = data['name']
       character.data['class'] = CLASSES[data['class']]
       character.data['realm'] = character.realm
-      character.data['faction'] = data['faction'].zero? ? 'Alliance' : 'Horde'
+      character.data['faction'] = FACTIONS[data['faction']]
       character.data['realm_slug'] = character.realm_slug
       character.data['character_id'] = character.id
       character.data['join_date'] = character.created_at

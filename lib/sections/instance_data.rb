@@ -15,7 +15,7 @@ module Audit
                      'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
       dungeon_count = 0
-      instance_data = data['statistics']['subCategories'][5]['subCategories'][6]['statistics']
+      instance_data = data['statistics']['subCategories'][5]['subCategories'][7]['statistics']
 
       # Track Dungeon count through the statistics
       instance_data.each do |instance|
