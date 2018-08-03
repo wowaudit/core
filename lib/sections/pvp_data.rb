@@ -2,10 +2,8 @@ module Audit
   class PvPData
 
     def self.add(character, data)
-      HONOR_LEVEL_ACHIEVEMENTS.keys.each do |level|
-        break unless data['achievements']['achievementsCompleted'].include?(level)
-        character.data['honor_level'] = HONOR_LEVEL_ACHIEVEMENTS[level]
-      end
+      byebug
+      character.data['honor_level'] = character.details["honor_level"] || "-"
 
       ['2v2','3v3','RBG'].each do |bracket|
         character.data["#{bracket}_rating"] = data['pvp']['brackets']["ARENA_BRACKET_#{bracket}"]['rating']

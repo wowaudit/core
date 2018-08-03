@@ -55,8 +55,6 @@ module Audit
     end
 
     def self.add_warcraftlogs_data(character)
-      character.data['WCL_id'] = "" # TODO: Legacy, remove
-
       RAID_DIFFICULTIES.each_key do |diff|
         output = []
         WCL_IDS.each do |boss|

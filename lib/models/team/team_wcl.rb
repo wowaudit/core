@@ -2,7 +2,6 @@ module Audit
   class TeamWcl < Team
 
     def refresh
-      Audit.timestamp = region
       # Requests are not made in parallel, otherwise
       # load on the Warcraft Logs API would be too high
       characters.each do |character|

@@ -1,12 +1,14 @@
 module Audit
   class Team < Sequel::Model
     class << self
-      def refresh(id, type)
-        self.type(type).where(id: id).first.refresh
+      def refresh(id, refresh_type)
+        team = self.type(refresh_type).where(id: id).first
+        Audit.timestamp = team.region
+        team.refresh
       end
 
-      def type(type)
-        type == "bnet" ? TeamBnet : (type == "raiderio" ? TeamRaiderio : TeamWcl)
+      def type(refresh_type)
+        Audit.const_get("Team#{refresh_type.capitalize}")
       end
     end
 
@@ -34,6 +36,19 @@ module Audit
 
     def realm
       guild_data("realm")
+    end
+
+    def slugged_region
+      case region
+      when "US"
+        return "en-us"
+      when "TW"
+        return "zh-tw"
+      when "KR"
+        return "ko-kr"
+      else
+        return "en-gb"
+      end
     end
 
     def region

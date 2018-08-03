@@ -12,10 +12,10 @@ MYTHIC_DUNGEONS = {
 }
 
 RAID_DIFFICULTIES = {
-  1 => 'Raid Finder',
-  3 => 'Normal',
-  4 => 'Heroic',
-  5 => 'Mythic'
+  1 => 'raid_finder',
+  3 => 'normal',
+  4 => 'heroic',
+  5 => 'mythic'
 }
 
 #TODO: Add Warcraft Logs IDs when they get added

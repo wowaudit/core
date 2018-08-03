@@ -2,7 +2,6 @@ module Audit
   class TeamBnet < Team
 
     def refresh
-      Audit.timestamp = region
       # Forked library, processing the result of each Character
       # is called from within the RBattlenet library
       RBattlenet.authenticate(api_key: BNET_KEY)
