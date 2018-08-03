@@ -1,6 +1,6 @@
 ITEMS = [
-  'mainhand',
-  'offhand',
+  'mainHand',
+  'offHand',
   'head',
   'neck',
   'shoulder',
@@ -38,7 +38,7 @@ ENCHANTS = {
     5944 => [2, "+9 Mastery"],
     5945 => [2, "+9 Versatility"]
   },
-  'mainhand' => {
+  'mainHand' => {
     5946 => [2, "Coastal Surge"],
     5948 => [2, "Siphoning"],
     5949 => [2, "Torrent of Elements"],
@@ -49,7 +49,7 @@ ENCHANTS = {
     5965 => [2, "Deadly Navigation"],
     5966 => [2, "Stalwart Navigation"]
   },
-  'offhand' => {
+  'offHand' => {
     5946 => [2, "Coastal Surge"],
     5948 => [2, "Siphoning"],
     5949 => [2, "Torrent of Elements"],
