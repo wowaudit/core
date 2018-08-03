@@ -19,8 +19,7 @@ BNET_FIELDS = [
   "achievements",
   "pets",
   "pvp",
-  "mounts",
-  "feed"
+  "quests"
 ]
 
 # UTC times
@@ -165,6 +164,7 @@ HEADER = [
   'finger1_enchant',
   'finger2_enchant',
   'gem_list', # IMPORTANT: Data is shifted after this column
+  'daily_heroic_done',
   'rank',
   'ap_obtained_total',
   'ap_this_week',

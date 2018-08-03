@@ -35,6 +35,7 @@ module Audit
         end
       end
 
+      character.data['daily_heroic_done'] = data['quests'].include?(50627)
       character.data['dungeons_done_total'] = dungeon_count
       character.data['dungeons_this_week'] =
         dungeon_count - character.details['snapshots'][Audit.year][Audit.week]['dungeons'] rescue 0
