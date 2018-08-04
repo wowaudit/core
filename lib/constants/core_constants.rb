@@ -23,6 +23,15 @@ BNET_FIELDS = [
 ]
 
 # UTC times
+EXPANSION_START = Date.new(2018, 8, 13)
+
+DAILY_RESET = {
+  'EU' => 7,
+  'US' => 15,
+  'KR' => 2,
+  'TW' => 2
+}
+
 WEEKLY_RESET = {
   'EU' => {
     'hour' => 5,
@@ -163,8 +172,15 @@ HEADER = [
   'off_hand_enchant',
   'finger1_enchant',
   'finger2_enchant',
-  'gem_list', # IMPORTANT: Data is shifted after this column
+  'gem_list',
+  'daily_normal_done',
   'daily_heroic_done',
+  'daily_normal_this_week',
+  'daily_heroic_this_week',
+  'daily_normal_percentage',
+  'daily_heroic_percentage',
+  'historical_daily_normal_dungeons_done',
+  'historical_daily_heroic_dungeons_done',
   'rank',
   'ap_obtained_total',
   'ap_this_week',

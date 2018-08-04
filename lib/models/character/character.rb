@@ -1,15 +1,16 @@
 module Audit
   class Character < Sequel::Model
-    attr_accessor :output, :data, :tier_pieces, :gems, :ilvl, :spec_id,
-                  :legendaries_equipped, :ap_snapshot, :wq_snapshot,
-                  :dungeon_snapshot, :specs, :changed, :details
+    attr_accessor :output, :data, :gems, :ilvl,
+                  :ap_snapshot, :wq_snapshot,
+                  :dungeon_snapshot, :changed, :details
 
     def realm_slug
       Realm.to_slug realm
     end
 
-    def owned_legendaries
-      @owned_legendaries ||= details['legendaries'].map{ |l| l['id'].to_i }
+    def tracking_since
+      date = created_at || EXPANSION_START
+      [EXPANSION_START, date.to_date].max
     end
 
     def historical_snapshots
@@ -46,6 +47,16 @@ module Audit
           'weekly_highest' => 0
         }
       end
+
+      if !details['dailies'].is_a? Hash
+        details['dailies'] = {
+          'heroic_dungeon' => [],
+          'normal_dungeon' => []
+        }
+      end
+
+      details['dailies']['normal_dungeon'] = [] unless details['dailies']['normal_dungeon'].is_a? Array
+      details['dailies']['heroic_dungeon'] = [] unless details['dailies']['heroic_dungeon'].is_a? Array
 
       # Initialise Warcraft Logs data if not present
       if !details['warcraftlogs'].is_a? Hash
