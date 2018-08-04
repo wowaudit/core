@@ -12,6 +12,7 @@ module Audit
       new_header[2] = team.realm
       new_header[3] = team.region
       new_header[7] = team.name
+      new_header[8] = MYTHIC_PLUS_THRESHOLD
 
       # Parse messages
       new_header[4] = "#{CURRENT_VERSION}|#{VERSION_MESSAGE}"

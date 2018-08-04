@@ -11,6 +11,8 @@ MYTHIC_DUNGEONS = {
   12785 => 'Waycrest Manor'
 }
 
+MYTHIC_PLUS_THRESHOLD = 10
+
 RAID_DIFFICULTIES = {
   1 => 'raid_finder',
   3 => 'normal',
