@@ -60,7 +60,7 @@ module Audit
 
     def daily_date
       @daily_date ||= begin
-        if DateTime.now.hour < WEEKLY_RESET[region]['hour']
+        if DateTime.now.hour < DAILY_RESET[region]
           Date.today - 1
         else
           Date.today
