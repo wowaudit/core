@@ -104,8 +104,8 @@ module Audit
     def dailies_percentage(type)
       all_days = (tracking_since..Date.today).to_a
       missed_days = all_days - details['dailies'][type]
-      return 100 if all_days.size.zero?
-      (all_days.size - missed_days.size).to_f / all_days.size.to_f * 100.0
+      return 1 if all_days.size.zero?
+      ((all_days.size - missed_days.size).to_f / all_days.size.to_f).round(2)
     end
   end
 end
