@@ -29,8 +29,8 @@ module Audit
         end
       end
 
-      character.data['reputation_ranking'] = #TODO: Add data source
-      character.data['exalted_amount'] = exalted_rep_amount / REPUTATIONS.length
+      character.data['reputation_ranking'] = rep_value
+      character.data['exalted_amount'] = exalted_rep_amount / REPUTATIONS[character.data['faction']].length
     end
   end
 end
