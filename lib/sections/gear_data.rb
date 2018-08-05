@@ -3,6 +3,8 @@ module Audit
 
     def self.add(character, data)
       # Check equipped gear
+
+      items_equipped = 0
       ITEMS.each do |item|
         begin
           self.check_enchant(item, data, character)
@@ -12,6 +14,7 @@ module Audit
           character.data[item + '_id'] = data['items'][item]['id']
           character.data[item + '_name'] = data['items'][item]['name']
           character.data[item + '_quality'] = data['items'][item]['quality']
+          items_equipped += 1
 
         rescue
           character.data[item + '_ilvl'] = ''
@@ -21,9 +24,16 @@ module Audit
         end
       end
 
-      # Weapon ilvl is counted twice to normalise between 1H and 2H specialisations
-      character.ilvl += (data['items']['mainHand']['itemLevel']*2) rescue 0
-      character.data['ilvl'] = (character.ilvl / (ITEMS.length + 2)).round(2)
+      # For 2H weapons the item level is counted twice to normalise between weapon types
+      if !data['items']['offHand']
+        items_equipped += 1
+        character.ilvl += data['items']['mainHand']['itemLevel'] rescue 0
+      end
+
+      character.data['ilvl'] = (character.ilvl / (items_equipped)).round(2) rescue 0
+
+      # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
+      character.data['ilvl'] = 0 if character.data['ilvl'] > 600
 
       character.details['max_ilvl'] = [character.data['ilvl'], character.details['max_ilvl'].to_i].max
       character.data['highest_ilvl_ever_equipped'] = character.details['max_ilvl']
