@@ -47,6 +47,9 @@ module Audit
 
       if ENCHANTS.include? item
         begin
+          # Off-hand items that are not weapons can't be enchanted
+          return if !data['items'][item]["weaponInfo"] && item == "offHand"
+
           character.data["enchant_quality_#{item}"] =
             ENCHANTS[item][data['items'][item]['tooltipParams']['enchant']][0]
 
