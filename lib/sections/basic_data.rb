@@ -12,7 +12,7 @@ module Audit
       character.data['note'] = character.note
       character.data['rank'] = character.rank
 
-      #Parse the role if it's valid, otherwise use the default role
+      #Parse the role if it's valid, otherwise set the default role
       begin
         if ROLES[character.role][CLASSES[data['class']]]
           character.data['role'] = character.role
@@ -20,8 +20,9 @@ module Audit
           raise RoleError
         end
       rescue
-        $errors[:role] += 1
-        character.data['role'] = DEFAULT_ROLES[CLASSES[data['class']]]
+        character.role = DEFAULT_ROLES[CLASSES[data['class']]]
+        character.data['role'] = character.role
+        character.changed = true
       end
     end
   end
