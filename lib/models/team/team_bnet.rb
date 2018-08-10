@@ -25,15 +25,7 @@ module Audit
     end
 
     def warning
-      if days_remaining <= 7
-        INACTIVE_WARNING
-      elsif $errors[:tracking] > 0
-        TRACK_WARNING
-      elsif $errors[:role] > 0
-        ROLE_WARNING
-      else
-        NO_WARNING
-      end
+      BFA_WARNING
     end
   end
 end

@@ -10,6 +10,8 @@ TRACK_WARNING = "warning|Not all added members are being tracked. Please check w
 
 ROLE_WARNING = "warning|Not all added members have a valid role for their class. Please check wowaudit.com and update the list of members."
 
+BFA_WARNING = "warning|The Legion spreadsheet has stopped updating. Please update to the BfA version here: https://wowaudit.com/copy"
+
 # Back-end log messages
 
 ERROR_API_LIMIT_REACHED = "API limit reached. Waiting one minute before trying again. "
