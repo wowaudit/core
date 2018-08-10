@@ -2,7 +2,7 @@ module Audit
   class PvPData
 
     def self.add(character, data)
-      character.data['honor_level'] = character.details["honor_level"] || "-"
+      character.data['honor_level'] = character.details["honor_level"] || 0
       character.data['honorable_kills'] = data['totalHonorableKills']
 
       ['2v2','3v3','RBG'].each do |bracket|
