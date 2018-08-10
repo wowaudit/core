@@ -9,12 +9,13 @@ module Audit
       }.flatten
       boss_ids = encounters.map{ |encounter| encounter.values }.flatten
       raid_list = {}
-      raid_output = {'raids_normal' => [],'raids_normal_weekly' => [],
-                     'raids_heroic' => [],'raids_heroic_weekly' => [],
-                     'raids_mythic' => [],'raids_mythic_weekly' => []}
+      raid_output = {'raids_raid_finder' => [], 'raids_raid_finder_weekly' => [],
+                     'raids_normal' => [],      'raids_normal_weekly' => [],
+                     'raids_heroic' => [],      'raids_heroic_weekly' => [],
+                     'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
       dungeon_count = 0
-      instance_data = data['statistics']['subCategories'][5]['subCategories'][6]['statistics']
+      instance_data = data['statistics']['subCategories'][5]['subCategories'][7]['statistics']
 
       # Track Dungeon count through the statistics
       instance_data.each do |instance|
@@ -34,13 +35,18 @@ module Audit
         end
       end
 
-      # Patch dungeons haven't been added to statistics, but can be tracked using criterias
-      DUNGEONS_BY_ACHIEVEMENT.each do |key, dungeon|
-        criteria = data['achievements']['criteria'].index(key)
-        completions = data['achievements']['criteriaQuantity'][criteria] rescue 0
-        character.data[dungeon] = completions
-        dungeon_count += completions
+      character.data['daily_normal_done'] = data['quests'].include?(50626)
+      character.data['daily_heroic_done'] = data['quests'].include?(50627)
+
+      unless Audit.daily_date < EXPANSION_START
+        (character.details['dailies']['normal_dungeon'] << Audit.daily_date).uniq if character.data['daily_normal_done']
+        (character.details['dailies']['heroic_dungeon'] << Audit.daily_date).uniq if character.data['daily_heroic_done']
       end
+
+      character.data['daily_normal_this_week'] = character.dailies_this_week('normal_dungeon')
+      character.data['daily_normal_percentage'] = character.dailies_percentage('normal_dungeon')
+      character.data['daily_heroic_this_week'] = character.dailies_this_week('heroic_dungeon')
+      character.data['daily_heroic_percentage'] = character.dailies_percentage('heroic_dungeon')
 
       character.data['dungeons_done_total'] = dungeon_count
       character.data['dungeons_this_week'] =
@@ -62,16 +68,12 @@ module Audit
     end
 
     def self.add_warcraftlogs_data(character)
-      character.data['WCL_id'] = "" # TODO: Legacy, remove
-
       RAID_DIFFICULTIES.each_key do |diff|
-        ['best', 'average', 'median'].each do |metric|
-          output = []
-          WCL_IDS.each do |boss|
-            output << (character.details['warcraftlogs'][diff.to_s][boss][metric] rescue '-')
-          end
-          character.data["WCL_#{RAID_DIFFICULTIES[diff]}_#{metric}"] = output.join('|')
+        output = []
+        WCL_IDS.each do |boss|
+          output << (character.details['warcraftlogs'][diff.to_s][boss] rescue '-')
         end
+        character.data["WCL_#{RAID_DIFFICULTIES[diff]}"] = output.join('|')
       end
     end
 

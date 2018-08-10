@@ -2,26 +2,19 @@ module Audit
   class GearData
 
     def self.add(character, data)
-      # Check activity feed
-      data['feed'].select{ |item| item["type"] == "LOOT" }.each do |item|
-        self.check_tier_from_feed(item, data, character)
-        self.check_legendary_from_feed(item, data, character)
-        self.check_pantheon_from_feed(item, data, character)
-      end
-
       # Check equipped gear
+
+      items_equipped = 0
       ITEMS.each do |item|
         begin
           self.check_enchant(item, data, character)
-          self.check_tier(item, data, character)
-          self.check_legendary(item, data, character)
-          self.check_pantheon(item, data, character) if (["trinket1", "trinket2"].include? item)
           character.ilvl += data['items'][item]['itemLevel']
 
           character.data[item + '_ilvl'] = data['items'][item]['itemLevel']
           character.data[item + '_id'] = data['items'][item]['id']
           character.data[item + '_name'] = data['items'][item]['name']
           character.data[item + '_quality'] = data['items'][item]['quality']
+          items_equipped += 1
 
         rescue
           character.data[item + '_ilvl'] = ''
@@ -31,11 +24,19 @@ module Audit
         end
       end
 
-      # Weapon ilvl is counted twice to normalise between 1H and 2H specialisations
-      character.ilvl += (data['items']['mainHand']['itemLevel']*2) rescue 0
-      character.data['ilvl'] = (character.ilvl / (ITEMS.length + 2)).round(2)
+      # For 2H weapons the item level is counted twice to normalise between weapon types
+      if !data['items']['offHand']
+        items_equipped += 1
+        character.ilvl += data['items']['mainHand']['itemLevel'] rescue 0
+      end
+
+      character.data['ilvl'] = (character.ilvl / (items_equipped)).round(2) rescue 0
+
+      # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
+      character.data['ilvl'] = 0 if character.data['ilvl'] > 600
 
       character.details['max_ilvl'] = [character.data['ilvl'], character.details['max_ilvl'].to_i].max
+      character.data['highest_ilvl_ever_equipped'] = character.details['max_ilvl']
       character.data['empty_sockets'] = data['audit']['emptySockets']
       character.data['gem_list'] = character.gems.join('|')
     end
@@ -46,6 +47,9 @@ module Audit
 
       if ENCHANTS.include? item
         begin
+          # Off-hand items that are not weapons can't be enchanted
+          return if !data['items'][item]["weaponInfo"] && item == "offHand"
+
           character.data["enchant_quality_#{item}"] =
             ENCHANTS[item][data['items'][item]['tooltipParams']['enchant']][0]
 
@@ -54,58 +58,6 @@ module Audit
         rescue
           character.data["enchant_quality_#{item}"] = 0
           character.data["#{item}_enchant"] = ''
-        end
-      end
-    end
-
-    def self.check_tier(item, data, character)
-      if TIER_IDS_MAPPED.keys.include? data['items'][item]['id'].to_i
-        if character.details['tier_data'][item] != data['items'][item]['itemLevel'].to_i
-          character.details['tier_data'][item] = data['items'][item]['itemLevel'].to_i
-        end
-      end
-
-      if character.details['tier_data'].include? item
-        character.data["tier_#{item}"] = character.details['tier_data'][item]
-      end
-    end
-
-    def self.check_tier_from_feed(item, data, character)
-      if TIER_IDS_MAPPED.keys.include? item["itemId"].to_i
-        if character.details['tier_data'][TIER_IDS_MAPPED[item["itemId"].to_i]] < (BASE_ILVL[item["context"]] || 915)
-          character.details['tier_data'][TIER_IDS_MAPPED[item["itemId"].to_i]] = (BASE_ILVL[item["context"]] || 915)
-        end
-      end
-    end
-
-    def self.check_legendary(item, data, character)
-      if data['items'][item]['itemLevel'] >= 800 && data['items'][item]['quality'] == 5
-        character.legendaries_equipped << data['items'][item]['id'].to_i
-      end
-    end
-
-    def self.check_legendary_from_feed(item, data, character)
-      if LEGENDARIES.keys.include? item["itemId"]
-        character.legendaries_equipped << item["itemId"].to_i
-      end
-    end
-
-    def self.check_pantheon(item, data, character)
-      if PANTHEON_TRINKETS.keys.include? data['items'][item]['id'].to_i
-        if character.details['pantheon_trinket']['ilvl'].to_i < data['items'][item]['itemLevel'].to_i
-          character.details['pantheon_trinket']['ilvl'] = data['items'][item]['itemLevel']
-          character.details['pantheon_trinket']['type'] = PANTHEON_TRINKETS[data['items'][item]['id'].to_i]
-        end
-      end
-      character.data["pantheon_trinket_ilvl"] = character.details['pantheon_trinket']['ilvl']
-      character.data["pantheon_trinket_type"] = character.details['pantheon_trinket']['type']
-    end
-
-    def self.check_pantheon_from_feed(item, data, character)
-      if PANTHEON_TRINKETS.keys.include? item["itemId"]
-        if character.details['pantheon_trinket']['ilvl'].to_i < 940
-          character.details['pantheon_trinket']['ilvl'] = 940
-          character.details['pantheon_trinket']['type'] = PANTHEON_TRINKETS[item["itemId"].to_i]
         end
       end
     end

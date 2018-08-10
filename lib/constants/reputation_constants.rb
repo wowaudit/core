@@ -1,14 +1,20 @@
 REPUTATIONS = {
-  1828 => 'highmountain_tribe',
-  1859 => 'nightfallen',
-  1883 => 'dreamweavers',
-  1894 => 'wardens',
-  1900 => 'court_of_farondis',
-  1948 => 'valarjar',
-  2018 => 'talons_vengeance',
-  2045 => 'legionfall',
-  2165 => 'army_of_the_light',
-  2170 => 'argussian_reach'
+  'Alliance' => {
+    2160 => 'proudmoore_taljani', # Proudmoore Admirality
+    2159 => '7th_legion_zandalari', # 7th Legion
+    2162 => 'storms_wake_voldunai', # Storm's Wake
+    2161 => 'order_of_embers_honorbound', # Order of Embers
+    2164 => 'champions_of_azeroth', # Champions of Azeroth
+    2163 => 'tortollan_seekers' # Tortollan Seekers
+  },
+  'Horde' => {
+    2156 => 'proudmoore_taljani', # Taljani's Expedition
+    2103 => '7th_legion_zandalari', # Zandalari Empire
+    2158 => 'storms_wake_voldunai', # Voldunai
+    2157 => 'order_of_embers_honorbound_standing', # The Honorbound
+    2164 => 'champions_of_azeroth', # Champions of Azeroth
+    2163 => 'tortollan_seekers' # Tortollan Seekers
+  }
 }
 
 STANDINGS = {
@@ -30,5 +36,5 @@ REP_AMOUNT = {
   4 => 6000,
   5 => 12000,
   6 => 21000,
-  7 => 999
+  7 => 0
 }

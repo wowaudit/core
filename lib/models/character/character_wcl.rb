@@ -14,32 +14,17 @@ module Audit
     end
 
     def store_result(data)
-      percentiles = { 3 => {}, 4 => {}, 5 => {} }
-      data.reject{ |parse| parse['difficulty'] < 3 }.each do |parse|
+      # Don't use the Parses API for now, it is being rate limited too severely.
+      percentiles = { 1 => {}, 3 => {}, 4 => {}, 5 => {} }
+      data.each do |parse|
         next unless ROLES_TO_SPEC[self.role].include?(parse['spec'])
-        (percentiles[parse['difficulty']][parse['encounterID'].to_s] ||= []) << parse['percentile']
+        percentiles[parse['difficulty']][parse['encounterID'].to_s] = parse['percentile']
       end
 
       percentiles.each do |difficulty, encounters|
         WCL_IDS.each do |encounter_id|
-          details['warcraftlogs'][difficulty.to_s][encounter_id] = calculated_percentiles(encounters[encounter_id])
+          details['warcraftlogs'][difficulty.to_s][encounter_id] = encounters[encounter_id] || '-'
         end
-      end
-    end
-
-    def calculated_percentiles(percentiles)
-      if percentiles
-        {
-          'best' => percentiles.max,
-          'median' => percentiles.median,
-          'average' => percentiles.mean
-        }
-      else
-        {
-          'best' => '-',
-          'median' => '-',
-          'average' => '-'
-        }
       end
     end
 

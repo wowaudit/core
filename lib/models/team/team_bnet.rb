@@ -2,7 +2,6 @@ module Audit
   class TeamBnet < Team
 
     def refresh
-      Audit.timestamp = region
       # Forked library, processing the result of each Character
       # is called from within the RBattlenet library
       RBattlenet.authenticate(api_key: BNET_KEY)
@@ -25,7 +24,13 @@ module Audit
     end
 
     def warning
-      BFA_WARNING
+      if days_remaining <= 7
+        INACTIVE_WARNING
+      elsif $errors[:tracking] > 0
+        TRACK_WARNING
+      else
+        NO_WARNING
+      end
     end
   end
 end

@@ -1,6 +1,5 @@
 module Audit
   class CharacterBnet < Character
-
     def init
       # Main variables
       self.output = []
@@ -10,8 +9,6 @@ module Audit
       # Variables for gear data
       self.gems = []
       self.ilvl = 0.0
-      self.legendaries_equipped = []
-      self.spec_id = 1
     end
 
     def last_refresh
@@ -24,7 +21,6 @@ module Audit
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
         data = JSON.parse response.body
-
         data.any? ? process(data) : return_error(response)
         update_snapshots
         to_output
@@ -46,12 +42,10 @@ module Audit
       GearData.add(self, response)
       ArtifactData.add(self, response)
       ReputationData.add(self, response)
+      PvPData.add(self, response)
       InstanceData.add(self, response)
       WorldQuestData.add(self, response)
-      PvPData.add(self, response)
-      LegendaryData.add(self, response)
       CollectionData.add(self, response)
-      SpecData.add(self, response)
       HistoricalData.add(self, response)
     end
 
@@ -60,7 +54,8 @@ module Audit
         details['snapshots'][Audit.year][Audit.week] = {
           'dungeons' => self.data['dungeons_done_total'],
           'wqs' => self.data['wqs_done_total'],
-          'ap' => self.data['ap_obtained_total']
+          'ap' => self.data['ap_obtained_total'],
+          'dailies' => {}
         }
       end
     end
@@ -92,13 +87,25 @@ module Audit
         team_id: team_id,
         character_id: id,
         max_ilvl: details['max_ilvl'],
-        legendaries: details["legendaries"],
         snapshots: details["snapshots"],
-        tier_data: details["tier_data"],
-        spec_data: details["spec_data"],
-        pantheon_trinket: details["pantheon_trinket"],
+        dailies: details["dailies"],
         last_refresh: ([HEADER, output].transpose.to_h rescue false)
       }
+    end
+
+    def dailies_this_week(type)
+      amount = details['dailies'][type].select{ |d| d >= Audit.first_date_of_current_week }.size
+      if details['snapshots'][Audit.year][Audit.week]
+        details['snapshots'][Audit.year][Audit.week]['dailies'][type] = amount
+      end
+      amount
+    end
+
+    def dailies_percentage(type)
+      all_days = (tracking_since..Date.today).to_a
+      missed_days = all_days - details['dailies'][type]
+      return 1 if all_days.size.zero?
+      ((all_days.size - missed_days.size).to_f / all_days.size.to_f).round(2)
     end
   end
 end
