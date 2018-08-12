@@ -4,14 +4,11 @@ module Audit
     def self.add(character, data)
       reps = {}
       rep_value = 0
-      exalted_rep_amount = 0
 
       REPUTATIONS[character.data['faction']].each do |reputation, name|
         match = false
 
         data['reputation'].each do |rep_data|
-          exalted_rep_amount += 1 if rep_data['standing'] == 7
-
           if rep_data['id'] == reputation
             character.data["#{name}_standing"] = STANDINGS[rep_data['standing']]
 
@@ -29,7 +26,8 @@ module Audit
         end
       end
 
-      character.data['reputation_ranking'] = rep_value
+      character.data['reputation_ranking'] =
+        data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(982)]
       character.data['exalted_amount'] = exalted_rep_amount / REPUTATIONS[character.data['faction']].length
     end
   end
