@@ -26,9 +26,9 @@ module Audit
         end
       end
 
-      character.data['reputation_ranking'] =
+      character.data['reputation_ranking'] = rep_value
+      character.data['exalted_amount'] =
         data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(982)]
-      character.data['exalted_amount'] = exalted_rep_amount / REPUTATIONS[character.data['faction']].length
     end
   end
 end
