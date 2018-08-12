@@ -19,7 +19,7 @@ module Audit
       end
 
       character.data['unique_pets'] =
-        data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(19598)]
+        data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(19598)] rescue 0
       character.data['lvl_25_pets'] = level_25_pets
     end
   end
