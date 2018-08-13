@@ -2,10 +2,10 @@ module Audit
   class ArtifactData
 
     def self.add(character, data)
-      # TODO: Add data source once it's available
-      character.data['artifact_level'] = 0
+      character.data['artifact_level'] = data['items']['neck']['tooltipParams']['azeritePowerLevel'] rescue 0
       character.data['ap_obtained_total'] = 0
-      character.data['ap_this_week'] = 0
+      character.data['ap_this_week'] =
+        character.data['ap_obtained_total'] - character.details['snapshots'][Audit.year][Audit.week]['ap'] rescue 0
     end
   end
 end

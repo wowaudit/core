@@ -19,7 +19,8 @@ BNET_FIELDS = [
   "achievements",
   "pets",
   "pvp",
-  "quests"
+  "quests",
+  "professions"
 ]
 
 # UTC times
@@ -212,5 +213,7 @@ HEADER = [
   'max_3v3_rating',
   'm+_score',
   'weekly_highest_m+',
-  'season_highest_m+'
+  'season_highest_m+',
+  'profession_1',
+  'profession_2'
 ]

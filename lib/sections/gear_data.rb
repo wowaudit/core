@@ -3,7 +3,6 @@ module Audit
 
     def self.add(character, data)
       # Check equipped gear
-
       items_equipped = 0
       ITEMS.each do |item|
         begin

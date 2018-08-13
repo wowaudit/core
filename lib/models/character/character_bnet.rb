@@ -44,6 +44,7 @@ module Audit
       ReputationData.add(self, response)
       PvPData.add(self, response)
       InstanceData.add(self, response)
+      ProfessionData.add(self, response)
       WorldQuestData.add(self, response)
       CollectionData.add(self, response)
       HistoricalData.add(self, response)
