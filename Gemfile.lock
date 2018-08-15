@@ -1,6 +1,7 @@
 GIT
   remote: git://github.com/Sheday/rbattlenet.git
   revision: 4d3cdbf5d140af6602f81c0bfa718d6d96327c19
+  branch: master
   specs:
     rbattlenet (1.1.3)
       httparty (~> 0.16.1)

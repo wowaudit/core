@@ -11,7 +11,7 @@ REPUTATIONS = {
     2156 => 'proudmoore_taljani', # Taljani's Expedition
     2103 => '7th_legion_zandalari', # Zandalari Empire
     2158 => 'storms_wake_voldunai', # Voldunai
-    2157 => 'order_of_embers_honorbound_standing', # The Honorbound
+    2157 => 'order_of_embers_honorbound', # The Honorbound
     2164 => 'champions_of_azeroth', # Champions of Azeroth
     2163 => 'tortollan_seekers' # Tortollan Seekers
   }

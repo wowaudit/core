@@ -1,8 +1,6 @@
 module Audit
   class Character < Sequel::Model
-    attr_accessor :output, :data, :gems, :ilvl,
-                  :ap_snapshot, :wq_snapshot,
-                  :dungeon_snapshot, :changed, :details
+    attr_accessor :output, :data, :gems, :ilvl, :changed, :details
 
     def realm_slug
       Realm.to_slug realm
@@ -47,16 +45,6 @@ module Audit
           'weekly_highest' => 0
         }
       end
-
-      if !details['dailies'].is_a? Hash
-        details['dailies'] = {
-          'heroic_dungeon' => [],
-          'normal_dungeon' => []
-        }
-      end
-
-      details['dailies']['normal_dungeon'] = [] unless details['dailies']['normal_dungeon'].is_a? Array
-      details['dailies']['heroic_dungeon'] = [] unless details['dailies']['heroic_dungeon'].is_a? Array
 
       # Initialise Warcraft Logs data if not present
       if !details['warcraftlogs'].is_a? Hash

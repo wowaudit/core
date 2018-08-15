@@ -6,21 +6,13 @@ module Audit
       rep_value = 0
 
       REPUTATIONS[character.data['faction']].each do |reputation, name|
-        match = false
-
-        data['reputation'].each do |rep_data|
-          if rep_data['id'] == reputation
-            character.data["#{name}_standing"] = STANDINGS[rep_data['standing']]
-
-            character.data["#{name}_value"] = rep_data['value']
-
-            rep_value += ( ( rep_data['standing'] - 2 ) +
-                           ( rep_data['value'].to_f / REP_AMOUNT[rep_data['standing']].to_f ) )
-            match = true
-          end
-        end
-
-        if not match
+        match = data['reputation'].select{ |r| r['id'] == reputation }.first
+        if match
+          character.data["#{name}_standing"] = STANDINGS[match['standing']]
+          character.data["#{name}_value"] = match['value']
+          rep_value += ( ( match['standing'] - 2 ) +
+            ( match['value'].to_f / REP_AMOUNT[match['standing']].to_f ) )
+        else
           character.data["#{name}_standing"] = 'Neutral'
           character.data["#{name}_value"] = 0
         end

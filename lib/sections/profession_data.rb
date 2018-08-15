@@ -17,6 +17,10 @@ module Audit
           character.data["profession_#{index + 1}"] = "#{profession['name']} (0)"
         end
       end
+
+      # Ugly workaround to get rid of Kul Tiran
+      character.data["profession_1"].gsub!("Kul Tiran ", "") rescue ""
+      character.data["profession_2"].gsub!("Kul Tiran ", "") rescue ""
     end
   end
 end

@@ -54,9 +54,7 @@ module Audit
       if !details['snapshots'][Audit.year].include? Audit.week
         details['snapshots'][Audit.year][Audit.week] = {
           'dungeons' => self.data['dungeons_done_total'],
-          'wqs' => self.data['wqs_done_total'],
-          'ap' => self.data['ap_obtained_total'],
-          'dailies' => {}
+          'wqs' => self.data['wqs_done_total']
         }
       end
     end
@@ -89,24 +87,8 @@ module Audit
         character_id: id,
         max_ilvl: details['max_ilvl'],
         snapshots: details["snapshots"],
-        dailies: details["dailies"],
         last_refresh: ([HEADER, output].transpose.to_h rescue false)
       }
-    end
-
-    def dailies_this_week(type)
-      amount = details['dailies'][type].select{ |d| d >= Audit.first_date_of_current_week }.size
-      if details['snapshots'][Audit.year][Audit.week]
-        details['snapshots'][Audit.year][Audit.week]['dailies'][type] = amount
-      end
-      amount
-    end
-
-    def dailies_percentage(type)
-      all_days = (tracking_since..Date.today).to_a
-      missed_days = all_days - details['dailies'][type]
-      return 1 if all_days.size.zero?
-      ((all_days.size - missed_days.size).to_f / all_days.size.to_f).round(2)
     end
   end
 end

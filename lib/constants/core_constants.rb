@@ -1,4 +1,4 @@
-CURRENT_VERSION = "8.0"
+CURRENT_VERSION = 801
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -19,7 +19,6 @@ BNET_FIELDS = [
   "achievements",
   "pets",
   "pvp",
-  "quests",
   "professions"
 ]
 
@@ -174,21 +173,21 @@ HEADER = [
   'finger1_enchant',
   'finger2_enchant',
   'gem_list',
-  'daily_normal_done',
-  'daily_heroic_done',
-  'daily_normal_this_week',
-  'daily_heroic_this_week',
-  'daily_normal_percentage',
-  'daily_heroic_percentage',
-  'historical_daily_normal_dungeons_done',
-  'historical_daily_heroic_dungeons_done',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
+  '',
   'rank',
-  'ap_obtained_total',
-  'ap_this_week',
+  '',
+  '',
   'highest_ilvl_ever_equipped',
   'character_id',
   'historical_wqs_done',
-  'historical_ap_gained',
+  '',
   'historical_dungeons_done',
   'raids_raid_finder',
   'raids_raid_finder_weekly',
@@ -215,5 +214,6 @@ HEADER = [
   'weekly_highest_m+',
   'season_highest_m+',
   'profession_1',
-  'profession_2'
+  'profession_2',
+  'artifact_experience'
 ]

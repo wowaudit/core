@@ -35,19 +35,6 @@ module Audit
         end
       end
 
-      character.data['daily_normal_done'] = data['quests'].include?(50626)
-      character.data['daily_heroic_done'] = data['quests'].include?(50627)
-
-      unless Audit.daily_date < EXPANSION_START
-        (character.details['dailies']['normal_dungeon'] << Audit.daily_date).uniq if character.data['daily_normal_done']
-        (character.details['dailies']['heroic_dungeon'] << Audit.daily_date).uniq if character.data['daily_heroic_done']
-      end
-
-      character.data['daily_normal_this_week'] = character.dailies_this_week('normal_dungeon')
-      character.data['daily_normal_percentage'] = character.dailies_percentage('normal_dungeon')
-      character.data['daily_heroic_this_week'] = character.dailies_this_week('heroic_dungeon')
-      character.data['daily_heroic_percentage'] = character.dailies_percentage('heroic_dungeon')
-
       character.data['dungeons_done_total'] = dungeon_count
       character.data['dungeons_this_week'] =
         dungeon_count - character.details['snapshots'][Audit.year][Audit.week]['dungeons'] rescue 0
