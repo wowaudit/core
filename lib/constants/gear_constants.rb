@@ -55,6 +55,9 @@ ENCHANTS = {
     5945 => [3, "+37 Versatility"]
   },
   'mainHand' => {
+    3370 => [3, "Rune of Razorice"],
+    3847 => [3, "Rune of the Stoneskin Gargoyle"],
+    3368 => [3, "Rune of the Fallen Crusader"],
     5946 => [3, "Coastal Surge"],
     5948 => [3, "Siphoning"],
     5949 => [3, "Torrent of Elements"],
@@ -70,6 +73,9 @@ ENCHANTS = {
     5966 => [3, "Stalwart Navigation"]
   },
   'offHand' => {
+    3370 => [3, "Rune of Razorice"],
+    3847 => [3, "Rune of the Stoneskin Gargoyle"],
+    3368 => [3, "Rune of the Fallen Crusader"],
     5946 => [3, "Coastal Surge"],
     5948 => [3, "Siphoning"],
     5949 => [3, "Torrent of Elements"],
