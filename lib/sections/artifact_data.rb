@@ -8,6 +8,8 @@ module Audit
       # For old spreadsheet versions
       character.data['ap_this_week'] = 0
       character.data['ap_obtained_total'] = 0
+
+      character.data['island_expedition_weekly'] = data['quests'].include?(53435) || data['quests'].include?(53436)
     end
   end
 end

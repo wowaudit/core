@@ -19,7 +19,8 @@ BNET_FIELDS = [
   "achievements",
   "pets",
   "pvp",
-  "professions"
+  "professions",
+  "quests"
 ]
 
 # UTC times
@@ -215,5 +216,8 @@ HEADER = [
   'season_highest_m+',
   'profession_1',
   'profession_2',
-  'artifact_experience'
+  'artifact_experience',
+  'island_expedition_weekly',
+  'siege_of_boralus_attuned',
+  'kings_rest_attuned'
 ]

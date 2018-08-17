@@ -2,6 +2,8 @@ module Audit
   class InstanceData
 
     def self.add(character, data)
+      self.add_attunement_data(character, data)
+
       encounters = VALID_RAIDS.map{ |raid|
         raid['encounters'].map{ |boss|
           boss['raid_ids']
@@ -73,6 +75,16 @@ module Audit
 
       character.data['weekly_highest_m+'] =
         (character.details['raiderio']['weekly_highest'] rescue 0)
+    end
+
+    def self.add_attunement_data(character, data)
+      if character.data['faction'] == 'Alliance'
+        character.data['siege_of_boralus_attuned'] = data['quests'].include?(51445)
+        character.data['kings_rest_attuned'] = data['quests'].include?(53131)
+      elsif character.data['faction'] == 'Horde'
+        character.data['siege_of_boralus_attuned'] = data['quests'].include?(53121)
+        character.data['kings_rest_attuned'] = data['quests'].include?(50954)
+      end
     end
   end
 end
