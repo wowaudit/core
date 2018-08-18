@@ -34,7 +34,7 @@ module Audit
       # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
       character.data['ilvl'] = 0 if character.data['ilvl'] > 600
 
-      character.details['max_ilvl'] = [character.data['ilvl'], character.details['max_ilvl'].to_i].max
+      character.details['max_ilvl'] = [character.data['ilvl'], character.details['max_ilvl'].to_f].max
       character.data['highest_ilvl_ever_equipped'] = character.details['max_ilvl']
       character.data['empty_sockets'] = data['audit']['emptySockets']
       character.data['gem_list'] = character.gems.join('|')
