@@ -188,7 +188,7 @@ HEADER = [
   'highest_ilvl_ever_equipped',
   'character_id',
   'historical_wqs_done',
-  '',
+  'for_backward_compatibility',
   'historical_dungeons_done',
   'raids_raid_finder',
   'raids_raid_finder_weekly',

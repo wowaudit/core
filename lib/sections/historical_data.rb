@@ -12,6 +12,10 @@ module Audit
 
       character.data['historical_wqs_done'] = wqs.join('|')
       character.data['historical_dungeons_done'] = dungeons.join('|')
+
+      # Older BfA spreadsheet versions rely on the AP historical data to show the week dropdown
+      # Make sure to include at least some arbitrary values for those versions of the spreadsheet
+      character.data['for_backward_compatibility'] = wqs.join('|')
     end
   end
 end
