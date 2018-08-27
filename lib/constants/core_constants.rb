@@ -144,7 +144,7 @@ HEADER = [
   'enchant_quality_finger1',
   'enchant_quality_finger2',
   'empty_sockets',
-  'reputation_ranking',
+  '',
   'role',
   'dungeons_done_total',
   'Atal\'Dazar',
