@@ -19,7 +19,7 @@ RAID_DIFFICULTIES = {
 }
 
 VALID_RAIDS = [{
-  'name' => 'Uldir', 'days' => [], 'id' => 0, 'partition' => 1,
+  'name' => 'Uldir', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 0, 'partition' => 1,
   'encounters' => [{
     'id' => 2144, 'name' => 'Taloc', 'raid_ids' => {
       'raid_finder' => 12786, 'normal' => 12787, 'heroic' => 12788, 'mythic' => 12789
