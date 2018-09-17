@@ -71,7 +71,7 @@ ROLES_TO_SPEC = {
     'Frost',
     'Balance',
     'Marksmanship',
-    'BeastMastery',
+    'Beast Mastery',
     'Elemental'
   ]
 }
