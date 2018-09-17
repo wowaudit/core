@@ -1,15 +1,18 @@
 MYTHIC_DUNGEONS = {
-  12749 => 'Atal\'Dazar',
-  12752 => 'Freehold',
-  12763 => 'King\'s Rest',
-  12779 => 'The MOTHERLODE!!',
-  12768 => 'Shrine of the Storm',
-  12773 => 'Siege of Boralus',
-  12776 => 'Temple of Sethraliss',
-  12782 => 'Tol Dagor',
-  12745 => 'Underrot',
-  12785 => 'Waycrest Manor'
+  40808 => 'Atal\'Dazar',
+  40812 => 'Freehold',
+  40959 => 'King\'s Rest',
+  40955 => 'The MOTHERLODE!!',
+  40941 => 'Shrine of the Storm',
+  43355 => 'Siege of Boralus',
+  40191 => 'Temple of Sethraliss',
+  40944 => 'Tol Dagor',
+  40184 => 'Underrot',
+  40144 => 'Waycrest Manor'
 }
+
+# Not used at the moment
+MYTHIC_PLUS_CRITERIA = (41506..41514)
 
 RAID_DIFFICULTIES = {
   1 => 'raid_finder',

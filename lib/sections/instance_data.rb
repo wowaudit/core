@@ -19,16 +19,14 @@ module Audit
       dungeon_count = 0
       instance_data = data['statistics']['subCategories'][5]['subCategories'][7]['statistics']
 
-      # Track Dungeon count through the statistics
+      MYTHIC_DUNGEONS.keys.each do |i|
+        amount = data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(i)] rescue 0
+        dungeon_count += amount
+        character.data[MYTHIC_DUNGEONS[i]] = amount
+      end
+
+      # Track weekly Raid kills through the statistics
       instance_data.each do |instance|
-        if MYTHIC_DUNGEONS.include?(instance['id'])
-          dungeon_count += instance['quantity']
-          begin #For dungeons with multiple entries
-            character.data[MYTHIC_DUNGEONS[instance['id']]] += instance['quantity']
-          rescue
-            character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity']
-          end
-        end
         if boss_ids.include?(instance['id'])
           raid_list[instance['id']] = [
             instance['quantity'],
