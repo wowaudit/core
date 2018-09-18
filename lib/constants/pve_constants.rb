@@ -1,4 +1,17 @@
 MYTHIC_DUNGEONS = {
+  12749 => 'Atal\'Dazar',
+  12752 => 'Freehold',
+  12763 => 'King\'s Rest',
+  12779 => 'The MOTHERLODE!!',
+  12768 => 'Shrine of the Storm',
+  12773 => 'Siege of Boralus',
+  12776 => 'Temple of Sethraliss',
+  12782 => 'Tol Dagor',
+  12745 => 'Underrot',
+  12785 => 'Waycrest Manor'
+}
+
+MYTHIC_DUNGEONS_CRITERIA = {
   40808 => 'Atal\'Dazar',
   40812 => 'Freehold',
   40959 => 'King\'s Rest',

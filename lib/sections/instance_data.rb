@@ -19,14 +19,25 @@ module Audit
       dungeon_count = 0
       instance_data = data['statistics']['subCategories'][5]['subCategories'][7]['statistics']
 
-      MYTHIC_DUNGEONS.keys.each do |i|
+      MYTHIC_DUNGEONS_CRITERIA.keys.each do |i|
         amount = data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(i)] rescue 0
         dungeon_count += amount
-        character.data[MYTHIC_DUNGEONS[i]] = amount
+        character.data[MYTHIC_DUNGEONS_CRITERIA[i]] = amount
       end
 
-      # Track weekly Raid kills through the statistics
       instance_data.each do |instance|
+        # For some reason not all normal Mythic kills are being tracked with the criteria
+        # for some characters. If the criteria is lower than the statistics then use the
+        # statistics instead, as a workaround.
+        if MYTHIC_DUNGEONS.include?(instance['id'])
+          if character.data[MYTHIC_DUNGEONS[instance['id']]].to_i < instance['quantity']
+            dungeon_count -= character.data[MYTHIC_DUNGEONS[instance['id']]].to_i
+            character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity']
+            dungeon_count += instance['quantity']
+          end
+        end
+
+        # Track weekly Raid kills through the statistics
         if boss_ids.include?(instance['id'])
           raid_list[instance['id']] = [
             instance['quantity'],

@@ -17,7 +17,7 @@ module Audit
       # Don't use the Parses API for now, it is being rate limited too severely.
       percentiles = { 1 => {}, 3 => {}, 4 => {}, 5 => {} }
       data.each do |parse|
-        next unless ROLES_TO_SPEC[self.role].include?(parse['spec'])
+        next unless (ROLES_TO_SPEC[self.role].include?(parse['spec']) rescue false)
         percentiles[parse['difficulty']][parse['encounterID'].to_s] = parse['percentile']
       end
 
