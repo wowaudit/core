@@ -11,6 +11,7 @@ require 'yaml'
 require 'tzinfo'
 require 'csv'
 require 'byebug'
+require 'rollbar'
 
 # File Storage
 storage_data = YAML::load(File.open('config/storage.yml'))
@@ -27,6 +28,11 @@ BUCKET = storage_data["bucket"]
 keys = YAML::load(File.open('config/keys.yml'))
 BNET_KEY = keys["bnet_key"]
 WCL_KEY = keys["wcl_key"]
+ROLLBAR_KEY = keys["rollbar_key"]
+
+Rollbar.configure do |config|
+  config.access_token = ROLLBAR_KEY
+end
 
 begin
   # Connections
@@ -52,9 +58,10 @@ begin
   require_rel 'sections'
   require_rel 'utils'
 
-rescue Mysql2::Error
+rescue Mysql2::Error => e
   # The SQL proxy isn't always instantly available on server reboot
   # Therefore, retry connection after 5 seconds have passed
+  Rollbar.error(e)
   puts "Connection to the database failed. Trying again in 5 seconds."
   sleep 5
   retry
