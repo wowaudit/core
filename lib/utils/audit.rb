@@ -13,7 +13,7 @@ module Audit
           sleep 60
           redo
         rescue => e
-          Rollbar.error(e)
+          Rollbar.error(e, team_id: team.to_i, type: type)
           Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
         end
       end
