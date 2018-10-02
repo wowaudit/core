@@ -11,6 +11,7 @@ module Audit
       character.data['join_date'] = character.created_at
       character.data['note'] = character.note
       character.data['rank'] = character.rank
+      character.data['blizzard_last_modified'] = data['lastModified']
 
       #Parse the role if it's valid, otherwise set the default role
       begin
