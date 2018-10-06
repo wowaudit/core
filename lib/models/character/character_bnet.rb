@@ -20,7 +20,7 @@ module Audit
       if response.code == 200
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
-        data = JSON.parse response.body
+        data = JSON.parse(response.body) rescue (return return_error OpenStruct.new(code: 500))
         data.any? ? process(data) : return_error(response)
         update_snapshots
         to_output
