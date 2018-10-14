@@ -18,7 +18,8 @@ module Audit
       percentiles = { 1 => {}, 3 => {}, 4 => {}, 5 => {} }
       data.each do |parse|
         next unless (ROLES_TO_SPEC[self.role].include?(parse['spec']) rescue false)
-        percentiles[parse['difficulty']][parse['encounterID'].to_s] = parse['percentile']
+        percentiles[parse['difficulty']][parse['encounterID'].to_s] =
+          [percentiles[parse['difficulty']][parse['encounterID'].to_s], parse['percentile']].compact.max
       end
 
       percentiles.each do |difficulty, encounters|

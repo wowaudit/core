@@ -2,12 +2,19 @@ module Audit
   class Scheduler
 
     def initialize
+      stats = {}
       loop do
         schedule = Schedule.all
 
         schedule.each do |worker|
           worker.schedule ||= Scheduler.schedule_work(worker.name).to_json
-          worker.save_changes
+          if worker.save_changes
+            (stats[worker.name] ||= 0) += 5
+            if stats[worker.name] >= 250
+              Rollbar.info("250 teams refreshed by worker.", worker_name: worker.name)
+              stats[worker.name] = 0
+            end
+          end
         end
         Logger.g(INFO_SCHEDULER_CYCLE_DONE)
         sleep SCHEDULER_PAUSE_AFTER_CYCLE
