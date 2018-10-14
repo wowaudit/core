@@ -11,8 +11,8 @@ module Audit
           if worker.save_changes
             stats[worker.name] = 0 unless stats[worker.name]
             stats[worker.name] += 5
-            if stats[worker.name] >= 250
-              Rollbar.info("250 teams refreshed by worker.", worker_name: worker.name)
+            if stats[worker.name] >= 2000
+              Rollbar.info("2000 teams refreshed by worker.", worker_name: worker.name)
               stats[worker.name] = 0
             end
           end
