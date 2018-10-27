@@ -9,12 +9,14 @@ module Audit
         schedule.each do |worker|
           worker.schedule ||= Scheduler.schedule_work(worker.name).to_json
           if worker.save_changes
-            stats[worker.name] = 0 unless stats[worker.name]
-            stats[worker.name] += 5
-            if stats[worker.name] >= 2000
-              Rollbar.info("2000 teams refreshed by worker.", worker_name: worker.name)
-              stats[worker.name] = 0
-            end
+            stats[worker.name] = Time.now.to_i
+          end
+        end
+
+        stats.each do |worker, time_since_last_schedule|
+          if Time.now.to_i - time_since_last_schedule > 60 * 15
+            Rollbar.error("Worker idle for 15 minutes.", worker: worker)
+            stats[worker] = Time.now.to_i
           end
         end
         Logger.g(INFO_SCHEDULER_CYCLE_DONE)

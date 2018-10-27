@@ -12,6 +12,8 @@ module Audit
       character.data['note'] = character.note
       character.data['rank'] = character.rank
       character.data['blizzard_last_modified'] = data['lastModified']
+      character.data['gender'] = data['gender'].zero? ? 'Male' : 'Female'
+      character.data['race'] = RACES[data['race']]
 
       #Parse the role if it's valid, otherwise set the default role
       begin
