@@ -26,9 +26,13 @@ BUCKET = storage_data["bucket"]
 
 # Load keys
 keys = YAML::load(File.open('config/keys.yml'))
-BNET_KEY = keys["bnet_key"]
+BNET_CLIENT_ID = keys["bnet_client_id"]
+BNET_CLIENT_SECRET = keys["bnet_client_secret"]
 WCL_KEY = keys["wcl_key"]
 ROLLBAR_KEY = keys["rollbar_key"]
+
+# Obtain access token - valid for 24 hours
+RBattlenet.authenticate(client_id: BNET_CLIENT_ID, client_secret: BNET_CLIENT_SECRET)
 
 Rollbar.configure do |config|
   config.access_token = ROLLBAR_KEY

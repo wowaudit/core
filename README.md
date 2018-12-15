@@ -15,7 +15,8 @@ it's not built with individual use in mind. Therefore, setting up the scripts ca
         Enter your ArangoDB credentials in `config/arangodb.yml`
 
         In `config/keys.yml`:
-        $ bnet_key: <your battle.net API key>
+        $ bnet_client_id: <your battle.net client ID>
+        $ bnet_client_secret: <your battle.net client secret>
         $ wcl_key: <your Warcraft Logs API key>
 
         The generated CSV files will be uploaded to a S3 server that you configure, so they can be

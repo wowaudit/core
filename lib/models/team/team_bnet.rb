@@ -4,7 +4,6 @@ module Audit
     def refresh
       # Forked library, processing the result of each Character
       # is called from within the RBattlenet library
-      RBattlenet.authenticate(api_key: BNET_KEY)
       RBattlenet.set_region(region: region, locale: "en_GB")
       $errors = { :tracking => 0, :role => 0 }
       if characters.any?
