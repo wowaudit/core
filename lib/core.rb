@@ -30,6 +30,7 @@ BNET_CLIENT_ID = keys["bnet_client_id"]
 BNET_CLIENT_SECRET = keys["bnet_client_secret"]
 WCL_KEY = keys["wcl_key"]
 ROLLBAR_KEY = keys["rollbar_key"]
+SERVER_AUTH = keys["server_auth"]
 
 # Obtain access token - valid for 24 hours
 RBattlenet.authenticate(client_id: BNET_CLIENT_ID, client_secret: BNET_CLIENT_SECRET)

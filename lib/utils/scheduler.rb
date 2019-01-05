@@ -9,13 +9,13 @@ module Audit
         schedule.each do |worker|
           worker.schedule ||= Scheduler.schedule_work(worker.name).to_json
           if worker.save_changes
-            stats[worker.name] = Time.now.to_i
+            stats[worker] = Time.now.to_i
           end
         end
 
         stats.each do |worker, time_since_last_schedule|
-          if Time.now.to_i - time_since_last_schedule > 60 * 15
-            Rollbar.error("Worker idle for 15 minutes.", worker: worker)
+          if Time.now.to_i - time_since_last_schedule > 60 * 5
+            worker.restart
             stats[worker] = Time.now.to_i
           end
         end
