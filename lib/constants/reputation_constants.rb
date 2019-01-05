@@ -14,7 +14,8 @@ REPUTATIONS = {
     2157 => 'order_of_embers_honorbound', # The Honorbound
     2164 => 'champions_of_azeroth', # Champions of Azeroth
     2163 => 'tortollan_seekers' # Tortollan Seekers
-  }
+  },
+  nil => {} # For people who enjoy tracking neutral Pandaren
 }
 
 STANDINGS = {
