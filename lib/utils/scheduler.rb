@@ -9,14 +9,14 @@ module Audit
         schedule.each do |worker|
           worker.schedule ||= Scheduler.schedule_work(worker.name).to_json
           if worker.save_changes
-            stats[worker] = Time.now.to_i
+            stats[worker.id] = Time.now.to_i
           end
         end
 
-        stats.each do |worker, time_since_last_schedule|
+        stats.each do |worker_id, time_since_last_schedule|
           if Time.now.to_i - time_since_last_schedule > 60 * 5
-            worker.restart
-            stats[worker] = Time.now.to_i
+            Schedule.where(id: worker_id).first.restart
+            stats[worker_id] = Time.now.to_i
           end
         end
         Logger.g(INFO_SCHEDULER_CYCLE_DONE)
