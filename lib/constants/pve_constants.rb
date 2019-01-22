@@ -35,7 +35,7 @@ RAID_DIFFICULTIES = {
 }
 
 VALID_RAIDS = [{
-  'name' => 'Uldir', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 19, 'partition' => 2,
+  'name' => 'Uldir', 'days' => [], 'id' => 19, 'partition' => 2,
   'encounters' => [{
     'id' => 2144, 'name' => 'Taloc', 'raid_ids' => {
       'raid_finder' => 12786, 'normal' => 12787, 'heroic' => 12788, 'mythic' => 12789
@@ -67,6 +67,45 @@ VALID_RAIDS = [{
   }, {
     'id' => 2122, 'name' => 'G\'huun', 'raid_ids' => {
       'raid_finder' => 12817, 'normal' => 12818, 'heroic' => 12819, 'mythic' => 12820
+    }
+  }]
+}, {
+  'name' => 'Battle of Dazar\'alor', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 21, 'partition' => 1,
+  'encounters' => [{
+    'id' => 2265, 'name' => 'Champion of the Light', 'raid_ids' => {
+      'raid_finder' => 13328, 'normal' => 13329, 'heroic' => 13330, 'mythic' => 13331
+    }
+  }, {
+    'id' => 2263, 'name' => 'Grong', 'raid_ids' => {
+      'raid_finder' => 13332, 'normal' => 13333, 'heroic' => 13334, 'mythic' => 13336
+    }
+  }, {
+    'id' => 2266, 'name' => 'Jadefire Masters', 'raid_ids' => {
+      'raid_finder' => 13354, 'normal' => 13355, 'heroic' => 13356, 'mythic' => 13357
+    }
+  }, {
+    'id' => 2271, 'name' => 'Opulence', 'raid_ids' => {
+      'raid_finder' => 13358, 'normal' => 13359, 'heroic' => 13361, 'mythic' => 13362
+    }
+  }, {
+    'id' => 2268, 'name' => 'Conclave of the Chosen', 'raid_ids' => {
+      'raid_finder' => 13363, 'normal' => 13364, 'heroic' => 13365, 'mythic' => 13366
+    }
+  }, {
+    'id' => 2272, 'name' => 'King Rastakhan', 'raid_ids' => {
+      'raid_finder' => 13367, 'normal' => 13368, 'heroic' => 13369, 'mythic' => 13370
+    }
+  }, {
+    'id' => 2276, 'name' => 'Mekkatorque', 'raid_ids' => {
+      'raid_finder' => 13371, 'normal' => 13372, 'heroic' => 13373, 'mythic' => 13374
+    }
+  }, {
+    'id' => 2280, 'name' => 'Stormwall Blockade', 'raid_ids' => {
+      'raid_finder' => 13375, 'normal' => 13376, 'heroic' => 13377, 'mythic' => 13378
+    }
+  }, {
+    'id' => 2281, 'name' => 'Lady Jaina Proudmoore', 'raid_ids' => {
+      'raid_finder' => 13379, 'normal' => 13380, 'heroic' => 13381, 'mythic' => 13382
     }
   }]
 }]
