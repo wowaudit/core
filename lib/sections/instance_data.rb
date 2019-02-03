@@ -51,9 +51,9 @@ module Audit
         dungeon_count - character.details['snapshots'][Audit.year][Audit.week]['dungeons'] rescue 0
 
       encounters.each do |encounter|
-        encounter.each do |difficulty, id|
-          raid_output["raids_#{difficulty}"] << raid_list[id][0]
-          raid_output["raids_#{difficulty}_weekly"] << raid_list[id][1]
+        encounter.each do |difficulty, ids|
+          raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id][0] }.max
+          raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id][1] }.max
         end
       end
 
