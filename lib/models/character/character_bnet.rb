@@ -56,6 +56,12 @@ module Audit
           'dungeons' => self.data['dungeons_done_total'],
           'wqs' => self.data['wqs_done_total']
         }
+
+        # Update the previous week with M+ data
+        if details['snapshots'][Audit.previous_week_year].include? Audit.previous_week
+          details['snapshots'][Audit.previous_week_year, Audit.previous_week]['m+'] =
+            self.data['weekly_highest_m+']
+        end
       end
     end
 

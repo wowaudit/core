@@ -27,6 +27,18 @@ MYTHIC_DUNGEONS_CRITERIA = {
 # Not used at the moment
 MYTHIC_PLUS_CRITERIA = (41506..41514)
 
+WEEKLY_EVENT_QUESTS = [
+  53032, # Burning Crusade timewalking
+  53036, # 4 Battleground matches
+  53033, # Lich King timewalking
+  53034, # Cataclysm timewalking
+  53035, # Pandaria timewalking
+  53037, # Emissary of war
+  53039, # Arena calls
+  53038, # Pet battles
+  53030, # World quests
+]
+
 RAID_DIFFICULTIES = {
   1 => 'raid_finder',
   3 => 'normal',

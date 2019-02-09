@@ -6,11 +6,20 @@ module Audit
       character.data['artifact_experience'] = data['items']['neck']['azeriteItem']['azeriteExperience'] rescue 0
       character.data['artifact_experience_remaining'] = data['items']['neck']['azeriteItem']['azeriteExperienceRemaining'] rescue 0
 
+      ap_required = character.data['artifact_experience'] + character.data['artifact_experience_remaining'].to_f
+      character.data['artifact_progress'] = ((character.data['artifact_experience'] / ap_required * 100) rescue 0).round(2)
+
       # For old spreadsheet versions
       character.data['ap_this_week'] = 0
       character.data['ap_obtained_total'] = 0
 
       character.data['island_expedition_weekly'] = data['quests'].include?(53435) || data['quests'].include?(53436)
+      character.data['island_expedition_total'] =
+        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40564)] rescue 0) + # Normal/heroic
+        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40563)] rescue 0) + # Mythic
+        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40565)] rescue 0) # PvP
+
+      character.data['weekly_event_completed'] = WEEKLY_EVENT_QUESTS.select{ |e| data['quests'].include?(e) }.any?
     end
   end
 end

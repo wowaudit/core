@@ -77,8 +77,16 @@ module Audit
       @@week_number
     end
 
+    def previous_week
+      @@previous_week_number
+    end
+
     def year
       @@year_number
+    end
+
+    def previous_week_year
+      @@previous_year_number
     end
 
     def timestamp=(region)
@@ -90,6 +98,13 @@ module Audit
       @@week_number = reset_time.cweek.to_s
       @@year_number = reset_time.year.to_s
       @@region = region
+      @@previous_week_number = (reset_time.cweek - 1).to_s
+      if @@previous_week_number.to_i < 1
+        @@previous_year_number = (reset_time.year - 1).to_s
+        @@previous_week_number = Date.new(reset_time.year - 1, 12, 28).cweek
+      else
+        @@previous_year_number = @@year_number
+      end
     end
 
     def now

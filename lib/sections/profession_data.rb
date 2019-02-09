@@ -18,6 +18,9 @@ module Audit
         end
       end
 
+      character.data['cooking_rank'] =
+        data['professions']['secondary'].select{ |p| p['name'] == 'Kul Tiran Cooking' }.first['rank'] rescue 0
+
       # Ugly workaround to get rid of Kul Tiran
       character.data["profession_1"].gsub!("Kul Tiran ", "") rescue ""
       character.data["profession_2"].gsub!("Kul Tiran ", "") rescue ""

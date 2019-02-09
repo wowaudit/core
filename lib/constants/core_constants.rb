@@ -1,4 +1,4 @@
-CURRENT_VERSION = 801
+CURRENT_VERSION = 810
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -188,7 +188,7 @@ HEADER = [
   'highest_ilvl_ever_equipped',
   'character_id',
   'historical_wqs_done',
-  'for_backward_compatibility',
+  'historical_mplus_done',
   'historical_dungeons_done',
   'raids_raid_finder',
   'raids_raid_finder_weekly',
@@ -223,5 +223,9 @@ HEADER = [
   'artifact_experience_remaining',
   'blizzard_last_modified',
   'gender',
-  'race'
+  'race',
+  'island_expedition_total',
+  'cooking_rank',
+  'weekly_event_completed',
+  'artifact_progress'
 ]

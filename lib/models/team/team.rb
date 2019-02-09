@@ -30,6 +30,10 @@ module Audit
       @guild_data.send(type)
     end
 
+    def raids_path
+      "https://wowaudit.com/raids/#{guild_data("path")}/#{name.gsub(" ","-").downcase}"
+    end
+
     def guild_name
       guild_data("name")
     end

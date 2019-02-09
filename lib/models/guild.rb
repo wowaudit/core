@@ -7,6 +7,18 @@ module Audit
       end
     end
 
+    def path
+      "#{region.downcase}/#{slugged_realm}/#{slugged_name}"
+    end
+
+    def slugged_name
+      name.gsub(" ","-").downcase
+    end
+
+    def slugged_realm
+      Realm.to_slug(realm)
+    end
+
     def days_remaining
       if patreon > 0
         60
