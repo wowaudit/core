@@ -220,7 +220,7 @@ HEADER = [
   'island_expedition_weekly',
   'siege_of_boralus_attuned',
   'kings_rest_attuned',
-  'artifact_experience_remaining',
+  'artifact_experience_total_for_level',
   'blizzard_last_modified',
   'gender',
   'race',
