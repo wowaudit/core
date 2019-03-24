@@ -82,7 +82,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Battle of Dazar\'alor', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 21, 'partition' => 1,
+  'name' => 'Battle of Dazar\'alor', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 21, 'partition' => 2,
   'encounters' => [{
     'id' => 2265, 'name' => 'Champion of the Light', 'raid_ids' => {
       'raid_finder' => [13328], 'normal' => [13329], 'heroic' => [13330], 'mythic' => [13331]
