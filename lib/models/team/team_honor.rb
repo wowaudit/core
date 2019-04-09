@@ -14,7 +14,8 @@ module Audit
 
     def uri(character)
       uri = HONOR_URL[0 .. HONOR_URL.length]
-      uri["{region}"] = slugged_region
+      uri["{slugged_region}"] = slugged_region
+      uri["{region}"] = region.downcase
       uri["{realm}"] = Realm.to_slug(character.realm || realm)
       uri["{name}"] = CGI.escape(character.name)
       uri
