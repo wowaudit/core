@@ -38,8 +38,10 @@ RACES = {
   28 => "Highmountain Tauren",
   29 => "Void Elf",
   30 => "Lightforged Draenei",
+  31 => "Zandalari Troll",
+  32 => "Kul Tiran",
   34 => "Dark Iron Dwarf",
-  36 => "Mag'har Orc"
+  36 => "Mag'har Orc",
 }
 
 DEFAULT_ROLES = {
