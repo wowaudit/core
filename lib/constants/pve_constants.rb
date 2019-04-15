@@ -120,6 +120,17 @@ VALID_RAIDS = [{
       'raid_finder' => [13379], 'normal' => [13380], 'heroic' => [13381], 'mythic' => [13382]
     }
   }]
+}, {
+  'name' => 'Crucible of Storms', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 22, 'partition' => 1,
+  'encounters' => [{
+    'id' => 2269, 'name' => 'The Restless Cabal', 'raid_ids' => {
+      'raid_finder' => [13404], 'normal' => [13405], 'heroic' => [13406], 'mythic' => [13407]
+    }
+  }, {
+    'id' => 2273, 'name' => "Uu'nat, Harbinger of the Void", 'raid_ids' => {
+      'raid_finder' => [13408], 'normal' => [13411], 'heroic' => [13412], 'mythic' => [13413]
+    }
+  }]
 }]
 
 WCL_IDS = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["id"].to_s } }.flatten
