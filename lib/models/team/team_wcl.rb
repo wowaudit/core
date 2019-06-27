@@ -27,7 +27,6 @@ module Audit
       uri["{name}"] = character.name
       uri["{zone}"] = zone["id"].to_s
       uri["{metric}"] = character.wcl_role
-      uri["{partition}"] = zone["partition"].to_s
       uri
     end
 

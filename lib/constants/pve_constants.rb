@@ -47,7 +47,7 @@ RAID_DIFFICULTIES = {
 }
 
 VALID_RAIDS = [{
-  'name' => 'Uldir', 'days' => [], 'id' => 19, 'partition' => 2,
+  'name' => 'Uldir', 'days' => [], 'id' => 19,
   'encounters' => [{
     'id' => 2144, 'name' => 'Taloc', 'raid_ids' => {
       'raid_finder' => [12786], 'normal' => [12787], 'heroic' => [12788], 'mythic' => [12789]
@@ -82,7 +82,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Battle of Dazar\'alor', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 21, 'partition' => 2,
+  'name' => 'Battle of Dazar\'alor', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 21,
   'encounters' => [{
     'id' => 2265, 'name' => 'Champion of the Light', 'raid_ids' => {
       'raid_finder' => [13328], 'normal' => [13329], 'heroic' => [13330], 'mythic' => [13331]
@@ -121,7 +121,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Crucible of Storms', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 22, 'partition' => 1,
+  'name' => 'Crucible of Storms', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 22,
   'encounters' => [{
     'id' => 2269, 'name' => 'The Restless Cabal', 'raid_ids' => {
       'raid_finder' => [13404], 'normal' => [13405], 'heroic' => [13406], 'mythic' => [13407]
