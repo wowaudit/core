@@ -227,5 +227,9 @@ HEADER = [
   'island_expedition_total',
   'cooking_rank',
   'weekly_event_completed',
-  'artifact_progress'
+  'artifact_progress',
+  'unshackled_waveblade_standing',
+  'unshackled_waveblade_value',
+  'rustbolt_resistance_standing',
+  'rustbolt_resistance_value',
 ]

@@ -5,7 +5,9 @@ REPUTATIONS = {
     2162 => 'storms_wake_voldunai', # Storm's Wake
     2161 => 'order_of_embers_honorbound', # Order of Embers
     2164 => 'champions_of_azeroth', # Champions of Azeroth
-    2163 => 'tortollan_seekers' # Tortollan Seekers
+    2163 => 'tortollan_seekers', # Tortollan Seekers
+    2400 => 'unshackled_waveblade', # Waveblade Ankoan
+    2391 => 'rustbolt_resistance', # Rustbolt Resistance
   },
   'Horde' => {
     2156 => 'proudmoore_taljani', # Taljani's Expedition
@@ -13,7 +15,9 @@ REPUTATIONS = {
     2158 => 'storms_wake_voldunai', # Voldunai
     2157 => 'order_of_embers_honorbound', # The Honorbound
     2164 => 'champions_of_azeroth', # Champions of Azeroth
-    2163 => 'tortollan_seekers' # Tortollan Seekers
+    2163 => 'tortollan_seekers', # Tortollan Seekers
+    2373 => 'unshackled_waveblade', # The Unshackled
+    2391 => 'rustbolt_resistance', # Rustbolt Resistance
   },
   nil => {} # For people who enjoy tracking neutral Pandaren
 }
