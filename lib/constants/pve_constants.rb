@@ -82,7 +82,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Battle of Dazar\'alor', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 21,
+  'name' => 'Battle of Dazar\'alor', 'days' => [], 'id' => 21,
   'encounters' => [{
     'id' => 2265, 'name' => 'Champion of the Light', 'raid_ids' => {
       'raid_finder' => [13328], 'normal' => [13329], 'heroic' => [13330], 'mythic' => [13331]
@@ -121,7 +121,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Crucible of Storms', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 22,
+  'name' => 'Crucible of Storms', 'days' => [], 'id' => 22,
   'encounters' => [{
     'id' => 2269, 'name' => 'The Restless Cabal', 'raid_ids' => {
       'raid_finder' => [13404], 'normal' => [13405], 'heroic' => [13406], 'mythic' => [13407]
@@ -129,6 +129,41 @@ VALID_RAIDS = [{
   }, {
     'id' => 2273, 'name' => "Uu'nat, Harbinger of the Void", 'raid_ids' => {
       'raid_finder' => [13408], 'normal' => [13411], 'heroic' => [13412], 'mythic' => [13413]
+    }
+  }]
+}, {
+  'name' => 'The Eternal Palace', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 23,
+  'encounters' => [{
+    'id' => 2298, 'name' => 'Abyssal Commander Sivara', 'raid_ids' => {
+      'raid_finder' => [13587], 'normal' => [13588], 'heroic' => [13589], 'mythic' => [13590]
+    }
+  }, {
+    'id' => 2305, 'name' => "Radiance of Azshara", 'raid_ids' => {
+      'raid_finder' => [13595], 'normal' => [13596], 'heroic' => [13597], 'mythic' => [13598]
+    }
+  }, {
+    'id' => 2289, 'name' => "Blackwater Behemoth", 'raid_ids' => {
+      'raid_finder' => [13591], 'normal' => [13592], 'heroic' => [13593], 'mythic' => [13594]
+    }
+  }, {
+    'id' => 2304, 'name' => "Lady Ashvane", 'raid_ids' => {
+      'raid_finder' => [13600], 'normal' => [13601], 'heroic' => [13602], 'mythic' => [13603]
+    }
+  }, {
+    'id' => 2303, 'name' => "Orgozoa", 'raid_ids' => {
+      'raid_finder' => [13604], 'normal' => [13605], 'heroic' => [13606], 'mythic' => [13607]
+    }
+  }, {
+    'id' => 2311, 'name' => "The Queen's Court", 'raid_ids' => {
+      'raid_finder' => [13608], 'normal' => [13609], 'heroic' => [13610], 'mythic' => [13611]
+    }
+  }, {
+    'id' => 2293, 'name' => "Za'qul", 'raid_ids' => {
+      'raid_finder' => [13612], 'normal' => [13613], 'heroic' => [13614], 'mythic' => [13615]
+    }
+  }, {
+    'id' => 2299, 'name' => "Queen Azshara", 'raid_ids' => {
+      'raid_finder' => [13616], 'normal' => [13617], 'heroic' => [13618], 'mythic' => [13619]
     }
   }]
 }]
