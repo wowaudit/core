@@ -232,4 +232,5 @@ HEADER = [
   'unshackled_waveblade_value',
   'rustbolt_resistance_standing',
   'rustbolt_resistance_value',
+  'Operation: Mechagon',
 ]

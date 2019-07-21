@@ -8,7 +8,8 @@ MYTHIC_DUNGEONS = {
   12776 => 'Temple of Sethraliss',
   12782 => 'Tol Dagor',
   12745 => 'Underrot',
-  12785 => 'Waycrest Manor'
+  12785 => 'Waycrest Manor',
+  13620 => 'Operation: Mechagon'
 }
 
 MYTHIC_DUNGEONS_CRITERIA = {
