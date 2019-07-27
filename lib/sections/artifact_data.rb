@@ -15,9 +15,8 @@ module Audit
 
       character.data['island_expedition_weekly'] = data['quests'].include?(53435) || data['quests'].include?(53436)
       character.data['island_expedition_total'] =
-        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40564)] rescue 0) + # Normal/heroic
-        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40563)] rescue 0) + # Mythic
-        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40565)] rescue 0) # PvP
+        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40564)] rescue 0) + # PvE
+        (data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(40565)] rescue 0)   # PvP
 
       character.data['weekly_event_completed'] = WEEKLY_EVENT_QUESTS.select{ |e| data['quests'].include?(e) }.any?
     end
