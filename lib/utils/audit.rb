@@ -14,6 +14,7 @@ module Audit
           redo
         rescue => e
           Rollbar.error(e, team_id: team.to_i, type: type)
+          sleep(300) if e.class == Mysql2::Error
           Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
         end
       end
