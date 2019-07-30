@@ -5,7 +5,7 @@ module Audit
       characters.each do |character|
         uri = RAIDER_IO_URL[0 .. RAIDER_IO_URL.length]
         uri["{region}"] = region
-        uri["{realm}"] = Realm.to_slug(character.realm || realm)
+        uri["{realm}"] = CGI.escape(Realm.raiderio_realm(character.realm || realm))
         uri["{name}"] = CGI.escape(character.name)
 
         begin
