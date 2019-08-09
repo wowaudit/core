@@ -233,4 +233,5 @@ HEADER = [
   'rustbolt_resistance_standing',
   'rustbolt_resistance_value',
   'Operation: Mechagon',
+  'active_loyal_traits',
 ]

@@ -29,6 +29,8 @@ module Audit
         character.ilvl += data['items']['mainHand']['itemLevel'] rescue 0
       end
 
+      character.data['active_loyal_traits'] = self.check_trait(303007, data, character)
+
       character.data['ilvl'] = (character.ilvl / (items_equipped)).round(2) rescue 0
 
       # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
@@ -58,6 +60,14 @@ module Audit
           character.data["enchant_quality_#{item}"] = 0
           character.data["#{item}_enchant"] = ''
         end
+      end
+
+      def self.check_trait(trait, data, character)
+        ['head', 'shoulder', 'chest'].map do |item|
+          data['items'][item]['azeriteEmpoweredItem']['azeritePowers'].map do |power|
+            power['spellId'] == trait ? true : nil # Loyal to the End
+          end rescue []
+        end.flatten.compact.size
       end
     end
   end
