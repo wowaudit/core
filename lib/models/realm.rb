@@ -16,7 +16,7 @@ module Audit
     end
 
     def self.raiderio_realm(realm)
-      Realm.where(name: realm).first.wcl_name
+      Realm.where(name: realm).first.blizzard_name
     end
   end
 end
