@@ -21,7 +21,7 @@ module Audit
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
         data = JSON.parse(response.body) rescue (return return_error OpenStruct.new(code: 500))
-        data.any? ? process(data) : return_error(response)
+        data.any? ? Data.process(self, data) : return_error(response)
         update_snapshots
         to_output
       elsif response.code == 403
@@ -35,19 +35,6 @@ module Audit
       Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
       set_status(response.code)
       to_output(details['last_refresh']) if details['last_refresh']
-    end
-
-    def process(response)
-      BasicData.add(self, response)
-      GearData.add(self, response)
-      ArtifactData.add(self, response)
-      ReputationData.add(self, response)
-      PvPData.add(self, response)
-      InstanceData.add(self, response)
-      ProfessionData.add(self, response)
-      WorldQuestData.add(self, response)
-      CollectionData.add(self, response)
-      HistoricalData.add(self, response)
     end
 
     def update_snapshots

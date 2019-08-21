@@ -1,8 +1,7 @@
 module Audit
-  class InstanceData
-
-    def self.add(character, data)
-      self.add_attunement_data(character, data)
+  class InstanceData < Data
+    def add
+      add_attunement_data
 
       encounters = VALID_RAIDS.map{ |raid|
         raid['encounters'].map{ |boss|
@@ -17,12 +16,12 @@ module Audit
                      'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
       dungeon_count = 0
-      instance_data = data['statistics']['subCategories'][5]['subCategories'][7]['statistics']
+      instance_data = @data['statistics']['subCategories'][5]['subCategories'][7]['statistics']
 
       MYTHIC_DUNGEONS_CRITERIA.keys.each do |i|
-        amount = data['achievements']['criteriaQuantity'][data['achievements']['criteria'].index(i)] rescue 0
+        amount = @data['achievements']['criteriaQuantity'][@data['achievements']['criteria'].index(i)] rescue 0
         dungeon_count += amount
-        character.data[MYTHIC_DUNGEONS_CRITERIA[i]] = amount
+        @character.data[MYTHIC_DUNGEONS_CRITERIA[i]] = amount
       end
 
       instance_data.each do |instance|
@@ -30,9 +29,9 @@ module Audit
         # for some characters. If the criteria is lower than the statistics then use the
         # statistics instead, as a workaround.
         if MYTHIC_DUNGEONS.include?(instance['id'])
-          if character.data[MYTHIC_DUNGEONS[instance['id']]].to_i < instance['quantity']
-            dungeon_count -= character.data[MYTHIC_DUNGEONS[instance['id']]].to_i
-            character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity']
+          if @character.data[MYTHIC_DUNGEONS[instance['id']]].to_i < instance['quantity']
+            dungeon_count -= @character.data[MYTHIC_DUNGEONS[instance['id']]].to_i
+            @character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity']
             dungeon_count += instance['quantity']
           end
         end
@@ -46,9 +45,9 @@ module Audit
         end
       end
 
-      character.data['dungeons_done_total'] = dungeon_count
-      character.data['dungeons_this_week'] =
-        dungeon_count - character.details['snapshots'][Audit.year][Audit.week]['dungeons'] rescue 0
+      @character.data['dungeons_done_total'] = dungeon_count
+      @character.data['dungeons_this_week'] =
+        dungeon_count - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'] rescue 0
 
       encounters.each do |encounter|
         encounter.each do |difficulty, ids|
@@ -58,41 +57,41 @@ module Audit
       end
 
       raid_output.each do |metric, data|
-        character.data[metric] = data.join('|')
+        @character.data[metric] = data.join('|')
       end
 
-      self.add_warcraftlogs_data(character)
-      self.add_raiderio_data(character)
+      add_warcraftlogs_data
+      add_raiderio_data
     end
 
-    def self.add_warcraftlogs_data(character)
+    def add_warcraftlogs_data
       RAID_DIFFICULTIES.each_key do |diff|
         output = []
         WCL_IDS.each do |boss|
-          output << (character.details['warcraftlogs'][diff.to_s][boss] || '-')
+          output << (@character.details['warcraftlogs'][diff.to_s][boss] || '-')
         end
-        character.data["WCL_#{RAID_DIFFICULTIES[diff]}"] = output.join('|')
+        @character.data["WCL_#{RAID_DIFFICULTIES[diff]}"] = output.join('|')
       end
     end
 
-    def self.add_raiderio_data(character)
-      character.data['m+_score'] =
-        (character.details['raiderio']['score'] rescue '')
+    def add_raiderio_data
+      @character.data['m+_score'] =
+        (@character.details['raiderio']['score'] rescue '')
 
-      character.data['season_highest_m+'] =
-        (character.details['raiderio']['season_highest'] rescue '-')
+      @character.data['season_highest_m+'] =
+        (@character.details['raiderio']['season_highest'] rescue '-')
 
-      character.data['weekly_highest_m+'] =
-        (character.details['raiderio']['weekly_highest'] rescue 0)
+      @character.data['weekly_highest_m+'] =
+        (@character.details['raiderio']['weekly_highest'] rescue 0)
     end
 
-    def self.add_attunement_data(character, data)
-      if character.data['faction'] == 'Alliance'
-        character.data['siege_of_boralus_attuned'] = data['quests'].include?(51445)
-        character.data['kings_rest_attuned'] = data['quests'].include?(53131)
-      elsif character.data['faction'] == 'Horde'
-        character.data['siege_of_boralus_attuned'] = data['quests'].include?(53121)
-        character.data['kings_rest_attuned'] = data['quests'].include?(50954)
+    def add_attunement_data
+      if @character.data['faction'] == 'Alliance'
+        @character.data['siege_of_boralus_attuned'] = @data['quests'].include?(51445)
+        @character.data['kings_rest_attuned'] = @data['quests'].include?(53131)
+      elsif @character.data['faction'] == 'Horde'
+        @character.data['siege_of_boralus_attuned'] = @data['quests'].include?(53121)
+        @character.data['kings_rest_attuned'] = @data['quests'].include?(50954)
       end
     end
   end
