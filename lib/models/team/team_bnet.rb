@@ -7,12 +7,22 @@ module Audit
       RBattlenet.set_region(region: region, locale: "en_GB")
       $errors = { :tracking => 0, :role => 0 }
       if characters.any?
-        result = RBattlenet::Wow::Character.find_all(characters,
-          fields: BNET_FIELDS)
+        results = []
+        characters.each do |character|
+          character.process_result(RBattlenet::Wow::Character.find(
+            name: character.name,
+            realm: character.realm_slug,
+            fields: BNET_FIELDS,
+          ))
+          results << ["", character]
+        end
+
+        # result = RBattlenet::Wow::Character.find_all(characters,
+        #   fields: BNET_FIELDS)
         Logger.t(INFO_TEAM_REFRESHED, id)
 
-        Writer.write(self, result, HeaderData.altered_header(self))
-        Writer.update_db(result.map { |uri, character| character }, true)
+        Writer.write(self, results, HeaderData.altered_header(self))
+        Writer.update_db(results.map { |uri, character| character }, true)
       else
         Logger.t(INFO_TEAM_EMPTY, id)
       end
