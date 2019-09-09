@@ -26,8 +26,8 @@ BUCKET = storage_data["bucket"]
 
 # Load keys
 keys = YAML::load(File.open('config/keys.yml'))
-BNET_CLIENT_ID = keys["bnet_keys"][`hostname`.strip[-1].to_i]["bnet_client_id"]
-BNET_CLIENT_SECRET = keys["bnet_keys"][`hostname`.strip[-1].to_i]["bnet_client_secret"]
+BNET_CLIENT_ID = keys["bnet_keys"][ARGV[1].to_i rescue 0]["bnet_client_id"]
+BNET_CLIENT_SECRET = keys["bnet_keys"][ARGV[1].to_i rescue 0]["bnet_client_secret"]
 WCL_KEY = keys["wcl_key"]
 ROLLBAR_KEY = keys["rollbar_key"]
 SERVER_AUTH = keys["server_auth"]
