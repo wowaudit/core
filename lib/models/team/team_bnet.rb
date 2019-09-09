@@ -9,15 +9,11 @@ module Audit
       if characters.any?
         results = []
         characters.each do |character|
-          begin
-            character.process_result(RBattlenet::Wow::Character.find(
-              name: character.name,
-              realm: character.realm_slug,
-              fields: BNET_FIELDS,
-            ))
-          rescue
-            character.return_error(OpenStruct.new({code: 555}))
-          end
+          character.process_result(RBattlenet::Wow::Character.find(
+            name: character.name,
+            realm: character.realm_slug,
+            fields: BNET_FIELDS,
+          ))
           results << ["", character]
         end
 
