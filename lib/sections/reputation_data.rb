@@ -3,7 +3,7 @@ module Audit
     def add
       reps = {}
 
-      REPUTATIONS[@data['faction']].each do |reputation, name|
+      REPUTATIONS[FACTIONS[@data['faction']]].each do |reputation, name|
         match = @data['reputation'].select{ |r| r['id'] == reputation }.first
         if match
           @character.data["#{name}_standing"] = STANDINGS[match['standing']]
