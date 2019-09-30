@@ -12,6 +12,11 @@ module Audit
           Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
           sleep 60
           redo
+        rescue Net::ReadTimeout, Mysql2::Error => e
+          Rollbar.error(e, team_id: team.to_i, type: type)
+          Logger.t(ERROR_DATABASE_CONNECTION, team.to_i)
+          sleep 300
+          redo
         rescue => e
           Rollbar.error(e, team_id: team.to_i, type: type)
           sleep(300) if e.class == Mysql2::Error

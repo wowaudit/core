@@ -16,6 +16,8 @@ BFA_WARNING = "warning|The Legion spreadsheet has stopped updating. Please updat
 
 ERROR_API_LIMIT_REACHED = "API limit reached. Waiting one minute before trying again. "
 
+ERROR_DATABASE_CONNECTION = "Encountered an error connection to the database. Waiting five minutes before trying again. "
+
 ERROR_TEAM = "Encountered an error in refreshing this team: "
 
 ERROR_CHARACTER = "Encountered an error in refreshing this character. "
