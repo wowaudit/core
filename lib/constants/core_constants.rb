@@ -20,7 +20,8 @@ BNET_FIELDS = [
   "pets",
   "pvp",
   "professions",
-  "quests"
+  "quests",
+  "titles",
 ]
 
 # UTC times

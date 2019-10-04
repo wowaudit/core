@@ -7,6 +7,8 @@ module Audit
       @character.data['mounts'] =
         @data['statistics']['subCategories'][0]['subCategories'][2]['statistics'][7]['quantity']
 
+      @character.data['titles'] = @data['titles'].size
+
       pets_owned = []
       level_25_pets = 0
 
