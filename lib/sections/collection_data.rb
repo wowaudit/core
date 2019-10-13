@@ -13,8 +13,8 @@ module Audit
       level_25_pets = 0
 
       @data['pets']['collected'].each do |pet|
-        unless pets_owned.include?(pet['stats']['speciesId'])
-          pets_owned << pet['stats']['speciesId']
+        unless pets_owned.include?(pet['creatureId'])
+          pets_owned << pet['creatureId']
           level_25_pets += pet['stats']['level'] == 25 ? 1 : 0
         end
       end
