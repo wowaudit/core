@@ -20,6 +20,8 @@ ERROR_DATABASE_CONNECTION = "Encountered an error connection to the database. Wa
 
 ERROR_TEAM = "Encountered an error in refreshing this team: "
 
+ERROR_TEAM_DELETED = "Could not refresh this team, it appears to have been deleted. "
+
 ERROR_CHARACTER = "Encountered an error in refreshing this character. "
 
 INFO_TEAM_STARTING = "Going to refresh this team now. "

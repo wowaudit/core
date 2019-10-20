@@ -3,6 +3,7 @@ module Audit
     class << self
       def refresh(id, refresh_type)
         team = self.type(refresh_type).where(id: id).first
+        return Logger.t(ERROR_TEAM_DELETED, id) unless team
         Audit.timestamp = team.region
         team.refresh
       end
