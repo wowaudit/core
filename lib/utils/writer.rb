@@ -23,6 +23,23 @@ module Audit
         end
         query_string << "ELSE status END"
         self.query(query_string)
+
+
+        # Migration prep quick 'n dirty
+        query_string = "UPDATE characters SET `key` = CASE "
+        result.select{ |c| c.changed }.each do |character|
+          query_string << "WHEN id = #{character.id} THEN '#{character.key}' "
+        end
+        query_string << "ELSE `key` END"
+        byebug
+        self.query(query_string)
+
+        query_string = "UPDATE characters SET class_id = CASE "
+        result.select{ |c| c.changed }.each do |character|
+          query_string << "WHEN id = #{character.id} THEN '#{character.class_id}' "
+        end
+        query_string << "ELSE class_id END"
+        self.query(query_string)
       end
 
       # Update data

@@ -22,6 +22,14 @@ module Audit
         self.status = "tracking"
         data = JSON.parse(response.body) rescue (return return_error OpenStruct.new(code: 500))
         data.any? ? Data.process(self, data) : return_error(response)
+
+        # Migration prep
+        if !self.class_id || !self.key
+          self.class_id = data['class']
+          self.key = data['thumbnail']
+          self.changed = true
+        end
+
         update_snapshots
         to_output
       elsif response.code == 403
