@@ -35,6 +35,7 @@ module Audit
 
         query_string = "UPDATE characters SET class_id = CASE "
         result.select{ |c| c.changed }.each do |character|
+          next if !character.class_id
           query_string << "WHEN id = #{character.id} THEN '#{character.class_id}' "
         end
         query_string << "ELSE class_id END"
