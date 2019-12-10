@@ -31,7 +31,6 @@ module Audit
           query_string << "WHEN id = #{character.id} THEN '#{character.key}' "
         end
         query_string << "ELSE `key` END"
-        byebug
         self.query(query_string)
 
         query_string = "UPDATE characters SET class_id = CASE "
