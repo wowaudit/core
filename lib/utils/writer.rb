@@ -32,7 +32,7 @@ module Audit
         query_string << "ELSE `key` END"
         self.query(query_string)
 
-        if result.select(&:class_id).any?
+        if result.select{ |c| c.changed && c.class_id }.any?
           query_string = "UPDATE characters SET class_id = CASE "
           result.select{ |c| c.changed && c.class_id }.each do |character|
             query_string << "WHEN id = #{character.id} THEN '#{character.class_id}' "
