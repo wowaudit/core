@@ -53,7 +53,7 @@ module Audit
         }
 
         # Update the previous week with M+ data
-        if details['snapshots'][Audit.previous_week_year].include? Audit.previous_week
+        if (details['snapshots'][Audit.previous_week_year] || {}).include? Audit.previous_week
           details['snapshots'][Audit.previous_week_year][Audit.previous_week]['m+'] =
             self.data['weekly_highest_m+']
         end
