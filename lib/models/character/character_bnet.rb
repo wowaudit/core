@@ -31,7 +31,7 @@ module Audit
 
         update_snapshots
         to_output
-      elsif response.status_code == 403
+      elsif response.status_code == 429
         raise ApiLimitReachedException
       else
         return_error(response)
