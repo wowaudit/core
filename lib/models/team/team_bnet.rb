@@ -4,7 +4,7 @@ module Audit
     def refresh
       # Forked library, processing the result of each Character
       # is called from within the RBattlenet library
-      RBattlenet.set_region(region: region, locale: "en_GB")
+      RBattlenet.set_options(region: region, locale: "en_GB")
       $errors = { :tracking => 0, :role => 0 }
       if characters.any?
         result = RBattlenet::Wow::Character.find_all(characters,
