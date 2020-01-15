@@ -6,13 +6,20 @@ module Audit
       # is called from within the RBattlenet library
       RBattlenet.set_options(region: region, locale: "en_GB")
       $errors = { :tracking => 0, :role => 0 }
+      output = []
+
       if characters.any?
-        result = RBattlenet::Wow::Character.find_all(characters,
-          fields: BNET_FIELDS)
+        result = RBattlenet::Wow::Character.find(
+          characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, source: ch } },
+          fields: [:equipment, :legacy]
+        ) do |character, result|
+          character[:source].process_result(result)
+          output << character[:source]
+        end
         Logger.t(INFO_TEAM_REFRESHED, id)
 
-        Writer.write(self, result, HeaderData.altered_header(self))
-        Writer.update_db(result.map { |uri, character| character }, true)
+        Writer.write(self, output, HeaderData.altered_header(self))
+        Writer.update_db(output, true)
       else
         Logger.t(INFO_TEAM_EMPTY, id)
       end

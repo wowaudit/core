@@ -17,22 +17,21 @@ module Audit
 
     def process_result(response)
       init
-      if response.code == 200
+      if response.status_code == 200
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
-        data = JSON.parse(response.body) rescue (return return_error OpenStruct.new(code: 500))
-        data.any? ? Data.process(self, data) : return_error(response)
+        Data.process(self, response)
 
         # Migration prep
         if !self.class_id || !self.key
-          self.class_id = data['class']
-          self.key = data['thumbnail']
+          self.class_id = response.character_class.id
+          self.key = response.id
           self.changed = true
         end
 
         update_snapshots
         to_output
-      elsif response.code == 403
+      elsif response.status_code == 403
         raise ApiLimitReachedException
       else
         return_error(response)
@@ -40,8 +39,8 @@ module Audit
     end
 
     def return_error(response)
-      Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", id)
-      set_status(response.code)
+      Logger.c(ERROR_CHARACTER + "Response code: #{response.status_code}", id)
+      set_status(response.status_code)
       to_output(details['last_refresh']) if details['last_refresh']
     end
 
