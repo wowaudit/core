@@ -14,7 +14,7 @@ module Audit
         end
 
         stats.each do |worker_id, time_since_last_schedule|
-          if Time.now.to_i - time_since_last_schedule > 60 * 5
+          if Time.now.to_i - time_since_last_schedule > 60 * 10
             Schedule.where(id: worker_id).first.restart
             stats[worker_id] = Time.now.to_i
           end
