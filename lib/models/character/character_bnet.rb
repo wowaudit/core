@@ -20,17 +20,22 @@ module Audit
       if response.status_code == 200
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
-        Data.process(self, response)
 
-        # Migration prep
-        if !self.class_id || !self.key
-          self.class_id = response.character_class.id
-          self.key = response.id
-          self.changed = true
+        if response.class == RBattlenet::EmptyResult
+          return_error(response)
+        else
+          Data.process(self, response)
+
+          # Migration prep
+          if !self.class_id || !self.key
+            self.class_id = response.character_class.id
+            self.key = response.id
+            self.changed = true
+          end
+
+          update_snapshots
+          to_output
         end
-
-        update_snapshots
-        to_output
       elsif response.status_code == 429
         raise ApiLimitReachedException
       else
