@@ -1,7 +1,7 @@
 module Audit
   class ArtifactData < Data
     def add
-      neck = @data.equipment.equipped_items.select{ |item| item.slot.name == "Neck" }.first
+      neck = @data.equipment.equipped_items&.select{ |item| item.slot.name == "Neck" }&.first
 
       if neck
         @character.data['artifact_level'] = neck.azerite_details.level.value rescue 0

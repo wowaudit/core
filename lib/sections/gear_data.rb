@@ -25,14 +25,14 @@ module Audit
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types
-      if !@data.equipment.equipped_items.any?{ |eq_item| eq_item.slot.type == "OFF_HAND" }
+      if @data.equipment.equipped_items && !@data.equipment.equipped_items.any?{ |eq_item| eq_item.slot.type == "OFF_HAND" }
         items_equipped += 1
         @character.ilvl += @data.equipment.equipped_items.select{ |eq_item| eq_item.slot.type == "MAIN_HAND" }.first.level.value rescue 0
       end
 
       @character.data['active_loyal_traits'] = check_trait(303007)
 
-      @character.data['ilvl'] = (@character.ilvl / (items_equipped)).round(2) rescue 0
+      @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
 
       # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
       @character.data['ilvl'] = 0 if @character.data['ilvl'] > 600
