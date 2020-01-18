@@ -9,9 +9,8 @@ module Audit
       output = []
 
       if characters.any?
-        result = RBattlenet::Wow::Character.find(
-          characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, source: ch } },
-          fields: [:equipment, :legacy]
+        result = RBattlenet::Wow::Character::Legacy.find(
+          characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, source: ch } }
         ) do |character, result|
           character[:source].process_result(result)
           output << character[:source]

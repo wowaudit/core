@@ -16,10 +16,10 @@ module Audit
                      'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
       dungeon_count = 0
-      instance_data = @data.legacy['statistics']['subCategories'][5]['subCategories'][7]['statistics']
+      instance_data = @data['statistics']['subCategories'][5]['subCategories'][7]['statistics']
 
       MYTHIC_DUNGEONS_CRITERIA.keys.each do |i|
-        amount = @data.legacy['achievements']['criteriaQuantity'][@data.legacy['achievements']['criteria'].index(i)] rescue 0
+        amount = @data['achievements']['criteriaQuantity'][@data['achievements']['criteria'].index(i)] rescue 0
         dungeon_count += amount
         @character.data[MYTHIC_DUNGEONS_CRITERIA[i]] = amount
       end
@@ -87,11 +87,11 @@ module Audit
 
     def add_attunement_data
       if @character.data['faction'] == 'Alliance'
-        @character.data['siege_of_boralus_attuned'] = @data.legacy['quests'].include?(51445)
-        @character.data['kings_rest_attuned'] = @data.legacy['quests'].include?(53131)
+        @character.data['siege_of_boralus_attuned'] = @data['quests'].include?(51445)
+        @character.data['kings_rest_attuned'] = @data['quests'].include?(53131)
       elsif @character.data['faction'] == 'Horde'
-        @character.data['siege_of_boralus_attuned'] = @data.legacy['quests'].include?(53121)
-        @character.data['kings_rest_attuned'] = @data.legacy['quests'].include?(50954)
+        @character.data['siege_of_boralus_attuned'] = @data['quests'].include?(53121)
+        @character.data['kings_rest_attuned'] = @data['quests'].include?(50954)
       end
     end
   end

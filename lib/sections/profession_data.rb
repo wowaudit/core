@@ -1,8 +1,8 @@
 module Audit
   class ProfessionData < Data
     def add
-      professions = @data.legacy['professions']['primary'].select{ |p| PROFESSIONS.keys.include?(p['id']) }
-      base_professions = @data.legacy['professions']['primary'].select{ |p| BASE_PROFESSIONS.keys.include?(p['id']) }
+      professions = @data['professions']['primary'].select{ |p| PROFESSIONS.keys.include?(p['id']) }
+      base_professions = @data['professions']['primary'].select{ |p| BASE_PROFESSIONS.keys.include?(p['id']) }
 
       professions.each_with_index do |profession, index|
         @character.data["profession_#{index + 1}"] = "#{profession['name']} (#{profession['rank']})"
@@ -18,7 +18,7 @@ module Audit
       end
 
       @character.data['cooking_rank'] =
-        @data.legacy['professions']['secondary'].select{ |p| p['name'] == 'Kul Tiran Cooking' }.first['rank'] rescue 0
+        @data['professions']['secondary'].select{ |p| p['name'] == 'Kul Tiran Cooking' }.first['rank'] rescue 0
 
       # Ugly workaround to get rid of Kul Tiran
       @character.data["profession_1"].gsub!("Kul Tiran ", "") rescue ""
