@@ -9,7 +9,7 @@ module Audit
       @character.data['artifact_progress'] = 0 if @character.data['artifact_progress'].nan?
 
       @character.data['cloak_level'] = begin
-        if @data.items.back.id == 169223
+        if @data.items.back&.id == 169223
           ((@data.items.back.itemLevel - 470) + 2) / 2
         end
       end
