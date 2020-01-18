@@ -8,6 +8,12 @@ module Audit
         (@character.data['artifact_experience'].to_f / @character.data['artifact_experience_total_for_level'] * 100).round(2)
       @character.data['artifact_progress'] = 0 if @character.data['artifact_progress'].nan?
 
+      @character.data['cloak_level'] = begin
+        if @data.items.back.id == 169223
+          ((@data.items.back.itemLevel - 470) + 2) / 2
+        end
+      end
+
       # For old spreadsheet versions
       @character.data['ap_this_week'] = 0
       @character.data['ap_obtained_total'] = 0

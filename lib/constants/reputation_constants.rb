@@ -8,6 +8,9 @@ REPUTATIONS = {
     2163 => 'tortollan_seekers', # Tortollan Seekers
     2400 => 'unshackled_waveblade', # Waveblade Ankoan
     2391 => 'rustbolt_resistance', # Rustbolt Resistance
+    2415 => 'rajani', # Rajani
+    2417 => 'uldum_accord', # Uldum Accord
+
   },
   'Horde' => {
     2156 => 'proudmoore_taljani', # Taljani's Expedition
@@ -18,6 +21,8 @@ REPUTATIONS = {
     2163 => 'tortollan_seekers', # Tortollan Seekers
     2373 => 'unshackled_waveblade', # The Unshackled
     2391 => 'rustbolt_resistance', # Rustbolt Resistance
+    2415 => 'rajani', # Rajani
+    2417 => 'uldum_accord', # Uldum Accord
   },
   nil => {} # For people who enjoy tracking neutral Pandaren
 }

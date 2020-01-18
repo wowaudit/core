@@ -37,6 +37,10 @@ RBattlenet.authenticate(client_id: BNET_CLIENT_ID, client_secret: BNET_CLIENT_SE
 
 Rollbar.configure do |config|
   config.access_token = ROLLBAR_KEY
+
+  if `hostname` == "L049.local\n"
+    config.enabled = false
+  end
 end
 
 begin

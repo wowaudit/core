@@ -47,6 +47,52 @@ RAID_DIFFICULTIES = {
   5 => 'mythic'
 }
 
+CUTTING_EDGE_ACHIEVEMENTS = [
+  7485, # Will of the Emperor
+  7486, # Grand Empress Shek'zeer
+  7487, # Sha of Fear
+  8238, # Lei Shen
+  8260, # Ra-den
+  8400, # Garrosh Hellscream (10 player)
+  8401, # Garrosh Hellscream (25 player)
+  9442, # Imperator Mar'gok
+  9443, # Blackhand's Crucible
+  10045, # Archimonde
+  11191, # Xavius
+  11580, # Helya
+  11192, # Gul'dan
+  11875, # Kil'jaeden
+  12111, # Argus the Unmaker
+  12535, # G'huun
+  13323, # Lady Jaina Proudmoore
+  13419, # Uu'nat, Harbinger of the Void
+  13785, # Queen Azshara
+  14069, # N'zoth the Corruptor
+]
+
+AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
+  6954, # Will of the Emperor
+  8246, # Grand Empress Shek'zeer
+  8248, # Sha of Fear
+  8249, # Lei Shen
+  8260, # Ra-den (count if Cutting Edge is obtained)
+  8398, # Garrosh Hellscream (10 player)
+  8399, # Garrosh Hellscream (25 player)
+  9441, # Imperator Mar'gok
+  9444, # Blackhand's Crucible
+  10044, # Archimonde
+  11194, # Xavius
+  11581, # Helya
+  11195, # Gul'dan
+  11874, # Kil'jaeden
+  12110, # Argus the Unmaker
+  12536, # G'huun
+  13322, # Lady Jaina Proudmoore
+  13418, # Uu'nat, Harbinger of the Void
+  13784, # Queen Azshara
+  14068, # N'zoth the Corruptor
+]
+
 VALID_RAIDS = [{
   'name' => 'Uldir', 'days' => [], 'id' => 19,
   'encounters' => [{

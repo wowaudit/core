@@ -60,6 +60,11 @@ module Audit
         @character.data[metric] = data.join('|')
       end
 
+      @character.data['cutting_edge'] =
+        CUTTING_EDGE_ACHIEVEMENTS.count{ |raid| @data.achievements.achievementsCompleted.include? raid }
+      @character.data['ahead_of_the_curve'] =
+        AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @data.achievements.achievementsCompleted.include? raid }
+
       add_warcraftlogs_data
       add_raiderio_data
     end

@@ -11,19 +11,6 @@ RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={region}&rea
 
 HONOR_URL = "https://worldofwarcraft.com/{slugged_region}/character/{region}/{realm}/{name}/pvp"
 
-BNET_FIELDS = [
-  "items",
-  "reputation",
-  "audit",
-  "statistics",
-  "achievements",
-  "pets",
-  "pvp",
-  "professions",
-  "quests",
-  "titles",
-]
-
 # UTC times
 EXPANSION_START = Date.new(2018, 8, 13)
 
@@ -236,4 +223,13 @@ HEADER = [
   'Operation: Mechagon',
   'active_loyal_traits',
   'titles',
+  'cutting_edge',
+  'ahead_of_the_curve',
+  'uldum_accord_standing',
+  'uldum_accord_value',
+  'rajani_standing',
+  'rajani_value',
+  'cloak_level',
+  'jaina_mount',
+  'nzoth_mount',
 ]
