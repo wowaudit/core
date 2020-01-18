@@ -28,8 +28,8 @@ module Audit
 
           # Migration prep
           if !self.class_id || !self.key
-            self.class_id = response.character_class.id
-            self.key = response.id
+            self.class_id = response['class']
+            self.key = response['thumbnail']
             self.changed = true
           end
 
