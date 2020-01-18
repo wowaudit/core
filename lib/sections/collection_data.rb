@@ -31,8 +31,8 @@ module Audit
         @character.data['jaina_mount'] = (mounts.include? 166705) ? "yes" : "no"
         @character.data['nzoth_mount'] = (mounts.include? 174872) ? "yes" : "no"
       else
-        @character.data['jaina_mount'] = (character.last_refresh['jaina_mount'] || "no")
-        @character.data['nzoth_mount'] = (character.last_refresh['nzoth_mount'] || "no")
+        @character.data['jaina_mount'] = (@character.last_refresh['jaina_mount'] || "no")
+        @character.data['nzoth_mount'] = (@character.last_refresh['nzoth_mount'] || "no")
       end
     end
   end
