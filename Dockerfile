@@ -18,6 +18,7 @@ RUN \
 
 COPY bin /srv/bin
 COPY lib /srv/lib
+COPY config /srv/config
 COPY Gemfile Gemfile.lock /srv/
 
 RUN \
