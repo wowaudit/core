@@ -10,7 +10,6 @@ require 'mysql2'
 require 'yaml'
 require 'tzinfo'
 require 'csv'
-require 'byebug'
 require 'rollbar'
 
 # File Storage
@@ -38,14 +37,18 @@ RBattlenet.authenticate(client_id: BNET_CLIENT_ID, client_secret: BNET_CLIENT_SE
 Rollbar.configure do |config|
   config.access_token = ROLLBAR_KEY
 
-  if `hostname` == "L049.local\n"
+  if `hostname`.strip == "L049.local"
     config.enabled = false
+
+    require 'byebug'
   end
 end
 
 begin
   # Connections
   DB = Sequel.connect(YAML::load(File.open('config/database.yml')))
+  # DB.sql_log_level = :debug
+  # DB.logger = Logger.new($stdout)
   DB2 = Mysql2::Client.new(YAML::load(File.open('config/database.yml')))
 
   db_config = YAML::load(File.open('config/arangodb.yml'))
@@ -66,6 +69,9 @@ begin
   require_rel 'models'
   require_rel 'sections'
   require_rel 'utils'
+
+  # Store realm data in memory
+  REALMS = Audit::Realm.all.map{ |realm| [realm.id, realm] }.to_h
 
 rescue Mysql2::Error => e
   # The SQL proxy isn't always instantly available on server reboot

@@ -2,7 +2,7 @@ module Audit
   module Writer
 
     def self.write(team, result, header)
-      file = STORAGE.bucket(BUCKET).object("#{team.key_code}.csv")
+      file = STORAGE.bucket(BUCKET).object("#{team.key}.csv")
       data = CSV.generate do |csv|
         csv << header
         result.sort_by{|c| c.name}.each do |character|

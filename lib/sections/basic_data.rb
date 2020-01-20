@@ -3,7 +3,7 @@ module Audit
     def add
       @character.data['name'] = @data['name']
       @character.data['class'] = CLASSES[@data['class']]
-      @character.data['realm'] = @character.realm
+      @character.data['realm'] = REALMS[@character.realm_id]&.name
       @character.data['faction'] = FACTIONS[@data['faction']]
       @character.data['realm_slug'] = @character.realm_slug
       @character.data['character_id'] = @character.id

@@ -8,9 +8,9 @@ module Audit
       new_header[0] = Audit.now.strftime("%d-%m %H:%M")
 
       # Parse guild data
-      new_header[1] = team.guild_name
-      new_header[2] = team.realm
-      new_header[3] = team.region
+      new_header[1] = team.guild.name
+      new_header[2] = REALMS[team.guild.realm_id]&.name
+      new_header[3] = REALMS[team.guild.realm_id]&.region
       new_header[7] = team.name
       new_header[8] = team.raids_path
       new_header[9] = Audit.now
@@ -18,7 +18,7 @@ module Audit
       # Parse messages
       new_header[4] = "#{CURRENT_VERSION}|#{VERSION_MESSAGE}"
       new_header[5] = team.warning
-      new_header[6] = team.patreon > 0 ? "patreon" : "no patreon"
+      new_header[6] = team.guild.patron_id ? "patreon" : "no patreon"
 
       # Add raid bosses to header, spreadsheet relies on it being in the 141th column
       data = []

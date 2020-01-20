@@ -1,10 +1,8 @@
 module Audit
   class Character < Sequel::Model
-    attr_accessor :output, :data, :gems, :ilvl, :changed, :details
+    many_to_one :realm
 
-    def realm_slug
-      Realm.to_slug realm
-    end
+    attr_accessor :output, :data, :gems, :ilvl, :changed, :details, :realm_slug
 
     def tracking_since
       date = created_at || EXPANSION_START

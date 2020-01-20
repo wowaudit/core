@@ -15,19 +15,21 @@ module Audit
         rescue Net::ReadTimeout, Mysql2::Error => e
           Rollbar.error(e, team_id: team.to_i, type: type)
           Logger.t(ERROR_DATABASE_CONNECTION, team.to_i)
-          sleep 300
+          sleep 180
           redo
         rescue => e
           Rollbar.error(e, team_id: team.to_i, type: type)
-          sleep(300) if e.class == Mysql2::Error
+          sleep(180) if e.class == Mysql2::Error
           Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
         end
       end
     end
 
-    def refresh_from_schedule(instance)
+    def refresh_from_schedule(type)
+      register_worker(type)
+
       loop do
-        worker = Schedule.where(:name => instance).first
+        worker = Schedule.where(name: `hostname`.strip).first || register_worker(type)
         if worker.schedule
           schedule = JSON.parse worker.schedule
           Logger.g(INFO_STARTING_SCHEDULE + "Teams: #{schedule.join(', ')}")
@@ -39,10 +41,11 @@ module Audit
         else
           # Schedule own work if no schedule is available
           Logger.g(INFO_NO_SCHEDULE)
-          schedule = Scheduler.schedule_work(instance)
+          schedule = Scheduler.schedule_work(worker)
+          worker.update(updated_at: DateTime.now)
         end
 
-        self.refresh(schedule, instance.split('-').first)
+        self.refresh(schedule, worker.type)
         Logger.g(INFO_FINISHED_SCHEDULE)
       end
     end
@@ -54,6 +57,18 @@ module Audit
 
         self.refresh(schedule, instance.split('-').first)
         Logger.g(INFO_FINISHED_SCHEDULE)
+      end
+    end
+
+    def register_worker(type)
+      Logger.g(INFO_REGISTERED_WORKER)
+      Schedule.find_or_create(
+        name: `hostname`.strip,
+      ) do |schedule|
+        schedule.type = type
+        schedule.active = true
+        schedule.created_at = DateTime.now
+        schedule.updated_at = DateTime.now
       end
     end
 

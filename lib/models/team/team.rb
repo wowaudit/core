@@ -1,10 +1,12 @@
 module Audit
   class Team < Sequel::Model
+    many_to_one :guild
+
     class << self
       def refresh(id, refresh_type)
         team = self.type(refresh_type).where(id: id).first
         return Logger.t(ERROR_TEAM_DELETED, id) unless team
-        Audit.timestamp = team.region
+        Audit.timestamp = REALMS[team.guild.realm_id].region
         team.refresh
       end
 
@@ -15,7 +17,7 @@ module Audit
 
     def characters(characters)
       characters.each_with_index do |character, index|
-        character.realm = character.realm.to_s.empty? ? realm : character.realm
+        character.realm_slug = Realm.to_slug(REALMS[character.realm_id || guild.realm_id])
         character.details = character_details[character.id].to_h
         character.verify_details
       end
@@ -26,21 +28,8 @@ module Audit
       @character_details ||= Arango.get_characters(id)
     end
 
-    def guild_data(type)
-      @guild_data ||= Guild.where(:id => guild_id).first
-      @guild_data.send(type)
-    end
-
     def raids_path
-      "https://wowaudit.com/raids/#{guild_data("path")}/#{name.gsub(" ","-").downcase}"
-    end
-
-    def guild_name
-      guild_data("name")
-    end
-
-    def realm
-      guild_data("realm")
+      "https://wowaudit.com/raids/#{guild.path}/#{name.gsub(" ","-").downcase}"
     end
 
     def slugged_region
@@ -54,18 +43,6 @@ module Audit
       else
         return "en-gb"
       end
-    end
-
-    def region
-      guild_data("region")
-    end
-
-    def patreon
-      guild_data("patreon")
-    end
-
-    def days_remaining
-      guild_data("days_remaining")
     end
   end
 end

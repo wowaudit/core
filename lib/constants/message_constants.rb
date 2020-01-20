@@ -34,6 +34,8 @@ INFO_TEAM_UPDATED = "Stored the team's data in the database. "
 
 INFO_TEAM_WRITTEN = "Wrote and uploaded the CSV file to the server. All done now. "
 
+INFO_REGISTERED_WORKER = "Registered worker #{`hostname`.strip}."
+
 INFO_STARTING_SCHEDULE = "Going to refresh according to the schedule. "
 
 INFO_FINISHED_SCHEDULE = "Finished all guilds on the schedule. "
@@ -43,6 +45,8 @@ INFO_NO_SCHEDULE = "No work found. Generating own schedule. "
 INFO_TIME_SINCE_LAST_REFRESH = "Time since last refresh for these teams is (on average) "
 
 INFO_SCHEDULER_ADDED = "Assigned schedule to worker. "
+
+INFO_SCHEDULER_DESTROYED_WORKER = "Destroyed worker due to inactivity. "
 
 INFO_SCHEDULER_CYCLE_DONE = "Finished assigning schedules to all workers. Pausing for #{SCHEDULER_PAUSE_AFTER_CYCLE} second. "
 

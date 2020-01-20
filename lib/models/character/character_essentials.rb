@@ -1,5 +1,5 @@
 module Audit
-  class CharacterBnet < Character
+  class CharacterEssentials < Character
     def init
       # Main variables
       self.output = []

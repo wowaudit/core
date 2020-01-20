@@ -1,12 +1,22 @@
 module Audit
-  class TeamBnet < Team
+  class TeamEssentials < Team
 
     def refresh
       # Forked library, processing the result of each Character
       # is called from within the RBattlenet library
-      RBattlenet.set_options(region: region, locale: "en_GB", concurrency: 50)
+      RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 50)
       $errors = { :tracking => 0, :role => 0 }
       output = []
+      if guild.api_key && guild.api_key.active
+        begin
+          RBattlenet.authenticate(
+            client_id: guild.api_key.client_id,
+            client_secret: guild.api_key.client_secret
+          )
+        rescue RBattlenet::Errors::Unauthorized
+          guild.api_key.update(active: false)
+        end
+      end
 
       if characters.any?
         result = RBattlenet::Wow::Character::Legacy.find(
@@ -22,14 +32,18 @@ module Audit
       else
         Logger.t(INFO_TEAM_EMPTY, id)
       end
+
+      if guild.api_key && guild.api_key.active
+        RBattlenet.authenticate(client_id: BNET_CLIENT_ID, client_secret: BNET_CLIENT_SECRET)
+      end
     end
 
     def characters
-      @characters ||= super(CharacterBnet.where(:team_id => id).to_a)
+      @characters ||= super(CharacterEssentials.eager(:realm).where(:team_id => id).to_a)
     end
 
     def warning
-      if days_remaining <= 7
+      if guild.days_remaining <= 7
         INACTIVE_WARNING
       elsif $errors[:tracking] > 0
         TRACK_WARNING

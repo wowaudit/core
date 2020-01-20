@@ -7,6 +7,10 @@ gem 'sequel'
 gem 'aws-sdk'
 gem 'tzinfo'
 gem 'require_all'
-gem 'byebug'
 gem 'arangorb'
 gem 'rollbar'
+gem 'json'
+
+group :development do
+  gem 'byebug'
+end

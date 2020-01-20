@@ -5,7 +5,7 @@ module Audit
       characters.each do |character|
         uri = RAIDER_IO_URL[0 .. RAIDER_IO_URL.length]
         uri["{region}"] = region
-        uri["{realm}"] = CGI.escape(Realm.raiderio_realm(character.realm || realm))
+        uri["{realm}"] = CGI.escape(REALMS[character.realm_id || guild.realm_id].blizzard_name)
         uri["{name}"] = CGI.escape(character.name)
 
         begin
@@ -22,7 +22,7 @@ module Audit
     end
 
     def characters
-      @characters ||= super(CharacterRaiderio.where(:team_id => id).to_a)
+      @characters ||= super(CharacterRaiderio.eager(:realm).where(:team_id => id).to_a)
     end
   end
 end

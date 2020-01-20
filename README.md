@@ -30,13 +30,13 @@ it's not built with individual use in mind. Therefore, setting up the scripts ca
 
         First, add a guild, team and characters to the database. Currently this
         has to be done manually. Then, run:
-        $ bundle exec ruby bin/refresh_bnet_local.rb <TEAM_ID>
-        
+        $ bundle exec ruby bin/refresh_essentials_local.rb <TEAM_ID>
+
         To add Warcraft Logs and Raider.io data to your team, the following scripts
         can be run in the same way as refresh_bnet_local:
         $ bundle exec ruby bin/refresh_wcl_local.rb <TEAM_ID>
         $ bundle exec ruby bin/refresh_raiderio_local.rb <TEAM_ID>
-        
+
         If the Team ID is omitted the script will loop through all teams in the database.
 
 ## Contributing

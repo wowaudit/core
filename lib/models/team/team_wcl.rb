@@ -23,7 +23,7 @@ module Audit
     def uri(character, zone)
       uri = WCL_URL[0 .. WCL_URL.length]
       uri["{region}"] = region
-      uri["{realm}"] = Realm.wcl_realm(character.realm || realm)
+      uri["{realm}"] = REALMS[character.realm_id || guild.realm_id].wcl_name
       uri["{name}"] = character.name
       uri["{zone}"] = zone["id"].to_s
       uri["{metric}"] = character.wcl_role
@@ -31,7 +31,7 @@ module Audit
     end
 
     def characters
-      @characters ||= super(CharacterWcl.where(:team_id => id).to_a)
+      @characters ||= super(CharacterWcl.eager(:realm).where(:team_id => id).to_a)
     end
   end
 end
