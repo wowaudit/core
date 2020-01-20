@@ -16,7 +16,6 @@ RUN \
   libffi-dev \
   mysql-dev
 
-COPY .bin /srv/.bin
 COPY bin /srv/bin
 COPY lib /srv/lib
 COPY Gemfile Gemfile.lock /srv/
