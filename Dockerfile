@@ -16,7 +16,10 @@ RUN \
   libffi-dev \
   mysql-dev
 
-COPY . /srv/
+COPY .bin /srv/.bin
+COPY bin /srv/bin
+COPY lib /srv/lib
+COPY Gemfile Gemfile.lock /srv/
 
 RUN \
   bundle install --frozen --no-cache --deployment --binstubs bin --without test development \
