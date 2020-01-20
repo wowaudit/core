@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: essentials-deployment
+  name: wcl-deployment
   labels:
-    app: essentials
+    app: wcl
 spec:
-  replicas: 4
+  replicas: 2
   selector:
     matchLabels:
-      app: essentials
+      app: wcl
   template:
     metadata:
       labels:
-        app: essentials
+        app: wcl
     spec:
       containers:
-      - name: essentials
+      - name: wcl
         image: shedi/wowaudit:latest
         command: ["/srv/bin/refresh"]
-        args: ["essentials"]
+        args: ["wcl"]
 
         resources:
           requests:
-            cpu: 1000m
-            memory: 750Mi
+            cpu: 100m
+            memory: 250Mi
 
           limits:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 150m
+            memory: 500Mi
 
       imagePullSecrets:
         - name: regcred

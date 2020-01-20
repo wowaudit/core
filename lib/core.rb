@@ -25,7 +25,6 @@ BUCKET = storage_data["bucket"]
 
 # Load keys
 keys = YAML::load(File.open('config/keys.yml'))
-WCL_KEY = keys["wcl_key"]
 ROLLBAR_KEY = keys["rollbar_key"]
 
 Rollbar.configure do |config|
@@ -66,9 +65,9 @@ begin
   # Store realm data in memory
   REALMS = Audit::Realm.all.map{ |realm| [realm.id, realm] }.to_h
 
-  ZONE = ((1..8).to_a - Audit::Schedule.all.map(&:zone)).first || Audit::Schedule.min(:zone)
-  KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE).first
-  RBattlenet.authenticate(client_id: KEY.client_id, client_secret: KEY.client_secret)
+  ZONE = ((1..8).to_a - Audit::Schedule.where(type: TYPE).map(&:zone)).first || Audit::Schedule.where(type: TYPE).min(:zone)
+  KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet")).first
+  RBattlenet.authenticate(client_id: KEY.client_id, client_secret: KEY.client_secret) unless TYPE == "wcl"
 
 rescue Mysql2::Error => e
   # The SQL proxy isn't always instantly available on server reboot

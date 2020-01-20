@@ -3,9 +3,10 @@ module Audit
 
     def refresh
       characters.each do |character|
+        realm = REALMS[character.realm_id || guild.realm_id]
         uri = RAIDER_IO_URL[0 .. RAIDER_IO_URL.length]
-        uri["{region}"] = region
-        uri["{realm}"] = CGI.escape(REALMS[character.realm_id || guild.realm_id].blizzard_name)
+        uri["{realm}"] = CGI.escape(realm.blizzard_name)
+        uri["{region}"] = realm.region
         uri["{name}"] = CGI.escape(character.name)
 
         begin

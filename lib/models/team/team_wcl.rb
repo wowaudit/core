@@ -21,12 +21,15 @@ module Audit
     end
 
     def uri(character, zone)
+      realm = REALMS[character.realm_id || guild.realm_id]
+
       uri = WCL_URL[0 .. WCL_URL.length]
-      uri["{region}"] = region
-      uri["{realm}"] = REALMS[character.realm_id || guild.realm_id].wcl_name
+      uri["{region}"] = realm.region
+      uri["{realm}"] = realm.wcl_name
       uri["{name}"] = character.name
       uri["{zone}"] = zone["id"].to_s
       uri["{metric}"] = character.wcl_role
+      uri["{key}"] = KEY.client_id
       uri
     end
 

@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: essentials-deployment
+  name: raiderio-deployment
   labels:
-    app: essentials
+    app: raiderio
 spec:
-  replicas: 4
+  replicas: 3
   selector:
     matchLabels:
-      app: essentials
+      app: raiderio
   template:
     metadata:
       labels:
-        app: essentials
+        app: raiderio
     spec:
       containers:
-      - name: essentials
+      - name: raiderio
         image: shedi/wowaudit:latest
         command: ["/srv/bin/refresh"]
-        args: ["essentials"]
+        args: ["raiderio"]
 
         resources:
           requests:
-            cpu: 1000m
-            memory: 750Mi
+            cpu: 100m
+            memory: 250Mi
 
           limits:
-            cpu: 1000m
-            memory: 1000Mi
+            cpu: 150m
+            memory: 500Mi
 
       imagePullSecrets:
         - name: regcred
