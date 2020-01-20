@@ -52,6 +52,4 @@ INFO_SCHEDULER_CYCLE_DONE = "Finished assigning schedules to all workers. Pausin
 
 INFO_WORKER_BUSY = "This worker hasn't started working on the newest schedule yet. "
 
-INFO_RESTARTED_WORKER = "Restarted worker because it hasn't shown activity for 5 minutes. "
-
 INFO_ITEM_QUERY = "New legendary item discovered through the feed. Querying item info."

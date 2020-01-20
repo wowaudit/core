@@ -34,7 +34,7 @@ module Audit
       end
 
       if guild.api_key && guild.api_key.active
-        RBattlenet.authenticate(client_id: BNET_CLIENT_ID, client_secret: BNET_CLIENT_SECRET)
+        RBattlenet.authenticate(client_id: KEY.client_id, client_secret: KEY.client_secret)
       end
     end
 

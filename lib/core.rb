@@ -25,21 +25,14 @@ BUCKET = storage_data["bucket"]
 
 # Load keys
 keys = YAML::load(File.open('config/keys.yml'))
-BNET_CLIENT_ID = keys["bnet_keys"][(ARGV[1].to_i rescue 0)]["bnet_client_id"]
-BNET_CLIENT_SECRET = keys["bnet_keys"][(ARGV[1].to_i rescue 0)]["bnet_client_secret"]
 WCL_KEY = keys["wcl_key"]
 ROLLBAR_KEY = keys["rollbar_key"]
-SERVER_AUTH = keys["server_auth"]
-
-# Obtain access token - valid for 24 hours
-RBattlenet.authenticate(client_id: BNET_CLIENT_ID, client_secret: BNET_CLIENT_SECRET)
 
 Rollbar.configure do |config|
   config.access_token = ROLLBAR_KEY
 
   if `hostname`.strip == "L049.local"
     config.enabled = false
-
     require 'byebug'
   end
 end
@@ -72,6 +65,10 @@ begin
 
   # Store realm data in memory
   REALMS = Audit::Realm.all.map{ |realm| [realm.id, realm] }.to_h
+
+  ZONE = ((1..8).to_a - Audit::Schedule.all.map(&:zone)).first || Audit::Schedule.min(:zone)
+  KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE).first
+  RBattlenet.authenticate(client_id: KEY.client_id, client_secret: KEY.client_secret)
 
 rescue Mysql2::Error => e
   # The SQL proxy isn't always instantly available on server reboot

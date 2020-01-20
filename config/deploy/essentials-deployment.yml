@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: essentials-deployment
+  labels:
+    app: essentials
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: essentials
+  template:
+    metadata:
+      labels:
+        app: essentials
+    spec:
+      containers:
+      - name: essentials
+        image: shedi/wowaudit:latest
+
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 750Mi
+
+          limits:
+            cpu: 1000m
+            memory: 900Mi
+
+      imagePullSecrets:
+        - name: regcred

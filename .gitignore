@@ -4,4 +4,6 @@ config/database.yml
 config/keys.yml
 config/storage.yml
 config/arangodb.yml
+
 deploy
+!config/deploy
