@@ -179,7 +179,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'The Eternal Palace', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 23,
+  'name' => 'The Eternal Palace', 'days' => [], 'id' => 23,
   'encounters' => [{
     'id' => 2298, 'name' => 'Abyssal Commander Sivara', 'raid_ids' => {
       'raid_finder' => [13587], 'normal' => [13588], 'heroic' => [13589], 'mythic' => [13590]
@@ -211,6 +211,57 @@ VALID_RAIDS = [{
   }, {
     'id' => 2299, 'name' => "Queen Azshara", 'raid_ids' => {
       'raid_finder' => [13616], 'normal' => [13617], 'heroic' => [13618], 'mythic' => [13619]
+    }
+  }]
+}, {
+  'name' => 'Ny\'alotha, the Waking CIty', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 24,
+  'encounters' => [{
+    'id' => 2329, 'name' => 'Wrathion', 'raid_ids' => {
+      'raid_finder' => [14078], 'normal' => [14079], 'heroic' => [14080], 'mythic' => [14082]
+    }
+  }, {
+    'id' => 2327, 'name' => "Maut", 'raid_ids' => {
+      'raid_finder' => [14089], 'normal' => [14091], 'heroic' => [14093], 'mythic' => [14094]
+    }
+  }, {
+    'id' => 2334, 'name' => "The Prophet Skitra", 'raid_ids' => {
+      'raid_finder' => [14095], 'normal' => [14096], 'heroic' => [14097], 'mythic' => [14098]
+    }
+  }, {
+    'id' => 2328, 'name' => "Dark Inquisitor Xanesh", 'raid_ids' => {
+      'raid_finder' => [14101], 'normal' => [14102], 'heroic' => [14104], 'mythic' => [14105]
+    }
+  }, {
+    'id' => 2333, 'name' => "The Hivemind", 'raid_ids' => {
+      'raid_finder' => [14107], 'normal' => [14108], 'heroic' => [14109], 'mythic' => [14110]
+    }
+  }, {
+    'id' => 2335, 'name' => "Shad'har the Insatiable", 'raid_ids' => {
+      'raid_finder' => [14111], 'normal' => [14112], 'heroic' => [14114], 'mythic' => [14115]
+    }
+  }, {
+    'id' => 2343, 'name' => "Drest'agath", 'raid_ids' => {
+      'raid_finder' => [14117], 'normal' => [14118], 'heroic' => [14119], 'mythic' => [14120]
+    }
+  }, {
+    'id' => 2336, 'name' => "Vexiona", 'raid_ids' => {
+      'raid_finder' => [14123], 'normal' => [14124], 'heroic' => [14125], 'mythic' => [14126]
+    }
+  }, {
+    'id' => 2331, 'name' => "Ra-den the Despoiled", 'raid_ids' => {
+      'raid_finder' => [14127], 'normal' => [14128], 'heroic' => [14129], 'mythic' => [14130]
+    }
+  }, {
+    'id' => 2345, 'name' => "Il'gynoth, Corruption Reborn", 'raid_ids' => {
+      'raid_finder' => [14207], 'normal' => [14208], 'heroic' => [14210], 'mythic' => [14211]
+    }
+  }, {
+    'id' => 2337, 'name' => "Carapace of N'Zoth", 'raid_ids' => {
+      'raid_finder' => [14131], 'normal' => [14132], 'heroic' => [14133], 'mythic' => [14134]
+    }
+  }, {
+    'id' => 2344, 'name' => "N'Zoth the Corruptor", 'raid_ids' => {
+      'raid_finder' => [14135], 'normal' => [14136], 'heroic' => [14137], 'mythic' => [14138]
     }
   }]
 }]
