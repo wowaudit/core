@@ -5,7 +5,7 @@ metadata:
   labels:
     app: essentials
 spec:
-  replicas: 4
+  replicas: 18
   selector:
     matchLabels:
       app: essentials
@@ -27,7 +27,7 @@ spec:
 
           limits:
             cpu: 1000m
-            memory: 1500Mi
+            memory: 2000Mi
 
       imagePullSecrets:
         - name: regcred

@@ -26,10 +26,8 @@ module Audit
     end
 
     def refresh_from_schedule(type)
-      register_worker(type)
-
       loop do
-        worker = Schedule.where(name: `hostname`.strip).first || register_worker(type)
+        worker = Schedule.where(name: "#{`hostname`.strip}-#{type}").first || register_worker(type)
         if worker.schedule
           schedule = JSON.parse worker.schedule
           Logger.g(INFO_STARTING_SCHEDULE + "Teams: #{schedule.join(', ')}")
