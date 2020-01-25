@@ -27,7 +27,7 @@ module Audit
 
     def refresh_from_schedule(type)
       loop do
-        worker = Schedule.where(name: "#{`hostname`.strip}-#{type}").first || register_worker(type)
+        worker = Schedule.where(name: `hostname`.strip).first || register_worker(type)
         if worker.schedule
           schedule = JSON.parse worker.schedule
           Logger.g(INFO_STARTING_SCHEDULE + "Teams: #{schedule.join(', ')}")
@@ -61,7 +61,7 @@ module Audit
     def register_worker(type)
       Logger.g(INFO_REGISTERED_WORKER)
       Schedule.find_or_create(
-        name: "#{`hostname`.strip}-#{type}",
+        name: `hostname`.strip,
       ) do |schedule|
         schedule.type = type
         schedule.active = true
