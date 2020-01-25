@@ -1,5 +1,10 @@
 module Audit
   class Scheduler
+    TIMEOUTS = {
+      essentials: 5,
+      raiderio: 60,
+      wcl: 15,
+    }
 
     def initialize
       stats = {}
@@ -10,7 +15,7 @@ module Audit
           worker.schedule ||= Scheduler.schedule_work(worker).to_json
           if worker.save_changes
             worker.update(updated_at: DateTime.now)
-          elsif (DateTime.now - worker.updated_at.to_datetime).to_f * 24 * 60 > 5
+          elsif (DateTime.now - worker.updated_at.to_datetime).to_f * 24 * 60 > TIMEOUTS[worker.type.to_sym]
             worker.destroy
             system("kubectl delete pods #{worker.name}")
             Logger.g(INFO_SCHEDULER_DESTROYED_WORKER + "Worker: #{worker.type} #{worker.name}")
