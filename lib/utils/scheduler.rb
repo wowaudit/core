@@ -32,7 +32,7 @@ module Audit
       if worker.type == "keystones"
         table = "realms"
         teams = Writer.query("SELECT id, last_refreshed_#{worker.type} FROM realms " +
-                             "ORDER BY last_refreshed_#{worker.type} DESC LIMIT 10", false).to_a
+                             "ORDER BY last_refreshed_#{worker.type} ASC LIMIT 10", false).to_a
       else
         table = "teams"
         teams = Writer.query("SELECT t.id, ((#{Audit.now.to_i} - IFNULL(t.last_refreshed_#{worker.type}, 0)) " +
