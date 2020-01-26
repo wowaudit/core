@@ -4,6 +4,7 @@ module Audit
       essentials: 5,
       raiderio: 60,
       wcl: 15,
+      keystones: 5,
     }
 
     def initialize
