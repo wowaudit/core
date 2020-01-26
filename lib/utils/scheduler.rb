@@ -28,24 +28,24 @@ module Audit
     end
 
     def self.schedule_work(worker)
-      teams = Writer.query("SELECT t.id, ((#{Audit.now.to_i} - IFNULL(t.last_refreshed_#{worker.type}, 0)) " +
-                           "* t.refresh_factor) + t.refresh_factor AS priority, " +
-                           "t.last_refreshed_#{worker.type} AS last_refreshed FROM `teams` t " +
-                           "INNER JOIN guilds g ON g.id = t.guild_id WHERE g.active = 1 " +
-                           "ORDER BY priority DESC LIMIT 5", false).to_a
+      if worker.type == "keystones"
+        table = "realms"
+        teams = Writer.query("SELECT id, last_refreshed_#{worker.type} FROM realms " +
+                             "ORDER BY last_refreshed_#{worker.type} DESC LIMIT 10", false).to_a
+      else
+        table = "teams"
+        teams = Writer.query("SELECT t.id, ((#{Audit.now.to_i} - IFNULL(t.last_refreshed_#{worker.type}, 0)) " +
+                            "* t.refresh_factor) + t.refresh_factor AS priority, " +
+                            "t.last_refreshed_#{worker.type} AS last_refreshed FROM `teams` t " +
+                            "INNER JOIN guilds g ON g.id = t.guild_id WHERE g.active = 1 " +
+                            "ORDER BY priority DESC LIMIT 5", false).to_a
+      end
       team_ids = teams.map{ |team| team["id"] }
 
       # Manual query since Sequel does not support
       # single update queries for multiple objects
-      Writer.query("UPDATE teams SET last_refreshed_#{worker.type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})", false)
-      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.type} #{worker.name} | Teams: #{team_ids.join(', ')}")
-
-      # Log the average time since last refresh in a pretty way. TODO: Refactor since it's quite ugly code
-      time = teams.map{ |team| Audit.now.to_i - team["last_refreshed"] }.inject{ |sum, el| sum + el }.to_f / 5 rescue 0
-      time_log = Time.at(time).utc.strftime("%e days, %H hours, %M minutes and %S seconds")
-      time_log[1] = (time_log[1].to_i - 1).to_s
-      Logger.g(INFO_TIME_SINCE_LAST_REFRESH + time_log)
-
+      Writer.query("UPDATE #{table} SET last_refreshed_#{worker.type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})", false)
+      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.type} #{worker.name} | Entities: #{team_ids.join(', ')}")
       team_ids
     end
   end

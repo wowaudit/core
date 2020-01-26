@@ -1,13 +1,13 @@
 module Audit
-  @@time_since_reset = nil
+  @@reset_timestamp = nil
 
   class << self
-    def refresh(teams, type)
+    def refresh(entities, type)
       query = []
-      teams.each do |team|
+      entities.each do |team|
         begin
           Logger.t(INFO_TEAM_STARTING, team.to_i)
-          Team.refresh(team.to_i, type)
+          (type == "keystones" ? Realm : Team).refresh(team.to_i, type)
         rescue ApiLimitReachedException
           Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
           sleep 60
@@ -30,7 +30,7 @@ module Audit
         worker = Schedule.where(name: `hostname`.strip).first || register_worker(type)
         if worker.schedule
           schedule = JSON.parse worker.schedule
-          Logger.g(INFO_STARTING_SCHEDULE + "Teams: #{schedule.join(', ')}")
+          Logger.g(INFO_STARTING_SCHEDULE + "Entities: #{schedule.join(', ')}")
 
           # Ask for a new schedule
           worker.schedule = nil
@@ -48,12 +48,11 @@ module Audit
       end
     end
 
-    def refresh_without_schedule(instance, teams = nil)
+    def refresh_without_schedule(type, entities = nil)
       loop do
-        schedule = teams || Scheduler.schedule_work(instance)
-        Logger.g(INFO_STARTING_SCHEDULE + "Teams: #{schedule.join(', ')}")
+        Logger.g(INFO_STARTING_SCHEDULE + "Entities: #{entities.join(', ')}")
+        self.refresh(entities, type)
 
-        self.refresh(schedule, instance.split('-').first)
         Logger.g(INFO_FINISHED_SCHEDULE)
       end
     end
@@ -72,7 +71,7 @@ module Audit
     end
 
     def timestamp
-      @@time_since_reset
+      @@reset_timestamp
     end
 
     def region
@@ -105,6 +104,10 @@ module Audit
       @@year_number
     end
 
+    def period
+      641 + ((@@reset_timestamp + 302400) - 1523372400) / 604799
+    end
+
     def previous_week_year
       @@previous_year_number
     end
@@ -114,11 +117,12 @@ module Audit
       reset_time = DateTime.parse(WEEKLY_RESET[region]['day']) + (HOUR * WEEKLY_RESET[region]['hour'])
       reset_time -= (DateTime.now > reset_time ? 0 : 7)
       @@first_day = reset_time.to_date
-      @@time_since_reset = reset_time.to_time.to_i
+      @@reset_timestamp = reset_time.to_time.to_i
       @@week_number = reset_time.cweek.to_s
       @@year_number = reset_time.year.to_s
       @@region = region
       @@previous_week_number = (reset_time.cweek - 1).to_s
+      @@keystone_period = 0
       if @@previous_week_number.to_i < 1
         @@previous_year_number = ((reset_time + 7).year - 1).to_s
         @@previous_week_number = Date.new((reset_time + 7).year - 1, 12, 28).cweek

@@ -73,7 +73,7 @@ begin
   occurrences = zones.map{ |zone| [zone, schedules.count{ |key| key == zone }] }.to_h
   ZONE, _ = occurrences.select { |_, v| v == occurrences.values.min }.first
   KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet")).first
-  Audit.register_worker(TYPE) unless TYPE == "scheduler"
+  Audit.register_worker(TYPE) if REGISTER
   RBattlenet.authenticate(client_id: KEY.client_id, client_secret: KEY.client_secret) unless TYPE == "wcl"
 
 rescue Mysql2::Error => e

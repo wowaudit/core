@@ -28,6 +28,8 @@ INFO_TEAM_STARTING = "Going to refresh this team now. "
 
 INFO_TEAM_REFRESHED = "Finished refreshing the team's data. "
 
+INFO_REALM_REFRESHED = "Finished refreshing character's dungeon level based on this realm's leaderboard. "
+
 INFO_TEAM_EMPTY = "This team is empty, there is nothing to refresh. "
 
 INFO_TEAM_UPDATED = "Stored the team's data in the database. "

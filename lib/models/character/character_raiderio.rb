@@ -21,6 +21,10 @@ module Audit
       end
     end
 
+    def process_leaderboard_result(level)
+      details['raiderio']['weekly_highest'] = level
+    end
+
     def update
       {
         _key: id.to_s,

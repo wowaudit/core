@@ -12,6 +12,8 @@ MYTHIC_DUNGEONS = {
   13620 => 'Operation: Mechagon'
 }
 
+KEYSTONE_DUNGEONS = [244, 245, 246, 247, 248, 249, 250, 251, 252, 353, 369, 370]
+
 MYTHIC_DUNGEONS_CRITERIA = {
   40808 => 'Atal\'Dazar',
   40812 => 'Freehold',

@@ -25,7 +25,7 @@ module Audit
     end
 
     def character_details
-      @character_details ||= Arango.get_characters(id)
+      @character_details ||= Arango.get_characters_by_team(id)
     end
 
     def raids_path

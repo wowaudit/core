@@ -1,7 +1,7 @@
 module Audit
   class PvPData < Data
     def add
-      @character.data['honor_level'] = @character.details["honor_level"] || 0
+      @character.data['honor_level'] = @character.details["honor_level"] || 0 # TODO: Fetch from new API
       @character.data['honorable_kills'] = @data.totalHonorableKills
 
       ['2v2','3v3','RBG'].each do |bracket|

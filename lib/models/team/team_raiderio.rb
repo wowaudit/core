@@ -23,7 +23,7 @@ module Audit
     end
 
     def characters
-      @characters ||= super(CharacterRaiderio.eager(:realm).where(:team_id => id).to_a)
+      @characters ||= super(CharacterRaiderio.where(:team_id => id).to_a)
     end
   end
 end

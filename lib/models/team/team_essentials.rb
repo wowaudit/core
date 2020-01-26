@@ -2,8 +2,6 @@ module Audit
   class TeamEssentials < Team
 
     def refresh
-      # Forked library, processing the result of each Character
-      # is called from within the RBattlenet library
       RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 50)
       $errors = { :tracking => 0, :role => 0 }
       output = []
@@ -39,7 +37,7 @@ module Audit
     end
 
     def characters
-      @characters ||= super(CharacterEssentials.eager(:realm).where(:team_id => id).to_a)
+      @characters ||= super(CharacterEssentials.where(:team_id => id).to_a)
     end
 
     def warning

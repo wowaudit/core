@@ -34,7 +34,7 @@ module Audit
     end
 
     def characters
-      @characters ||= super(CharacterWcl.eager(:realm).where(:team_id => id).to_a)
+      @characters ||= super(CharacterWcl.where(:team_id => id).to_a)
     end
   end
 end

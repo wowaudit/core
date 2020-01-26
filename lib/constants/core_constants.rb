@@ -9,8 +9,6 @@ WCL_URL = "https://www.warcraftlogs.com:443/v1/rankings/character/{name}/{realm}
 
 RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={region}&realm={realm}&name={name}&fields=mythic_plus_scores,mythic_plus_highest_level_runs,mythic_plus_weekly_highest_level_runs"
 
-HONOR_URL = "https://worldofwarcraft.com/{slugged_region}/character/{region}/{realm}/{name}/pvp"
-
 # UTC times
 EXPANSION_START = Date.new(2018, 8, 13)
 
