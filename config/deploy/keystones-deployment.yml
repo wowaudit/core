@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: essentials-deployment
+  name: keystones-deployment
   labels:
-    app: essentials
+    app: keystones
 spec:
-  replicas: 17
+  replicas: 1
   selector:
     matchLabels:
-      app: essentials
+      app: keystones
   template:
     metadata:
       labels:
-        app: essentials
+        app: keystones
     spec:
       containers:
-      - name: essentials
+      - name: keystones
         image: shedi/wowaudit:latest
         command: ["/srv/bin/refresh"]
-        args: ["essentials"]
+        args: ["keystones"]
 
         resources:
           requests:
