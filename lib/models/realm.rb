@@ -27,6 +27,7 @@ module Audit
 
         runs_by_character = {}
         leaderboards.results.map(&:leading_groups).flatten.each do |group|
+          next unless group # EmptyResult will have a nil value here
           group.members.each do |member|
             (runs_by_character[member.profile.id] ||= []) << group.keystone_level
           end
