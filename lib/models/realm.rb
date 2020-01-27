@@ -39,12 +39,12 @@ module Audit
         characters = characters.to_a.map! do |character|
           character.details = metadata[character.id].to_h
           character.verify_details
-          character.process_leaderboard_result(runs_by_character[character.key.to_i])
-          character
-        end
+          changed = character.process_leaderboard_result(runs_by_character[character.key.to_i])
+          character if changed
+        end.compact
 
         Logger.t(INFO_REALM_REFRESHED + "#{characters.size} characters updated.", id)
-        Writer.update_db(characters)
+        Writer.update_db(characters) if characters.any?
       end
     end
   end
