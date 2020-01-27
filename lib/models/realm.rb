@@ -45,6 +45,7 @@ module Audit
 
         Logger.t(INFO_REALM_REFRESHED + "#{characters.size} characters updated.", id)
         Writer.update_db(characters) if characters.any?
+        sleep 20
       end
     end
   end
