@@ -40,7 +40,8 @@ module Audit
         details['raiderio'] = {
           'score' => 0,
           'season_highest' => 0,
-          'weekly_highest' => 0
+          'weekly_highest' => 0,
+          'period' => 0,
         }
       end
 

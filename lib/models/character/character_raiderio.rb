@@ -19,8 +19,9 @@ module Audit
     end
 
     def process_leaderboard_result(level)
-      if level > (details['raiderio']['weekly_highest'] || 0)
+      if details['raiderio']['period'] != Audit.period || level > (details['raiderio']['weekly_highest'] || 0)
         details['raiderio']['weekly_highest'] = level
+        details['raiderio']['period'] = Audit.period
         true
       end
     end

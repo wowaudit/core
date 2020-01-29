@@ -34,12 +34,12 @@ module Audit
         end
         runs_by_character.transform_values!(&:max)
 
-        characters = CharacterRaiderio.where(key: runs_by_character.keys)
+        characters = CharacterRaiderio.where(realm: realm)
         metadata = Arango.get_characters(characters.map(&:id))
         characters = characters.to_a.map! do |character|
           character.details = metadata[character.id].to_h
           character.verify_details
-          changed = character.process_leaderboard_result(runs_by_character[character.key.to_i])
+          changed = character.process_leaderboard_result(runs_by_character[character.key.to_i] || 0)
           character if changed
         end.compact
 
