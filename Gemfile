@@ -4,10 +4,12 @@ gem 'rbattlenet', git: "git://github.com/emielvanlankveld/rbattlenet.git", branc
 gem 'mysql2'
 gem 'typhoeus'
 gem 'sequel'
+gem 'sequel-batches'
 gem 'aws-sdk'
 gem 'tzinfo'
 gem 'require_all'
 gem 'arangorb'
+gem 'redis'
 gem 'rollbar'
 gem 'json'
 

@@ -2,6 +2,7 @@
 require 'require_all'
 require 'sequel'
 require 'arangorb'
+require 'redis'
 require 'rbattlenet'
 require 'typhoeus'
 require 'aws-sdk'
