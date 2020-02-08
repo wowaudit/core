@@ -42,13 +42,7 @@ module Audit
         end
       end
 
-      # Update data
-      arango_data = []
-      result.each do |character|
-        arango_data << character.update
-      end
-
-      Arango.update(arango_data)
+      Redis.update(result)
     end
 
     def self.query(query, async = true)

@@ -35,9 +35,10 @@ module Audit
         runs_by_character.transform_values!(&:max)
 
         characters = CharacterRaiderio.where(realm: realm)
-        metadata = Arango.get_characters(characters.map(&:id))
+        metadata = Redis.get_characters(characters.map(&:key).compact)
         characters = characters.to_a.map! do |character|
-          character.details = metadata[character.id].to_h
+          next unless character.key
+          character.details = metadata[character.key]
           character.verify_details
           changed = character.process_leaderboard_result(runs_by_character[character.key.to_i] || 0)
           character if changed
@@ -45,7 +46,6 @@ module Audit
 
         Logger.t(INFO_REALM_REFRESHED + "#{characters.size} characters updated.", id)
         Writer.update_db(characters) if characters.any?
-        sleep 20
       end
     end
   end

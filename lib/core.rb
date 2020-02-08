@@ -27,6 +27,7 @@ BUCKET = storage_data["bucket"]
 # Load keys
 keys = YAML::load(File.open('config/keys.yml'))
 ROLLBAR_KEY = keys["rollbar_key"]
+db_config = {}
 
 Rollbar.configure do |config|
   config.access_token = ROLLBAR_KEY
@@ -34,28 +35,31 @@ Rollbar.configure do |config|
   if `hostname`.strip == "L049.local"
     config.enabled = false
     require 'byebug'
+    db_config = YAML::load(File.open('config/external_database.yml'))
+  else
+    db_config = YAML::load(File.open('config/database.yml'))
   end
 end
 
 begin
   # Connections
-  DB = Sequel.connect(YAML::load(File.open('config/database.yml')))
-  # DB.sql_log_level = :debug
-  # DB.logger = Logger.new($stdout)
-  DB2 = Mysql2::Client.new(YAML::load(File.open('config/database.yml')))
+  DB = Sequel.connect(db_config['mysql'])
+  DB2 = Mysql2::Client.new(db_config['mysql'])
 
-  db_config = YAML::load(File.open('config/arangodb.yml'))
+  arango_conf = YAML::load(File.open('config/arangodb.yml'))
   ArangoServer.default_server(
-    user: db_config['user'],
-    password: db_config['password'],
-    server: db_config['server'],
-    port: db_config['port']
+    user: arango_conf['user'],
+    password: arango_conf['password'],
+    server: arango_conf['server'],
+    port: arango_conf['port']
   )
-  ArangoServer.database = db_config['database']
-  ArangoServer.collection = db_config['collection']
-  ArangoServer.user = db_config['user']
+  ArangoServer.database = arango_conf['database']
+  ArangoServer.collection = arango_conf['collection']
+  ArangoServer.user = arango_conf['user']
   ArangoServer.async = true
   ADB = ArangoCollection.new
+
+  REDIS = Redis.new(url: db_config['redis']['host'], password: db_config['redis']['password'])
 
   # Modules
   require_rel 'constants'
