@@ -29,7 +29,7 @@ module Audit
           # Migration prep
           if !self.class_id || !self.key
             self.class_id = response['class']
-            self.key = response['thumbnail']
+            self.key = response['thumbnail'].split("-avatar").first&.split("/")&.last
             self.changed = true
           end
 
