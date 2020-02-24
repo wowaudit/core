@@ -9,6 +9,10 @@ module Audit
       [EXPANSION_START, date.to_date].max
     end
 
+    def active
+      super && key
+    end
+
     def historical_snapshots
       return @historical_snapshots if @historical_snapshots
       @historical_snapshots = []

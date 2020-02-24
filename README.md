@@ -11,18 +11,15 @@ it's not built with individual use in mind. Therefore, setting up the scripts ca
 
 2. Enter the various credentials (and remove `template` from the file names):
 
-        Enter your SQL credentials in `config/database.yml`
-        Enter your ArangoDB credentials in `config/arangodb.yml`
+        Enter your SQL and Redis credentials in `config/database.yml`
 
         In `config/keys.yml`:
-        $ bnet_client_id: <your battle.net client ID>
-        $ bnet_client_secret: <your battle.net client secret>
         $ wcl_key: <your Warcraft Logs API key>
 
         The generated CSV files will be uploaded to a S3 server that you configure, so they can be
         easily fetched by the spreadsheet. In `config/storage.yml` you can enter your S3 credentials.
 
-3. Initialise the database:
+3. Initialise the database and add your API key to the table storing them:
 
         $ rake db:schema:load
 

@@ -1,7 +1,6 @@
 # Dependencies
 require 'require_all'
 require 'sequel'
-require 'arangorb'
 require 'redis'
 require 'rbattlenet'
 require 'typhoeus'
@@ -45,20 +44,6 @@ begin
   # Connections
   DB = Sequel.connect(db_config['mysql'])
   DB2 = Mysql2::Client.new(db_config['mysql'])
-
-  arango_conf = YAML::load(File.open('config/arangodb.yml'))
-  ArangoServer.default_server(
-    user: arango_conf['user'],
-    password: arango_conf['password'],
-    server: arango_conf['server'],
-    port: arango_conf['port']
-  )
-  ArangoServer.database = arango_conf['database']
-  ArangoServer.collection = arango_conf['collection']
-  ArangoServer.user = arango_conf['user']
-  ArangoServer.async = true
-  ADB = ArangoCollection.new
-
   REDIS = Redis.new(url: db_config['redis']['host'], password: db_config['redis']['password'])
 
   # Modules

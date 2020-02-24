@@ -18,14 +18,14 @@ module Audit
     def characters(characters)
       characters.each_with_index do |character, index|
         character.realm_slug = Realm.to_slug(REALMS[character.realm_id || guild.realm_id])
-        character.details = character_details[character.id].to_h
+        character.details = character_details(characters)[character.key].to_h
         character.verify_details
       end
-      characters.select{ |character| character.active }
+      characters.select(&:active)
     end
 
-    def character_details
-      @character_details ||= Arango.get_characters_by_team(id)
+    def character_details(characters)
+      @character_details ||= Redis.get_characters(characters.map(&:key).compact)
     end
 
     def raids_path
