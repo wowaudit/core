@@ -38,7 +38,7 @@ module Audit
         metadata = Redis.get_characters(characters.map(&:key).compact)
         characters = characters.to_a.map! do |character|
           next unless character.key
-          character.details = metadata[character.key]
+          character.details = metadata[character.key] || {}
           character.verify_details
           changed = character.process_leaderboard_result(runs_by_character[character.key.to_i] || 0)
           character if changed
