@@ -2,7 +2,9 @@ module Audit
   module Redis
     def self.get_characters(ids)
       return {} unless ids.any?
-      REDIS.mget(*ids.map{ |id| "character:#{id}" }).map.with_index{ |data, i| [ids[i], JSON.parse(data)] }.to_h
+      REDIS.mget(*ids.map{ |id| "character:#{id}" }).map.with_index do |data, i|
+        [ids[i], data ? JSON.parse(data) : {}]
+      end.to_h
     end
 
     def self.update(characters)
