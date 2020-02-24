@@ -17,7 +17,7 @@ module Audit
         end
       end
       Logger.t(INFO_TEAM_REFRESHED, id)
-      Writer.update_db(characters)
+      Writer.update_db(characters) if characters.any?
     end
 
     def uri(character, zone)

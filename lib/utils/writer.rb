@@ -42,7 +42,7 @@ module Audit
         end
       end
 
-      Redis.update(result)
+      Redis.update(result) if result.any?
     end
 
     def self.query(query, async = true)
