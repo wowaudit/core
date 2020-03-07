@@ -5,13 +5,15 @@ module Audit
       items_equipped = 0
       ITEMS.each do |item|
         begin
-          check_enchant(item)
-          @character.ilvl += @data['items'][item]['itemLevel']
+          equipped_item = @data.equipment.equipped_items.select{ |eq_item| eq_item.slot.type == item.upcase }.first
+          check_enchant(item, equipped_item)
 
-          @character.data[item + '_ilvl'] = @data['items'][item]['itemLevel']
-          @character.data[item + '_id'] = @data['items'][item]['id']
-          @character.data[item + '_name'] = @data['items'][item]['name']
-          @character.data[item + '_quality'] = @data['items'][item]['quality']
+          @character.ilvl += equipped_item.level.value
+
+          @character.data[item + '_ilvl'] = equipped_item.level.value
+          @character.data[item + '_id'] = equipped_item.item.id
+          @character.data[item + '_name'] = equipped_item.name
+          @character.data[item + '_quality'] = QUALITIES[equipped_item.quality.type.to_sym]
           items_equipped += 1
 
         rescue
@@ -23,38 +25,38 @@ module Audit
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types
-      if !@data['items']['offHand']
+      if @data.equipment.equipped_items && !@data.equipment.equipped_items.any?{ |eq_item| eq_item.slot.type == "OFF_HAND" }
         items_equipped += 1
-        @character.ilvl += @data['items']['mainHand']['itemLevel'] rescue 0
+        @character.ilvl += @data.equipment.equipped_items.select{ |eq_item| eq_item.slot.type == "MAIN_HAND" }.first.level.value rescue 0
       end
 
       @character.data['active_loyal_traits'] = check_trait(303007)
 
-      @character.data['ilvl'] = (@character.ilvl / (items_equipped)).round(2) rescue 0
+      @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
 
       # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
       @character.data['ilvl'] = 0 if @character.data['ilvl'] > 600
 
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
-      @character.data['empty_sockets'] = @data['audit']['emptySockets']
+      @character.data['empty_sockets'] = @data.legacy['audit']['emptySockets']
       @character.data['gem_list'] = @character.gems.join('|')
     end
 
-    def check_enchant(item)
-      has_gem = GEMS[@data['items'][item]['tooltipParams']['gem0']]
+    def check_enchant(item, equipped_item)
+      has_gem = GEMS[equipped_item.sockets&.first&.item&.id]
       @character.gems << has_gem if has_gem
 
       if ENCHANTS.include? item
         begin
           # Off-hand items that are not weapons can't be enchanted
-          return if !@data['items'][item]["weaponInfo"] && item == "offHand"
+          return if !equipped_item.weapon && item == "off_hand"
 
           @character.data["enchant_quality_#{item}"] =
-            ENCHANTS[item][@data['items'][item]['tooltipParams']['enchant']][0]
+            ENCHANTS[item][equipped_item.enchantments.first.enchantment_id][0]
 
           @character.data["#{item}_enchant"] =
-            ENCHANTS[item][@data['items'][item]['tooltipParams']['enchant']][1]
+            ENCHANTS[item][equipped_item.enchantments.first.enchantment_id][1]
         rescue
           @character.data["enchant_quality_#{item}"] = 0
           @character.data["#{item}_enchant"] = ''
@@ -63,7 +65,7 @@ module Audit
 
       def check_trait(trait)
         ['head', 'shoulder', 'chest'].map do |item|
-          @data['items'][item]['azeriteEmpoweredItem']['azeritePowers'].map do |power|
+          @data.legacy['items'][item]['azeriteEmpoweredItem']['azeritePowers'].map do |power|
             power['spellId'] == trait ? true : nil # Loyal to the End
           end rescue []
         end.flatten.compact.size

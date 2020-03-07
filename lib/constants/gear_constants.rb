@@ -1,6 +1,6 @@
 ITEMS = [
-  'mainHand',
-  'offHand',
+  'main_hand',
+  'off_hand',
   'head',
   'neck',
   'shoulder',
@@ -11,14 +11,25 @@ ITEMS = [
   'waist',
   'legs',
   'feet',
-  'finger1',
-  'finger2',
-  'trinket1',
-  'trinket2'
+  'finger_1',
+  'finger_2',
+  'trinket_1',
+  'trinket_2'
 ]
 
+QUALITIES = {
+  POOR: 0,
+  COMMON: 1,
+  UNCOMMON: 2,
+  RARE: 3,
+  EPIC: 4,
+  LEGENDARY: 5,
+  ARTIFACT: 6,
+  HEIRLOOM: 7,
+}
+
 ENCHANTS = {
-  'finger1' => {
+  'finger_1' => {
     5938 => [1, "+30 Critical Strike"],
     5939 => [1, "+30 Haste"],
     5940 => [1, "+30 Mastery"],
@@ -32,7 +43,7 @@ ENCHANTS = {
     6110 => [3, "+60 Mastery"],
     6111 => [3, "+60 Versatility"],
   },
-  'finger2' => {
+  'finger_2' => {
     5938 => [1, "+30 Critical Strike"],
     5939 => [1, "+30 Haste"],
     5940 => [1, "+30 Mastery"],
@@ -46,7 +57,7 @@ ENCHANTS = {
     6110 => [3, "+60 Mastery"],
     6111 => [3, "+60 Versatility"],
   },
-  'mainHand' => {
+  'main_hand' => {
     3370 => [3, "Rune of Razorice"],
     3847 => [3, "Rune of the Stoneskin Gargoyle"],
     3368 => [3, "Rune of the Fallen Crusader"],
@@ -68,7 +79,7 @@ ENCHANTS = {
     6149 => [3, "Oceanic Restoration"],
     6150 => [3, "Naga Hide"],
   },
-  'offHand' => {
+  'off_hand' => {
     3370 => [3, "Rune of Razorice"],
     3847 => [3, "Rune of the Stoneskin Gargoyle"],
     3368 => [3, "Rune of the Fallen Crusader"],
