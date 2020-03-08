@@ -87,7 +87,7 @@ module Audit
         (@character.details['raiderio']['season_highest'] rescue '-')
 
       @character.data['weekly_highest_m+'] =
-        (@character.details['raiderio']['weekly_highest'] rescue 0)
+        (@character.details['raiderio']['weekly_highest'] rescue nil) || (@character.details['raiderio']['legacy_weekly_highest'] rescue 0)
     end
 
     def add_attunement_data

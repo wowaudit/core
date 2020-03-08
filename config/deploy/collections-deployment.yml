@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collections-deployment
+  labels:
+    app: collections
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: collections
+  template:
+    metadata:
+      labels:
+        app: collections
+    spec:
+      containers:
+      - name: collections
+        image: shedi/wowaudit:latest
+        command: ["/srv/bin/refresh"]
+        args: ["collections"]
+
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1000Mi
+
+          limits:
+            cpu: 1000m
+            memory: 2000Mi
+
+      imagePullSecrets:
+        - name: regcred

@@ -1,7 +1,10 @@
 module Audit
   class ArtifactData < Data
+    ESSENTIAL = true
+
     def add
       neck = @data.equipment.equipped_items&.select{ |item| item.slot.name == "Neck" }&.first
+      cloak = @data.equipment.equipped_items&.select{ |item| item.slot.name == "Back" }&.first
 
       if neck
         @character.data['artifact_level'] = neck.azerite_details.level.value rescue 0
@@ -9,21 +12,14 @@ module Audit
       end
 
       @character.data['cloak_level'] = begin
-        if @data.items.back&.id == 169223
-          ((@data.items.back.itemLevel - 470) + 2) / 2
+        if cloak&.item&.id == 169223
+          ((cloak.level.value - 470) + 2) / 2
         end
       end
 
       # For old spreadsheet versions
       @character.data['ap_this_week'] = 0
       @character.data['ap_obtained_total'] = 0
-
-      @character.data['island_expedition_weekly'] = @data.legacy['quests'].include?(53435) || @data.legacy['quests'].include?(53436)
-      @character.data['island_expedition_total'] =
-        (@data.legacy['achievements']['criteriaQuantity'][@data.legacy['achievements']['criteria'].index(40564)] rescue 0) + # PvE
-        (@data.legacy['achievements']['criteriaQuantity'][@data.legacy['achievements']['criteria'].index(40565)] rescue 0)   # PvP
-
-      @character.data['weekly_event_completed'] = WEEKLY_EVENT_QUESTS.select{ |e| @data.legacy['quests'].include?(e) }.any?
     end
   end
 end

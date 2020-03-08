@@ -1,5 +1,7 @@
 module Audit
   class GearData < Data
+    ESSENTIAL = true
+
     def add
       # Check equipped gear
       items_equipped = 0
@@ -30,8 +32,6 @@ module Audit
         @character.ilvl += @data.equipment.equipped_items.select{ |eq_item| eq_item.slot.type == "MAIN_HAND" }.first.level.value rescue 0
       end
 
-      @character.data['active_loyal_traits'] = check_trait(303007)
-
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
 
       # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
@@ -39,7 +39,6 @@ module Audit
 
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
-      @character.data['empty_sockets'] = @data.legacy['audit']['emptySockets']
       @character.data['gem_list'] = @character.gems.join('|')
     end
 
@@ -61,14 +60,6 @@ module Audit
           @character.data["enchant_quality_#{item}"] = 0
           @character.data["#{item}_enchant"] = ''
         end
-      end
-
-      def check_trait(trait)
-        ['head', 'shoulder', 'chest'].map do |item|
-          @data.legacy['items'][item]['azeriteEmpoweredItem']['azeritePowers'].map do |power|
-            power['spellId'] == trait ? true : nil # Loyal to the End
-          end rescue []
-        end.flatten.compact.size
       end
     end
   end
