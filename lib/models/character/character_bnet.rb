@@ -17,7 +17,7 @@ module Audit
 
     def process_result(response)
       init
-      byebug if name == "Sema"
+
       if response.status_code == 200
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
@@ -67,7 +67,7 @@ module Audit
 
     def to_output
       HEADER.each do |value|
-        self.output << self.data[value]
+        self.output << (self.data[value] || 0)
       end
     end
 
@@ -82,17 +82,6 @@ module Audit
         $errors[:tracking] += 1
       end
       self.changed = true
-    end
-
-    def update
-      {
-        _key: id.to_s,
-        team_id: team_id,
-        character_id: id,
-        max_ilvl: details['max_ilvl'],
-        snapshots: details["snapshots"],
-        last_refresh: ([HEADER, output].transpose.to_h rescue false)
-      }
     end
   end
 end

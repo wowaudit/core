@@ -1,5 +1,7 @@
 module Audit
   class HistoricalData < Data
+    ESSENTIAL = true
+
     def add
       wqs = []
       dungeons = []

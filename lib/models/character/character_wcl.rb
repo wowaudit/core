@@ -33,12 +33,5 @@ module Audit
     def wcl_role
       role == "Heal" ? "hps" : "dps"
     end
-
-    def update
-      {
-        _key: id.to_s,
-        warcraftlogs: details["warcraftlogs"]
-      }
-    end
   end
 end

@@ -3,19 +3,18 @@ module Audit
     def add
       reps = {}
 
-      REPUTATIONS[FACTIONS[@data.legacy.faction]].each do |reputation, name|
-        match = @data.legacy.reputation.select{ |r| r.id == reputation }.first
+      REPUTATIONS[@data.faction.name].each do |reputation, name|
+        match = @data.reputations.select{ |r| r.faction.id == reputation }.first
         if match
-          @character.data["#{name}_standing"] = STANDINGS[match.standing]
-          @character.data["#{name}_value"] = match.value
+          @character.data["#{name}_standing"] = STANDINGS[match.standing.tier]
+          @character.data["#{name}_value"] = match.standing.value
         else
           @character.data["#{name}_standing"] = 'Neutral'
           @character.data["#{name}_value"] = 0
         end
       end
 
-      @character.data['exalted_amount'] =
-        @data.legacy.achievements.criteriaQuantity[@data.legacy.achievements.criteria.index(982)] rescue 0
+      @character.data['exalted_amount'] = @achievements[12866].criteria.amount rescue 0
     end
   end
 end

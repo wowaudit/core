@@ -14,6 +14,10 @@ module Audit
     def initialize(character, data)
       @character = character
       @data = data
+
+      unless character.essentials_only?
+        @achievements = @data.achievements.group_by(&:id).transform_values(&:first)
+      end
     end
   end
 end

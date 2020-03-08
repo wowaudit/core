@@ -9,7 +9,7 @@ module Audit
 
     def self.update(characters)
       if characters.any?
-        REDIS.mset characters.map{ |character| ["character:#{character.key}", character.details.to_json] }.flatten
+        REDIS.mset characters.map{ |character| ["character:#{character.key}", character.metadata.to_json] }.flatten
       end
     end
   end

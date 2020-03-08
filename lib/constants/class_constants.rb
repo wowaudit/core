@@ -13,11 +13,6 @@ CLASSES = {
   12 => 'Demon Hunter'
 }
 
-FACTIONS = {
-  0 => 'Alliance',
-  1 => 'Horde'
-}
-
 DEFAULT_ROLES = {
   'Death Knight' => 'Melee',
   'Demon Hunter' => 'Melee',

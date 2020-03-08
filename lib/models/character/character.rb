@@ -59,5 +59,18 @@ module Audit
         details['last_refresh'] = false
       end
     end
+
+    def metadata
+      {
+        _key: id.to_s,
+        team_id: team_id,
+        character_id: id,
+        max_ilvl: details['max_ilvl'],
+        snapshots: details["snapshots"],
+        warcraftlogs: details["warcraftlogs"],
+        raiderio: details["raiderio"],
+        last_refresh: ([HEADER, output].transpose.to_h rescue false)
+      }
+    end
   end
 end

@@ -14,22 +14,6 @@ MYTHIC_DUNGEONS = {
 
 KEYSTONE_DUNGEONS = [244, 245, 246, 247, 248, 249, 250, 251, 252, 353, 369, 370]
 
-MYTHIC_DUNGEONS_CRITERIA = {
-  40808 => 'Atal\'Dazar',
-  40812 => 'Freehold',
-  40959 => 'King\'s Rest',
-  40955 => 'The MOTHERLODE!!',
-  40941 => 'Shrine of the Storm',
-  43355 => 'Siege of Boralus',
-  40191 => 'Temple of Sethraliss',
-  40944 => 'Tol Dagor',
-  40184 => 'Underrot',
-  40144 => 'Waycrest Manor'
-}
-
-# Not used at the moment
-MYTHIC_PLUS_CRITERIA = (41506..41514)
-
 WEEKLY_EVENT_QUESTS = [
   53032, # Burning Crusade timewalking
   53036, # 4 Battleground matches
