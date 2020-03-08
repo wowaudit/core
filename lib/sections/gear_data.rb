@@ -5,6 +5,11 @@ module Audit
     def add
       # Check equipped gear
       items_equipped = 0
+
+      # Quickfix to not have a 0 returned, which messes up the spreadsheet
+      @character.data["enchant_quality_off_hand"] = ''
+      @character.data["off_hand_enchant"] = ''
+
       ITEMS.each do |item|
         begin
           equipped_item = @data.equipment.equipped_items.select{ |eq_item| eq_item.slot.type == item.upcase }.first
