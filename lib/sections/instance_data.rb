@@ -32,7 +32,7 @@ module Audit
 
       @character.data['dungeons_done_total'] = dungeon_count
       @character.data['dungeons_this_week'] =
-        dungeon_count - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'] rescue 0
+        [dungeon_count - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'], 0].max rescue 0
 
       encounters.each do |encounter|
         encounter.each do |difficulty, ids|
