@@ -3,7 +3,7 @@ module Audit
     def add
       @character.data['achievement_points'] = @data.achievement_points
 
-      @character.data['mounts'] = @achievements[12933].criteria.child_criteria.first.amount
+      @character.data['mounts'] = @achievements[12933].criteria.child_criteria.first.amount rescue 0
 
       @character.data['titles'] = @data.titles.size
 
