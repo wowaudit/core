@@ -17,7 +17,7 @@ module Audit
 
     def characters(characters)
       characters.each_with_index do |character, index|
-        character.realm_slug = Realm.to_slug(REALMS[character.realm_id || guild.realm_id])
+        character.realm_slug = REALMS[character.realm_id || guild.realm_id].blizzard_name
         character.details = character_details(characters)[character.key].to_h
         character.verify_details
       end
