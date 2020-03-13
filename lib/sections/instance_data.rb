@@ -28,7 +28,7 @@ module Audit
             (instance.last_updated_timestamp / 1000) > Audit.timestamp ? 1 : 0
           ]
         end
-      end
+      end rescue nil
 
       @character.data['dungeons_done_total'] = dungeon_count
       @character.data['dungeons_this_week'] =
