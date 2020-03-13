@@ -8,8 +8,8 @@ module Audit
       mplus = []
 
       @character.historical_snapshots.drop(1).each_with_index do |week, index|
-        wqs.insert(0, [week['wqs'] - @character.historical_snapshots[index]['wqs'], 0].max)
-        dungeons.insert(0, [week['dungeons'] - @character.historical_snapshots[index]['dungeons'], 0].max)
+        wqs.insert(0, [(week['wqs'] || 0) - @character.historical_snapshots[index]['wqs'], 0].max)
+        dungeons.insert(0, [(week['dungeons'] || 0) - @character.historical_snapshots[index]['dungeons'], 0].max)
         mplus.insert(0, week['m+'] || '-')
       end
 

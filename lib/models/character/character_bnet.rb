@@ -45,7 +45,8 @@ module Audit
     end
 
     def update_snapshots
-      if !details['snapshots'][Audit.year].include? Audit.week
+      current_week = details['snapshots'][Audit.year][Audit.week]
+      if !current_week || !current_week['wqs'] || !current_week['dungeons']
         details['snapshots'][Audit.year][Audit.week] = {
           'dungeons' => self.data['dungeons_done_total'],
           'wqs' => self.data['wqs_done_total']
@@ -53,7 +54,7 @@ module Audit
 
         # Update the previous week with M+ data
         if (details['snapshots'][Audit.previous_week_year] || {}).include? Audit.previous_week
-          details['snapshots'][Audit.previous_week_year][Audit.previous_week]['m+'] =
+          details['snapshots'][Audit.previous_week_year][Audit.previous_week]['m+'] ||=
             self.data['weekly_highest_m+']
         end
       end
@@ -89,6 +90,7 @@ module Audit
     end
 
     def gdpr_deletion?(response)
+      return false if !response.status
       return true if response.status.status_code == 404
       return true unless response.status.is_valid
       return true if key.to_s != response.status.id.to_s
