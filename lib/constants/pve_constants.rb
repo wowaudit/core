@@ -200,7 +200,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Ny\'alotha, the Waking CIty', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 24,
+  'name' => 'Ny\'alotha', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 24,
   'encounters' => [{
     'id' => 2329, 'name' => 'Wrathion', 'raid_ids' => {
       'raid_finder' => [14078], 'normal' => [14079], 'heroic' => [14080], 'mythic' => [14082]

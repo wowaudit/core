@@ -17,6 +17,7 @@ module Audit
 
     def process_result(response)
       init
+      check_character_api_status(response)
 
       if response.status_code == 200
         self.changed = true if self.status != "tracking"
@@ -26,13 +27,6 @@ module Audit
           return_error(response)
         else
           Data.process(self, response)
-
-          # Migration prep
-          if !self.class_id || !self.key
-            self.class_id = response['class']
-            self.key = response['thumbnail'].split("-avatar").first&.split("/")&.last
-            self.changed = true
-          end
 
           update_snapshots
           to_output
@@ -82,6 +76,23 @@ module Audit
         $errors[:tracking] += 1
       end
       self.changed = true
+    end
+
+    def check_character_api_status(response)
+      return unless self.class == Audit::CharacterCollections
+
+      if gdpr_deletion?(response) && !self.marked_for_deletion_at
+        update(marked_for_deletion_at: DateTime.now)
+      elsif !gdpr_deletion?(response) && self.marked_for_deletion_at
+        update(marked_for_deletion_at: nil)
+      end
+    end
+
+    def gdpr_deletion?(response)
+      return true if response.status.status_code == 404
+      return true unless response.status.is_valid
+      return true if key.to_s != response.status.id.to_s
+      false
     end
   end
 end

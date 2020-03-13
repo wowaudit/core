@@ -11,7 +11,7 @@ module Audit
       @character.data['character_id'] = @character.id
       @character.data['join_date'] = @character.created_at
       @character.data['note'] = @character.note || ""
-      @character.data['rank'] = @character.rank
+      @character.data['rank'] = @character.rank.capitalize
       @character.data['blizzard_last_modified'] = @data.last_login_timestamp
       @character.data['gender'] = @data.gender.name
       @character.data['race'] = @data.race.name

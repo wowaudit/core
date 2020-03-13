@@ -5,6 +5,8 @@ module Audit
     def add
       # Check equipped gear
       items_equipped = 0
+      @character.data['corruption_amount'] = 0
+      @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
       @character.data["enchant_quality_off_hand"] = ''
@@ -23,6 +25,18 @@ module Audit
           @character.data[item + '_quality'] = QUALITIES[equipped_item.quality.type.to_sym]
           items_equipped += 1
 
+          if item == "back"
+            @character.data['corruption_amount'] -=
+              equipped_item.stats.select{ |stat| stat.type.name == "Corruption Resistance" }.first&.value || 0
+          end
+
+          (item == "neck" && equipped_item.azerite_details.selected_essences.any? do |essence|
+            essence.passive_spell_tooltip.description.include? "Corruption Resistance"
+          end ? (@character.data['corruption_amount'] -= 10) : nil) rescue nil
+
+          if corruption = equipped_item.stats.select{ |stat| stat.type.name == "Corruption" }.first
+            @character.data['corruption_amount'] += corruption.value
+          end
         rescue
           @character.data[item + '_ilvl'] = ''
           @character.data[item + '_id'] = ''
@@ -48,8 +62,13 @@ module Audit
     end
 
     def check_enchant(item, equipped_item)
-      has_gem = GEMS[equipped_item.sockets&.first&.item&.id]
-      @character.gems << has_gem if has_gem
+      (equipped_item.sockets || []).each do |socket|
+        if has_gem = GEMS[socket.item&.id]
+          @character.gems << has_gem
+        elsif !socket.item&.id
+          @character.data['empty_sockets'] += 1
+        end
+      end
 
       if ENCHANTS.include? item
         begin
