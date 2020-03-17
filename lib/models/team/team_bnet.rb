@@ -20,12 +20,13 @@ module Audit
         result = RBattlenet::Wow::Character.find(
           characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, source: ch } }, fields: self.class::FIELDS
         ) do |character, result|
-          character[:source].process_result(result)
-          output << character[:source]
+          if character[:source].process_result(result)
+            output << character[:source]
+          end
         end
         Logger.t(INFO_TEAM_REFRESHED, id)
 
-        Writer.write(self, output, HeaderData.altered_header(self))
+        Writer.write(self, output.reject(&:marked_for_deletion_at), HeaderData.altered_header(self))
         Writer.update_db(output, true)
       else
         Logger.t(INFO_TEAM_EMPTY, id)

@@ -6,6 +6,12 @@ module Audit
       self.data = last_refresh
       self.changed = false
 
+      # Populate identifying data regardless of response
+      self.data['name'] = name
+      self.data['realm'] = REALMS[realm_id]&.name
+      self.data['realm_slug'] = realm_slug
+      self.data['rank'] = rank.capitalize
+
       # Variables for gear data
       self.gems = []
       self.ilvl = 0.0
@@ -17,22 +23,15 @@ module Audit
 
     def process_result(response)
       init
-      check_character_api_status(response)
+      raise ApiLimitReachedException if response.status_code == 429
 
-      if response.status_code == 200
+      if check_character_api_status(response) && !self.marked_for_deletion_at
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
 
-        if response.class == RBattlenet::EmptyResult
-          return_error(response)
-        else
-          Data.process(self, response)
-
-          update_snapshots
-          to_output
-        end
-      elsif response.status_code == 429
-        raise ApiLimitReachedException
+        Data.process(self, response)
+        update_snapshots
+        to_output
       else
         return_error(response)
       end
@@ -67,26 +66,33 @@ module Audit
     end
 
     def set_status(code)
-      if code == 404
-        self.status = "does not exist"
+      new_status = if self.marked_for_deletion_at
         $errors[:tracking] += 1
+        "data unavailable"
+      elsif code == 404
+        $errors[:tracking] += 1
+        "does not exist"
       elsif code.to_s[0] == "5"
-        self.status = "temporarily unavailable"
+        "temporarily unavailable"
       else
-        self.status = "not tracking"
         $errors[:tracking] += 1
+        "not tracking"
       end
-      self.changed = true
+      self.changed = new_status != self.status
+      self.status = new_status
     end
 
     def check_character_api_status(response)
-      return unless self.class == Audit::CharacterCollections
-
-      if gdpr_deletion?(response) && !self.marked_for_deletion_at
-        update(marked_for_deletion_at: DateTime.now)
-      elsif !gdpr_deletion?(response) && self.marked_for_deletion_at
-        update(marked_for_deletion_at: nil)
+      unless self.class == Audit::CharacterEssentials
+        if gdpr_deletion?(response) && !self.marked_for_deletion_at
+          update(marked_for_deletion_at: DateTime.now)
+          return false
+        elsif !gdpr_deletion?(response) && self.marked_for_deletion_at
+          update(marked_for_deletion_at: nil)
+        end
       end
+
+      response.status_code == 200
     end
 
     def gdpr_deletion?(response)

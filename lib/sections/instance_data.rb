@@ -45,10 +45,12 @@ module Audit
         @character.data[metric] = data.join('|')
       end
 
-      @character.data['cutting_edge'] =
-        CUTTING_EDGE_ACHIEVEMENTS.count{ |raid| @achievements[raid]&.criteria&.is_completed }
-      @character.data['ahead_of_the_curve'] =
-        AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid]&.criteria&.is_completed }
+      if @achievements
+        @character.data['cutting_edge'] =
+          CUTTING_EDGE_ACHIEVEMENTS.count{ |raid| @achievements[raid]&.criteria&.is_completed }
+        @character.data['ahead_of_the_curve'] =
+          AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid]&.criteria&.is_completed }
+      end
     end
   end
 end

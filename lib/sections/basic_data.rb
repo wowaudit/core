@@ -3,15 +3,15 @@ module Audit
     ESSENTIAL = true
 
     def add
-      @character.data['name'] = @data['name']
-      @character.data['class'] = CLASSES[@data.character_class.id]
+      @character.data['name'] = @character.name
       @character.data['realm'] = REALMS[@character.realm_id]&.name
-      @character.data['faction'] = @data.faction.name
       @character.data['realm_slug'] = @character.realm_slug
+      @character.data['rank'] = @character.rank.capitalize
+      @character.data['note'] = @character.note || ""
       @character.data['character_id'] = @character.id
       @character.data['join_date'] = @character.created_at
-      @character.data['note'] = @character.note || ""
-      @character.data['rank'] = @character.rank.capitalize
+      @character.data['class'] = CLASSES[@data.character_class.id]
+      @character.data['faction'] = @data.faction.name
       @character.data['blizzard_last_modified'] = @data.last_login_timestamp
       @character.data['gender'] = @data.gender.name
       @character.data['race'] = @data.race.name

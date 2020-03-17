@@ -1,20 +1,22 @@
 module Audit
   class ReputationData < Data
     def add
-      reps = {}
-
-      REPUTATIONS[@data.faction.name].each do |reputation, name|
-        match = @data.reputations.select{ |r| r.faction.id == reputation }.first
-        if match
-          @character.data["#{name}_standing"] = STANDINGS[match.standing.tier]
-          @character.data["#{name}_value"] = match.standing.value
-        else
-          @character.data["#{name}_standing"] = 'Neutral'
-          @character.data["#{name}_value"] = 0
+      unless @data.reputations.class == RBattlenet::EmptyResult
+        REPUTATIONS[@data.faction.name].each do |reputation, name|
+          match = @data.reputations.select{ |r| r.faction.id == reputation }.first
+          if match
+            @character.data["#{name}_standing"] = STANDINGS[match.standing.tier]
+            @character.data["#{name}_value"] = match.standing.value
+          else
+            @character.data["#{name}_standing"] = 'Neutral'
+            @character.data["#{name}_value"] = 0
+          end
         end
       end
 
-      @character.data['exalted_amount'] = @achievements[12866].criteria.amount rescue 0
+      if @achievements
+        @character.data['exalted_amount'] = @achievements[12866].criteria.amount rescue 0
+      end
     end
   end
 end

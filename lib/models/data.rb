@@ -16,7 +16,7 @@ module Audit
       @data = data
 
       unless character.essentials_only?
-        @achievements = @data.achievements.group_by(&:id).transform_values(&:first)
+        @achievements = @data.achievements&.group_by(&:id)&.transform_values(&:first)
       end
     end
   end

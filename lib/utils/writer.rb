@@ -25,7 +25,7 @@ module Audit
         self.query(query_string)
       end
 
-      Redis.update(result) if result.any?
+      Redis.update(result.reject(&:marked_for_deletion_at)) if result.any?
     end
 
     def self.query(query, async = true)
