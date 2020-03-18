@@ -13,12 +13,12 @@ module Audit
                      'raids_heroic' => [],      'raids_heroic_weekly' => [],
                      'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
-      dungeon_count = 0
+      @character.data['dungeons_done_total'] = 0
 
       @data.achievement_statistics.statistics[5].sub_categories.map(&:statistics).flatten.each do |instance|
         if MYTHIC_DUNGEONS.include?(instance.id)
           @character.data[MYTHIC_DUNGEONS[instance.id]] = instance.quantity.to_i
-          dungeon_count += instance.quantity.to_i
+          @character.data['dungeons_done_total'] += instance.quantity.to_i
         end
 
         # Track weekly Raid kills through the statistics
@@ -29,10 +29,6 @@ module Audit
           ]
         end
       end rescue nil
-
-      @character.data['dungeons_done_total'] = dungeon_count
-      @character.data['dungeons_this_week'] =
-        [dungeon_count - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'], 0].max rescue 0
 
       encounters.each do |encounter|
         encounter.each do |difficulty, ids|

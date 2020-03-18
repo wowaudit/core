@@ -11,9 +11,6 @@ module Audit
           (@achievements[13121].criteria.child_criteria.first.amount rescue 0)   # PvP
       end
 
-      @character.data['wqs_this_week'] =
-        @character.data['wqs_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['wqs'] rescue 0
-
       # Reset WQ data to 0 when a character changes their account wide sharing setting
       if @character.data['wqs_this_week'] < 0 || @character.data['wqs_this_week'] > 1000
         @character.details['snapshots'][Audit.year][Audit.week]['wqs'] = @character.data['wqs_done_total']

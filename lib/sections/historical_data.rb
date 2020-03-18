@@ -8,8 +8,8 @@ module Audit
       mplus = []
 
       @character.historical_snapshots.drop(1).each_with_index do |week, index|
-        wqs.insert(0, [(week['wqs'] || 0) - @character.historical_snapshots[index]['wqs'], 0].max)
-        dungeons.insert(0, [(week['dungeons'] || 0) - @character.historical_snapshots[index]['dungeons'], 0].max)
+        wqs.insert(0, [(week['wqs'] || 0) - (@character.historical_snapshots[index]['wqs'] || 0), 0].max)
+        dungeons.insert(0, [(week['dungeons'] || 0) - (@character.historical_snapshots[index]['dungeons'] || 0), 0].max)
         mplus.insert(0, week['m+'] || '-')
       end
 
@@ -19,6 +19,12 @@ module Audit
       @character.data['historical_wqs_done'] = wqs.join('|')
       @character.data['historical_dungeons_done'] = dungeons.join('|')
       @character.data['historical_mplus_done'] = mplus.join('|')
+
+      @character.data['dungeons_this_week'] =
+        [@character.data['dungeons_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'], 0].max rescue 0
+
+      @character.data['wqs_this_week'] =
+        [@character.data['wqs_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['wqs'], 0].max rescue 0
     end
   end
 end
