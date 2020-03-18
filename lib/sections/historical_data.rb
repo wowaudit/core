@@ -25,6 +25,12 @@ module Audit
 
       @character.data['wqs_this_week'] =
         [@character.data['wqs_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['wqs'], 0].max rescue 0
+
+      # Reset WQ data to 0 when a character changes their account wide sharing setting
+      if @character.data['wqs_this_week'] < 0 || @character.data['wqs_this_week'] > 1000
+        @character.details['snapshots'][Audit.year][Audit.week]['wqs'] = @character.data['wqs_done_total']
+        @character.data['wqs_this_week'] = 0
+      end
     end
   end
 end
