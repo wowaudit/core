@@ -69,7 +69,7 @@ module Audit
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
         raiderio: details["raiderio"],
-        last_refresh: ([HEADER, output].transpose.to_h rescue false)
+        last_refresh: last_refresh_data
       }
     end
   end

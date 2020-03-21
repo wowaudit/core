@@ -102,5 +102,9 @@ module Audit
       return true if key.to_s != response.status.id.to_s
       false
     end
+
+    def last_refresh_data
+      [HEADER, output].transpose.to_h rescue false
+    end
   end
 end

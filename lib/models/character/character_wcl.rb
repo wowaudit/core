@@ -33,5 +33,9 @@ module Audit
     def wcl_role
       role == "Heal" ? "hps" : "dps"
     end
+
+    def last_refresh_data
+      details['last_refresh']
+    end
   end
 end

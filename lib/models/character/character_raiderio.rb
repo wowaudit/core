@@ -29,5 +29,9 @@ module Audit
         true
       end
     end
+
+    def last_refresh_data
+      details['last_refresh']
+    end
   end
 end
