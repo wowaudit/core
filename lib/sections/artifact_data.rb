@@ -13,7 +13,7 @@ module Audit
 
       @character.data['cloak_level'] = begin
         if cloak&.item&.id == 169223
-          ((cloak.level.value - 470) + 2) / 2
+          [((cloak.level.value - 470) + 2) / 2, 15].min
         end
       end
 
