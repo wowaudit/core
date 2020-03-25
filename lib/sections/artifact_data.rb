@@ -13,7 +13,9 @@ module Audit
 
       @character.data['cloak_level'] = begin
         if cloak&.item&.id == 169223
-          [((cloak.level.value - 470) + 2) / 2, 15].min
+          base_rank = [((cloak.level.value - 470) + 2) / 2, 15].min
+          cores = [((cloak.stats.select{ |stat| stat.type.name == "Corruption Resistance" }.first&.value || 0) - 50) / 3, 0].max
+          base_rank + cores
         end
       end
 
