@@ -13,12 +13,12 @@ module Audit
                      'raids_heroic' => [],      'raids_heroic_weekly' => [],
                      'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
-      @character.data['dungeons_done_total'] = 0
+      total_dungeons = 0
 
-      @data.achievement_statistics.statistics[5].sub_categories.map(&:statistics).flatten.each do |instance|
+      @data.achievement_statistics.categories[5].sub_categories.map(&:statistics).flatten.each do |instance|
         if MYTHIC_DUNGEONS.include?(instance.id)
           @character.data[MYTHIC_DUNGEONS[instance.id]] = instance.quantity.to_i
-          @character.data['dungeons_done_total'] += instance.quantity.to_i
+          total_dungeons += instance.quantity.to_i
         end
 
         # Track weekly Raid kills through the statistics
@@ -29,6 +29,10 @@ module Audit
           ]
         end
       end rescue nil
+
+      unless total_dungeons.zero?
+        @character.data['dungeons_done_total'] = total_dungeons
+      end
 
       encounters.each do |encounter|
         encounter.each do |difficulty, ids|
@@ -43,9 +47,9 @@ module Audit
 
       if @achievements
         @character.data['cutting_edge'] =
-          CUTTING_EDGE_ACHIEVEMENTS.count{ |raid| @achievements[raid]&.criteria&.is_completed }
+          CUTTING_EDGE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
         @character.data['ahead_of_the_curve'] =
-          AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid]&.criteria&.is_completed }
+          AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
       end
     end
   end
