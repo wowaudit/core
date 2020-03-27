@@ -7,10 +7,7 @@ module Audit
       output = []
       if guild.api_key && guild.api_key.active
         begin
-          RBattlenet.authenticate(
-            client_id: guild.api_key.client_id,
-            client_secret: guild.api_key.client_secret
-          )
+          Audit.authenticate(guild.api_key.client_id, guild.api_key.client_secret)
         rescue RBattlenet::Errors::Unauthorized
           guild.api_key.update(active: false)
         end
@@ -33,7 +30,7 @@ module Audit
       end
 
       if guild.api_key && guild.api_key.active
-        RBattlenet.authenticate(client_id: KEY.client_id, client_secret: KEY.client_secret)
+        Audit.authenticate(KEY.client_id, KEY.client_secret)
       end
     end
 

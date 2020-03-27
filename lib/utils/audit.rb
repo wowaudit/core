@@ -70,6 +70,21 @@ module Audit
       end
     end
 
+    def authenticate(id, secret)
+      attempts = 0
+
+      begin
+        RBattlenet.authenticate(client_id: id, client_secret: secret)
+      rescue
+        attempts += 1
+        if attempts < 5
+          retry
+        else
+          raise
+        end
+      end
+    end
+
     def timestamp
       @@reset_timestamp
     end

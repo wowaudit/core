@@ -10,7 +10,7 @@ module Audit
       @character.data['note'] = @character.note || ""
       @character.data['character_id'] = @character.id
       @character.data['join_date'] = @character.created_at
-      @character.data['class'] = CLASSES[@data.character_class.id]
+      @character.data['class'] = CLASSES[@character.class_id || @data.character_class&.id]
       @character.data['faction'] = @data.faction.name
       @character.data['blizzard_last_modified'] = @data.last_login_timestamp
       @character.data['gender'] = @data.gender.name
@@ -18,13 +18,13 @@ module Audit
 
       # Parse the role if it's valid, otherwise set the default role
       begin
-        if ROLES[@character.role][CLASSES[@data.character_class.id]]
+        if ROLES[@character.role][CLASSES[@character.class_id || @data.character_class&.id]]
           @character.data['role'] = @character.role
         else
           raise RoleError
         end
       rescue
-        @character.role = DEFAULT_ROLES[CLASSES[@data.character_class.id]]
+        @character.role = DEFAULT_ROLES[CLASSES[@character.class_id || @data.character_class&.id]]
         @character.data['role'] = @character.role
         @character.changed = true
       end

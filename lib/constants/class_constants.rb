@@ -10,7 +10,8 @@ CLASSES = {
   9 => 'Warlock',
   10 => 'Monk',
   11 => 'Druid',
-  12 => 'Demon Hunter'
+  12 => 'Demon Hunter',
+  nil => ''
 }
 
 DEFAULT_ROLES = {
