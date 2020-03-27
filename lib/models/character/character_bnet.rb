@@ -92,7 +92,7 @@ module Audit
         end
       end
 
-      response.status_code == 200
+      response.status_code == 200 && response.class == RBattlenet::Result
     end
 
     def gdpr_deletion?(response)
