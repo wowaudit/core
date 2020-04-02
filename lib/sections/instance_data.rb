@@ -50,6 +50,8 @@ module Audit
           CUTTING_EDGE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
         @character.data['ahead_of_the_curve'] =
           AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
+
+        @character.data['memento_amount'] = @achievements[14173].criteria.child_criteria.first.amount rescue 0
       end
     end
   end

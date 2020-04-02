@@ -233,4 +233,5 @@ HEADER = [
   'quests_done_total',
   'dailies_done_total',
   'corruption_amount',
+  'memento_amount',
 ]
