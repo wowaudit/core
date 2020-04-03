@@ -12,11 +12,11 @@ module Audit
         end
       end
 
-      @character.data['max_2v2_rating'] = @data.achievement_statistics.statistics[9].sub_categories[0].statistics.select do |stat|
+      @character.data['max_2v2_rating'] = @data.achievement_statistics.categories[9].sub_categories[0].statistics.select do |stat|
         stat.name == "Highest 2 man personal rating"
       end.first&.quantity&.to_i rescue 0
 
-      @character.data['max_3v3_rating'] = @data.achievement_statistics.statistics[9].sub_categories[0].statistics.select do |stat|
+      @character.data['max_3v3_rating'] = @data.achievement_statistics.categories[9].sub_categories[0].statistics.select do |stat|
         stat.name == "Highest 3 man personal rating"
       end.first&.quantity&.to_i rescue 0
     end
