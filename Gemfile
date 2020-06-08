@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rbattlenet', git: "git://github.com/emielvanlankveld/rbattlenet.git", branch: 'api-migration'
+gem 'rbattlenet', git: "git://github.com/emielvanlankveld/rbattlenet.git", branch: 'master'
 gem 'mysql2'
 gem 'typhoeus'
 gem 'sequel'

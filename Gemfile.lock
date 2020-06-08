@@ -1,7 +1,7 @@
 GIT
   remote: git://github.com/emielvanlankveld/rbattlenet.git
-  revision: b2351fa13e0dc81465523ac08c916b804a712334
-  branch: api-migration
+  revision: 104c194cf2e40105e0746bd83dad65552888890e
+  branch: master
   specs:
     rbattlenet (2.0.0)
       require_all
