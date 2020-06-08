@@ -23,9 +23,9 @@ module Audit
 
     def process_result(response)
       init
-      raise ApiLimitReachedException if response.status_code == 429
+      raise ApiLimitReachedException if response[:status_code] == 429
 
-      if check_character_api_status(response) && !self.marked_for_deletion_at
+      if check_character_api_status(response) && !self.marked_for_deletion_at && check_data_completeness(response)
         self.changed = true if self.status != "tracking"
         self.status = "tracking"
 
@@ -38,8 +38,8 @@ module Audit
     end
 
     def return_error(response)
-      Logger.c(ERROR_CHARACTER + "Response code: #{response.status_code}", id)
-      set_status(response.status_code)
+      Logger.c(ERROR_CHARACTER + "Response code: #{response[:status_code]}", id)
+      set_status(response[:status_code])
       to_output
     end
 
@@ -92,14 +92,14 @@ module Audit
         end
       end
 
-      response.status_code == 200 && response.class == RBattlenet::Result
+      response[:status_code] == 200 && response.class == RBattlenet::HashResult
     end
 
     def gdpr_deletion?(response)
-      return false if !response.status
-      return true if response.status.status_code == 404
-      return true unless response.status.is_valid
-      return true if key.to_s != response.status.id.to_s
+      return false if !response[:status]
+      return true if response[:status][:status_code] == 404
+      return true unless response[:status]['is_valid']
+      return true if key.to_s != response[:status]['id'].to_s
       false
     end
 

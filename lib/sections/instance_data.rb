@@ -15,17 +15,17 @@ module Audit
       dungeon_list = {}
       total_dungeons = 0
 
-      @data.achievement_statistics.categories[5].sub_categories.map(&:statistics).flatten.each do |instance|
-        if MYTHIC_DUNGEONS.include?(instance.id)
-          @character.data[MYTHIC_DUNGEONS[instance.id]] = instance.quantity.to_i
-          total_dungeons += instance.quantity.to_i
+      @data[:achievement_statistics]['categories'][5]['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
+        if MYTHIC_DUNGEONS.include?(instance['id'])
+          @character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity'].to_i
+          total_dungeons += instance['quantity'].to_i
         end
 
         # Track weekly Raid kills through the statistics
-        if boss_ids.include?(instance.id)
-          raid_list[instance.id] = [
-            instance.quantity.to_i,
-            (instance.last_updated_timestamp / 1000) > Audit.timestamp ? 1 : 0
+        if boss_ids.include?(instance['id'])
+          raid_list[instance['id']] = [
+            instance['quantity'].to_i,
+            (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0
           ]
         end
       end rescue nil
@@ -51,7 +51,7 @@ module Audit
         @character.data['ahead_of_the_curve'] =
           AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
 
-        @character.data['memento_amount'] = @achievements[14173].criteria.child_criteria.first.amount rescue 0
+        @character.data['memento_amount'] = @achievements[14173]['criteria']['child_criteria'].first['amount'] rescue 0
       end
     end
   end

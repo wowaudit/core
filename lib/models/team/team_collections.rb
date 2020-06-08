@@ -7,7 +7,7 @@ module Audit
       :equipment,
       :mounts,
       :pets,
-      # :professions,
+      :professions,
       :pvp_bracket_2v2,
       :pvp_bracket_3v3,
       :pvp_bracket_rbg,

@@ -1,4 +1,4 @@
-PROFESSIONS = {
+BFA_PROFESSIONS = {
   2478 => "Alchemy",
   2437 => "Blacksmithing",
   2486 => "Enchanting",

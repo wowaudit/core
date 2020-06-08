@@ -14,28 +14,28 @@ module Audit
 
       ITEMS.each do |item|
         begin
-          equipped_item = @data.equipment.equipped_items.select{ |eq_item| eq_item.slot.type == item.upcase }.first
+          equipped_item = @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == item.upcase }.first
           check_enchant(item, equipped_item)
 
-          @character.ilvl += equipped_item.level.value
+          @character.ilvl += equipped_item['level']['value']
 
-          @character.data[item + '_ilvl'] = equipped_item.level.value
-          @character.data[item + '_id'] = equipped_item.item.id
-          @character.data[item + '_name'] = equipped_item.name
-          @character.data[item + '_quality'] = QUALITIES[equipped_item.quality.type.to_sym]
+          @character.data[item + '_ilvl'] = equipped_item['level']['value']
+          @character.data[item + '_id'] = equipped_item['item']['id']
+          @character.data[item + '_name'] = equipped_item['name']
+          @character.data[item + '_quality'] = QUALITIES[equipped_item['quality']['type'].to_sym]
           items_equipped += 1
 
           if item == "back"
             @character.data['corruption_amount'] -=
-              equipped_item.stats.select{ |stat| stat.type.name == "Corruption Resistance" }.first&.value || 0
+              equipped_item['stats'].select{ |stat| stat['type']['name'] == "Corruption Resistance" }.first&.dig('value') || 0
           end
 
-          (item == "neck" && equipped_item.azerite_details.selected_essences.any? do |essence|
-            essence.passive_spell_tooltip.description.include? "Corruption Resistance"
+          (item == "neck" && equipped_item['azerite_details']['selected_essences'].any? do |essence|
+            essence['passive_spell_tooltip']['description'].include? "Corruption Resistance"
           end ? (@character.data['corruption_amount'] -= 10) : nil) rescue nil
 
-          if corruption = equipped_item.stats.select{ |stat| stat.type.name == "Corruption" }.first
-            @character.data['corruption_amount'] += corruption.value
+          if corruption = equipped_item['stats'].select{ |stat| stat['type']['name'] == "Corruption" }.first
+            @character.data['corruption_amount'] += corruption['value']
           end
         rescue
           @character.data[item + '_ilvl'] = ''
@@ -46,9 +46,9 @@ module Audit
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types
-      if @data.equipment.equipped_items && !@data.equipment.equipped_items.any?{ |eq_item| eq_item.slot.type == "OFF_HAND" }
+      if @data[:equipment]['equipped_items'] && !@data[:equipment]['equipped_items'].any?{ |eq_item| eq_item['slot']['type'] == "OFF_HAND" }
         items_equipped += 1
-        @character.ilvl += @data.equipment.equipped_items.select{ |eq_item| eq_item.slot.type == "MAIN_HAND" }.first.level.value rescue 0
+        @character.ilvl += @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == "MAIN_HAND" }.first['level']['value'] rescue 0
       end
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
@@ -62,10 +62,10 @@ module Audit
     end
 
     def check_enchant(item, equipped_item)
-      (equipped_item.sockets || []).each do |socket|
-        if has_gem = GEMS[socket.item&.id]
+      (equipped_item['sockets'] || []).each do |socket|
+        if has_gem = GEMS[socket.dig('item', 'id')]
           @character.gems << has_gem
-        elsif !socket.item&.id
+        elsif !socket.dig('item', 'id')
           @character.data['empty_sockets'] += 1
         end
       end
@@ -73,13 +73,13 @@ module Audit
       if ENCHANTS.include? item
         begin
           # Off-hand items that are not weapons can't be enchanted
-          return if !equipped_item.weapon && item == "off_hand"
+          return if !equipped_item['weapon'] && item == "off_hand"
 
           @character.data["enchant_quality_#{item}"] =
-            ENCHANTS[item][equipped_item.enchantments.first.enchantment_id][0]
+            ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][0]
 
           @character.data["#{item}_enchant"] =
-            ENCHANTS[item][equipped_item.enchantments.first.enchantment_id][1]
+            ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][1]
         rescue
           @character.data["enchant_quality_#{item}"] = 0
           @character.data["#{item}_enchant"] = ''

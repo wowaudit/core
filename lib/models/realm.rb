@@ -14,7 +14,7 @@ module Audit
 
       def refresh(id, refresh_type)
         realm = Realm.where(id: id).first
-        RBattlenet.set_options(region: realm.region, locale: "en_GB", concurrency: 50)
+        RBattlenet.set_options(region: realm.region, locale: "en_GB", concurrency: 50, response_type: :hash)
         Audit.timestamp = realm.region
 
         leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(KEYSTONE_DUNGEONS.map{ |dungeon|
@@ -26,10 +26,10 @@ module Audit
         })
 
         runs_by_character = {}
-        leaderboards.results.map(&:leading_groups).flatten.each do |group|
+        leaderboards.results.map{ |r| r['leading_groups']}.flatten.each do |group|
           next unless group # EmptyResult will have a nil value here
-          group.members.each do |member|
-            (runs_by_character[member.profile.id] ||= []) << group.keystone_level
+          group['members'].each do |member|
+            (runs_by_character[member['profile']['id']] ||= []) << group['keystone_level']
           end
         end
         runs_by_character.transform_values!(&:max)

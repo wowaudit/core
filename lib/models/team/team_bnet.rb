@@ -2,7 +2,7 @@ module Audit
   class TeamBnet < Team
 
     def refresh
-      RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 50)
+      RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 50, response_type: :hash)
       $errors = { :tracking => 0, :role => 0 }
       output = []
       if guild.api_key && guild.api_key.active

@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/emielvanlankveld/rbattlenet.git
-  revision: 9175231059f3c062196513e5116b7ae28ce8ff68
+  revision: b2351fa13e0dc81465523ac08c916b804a712334
   branch: api-migration
   specs:
     rbattlenet (2.0.0)
@@ -638,4 +638,4 @@ DEPENDENCIES
   tzinfo
 
 BUNDLED WITH
-   1.16.6
+   1.17.3
