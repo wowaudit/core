@@ -12,7 +12,7 @@ module Audit
       end
 
       @character.data['cloak_level'] = begin
-        if cloak.dig('item', 'id') == 169223
+        if cloak && cloak.dig('item', 'id') == 169223
           base_rank = [((cloak['level']['value'] - 470) + 2) / 2, 15].min
           cores = [((cloak['stats'].select{ |stat| stat['type']['name'] == "Corruption Resistance" }
             .first&.dig('value') || 0) - 50) / 3, 0].max
