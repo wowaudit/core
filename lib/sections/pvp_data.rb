@@ -5,10 +5,10 @@ module Audit
       @character.data['honorable_kills'] = @data[:pvp_summary]['honorable_kills']
 
       BRACKETS.each do |bracket, endpoint|
-        if @data[endpoint].class == RBattlenet::HashResult
-          @character.data["#{bracket}_rating"] = @data[endpoint]['rating']
-          @character.data["#{bracket}_season_played"] = @data[endpoint]['season_match_statistics']['played']
-          @character.data["#{bracket}_week_played"] = @data[endpoint]['weekly_match_statistics']['played']
+        if @data[endpoint.to_sym].class == RBattlenet::HashResult
+          @character.data["#{bracket}_rating"] = @data[endpoint.to_sym]['rating']
+          @character.data["#{bracket}_season_played"] = @data[endpoint.to_sym]['season_match_statistics']['played']
+          @character.data["#{bracket}_week_played"] = @data[endpoint.to_sym]['weekly_match_statistics']['played']
         end
       end
 
