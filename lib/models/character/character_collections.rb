@@ -8,7 +8,6 @@ module Audit
       # TODO: Fix HashResult to recognise these as empty when it happens (sporadically)
       # also change the structure to not have double nested data like this
       response[:achievements] && response[:achievements]['achievements'] &&
-      response[:titles] && response[:titles]['titles'] &&
       response[:pets] && response[:pets]['pets'] &&
       response[:mounts] && response[:mounts]['mounts'] &&
       response[:reputations] && response[:reputations]['reputations'] &&

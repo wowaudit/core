@@ -88,7 +88,9 @@ module Audit
           update(marked_for_deletion_at: DateTime.now)
           return false
         elsif !gdpr_deletion?(response) && self.marked_for_deletion_at
-          update(marked_for_deletion_at: nil)
+          self.marked_for_deletion_at = nil
+          self.save
+          return true
         end
       end
 
@@ -99,7 +101,11 @@ module Audit
       return false if !response[:status]
       return true if response[:status][:status_code] == 404
       return true unless response[:status]['is_valid']
-      return true if key.to_s != response[:status]['id'].to_s
+
+      if self.key.to_s != response[:status]['id'].to_s
+        self.key = response[:status]['id'].to_s
+      end
+
       false
     end
 

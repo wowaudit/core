@@ -7,7 +7,7 @@ module Audit
         @character.data['mounts'] = @achievements[2143]['criteria']['child_criteria'].first['amount'] rescue 0
       end
 
-      unless @data[:titles].class == RBattlenet::EmptyHashResult
+      unless !@data[:titles]['titles'] || @data[:titles].class == RBattlenet::EmptyHashResult
         @character.data['titles'] = @data[:titles]['titles'].size
       end
 
