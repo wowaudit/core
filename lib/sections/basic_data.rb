@@ -10,7 +10,7 @@ module Audit
       @character.data['note'] = @character.note || ""
       @character.data['character_id'] = @character.id
       @character.data['join_date'] = @character.created_at
-      @character.data['class'] = CLASSES[@character.class_id || @data.character_class&.id]
+      @character.data['class'] = CLASSES[@character.class_id || @data.dig('character_class', 'id')]
       @character.data['faction'] = @data['faction']['name']
       @character.data['blizzard_last_modified'] = @data['last_login_timestamp']
       @character.data['gender'] = @data['gender']['name']
