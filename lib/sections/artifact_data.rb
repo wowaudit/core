@@ -11,7 +11,7 @@ module Audit
         @character.data['artifact_progress'] = (neck['azerite_details']['percentage_to_next_level'] * 100).round(2) rescue 0.0
       end
 
-      @character.data['cloak_level'] = cloak&.dig("name_description", "display_string")&.sub("Rank ", "").to_i
+      @character.data['cloak_level'] = cloak&.dig("name_description", "display_string")&.sub("Rank ", "").to_i rescue 0
 
       # For old spreadsheet versions
       @character.data['ap_this_week'] = 0
