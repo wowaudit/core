@@ -24,19 +24,6 @@ module Audit
           @character.data[item + '_name'] = equipped_item['name']
           @character.data[item + '_quality'] = QUALITIES[equipped_item['quality']['type'].to_sym]
           items_equipped += 1
-
-          if item == "back"
-            @character.data['corruption_amount'] -=
-              equipped_item['stats'].select{ |stat| stat['type']['name'] == "Corruption Resistance" }.first&.dig('value') || 0
-          end
-
-          (item == "neck" && equipped_item['azerite_details']['selected_essences'].any? do |essence|
-            essence['passive_spell_tooltip']['description'].include? "Corruption Resistance"
-          end ? (@character.data['corruption_amount'] -= 10) : nil) rescue nil
-
-          if corruption = equipped_item['stats'].select{ |stat| stat['type']['name'] == "Corruption" }.first
-            @character.data['corruption_amount'] += corruption['value']
-          end
         rescue
           @character.data[item + '_ilvl'] = ''
           @character.data[item + '_id'] = ''
@@ -53,8 +40,8 @@ module Audit
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
 
-      # Set item level to 0 if it's above 600, so inactive Legion characters aren't being shown as top
-      @character.data['ilvl'] = 0 if @character.data['ilvl'] > 600
+      # Set item level to 0 if it's above 300, so inactive BfA characters aren't being shown as top
+      @character.data['ilvl'] = 0 if @character.data['ilvl'] > 300
 
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
