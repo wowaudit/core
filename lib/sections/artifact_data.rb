@@ -11,14 +11,7 @@ module Audit
         @character.data['artifact_progress'] = (neck['azerite_details']['percentage_to_next_level'] * 100).round(2) rescue 0.0
       end
 
-      @character.data['cloak_level'] = begin
-        if cloak && cloak.dig('item', 'id') == 169223
-          base_rank = [((cloak['level']['value'] - 470) + 2) / 2, 15].min
-          cores = [((cloak['stats'].select{ |stat| stat['type']['name'] == "Corruption Resistance" }
-            .first&.dig('value') || 0) - 50) / 3, 0].max
-          base_rank + cores
-        end
-      end
+      @character.data['cloak_level'] = cloak.dig("name_description", "display_string")&.sub("Rank ", "").to_i
 
       # For old spreadsheet versions
       @character.data['ap_this_week'] = 0
