@@ -27,7 +27,7 @@ module Audit
       @character.data['weekly_highest_m+'] =
         [
           (@character.details['raiderio']['weekly_highest'] rescue 0) || 0,
-          (@character.details['raiderio']['legacy_weekly_highest'] rescue 0) || 0
+          (@character.details['raiderio']['top_ten_highest'][0] rescue 0) || 0
         ].max
     end
   end

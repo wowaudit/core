@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/emielvanlankveld/rbattlenet.git
-  revision: 104c194cf2e40105e0746bd83dad65552888890e
+  revision: 5779735d0a5d1f49a28a9dceb5bcdf9e993ba267
   branch: master
   specs:
     rbattlenet (2.0.0)

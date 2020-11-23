@@ -13,8 +13,9 @@ module Audit
       :pvp_bracket_rbg,
       :pvp_summary,
       :reputations,
+      :soulbinds,
       :status,
-      :titles
+      :titles,
     ]
 
     def characters

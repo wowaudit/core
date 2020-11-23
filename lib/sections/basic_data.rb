@@ -28,6 +28,11 @@ module Audit
         @character.data['role'] = @character.role
         @character.changed = true
       end
+
+      if covenant = @data['covenant_progress']
+        @character.data['current_covenant'] = covenant.dig('chosen_covenant', 'name')
+        @character.data['renown_level'] = covenant['renown_level']
+      end
     end
   end
 end

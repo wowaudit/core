@@ -32,7 +32,6 @@ module Audit
             (runs_by_character[member['profile']['id']] ||= []) << group['keystone_level']
           end
         end
-        runs_by_character.transform_values!(&:max)
 
         characters = CharacterRaiderio.where(realm: realm)
         metadata = Redis.get_characters(characters.map(&:key).compact)
@@ -40,7 +39,7 @@ module Audit
           next unless character.key
           character.details = metadata[character.key] || {}
           character.verify_details
-          changed = character.process_leaderboard_result(runs_by_character[character.key.to_i] || 0)
+          changed = character.process_leaderboard_result(runs_by_character[character.key.to_i] || [])
           character if changed
         end.compact
 

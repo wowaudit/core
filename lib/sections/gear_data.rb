@@ -5,7 +5,6 @@ module Audit
     def add
       # Check equipped gear
       items_equipped = 0
-      @character.data['corruption_amount'] = 0
       @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -19,6 +18,22 @@ module Audit
 
           @character.ilvl += equipped_item['level']['value']
 
+          if equipped_item['level']['value'] >= @character.details['best_gear'][item]['ilvl']
+            @character.details['best_gear'][item] = {
+              'ilvl' => equipped_item['level']['value'],
+              'id' => equipped_item['item']['id'],
+              'name' => equipped_item['name'],
+              'quality' => QUALITIES[equipped_item['quality']['type'].to_sym]
+            }
+          end
+
+          # Don't trigger the Legendary cloak from BfA or other legacy legendaries here (so check item level)
+          if equipped_item['quality']['type'] == 'LEGENDARY' && equipped_item['level']['value'].to_i > 170
+            @character.data['current_legendary_ilvl'] = equipped_item['level']['value']
+            @character.data['current_legendary_id'] = equipped_item['item']['id']
+            @character.data['current_legendary_name'] = equipped_item['name']
+          end
+
           @character.data[item + '_ilvl'] = equipped_item['level']['value']
           @character.data[item + '_id'] = equipped_item['item']['id']
           @character.data[item + '_name'] = equipped_item['name']
@@ -30,6 +45,11 @@ module Audit
           @character.data[item + '_name'] = ''
           @character.data[item + '_quality'] = ''
         end
+
+        @character.data["best_#{item}_ilvl"] = @character.details['best_gear'][item]['ilvl'] || ''
+        @character.data["best_#{item}_id"] = @character.details['best_gear'][item]['id'] || ''
+        @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
+        @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types
@@ -39,10 +59,6 @@ module Audit
       end
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
-
-      # Set item level to 0 if it's above 300, so inactive BfA characters aren't being shown as top
-      @character.data['ilvl'] = 0 if @character.data['ilvl'] > 300
-
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
       @character.data['gem_list'] = @character.gems.join('|')
@@ -58,18 +74,20 @@ module Audit
       end
 
       if ENCHANTS.include? item
+        column = ['wrists', 'hands', 'feet'].include?(item) ? 'primary' : item
+
         begin
           # Off-hand items that are not weapons can't be enchanted
           return if !equipped_item['weapon'] && item == "off_hand"
 
-          @character.data["enchant_quality_#{item}"] =
+          @character.data["enchant_quality_#{column}"] =
             ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][0]
 
-          @character.data["#{item}_enchant"] =
+          @character.data["#{column}_enchant"] =
             ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][1]
         rescue
-          @character.data["enchant_quality_#{item}"] = 0
-          @character.data["#{item}_enchant"] = ''
+          @character.data["enchant_quality_#{column}"] = 0
+          @character.data["#{column}_enchant"] = ''
         end
       end
     end

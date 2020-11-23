@@ -26,10 +26,10 @@ module Audit
         @character.data['lvl_25_pets'] = level_25_pets
       end
 
-      unless @data[:mounts].class == RBattlenet::EmptyHashResult
-        @character.data['jaina_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1219 } ? "yes" : "no"
-        @character.data['nzoth_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1293 } ? "yes" : "no"
-      end
+      # unless @data[:mounts].class == RBattlenet::EmptyHashResult
+        # @character.data['jaina_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1219 } ? "yes" : "no"
+        # @character.data['nzoth_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1293 } ? "yes" : "no"
+      # end
     end
   end
 end

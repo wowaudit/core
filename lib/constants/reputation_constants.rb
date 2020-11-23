@@ -1,28 +1,19 @@
 REPUTATIONS = {
   'Alliance' => {
-    2160 => 'proudmoore_taljani', # Proudmoore Admirality
-    2159 => '7th_legion_zandalari', # 7th Legion
-    2162 => 'storms_wake_voldunai', # Storm's Wake
-    2161 => 'order_of_embers_honorbound', # Order of Embers
-    2164 => 'champions_of_azeroth', # Champions of Azeroth
-    2163 => 'tortollan_seekers', # Tortollan Seekers
-    2400 => 'unshackled_waveblade', # Waveblade Ankoan
-    2391 => 'rustbolt_resistance', # Rustbolt Resistance
-    2415 => 'rajani', # Rajani
-    2417 => 'uldum_accord', # Uldum Accord
-
+    2407 => 'the_ascended',
+    2410 => 'the_undying_army',
+    2413 => 'court_of_harvesters',
+    2432 => 'venari',
+    2439 => 'the_avowed',
+    2465 => 'the_wild_hunt',
   },
   'Horde' => {
-    2156 => 'proudmoore_taljani', # Taljani's Expedition
-    2103 => '7th_legion_zandalari', # Zandalari Empire
-    2158 => 'storms_wake_voldunai', # Voldunai
-    2157 => 'order_of_embers_honorbound', # The Honorbound
-    2164 => 'champions_of_azeroth', # Champions of Azeroth
-    2163 => 'tortollan_seekers', # Tortollan Seekers
-    2373 => 'unshackled_waveblade', # The Unshackled
-    2391 => 'rustbolt_resistance', # Rustbolt Resistance
-    2415 => 'rajani', # Rajani
-    2417 => 'uldum_accord', # Uldum Accord
+    2407 => 'the_ascended',
+    2410 => 'the_undying_army',
+    2413 => 'court_of_harvesters',
+    2432 => 'venari',
+    2439 => 'the_avowed',
+    2465 => 'the_wild_hunt',
   },
   nil => {} # For people who enjoy tracking neutral Pandaren
 }
@@ -47,4 +38,22 @@ REP_AMOUNT = {
   5 => 12000,
   6 => 21000,
   7 => 0
+}
+
+MAW_STANDINGS = {
+  0 => 'Dubious',
+  1 => 'Apprehensive',
+  2 => 'Tentative',
+  3 => 'Ambivalent',
+  4 => 'Cordial',
+  5 => 'Appreciative'
+}
+
+MAW_REP_AMOUNT = {
+  0 => 1000,
+  1 => 6000,
+  2 => 7000,
+  3 => 12000,
+  4 => 21000,
+  5 => 0,
 }

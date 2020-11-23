@@ -1,15 +1,15 @@
-BFA_PROFESSIONS = {
-  2478 => "Alchemy",
-  2437 => "Blacksmithing",
-  2486 => "Enchanting",
-  2499 => "Engineering",
-  2549 => "Herbalism",
-  2507 => "Inscription",
-  2517 => "Jewelcrafting",
-  2525 => "Leatherworking",
-  2565 => "Mining",
-  2557 => "Skinning",
-  2533 => "Tailoring"
+SL_PROFESSIONS = {
+  2750 => "Alchemy",
+  2751 => "Blacksmithing",
+  2753 => "Enchanting",
+  2755 => "Engineering",
+  2760 => "Herbalism",
+  2756 => "Inscription",
+  2757 => "Jewelcrafting",
+  2758 => "Leatherworking",
+  2761 => "Mining",
+  2762 => "Skinning",
+  2759 => "Tailoring"
 }
 
 BASE_PROFESSIONS = {

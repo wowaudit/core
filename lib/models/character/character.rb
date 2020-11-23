@@ -46,6 +46,8 @@ module Audit
           'season_highest' => 0,
           'weekly_highest' => 0,
           'period' => 0,
+          'top_ten_highest' => [],
+          'leaderboard_runs' => [],
         }
       end
 
@@ -58,6 +60,17 @@ module Audit
       if !details['last_refresh'].is_a? Hash
         details['last_refresh'] = false
       end
+
+      if !details['best_gear'].is_a? Hash
+        details['best_gear'] = ITEMS.map { |item| [item, { ilvl: 0 }] }.to_h
+      end
+
+      if !details['great_vault'].is_a? Hash
+        details['great_vault'] = {
+          'dungeons' => [],
+
+        }
+      end
     end
 
     def metadata
@@ -69,7 +82,8 @@ module Audit
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
         raiderio: details["raiderio"],
-        last_refresh: last_refresh_data
+        last_refresh: last_refresh_data,
+        best_gear: details['best_gear']
       }
     end
   end

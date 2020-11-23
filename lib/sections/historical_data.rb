@@ -6,11 +6,16 @@ module Audit
       wqs = []
       dungeons = []
       mplus = []
+      vault = { 1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [], 7 => [], 8 => [], 9 => [] }
 
       @character.historical_snapshots.drop(1).each_with_index do |week, index|
         wqs.insert(0, [(week['wqs'] || 0) - (@character.historical_snapshots[index]['wqs'] || 0), 0].max)
         dungeons.insert(0, [(week['dungeons'] || 0) - (@character.historical_snapshots[index]['dungeons'] || 0), 0].max)
         mplus.insert(0, week['m+'] || '-')
+
+        vault.keys.each do |slot|
+          vault[slot].insert(0, week.dig('vault', slot.to_s) || 0)
+        end
       end
 
       # Current week's highest M+ completion is not stored as a snapshot
@@ -19,6 +24,10 @@ module Audit
       @character.data['historical_wqs_done'] = wqs.join('|')
       @character.data['historical_dungeons_done'] = dungeons.join('|')
       @character.data['historical_mplus_done'] = mplus.join('|')
+
+      vault.each do |slot, data|
+        @character.data["historical_great_vault_slot_#{slot}"] = data.join('|')
+      end
 
       @character.data['dungeons_this_week'] =
         [@character.data['dungeons_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'], 0].max rescue 0
