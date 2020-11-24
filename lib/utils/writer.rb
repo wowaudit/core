@@ -11,8 +11,6 @@ module Audit
       end
       file.put(body: data)
 
-      File.write('test.csv', data)
-
       Logger.t(INFO_TEAM_WRITTEN, team.id)
     end
 

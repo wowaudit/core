@@ -1,16 +1,18 @@
+REGISTER = false
+TYPE = "deployer"
 require_relative('../lib/core')
 
 system("kubectl delete deployments wcl-deployment")
 system("kubectl delete deployments essentials-deployment")
 system("kubectl delete deployments collections-deployment")
-system("kubectl delete deployments wcl-deployment")
+system("kubectl delete deployments keystones-deployment")
 system("kubectl delete deployments raiderio-deployment")
-Schedule.destroy_all
+Audit::Schedule.all.each(&:destroy)
 
 system("docker build . -t shedi/wowaudit")
 system("docker push shedi/wowaudit:latest")
 
-Schedule.destroy_all
+Audit::Schedule.all.each(&:destroy)
 
 system("kubectl apply -f config/deploy/essentials-deployment.yml")
 system("kubectl apply -f config/deploy/collections-deployment.yml")

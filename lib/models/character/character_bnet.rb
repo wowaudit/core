@@ -45,7 +45,8 @@ module Audit
 
     def update_snapshots
       current_week = details['snapshots'][Audit.year][Audit.week]
-      if !current_week || !current_week['wqs']&.nonzero? || !current_week['dungeons']&.nonzero?
+
+      if !current_week || current_week['wqs'] == '' || current_week['dungeons'] == '' || !current_week['wqs']&.nonzero? || !current_week['dungeons']&.nonzero?
         details['snapshots'][Audit.year][Audit.week] = {
           'dungeons' => self.data['dungeons_done_total'],
           'wqs' => self.data['wqs_done_total']
@@ -64,7 +65,7 @@ module Audit
 
     def to_output
       HEADER.each do |value|
-        self.output << (self.data[value] || '')
+        self.output << (self.data[value] || 0)
       end
     end
 
