@@ -16,6 +16,7 @@ module Audit
           equipped_item = @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == item.upcase }.first
           check_enchant(item, equipped_item)
 
+          items_equipped += 1
           @character.ilvl += equipped_item['level']['value']
 
           if equipped_item['level']['value'] >= @character.details['best_gear'][item]['ilvl']
@@ -38,7 +39,6 @@ module Audit
           @character.data[item + '_id'] = equipped_item['item']['id']
           @character.data[item + '_name'] = equipped_item['name']
           @character.data[item + '_quality'] = QUALITIES[equipped_item['quality']['type'].to_sym]
-          items_equipped += 1
         rescue
           @character.data[item + '_ilvl'] = ''
           @character.data[item + '_id'] = ''
@@ -56,6 +56,11 @@ module Audit
       if @data[:equipment]['equipped_items'] && !@data[:equipment]['equipped_items'].any?{ |eq_item| eq_item['slot']['type'] == "OFF_HAND" }
         items_equipped += 1
         @character.ilvl += @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == "MAIN_HAND" }.first['level']['value'] rescue 0
+      end
+
+      # Correct broken average item levels
+      if @character.details['max_ilvl'].to_f > 250
+        @character.details['max_ilvl'] = 0
       end
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
