@@ -7,6 +7,8 @@ system("kubectl delete deployments essentials-deployment")
 system("kubectl delete deployments collections-deployment")
 system("kubectl delete deployments keystones-deployment")
 system("kubectl delete deployments raiderio-deployment")
+
+sleep 5
 Audit::Schedule.all.each(&:destroy)
 
 system("docker build . -t shedi/wowaudit")

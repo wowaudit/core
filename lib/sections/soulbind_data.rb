@@ -12,6 +12,9 @@ module Audit
             next unless socket = trait["conduit_socket"]
             conduits_found += 1
 
+            # Skip empty conduits
+            next unless socket["socket"]
+
             @character.data["conduit_#{conduits_found}_ilvl"] = CONDUIT_RANK_TO_ILVL[socket["socket"]["rank"]]
             @character.data["conduit_#{conduits_found}_id"] = CONDUIT_ID_TO_SPELL[socket["socket"]["conduit"]["id"]]
             @character.data["conduit_#{conduits_found}_name"] = socket["socket"]["conduit"]["name"]
