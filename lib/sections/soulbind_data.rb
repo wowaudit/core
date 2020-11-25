@@ -1,20 +1,24 @@
 module Audit
   class SoulbindData < Data
     def add
-      # Retrieve conduit ID > spell ID mapping (for spreadsheet ID) from API
+      unless @data[:soulbinds].class == RBattlenet::EmptyHashResult || !@data[:soulbinds]['soulbinds']
+        soulbind = @data[:soulbinds]['soulbinds'].select{ |soulbind| soulbind["is_active"] }.first rescue byebug
 
-      # unless @data[:soulbinds].class == RBattlenet::EmptyHashResult
-      @character.data['current_soulbind'] = ''
-      @character.data['conduit_1_ilvl'] = ''
-      @character.data['conduit_1_id'] = ''
-      @character.data['conduit_1_name'] = ''
-      @character.data['conduit_2_ilvl'] = ''
-      @character.data['conduit_2_id'] = ''
-      @character.data['conduit_2_name'] = ''
-      @character.data['conduit_3_ilvl'] = ''
-      @character.data['conduit_3_id'] = ''
-      @character.data['conduit_3_name'] = ''
-      # end
+        if soulbind
+          @character.data['current_soulbind'] = SOULBIND_NAME[soulbind["soulbind"]["name"]] || soulbind["soulbind"]["name"]
+
+          conduits_found = 0
+          soulbind["traits"].each do |trait|
+            next unless socket = trait["conduit_socket"]
+            conduits_found += 1
+
+            @character.data["conduit_#{conduits_found}_ilvl"] = CONDUIT_RANK_TO_ILVL[socket["socket"]["rank"]]
+            @character.data["conduit_#{conduits_found}_id"] = CONDUIT_ID_TO_SPELL[socket["socket"]["conduit"]["id"]]
+            @character.data["conduit_#{conduits_found}_name"] = socket["socket"]["conduit"]["name"]
+          end
+
+        end
+      end
     end
   end
 end

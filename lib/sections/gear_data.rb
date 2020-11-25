@@ -79,11 +79,14 @@ module Audit
       end
 
       if ENCHANTS.include? item
-        column = ['wrists', 'hands', 'feet'].include?(item) ? 'primary' : item
+        column = ['wrist', 'hands', 'feet'].include?(item) ? 'primary' : item
 
         begin
           # Off-hand items that are not weapons can't be enchanted
           return if !equipped_item['weapon'] && item == "off_hand"
+
+          # Don't store enchant data for primary enchant when it's not there
+          return if !ENCHANTS[item][equipped_item['enchantments']&.first&.dig('enchantment_id')] && column == 'primary'
 
           @character.data["enchant_quality_#{column}"] =
             ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][0]
