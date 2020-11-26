@@ -21,24 +21,28 @@ module Audit
       dungeon_list = {}
       total_dungeons = 0
 
-      dungeons_and_raids =  @data[:achievement_statistics]['categories'].find do |category|
-        category['name'] == "Dungeons & Raids"
+      begin
+        dungeons_and_raids =  @data[:achievement_statistics]['categories'].find do |category|
+          category['name'] == "Dungeons & Raids"
+        end
+
+        dungeons_and_raids['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
+          if MYTHIC_DUNGEONS.include?(instance['id'])
+            @character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity'].to_i
+            total_dungeons += instance['quantity'].to_i
+          end
+
+          # Track weekly Raid kills through the statistics
+          if boss_ids.include?(instance['id'])
+            raid_list[instance['id']] = [
+              instance['quantity'].to_i,
+              (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0
+            ]
+          end
+        end
+      rescue
+        nil
       end
-
-      dungeons_and_raids['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
-        if MYTHIC_DUNGEONS.include?(instance['id'])
-          @character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity'].to_i
-          total_dungeons += instance['quantity'].to_i
-        end
-
-        # Track weekly Raid kills through the statistics
-        if boss_ids.include?(instance['id'])
-          raid_list[instance['id']] = [
-            instance['quantity'].to_i,
-            (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0
-          ]
-        end
-      end rescue nil
 
       unless total_dungeons.zero?
         @character.data['dungeons_done_total'] = total_dungeons
