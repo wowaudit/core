@@ -21,7 +21,11 @@ module Audit
       dungeon_list = {}
       total_dungeons = 0
 
-      @data[:achievement_statistics]['categories'][5]['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
+      dungeons_and_raids =  @data[:achievement_statistics]['categories'].find do |category|
+        category['name'] == "Dungeons & Raids"
+      end
+
+      dungeons_and_raids['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
         if MYTHIC_DUNGEONS.include?(instance['id'])
           @character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity'].to_i
           total_dungeons += instance['quantity'].to_i
