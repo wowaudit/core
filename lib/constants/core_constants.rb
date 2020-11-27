@@ -304,4 +304,11 @@ HEADER = [
   'historical_great_vault_slot_7',
   'historical_great_vault_slot_8',
   'historical_great_vault_slot_9',
+  'torghast_layers_coldheart_interstitia',
+  'torghast_layers_upper_reaches',
+  'torghast_layers_skoldus_hall',
+  'torghast_layers_mortregar',
+  'torghast_layers_soulforges',
+  'torghast_layers_fracture_chambers',
+  'torghast_layers_twisting_corridors',
 ]

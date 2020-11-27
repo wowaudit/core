@@ -68,7 +68,16 @@ module Audit
         @character.data['ahead_of_the_curve'] =
           AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
 
-        @character.data['torghast_floors'] = (@achievements[14810]['criteria']['child_criteria'].sum{ |cr| cr['amount'] } rescue 0)
+        total_layers = 0
+        @achievements[14810]['criteria']['child_criteria'].each do |wing|
+          @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"] = wing['amount'] / 6
+          total_layers += wing['amount'] / 6
+        end rescue nil
+
+        @character.data['torghast_layers_twisting_corridors'] =
+          TORGHAST_TWISTING_CORRIDORS_IDS.count{ |layer| @achievements[layer] }
+
+        @character.data['torghast_floors'] = total_layers + @character.data['torghast_layers_twisting_corridors']
       end
     end
 

@@ -20,6 +20,19 @@ RAID_DIFFICULTIES = {
   5 => 'mythic'
 }
 
+TORGHAST_WINGS = {
+  89002 => 'skoldus_hall',
+  89003 => 'fracture_chambers',
+  89004 => 'soulforges',
+  89005 => 'coldheart_interstitia',
+  89006 => 'mortregar',
+  89007 => 'upper_reaches',
+}
+
+TORGHAST_TWISTING_CORRIDORS_IDS = [
+  14468, 14469, 14470, 14471, 14472, 14568, 14569, 14570
+]
+
 GREAT_VAULT_TO_ILVL = {
   'raid' => {
     'mythic' => 226,
