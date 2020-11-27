@@ -8,7 +8,7 @@ module Audit
           @character.data['current_soulbind'] = SOULBIND_NAME[soulbind["soulbind"]["name"]] || soulbind["soulbind"]["name"]
 
           conduits_found = 0
-          soulbind["traits"].each do |trait|
+          (soulbind["traits"] || []).each do |trait|
             next unless socket = trait["conduit_socket"]
             conduits_found += 1
 
