@@ -1,5 +1,6 @@
 .DS_Store
 .bin
+config/ca-certificate.crt
 config/database.yml
 config/external_database.yml
 config/keys.yml
