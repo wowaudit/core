@@ -18,12 +18,9 @@ module Audit
       # Update status in SQL database for Bnet updates
       # since the status is shown on the website
       if bnet && result.select{ |c| c.changed }.any?
-        query_string = "UPDATE characters SET status = CASE "
         result.select{ |c| c.changed }.each do |character|
-          query_string << "WHEN id = #{character.id} THEN '#{character.status}' "
+          character.save
         end
-        query_string << "ELSE status END"
-        self.query(query_string)
       end
 
       Redis.update(result.reject(&:marked_for_deletion_at)) if result.any?
