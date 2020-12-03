@@ -5,6 +5,7 @@ module Audit
     def add
       # Check equipped gear
       items_equipped = 0
+      bfa_level_detected = false
       @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -19,7 +20,7 @@ module Audit
           items_equipped += 1
           @character.ilvl += equipped_item['level']['value']
 
-          if equipped_item['level']['value'] >= @character.details['best_gear'][item]['ilvl']
+          if equipped_item['level']['value'] >= @character.details['best_gear'][item]['ilvl'].to_f
             @character.details['best_gear'][item] = {
               'ilvl' => equipped_item['level']['value'],
               'id' => equipped_item['item']['id'],
@@ -33,6 +34,10 @@ module Audit
             @character.data['current_legendary_ilvl'] = equipped_item['level']['value']
             @character.data['current_legendary_id'] = equipped_item['item']['id']
             @character.data['current_legendary_name'] = equipped_item['name']
+          else
+            @character.data['current_legendary_ilvl'] = ''
+            @character.data['current_legendary_id'] = ''
+            @character.data['current_legendary_name'] = ''
           end
 
           @character.data[item + '_ilvl'] = equipped_item['level']['value']
@@ -44,6 +49,10 @@ module Audit
           @character.data[item + '_id'] = ''
           @character.data[item + '_name'] = ''
           @character.data[item + '_quality'] = ''
+        end
+
+        if (@character.details['best_gear'][item]['ilvl'].to_f || 0) > 250
+          bfa_level_detected = true
         end
 
         @character.data["best_#{item}_ilvl"] = @character.details['best_gear'][item]['ilvl'] || ''
@@ -59,8 +68,12 @@ module Audit
       end
 
       # Correct broken average item levels
-      if @character.details['max_ilvl'].to_f > 250
+      if @character.details['max_ilvl'].to_f > 250 || bfa_level_detected
         @character.details['max_ilvl'] = 0
+
+        ITEMS.each do |item|
+          @character.details['best_gear'][item] = { 'ilvl' => '', 'id' => '', 'name' => '', 'quality' => '' }
+        end
       end
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
