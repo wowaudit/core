@@ -12,6 +12,11 @@ module Audit
       @character.data["enchant_quality_off_hand"] = ''
       @character.data["off_hand_enchant"] = ''
 
+      # Reset equipped legendary status, we don't want it to use last refresh data
+      @character.data['current_legendary_ilvl'] = ''
+      @character.data['current_legendary_id'] = ''
+      @character.data['current_legendary_name'] = ''
+
       ITEMS.each do |item|
         begin
           equipped_item = @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == item.upcase }.first
@@ -34,10 +39,6 @@ module Audit
             @character.data['current_legendary_ilvl'] = equipped_item['level']['value']
             @character.data['current_legendary_id'] = equipped_item['item']['id']
             @character.data['current_legendary_name'] = equipped_item['name']
-          else
-            @character.data['current_legendary_ilvl'] = ''
-            @character.data['current_legendary_id'] = ''
-            @character.data['current_legendary_name'] = ''
           end
 
           @character.data[item + '_ilvl'] = equipped_item['level']['value']
