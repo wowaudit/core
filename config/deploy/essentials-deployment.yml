@@ -5,7 +5,7 @@ metadata:
   labels:
     app: essentials
 spec:
-  replicas: 14
+  replicas: 18
   selector:
     matchLabels:
       app: essentials
