@@ -63,14 +63,14 @@ module Audit
       zones.map{ |zone| [zone, schedules.count{ |key| key == zone }] }.to_h
     end
 
-    def register_worker(type)
+    def register_worker(type, zone)
       Logger.g(INFO_REGISTERED_WORKER)
       Schedule.find_or_create(
         name: `hostname`.strip,
       ) do |schedule|
         schedule.type = type
         schedule.active = true
-        schedule.zone = ZONE
+        schedule.zone = zone
         schedule.created_at = DateTime.now
         schedule.updated_at = DateTime.now
       end

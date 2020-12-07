@@ -25,7 +25,7 @@ def register
 
   occurrences = Audit.fetch_occurrences(TYPE)
   zone = occurrences.select { |_, v| v == occurrences.values.min }.keys.sample
-  Audit.register_worker(TYPE) if REGISTER
+  Audit.register_worker(TYPE, zone) if REGISTER
 
   zone
 end
