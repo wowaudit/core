@@ -25,13 +25,12 @@ module Audit
     end
 
     def check_data_completeness(response)
-      # TODO: Fix HashResult to recognise these as empty when it happens (sporadically)
-      # also change the structure to not have double nested data like this
-      response[:achievements] && response[:achievements]['achievements'] &&
-      response[:pets] && response[:pets]['pets'] &&
-      response[:mounts] && response[:mounts]['mounts'] &&
-      response[:reputations] && response[:reputations]['reputations'] &&
-      response[:equipment] && response[:equipment]['equipped_items']
+      [:achievements, :pets, :mounts, :reputations, :equipment].each do |type|
+        raise ApiLimitReachedException if response.dig(type, :status_code) == 429
+        return false unless response[type] && response[type][type == :equipment ? 'equipped_items' : type.to_s]
+      end
+
+      true
     end
   end
 end

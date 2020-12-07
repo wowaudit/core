@@ -23,7 +23,7 @@ module Audit
 
     def process_result(response)
       init
-      raise ApiLimitReachedException if response[:status_code] == 429
+      raise ApiLimitReachedException if response[:status_code] == 429 || response[:status_code] == { status_code: 429 }
 
       if check_character_api_status(response) && !self.marked_for_deletion_at && check_data_completeness(response)
         self.changed = true if self.status != "tracking"
@@ -83,6 +83,7 @@ module Audit
 
     def gdpr_deletion?(response)
       return false if !response[:status]
+      raise ApiLimitReachedException if response[:status][:status_code] == 429
       return true if response[:status][:status_code] == 404
       return true unless response[:status]['is_valid']
 
