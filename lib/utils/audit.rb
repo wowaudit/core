@@ -57,6 +57,12 @@ module Audit
       end
     end
 
+    def fetch_occurrences(type)
+      zones = type == "wcl" ? 1..2 : 1..8
+      schedules = Audit::Schedule.where(type: type).map(&:zone)
+      zones.map{ |zone| [zone, schedules.count{ |key| key == zone }] }.to_h
+    end
+
     def register_worker(type)
       Logger.g(INFO_REGISTERED_WORKER)
       Schedule.find_or_create(

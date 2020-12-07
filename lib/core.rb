@@ -12,6 +12,24 @@ require 'tzinfo'
 require 'csv'
 require 'rollbar'
 
+MAX_OCCURRENCES = {
+  essentials: 2,
+  collections: 1,
+  wcl: 1,
+  raiderio: 3,
+}
+
+def register
+  # TODO: Figure out a way to properly fix registration race conditions
+  sleep rand(0..15.0)
+
+  occurrences = Audit.fetch_occurrences(TYPE)
+  zone = occurrences.select { |_, v| v == occurrences.values.min }.keys.sample
+  Audit.register_worker(TYPE) if REGISTER
+
+  zone
+end
+
 # File Storage
 storage_data = YAML::load(File.open('config/storage.yml'))
 Aws.config.update(
@@ -55,15 +73,15 @@ begin
   # Store realm data in memory
   REALMS = Audit::Realm.all.map{ |realm| [realm.id, realm] }.to_h
 
-  # TODO: Figure out a way to properly fix registration race conditions
-  sleep rand(0..15.0)
+  zone = register
 
-  zones = TYPE == "wcl" ? 1..2 : 1..8
-  schedules = Audit::Schedule.where(type: TYPE).map(&:zone)
-  occurrences = zones.map{ |zone| [zone, schedules.count{ |key| key == zone }] }.to_h
-  ZONE, _ = occurrences.select { |_, v| v == occurrences.values.min }.first
+  sleep 1
+  if Audit.fetch_occurrences(TYPE)[zone] > MAX_OCCURRENCES[TYPE.to_sym]
+    zone = register
+  end
+
+  ZONE = zone
   KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet")).first
-  Audit.register_worker(TYPE) if REGISTER
   Audit.authenticate(KEY.client_id, KEY.client_secret) unless TYPE == "wcl"
 
 rescue Mysql2::Error => e
