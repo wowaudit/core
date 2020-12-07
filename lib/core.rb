@@ -76,7 +76,7 @@ begin
   zone = register
 
   sleep 1
-  if Audit.fetch_occurrences(TYPE)[zone] > MAX_OCCURRENCES[TYPE.to_sym]
+  if REGISTER && Audit.fetch_occurrences(TYPE)[zone] > MAX_OCCURRENCES[TYPE.to_sym]
     zone = register
   end
 
