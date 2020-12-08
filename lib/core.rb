@@ -17,6 +17,7 @@ MAX_OCCURRENCES = {
   collections: 1,
   wcl: 1,
   raiderio: 3,
+  keystones: 1,
 }
 
 def register

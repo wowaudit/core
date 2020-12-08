@@ -18,8 +18,6 @@ Audit::Schedule.all.each(&:destroy)
 
 system("kubectl apply -f config/deploy/essentials-deployment.yml")
 system("kubectl apply -f config/deploy/collections-deployment.yml")
-
-# Don't deploy Raids & Mythic+ scrapers before they are available
-# system("kubectl apply -f config/deploy/keystones-deployment.yml")
-# system("kubectl apply -f config/deploy/wcl-deployment.yml")
-# system("kubectl apply -f config/deploy/raiderio-deployment.yml")
+system("kubectl apply -f config/deploy/keystones-deployment.yml")
+system("kubectl apply -f config/deploy/wcl-deployment.yml")
+system("kubectl apply -f config/deploy/raiderio-deployment.yml")
