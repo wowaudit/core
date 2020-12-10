@@ -82,11 +82,22 @@ module Audit
     end
 
     def add_great_vault_data(raid_completions)
-      raid_bosses_killed = raid_completions.map { |diff, amount| [diff] * amount }.flatten
+      raid_bosses_killed = raid_completions.map { |diff, amount| [diff] * amount }
 
-      @character.data['great_vault_slot_1'] = GREAT_VAULT_TO_ILVL['raid'][raid_bosses_killed[2]] || ''
-      @character.data['great_vault_slot_2'] = GREAT_VAULT_TO_ILVL['raid'][raid_bosses_killed[6]] || ''
-      @character.data['great_vault_slot_3'] = GREAT_VAULT_TO_ILVL['raid'][raid_bosses_killed[9]] || ''
+      # Don't use last refresh data for raid slots. TODO: Refactor me
+      @character.data['great_vault_slot_1'] = nil
+      @character.data['great_vault_slot_2'] = nil
+      @character.data['great_vault_slot_3'] = nil
+
+      raid_bosses_killed.map do |kills|
+        @character.data['great_vault_slot_1'] ||= GREAT_VAULT_TO_ILVL['raid'][kills[2]]
+        @character.data['great_vault_slot_2'] ||= GREAT_VAULT_TO_ILVL['raid'][kills[6]]
+        @character.data['great_vault_slot_3'] ||= GREAT_VAULT_TO_ILVL['raid'][kills[9]]
+      end
+
+      @character.data['great_vault_slot_1'] ||= ''
+      @character.data['great_vault_slot_2'] ||= ''
+      @character.data['great_vault_slot_3'] ||= ''
 
       # Use either Raider.io data or leaderboard data, whichever is more complete at the moment
       dungeon_data = if @character.details['raiderio']['top_ten_highest'].sum > @character.details['raiderio']['leaderboard_runs'].sum
