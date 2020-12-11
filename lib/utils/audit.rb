@@ -17,6 +17,8 @@ module Audit
           Logger.t(ERROR_DATABASE_CONNECTION, team.to_i)
           sleep 180
           redo
+        rescue RBattlenet::Errors::Unauthorized
+          Logger.t(ERROR_NO_API_KEY, team.to_i)
         rescue => e
           Rollbar.error(e, team_id: team.to_i, type: type)
           sleep(180) if e.class == Mysql2::Error
@@ -43,7 +45,7 @@ module Audit
           worker.update(updated_at: DateTime.now)
         end
 
-        self.refresh(schedule, worker.type)
+        self.refresh(schedule, worker.base_type)
         Logger.g(INFO_FINISHED_SCHEDULE)
       end
     end

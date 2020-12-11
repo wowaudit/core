@@ -8,6 +8,7 @@ module Audit
         begin
           Audit.authenticate(guild.api_key.client_id, guild.api_key.client_secret)
         rescue RBattlenet::Errors::Unauthorized
+          raise if TYPE.include?("dedicated")
           guild.api_key.update(active: false)
         end
       end
@@ -22,7 +23,7 @@ module Audit
         Logger.t(INFO_TEAM_EMPTY, id)
       end
 
-      if guild.api_key && guild.api_key.active
+      if guild.api_key && guild.api_key.active && defined?(KEY)
         Audit.authenticate(KEY.client_id, KEY.client_secret)
       end
     end

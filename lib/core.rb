@@ -77,13 +77,15 @@ begin
   zone = register
 
   sleep 1
-  if REGISTER && Audit.fetch_occurrences(TYPE)[zone] > MAX_OCCURRENCES[TYPE.to_sym]
+  if REGISTER && Audit.fetch_occurrences(TYPE)[zone] > (MAX_OCCURRENCES[TYPE.to_sym] || 99)
     zone = register
   end
 
   ZONE = zone
-  KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet")).first
-  Audit.authenticate(KEY.client_id, KEY.client_secret) unless TYPE == "wcl"
+  unless TYPE.include?("dedicated")
+    KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet")).first
+    Audit.authenticate(KEY.client_id, KEY.client_secret) unless TYPE == "wcl"
+  end
 
 rescue Mysql2::Error => e
   # The SQL proxy isn't always instantly available on server reboot

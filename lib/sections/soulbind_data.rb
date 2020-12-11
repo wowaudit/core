@@ -2,7 +2,7 @@ module Audit
   class SoulbindData < Data
     def add
       unless @data[:soulbinds].class == RBattlenet::EmptyHashResult || !@data[:soulbinds]['soulbinds']
-        soulbind = @data[:soulbinds]['soulbinds'].select{ |soulbind| soulbind["is_active"] }.first rescue byebug
+        soulbind = @data[:soulbinds]['soulbinds'].select{ |soulbind| soulbind["is_active"] }.first
 
         if soulbind
           @character.data['current_soulbind'] = SOULBIND_NAME[soulbind["soulbind"]["name"]] || soulbind["soulbind"]["name"]

@@ -16,6 +16,8 @@ ERROR_API_LIMIT_REACHED = "API limit reached. Waiting one minute before trying a
 
 ERROR_DATABASE_CONNECTION = "Encountered an error connection to the database. Waiting five minutes before trying again. "
 
+ERROR_NO_API_KEY = "Could not refresh this team, no dedicated API key was found. "
+
 ERROR_TEAM = "Encountered an error in refreshing this team: "
 
 ERROR_TEAM_DELETED = "Could not refresh this team, it appears to have been deleted. "
