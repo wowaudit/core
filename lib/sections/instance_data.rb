@@ -8,12 +8,7 @@ module Audit
       }.flatten
       boss_ids = encounters.map{ |encounter| encounter.values }.flatten
       raid_list = {}
-      great_vault_list = {
-        'mythic' => 0,
-        'heroic' => 0,
-        'normal' => 0,
-        'raid_finder' => 0,
-      }
+      great_vault_list = {}
       raid_output = {'raids_raid_finder' => [], 'raids_raid_finder_weekly' => [],
                      'raids_normal' => [],      'raids_normal_weekly' => [],
                      'raids_heroic' => [],      'raids_heroic_weekly' => [],
@@ -48,11 +43,13 @@ module Audit
         @character.data['dungeons_done_total'] = total_dungeons
       end
 
-      encounters.each do |encounter|
+      encounters.each_with_index do |encounter, index|
+        great_vault_list[index] = {}
+
         encounter.each do |difficulty, ids|
           raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max
           raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
-          great_vault_list[difficulty] += ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+          great_vault_list[index][difficulty] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
         end
       end
 
@@ -82,22 +79,27 @@ module Audit
     end
 
     def add_great_vault_data(raid_completions)
-      raid_bosses_killed = raid_completions.map { |diff, amount| [diff] * amount }
+      raid_bosses_killed = raid_completions.count { |boss, difficulties| difficulties.any? { |diff, killed| killed > 0 } }
+      completions_per_difficulty = {
+        'mythic' => [],
+        'heroic' => [],
+        'normal' => [],
+        'raid_finder' => [],
+      }
 
-      # Don't use last refresh data for raid slots. TODO: Refactor me
-      @character.data['great_vault_slot_1'] = nil
-      @character.data['great_vault_slot_2'] = nil
-      @character.data['great_vault_slot_3'] = nil
-
-      raid_bosses_killed.map do |kills|
-        @character.data['great_vault_slot_1'] ||= GREAT_VAULT_TO_ILVL['raid'][kills[2]]
-        @character.data['great_vault_slot_2'] ||= GREAT_VAULT_TO_ILVL['raid'][kills[6]]
-        @character.data['great_vault_slot_3'] ||= GREAT_VAULT_TO_ILVL['raid'][kills[9]]
+      raid_completions.values.each do |boss|
+        boss.keys.each do |difficulty|
+          if boss[difficulty] > 0
+            completions_per_difficulty[difficulty] << difficulty
+          end
+        end
       end
 
-      @character.data['great_vault_slot_1'] ||= ''
-      @character.data['great_vault_slot_2'] ||= ''
-      @character.data['great_vault_slot_3'] ||= ''
+      GREAT_VAULT_RAID_KILLS_NEEDED.each do |slot, kills_needed|
+        @character.data["great_vault_slot_#{slot}"] = if raid_bosses_killed >= kills_needed
+          GREAT_VAULT_TO_ILVL['raid'][completions_per_difficulty.values.flatten[kills_needed - 1]]
+        end || ''
+      end
 
       # Use either Raider.io data or leaderboard data, whichever is more complete at the moment
       dungeon_data = if @character.details['raiderio']['top_ten_highest'].sum > @character.details['raiderio']['leaderboard_runs'].sum
@@ -115,7 +117,9 @@ module Audit
       BRACKETS.each do |bracket, endpoint|
         if @data[endpoint.to_sym].class == RBattlenet::HashResult
           honor_earned += @data[endpoint.to_sym]['weekly_match_statistics']['won'] * HONOR_PER_WIN[bracket]
-          highest_rating = [highest_rating, @data[endpoint.to_sym]['rating']].max
+          if @data[endpoint.to_sym]['weekly_match_statistics']['played'] > 0
+            highest_rating = [highest_rating, @data[endpoint.to_sym]['rating']].max
+          end
         end
       end
 
