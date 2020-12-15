@@ -117,7 +117,7 @@ module Audit
       BRACKETS.each do |bracket, endpoint|
         if @data[endpoint.to_sym].class == RBattlenet::HashResult
           honor_earned += @data[endpoint.to_sym]['weekly_match_statistics']['won'] * HONOR_PER_WIN[bracket]
-          if @data[endpoint.to_sym]['weekly_match_statistics']['played'] > 0
+          if @data[endpoint.to_sym]['season']['id'] == 30
             highest_rating = [highest_rating, @data[endpoint.to_sym]['rating']].max
           end
         end

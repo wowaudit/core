@@ -6,9 +6,15 @@ module Audit
 
       BRACKETS.each do |bracket, endpoint|
         if @data[endpoint.to_sym].class == RBattlenet::HashResult
-          @character.data["#{bracket}_rating"] = @data[endpoint.to_sym]['rating']
-          @character.data["#{bracket}_season_played"] = @data[endpoint.to_sym]['season_match_statistics']['played']
-          @character.data["#{bracket}_week_played"] = @data[endpoint.to_sym]['weekly_match_statistics']['played']
+          if @data[endpoint.to_sym]['season']['id'] == 30
+            @character.data["#{bracket}_rating"] = @data[endpoint.to_sym]['rating']
+            @character.data["#{bracket}_season_played"] = @data[endpoint.to_sym]['season_match_statistics']['played']
+            @character.data["#{bracket}_week_played"] = @data[endpoint.to_sym]['weekly_match_statistics']['played']
+          else
+            @character.data["#{bracket}_rating"] = 0
+            @character.data["#{bracket}_season_played"] = 0
+            @character.data["#{bracket}_week_played"] = 0
+          end
         end
       end
 
