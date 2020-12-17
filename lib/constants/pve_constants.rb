@@ -9,9 +9,17 @@ MYTHIC_DUNGEONS = {
   14407 => 'Theater of Pain',
 }
 
-KEYSTONE_DUNGEONS = [244, 245, 246, 247, 248, 249, 250, 251, 252, 353, 369, 370] # TODO: Swap to Shadowlands data
+KEYSTONE_DUNGEONS = [375, 376, 377, 378, 379, 380, 381, 382]
 
-WEEKLY_EVENT_QUESTS = [] # Fill when quests return in Shadowlands
+WEEKLY_EVENT_QUESTS = [
+  62631,
+  62635,
+  62636,
+  62637,
+  62638,
+  62639,
+  62640,
+]
 
 RAID_DIFFICULTIES = {
   1 => 'raid_finder',

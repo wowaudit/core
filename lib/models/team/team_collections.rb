@@ -3,7 +3,7 @@ module Audit
     FIELDS = [
       :achievements,
       :achievement_statistics,
-      # :completed_quests,
+      :completed_quests,
       :equipment,
       :mounts,
       :pets,
