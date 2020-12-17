@@ -19,7 +19,9 @@ module Audit
             self.data['weekly_highest_m+']
 
           details['snapshots'][Audit.previous_week_year][Audit.previous_week]['vault'] ||=
-            9.times.map { |i| [(i + 1).to_s, self.data["great_vault_slot_#{i + 1}"]] }.to_h
+            9.times.map do |i|
+              [(i + 1).to_s, self.last_refresh["great_vault_slot_#{i + 1}"] || self.data["great_vault_slot_#{i + 1}"]]
+            end.to_h
         end
       end
     end

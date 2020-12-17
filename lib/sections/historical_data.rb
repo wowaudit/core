@@ -14,11 +14,13 @@ module Audit
         mplus.insert(0, week['m+'] || '-')
 
         vault.keys.each do |slot|
-          vault[slot].insert(0, week.dig('vault', slot.to_s) || 0)
+          value = week.dig('vault', slot.to_s) || "-"
+          vault[slot].insert(0, value.to_s.empty? ? "-" : value)
         end
       end
 
-      # Current week's highest M+ completion is not stored as a snapshot
+      # Current week's highest M+ completion and vault data are is not stored as a snapshot
+      vault.values.each { |slot| slot.shift(1) }
       mplus.shift(1)
 
       @character.data['historical_wqs_done'] = wqs.join('|')
