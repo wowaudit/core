@@ -105,7 +105,7 @@ module Audit
       dungeon_data = if @character.details['raiderio']['top_ten_highest'].sum > @character.details['raiderio']['leaderboard_runs'].sum
         @character.details['raiderio']['top_ten_highest']
       else
-        @character.details['raiderio']['leaderboard_runs']
+        (@character.details['raiderio']['leaderboard_runs'] || []).sort_by { |h| h * -1 }
       end
 
       @character.data['great_vault_slot_4'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 14].min]
