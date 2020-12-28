@@ -117,8 +117,12 @@ module Audit
 
       BRACKETS.each do |bracket, endpoint|
         if @data[endpoint.to_sym].class == RBattlenet::HashResult
-          honor_earned += @data[endpoint.to_sym]['weekly_match_statistics']['won'] * HONOR_PER_WIN[bracket]
-          if @data[endpoint.to_sym]['season']['id'] == 30
+          # Assume that players haven't played more than 3 different days.. Hacky for now
+          honor_earned += [@data[endpoint.to_sym]['weekly_match_statistics']['won'], 3].min * HONOR_PER_WIN[bracket][:daily]
+          honor_earned += [@data[endpoint.to_sym]['weekly_match_statistics']['won'] - 3, 0].max * HONOR_PER_WIN[bracket][:win]
+          honor_earned += @data[endpoint.to_sym]['weekly_match_statistics']['lost'] * HONOR_PER_WIN[bracket][:loss]
+
+          if @data[endpoint.to_sym]['season']['id'] == 30 && @data[endpoint.to_sym]['weekly_match_statistics']['won'] > 0
             highest_rating = [highest_rating, @data[endpoint.to_sym]['rating']].max
           end
         end
