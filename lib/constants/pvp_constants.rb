@@ -7,17 +7,17 @@ BRACKETS = {
 HONOR_PER_WIN = {
   '2v2' => {
     daily: 200,
-    win: 110,
-    loss: 15, # Estimated
+    win: 100,
+    loss: 25,
   },
   '3v3' => {
     daily: 250,
     win: 125,
-    loss: 30, # Estimated
+    loss: 30,
   },
   'rbg' => {
     daily: 850,
-    win: 450, # Estimated
-    loss: 150, # Estimated
+    win: 425, # Estimated
+    loss: 125, # Estimated
   }
 }
