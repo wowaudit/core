@@ -148,7 +148,7 @@ module Audit
       @@keystone_period = 0
       if @@previous_week_number.to_i < 1
         @@previous_year_number = ((reset_time + 7).year - 1).to_s
-        @@previous_week_number = Date.new((reset_time + 7).year - 1, 12, 28).cweek
+        @@previous_week_number = Date.new((reset_time + 7).year - 1, 12, 28).cweek.to_s
       else
         @@previous_year_number = @@year_number
       end
