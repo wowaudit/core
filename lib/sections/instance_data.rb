@@ -98,7 +98,9 @@ module Audit
         completions_per_difficulty['heroic'][boss] ||
         completions_per_difficulty['normal'][boss] ||
         completions_per_difficulty['raid_finder'][boss]
-      end.compact
+      end.compact.sort_by do |kill|
+        completions_per_difficulty.keys.index(kill)
+      end
 
       GREAT_VAULT_RAID_KILLS_NEEDED.each do |slot, kills_needed|
         @character.data["great_vault_slot_#{slot}"] = if raid_bosses_killed >= kills_needed
