@@ -89,15 +89,20 @@ module Audit
 
       raid_completions.values.each do |boss|
         boss.keys.each do |difficulty|
-          if boss[difficulty] > 0
-            completions_per_difficulty[difficulty] << difficulty
-          end
+          completions_per_difficulty[difficulty] << (boss[difficulty] > 0 ? difficulty : nil)
         end
       end
 
+      slot_info = raid_completions.keys.map do |boss|
+        completions_per_difficulty['mythic'][boss] ||
+        completions_per_difficulty['heroic'][boss] ||
+        completions_per_difficulty['normal'][boss] ||
+        completions_per_difficulty['raid_finder'][boss]
+      end.compact
+
       GREAT_VAULT_RAID_KILLS_NEEDED.each do |slot, kills_needed|
         @character.data["great_vault_slot_#{slot}"] = if raid_bosses_killed >= kills_needed
-          GREAT_VAULT_TO_ILVL['raid'][completions_per_difficulty.values.flatten[kills_needed - 1]]
+          GREAT_VAULT_TO_ILVL['raid'][slot_info[kills_needed - 1]]
         end || ''
       end
 
