@@ -65,6 +65,10 @@ module Audit
         @character.data['ahead_of_the_curve'] =
           AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
 
+        KEYSTONE_ACHIEVEMENTS.each do |achievement_id, level|
+          @character.data['keystone_master_level'] = level if @achievements[achievement_id]
+        end
+
         total_layers = 0
         @achievements[14810]['criteria']['child_criteria'].each do |wing|
           @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"] = wing['amount'] / 6

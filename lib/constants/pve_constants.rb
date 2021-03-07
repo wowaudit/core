@@ -79,6 +79,12 @@ GREAT_VAULT_TO_ILVL = {
   }
 }
 
+KEYSTONE_ACHIEVEMENTS = {
+  14938 => 5,
+  14531 => 10,
+  14532 => 15,
+}
+
 CUTTING_EDGE_ACHIEVEMENTS = [
   7485, # Will of the Emperor
   7486, # Grand Empress Shek'zeer

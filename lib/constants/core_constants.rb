@@ -311,4 +311,5 @@ HEADER = [
   'torghast_layers_soulforges',
   'torghast_layers_fracture_chambers',
   'torghast_layers_twisting_corridors',
+  'keystone_master_level',
 ]
