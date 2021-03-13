@@ -43,8 +43,8 @@ TORGHAST_TWISTING_CORRIDORS_IDS = [
 
 GREAT_VAULT_RAID_KILLS_NEEDED = {
   1 => 3,
-  2 => 7,
-  3 => 10,
+  2 => 6,
+  3 => 9,
 }
 
 GREAT_VAULT_TO_ILVL = {
