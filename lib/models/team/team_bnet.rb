@@ -17,7 +17,8 @@ module Audit
         output = process_request(characters)
         Logger.t(INFO_TEAM_REFRESHED, id)
 
-        Writer.write(self, output.reject(&:marked_for_deletion_at), HeaderData.altered_header(self))
+        # Writer.write(self, output.reject(&:marked_for_deletion_at), HeaderData.altered_header(self))
+        Writer.write(self, output, HeaderData.altered_header(self))
         Writer.update_db(output, true)
       else
         Logger.t(INFO_TEAM_EMPTY, id)
