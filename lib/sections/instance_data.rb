@@ -43,6 +43,16 @@ module Audit
         @character.data['dungeons_done_total'] = total_dungeons
       end
 
+      @character.data['m+_score'] = @data[:season_keystones].dig('mythic_rating', 'rating') || ''
+
+      best_runs = @data[:season_keystones]['best_runs']
+                    .group_by { |run| run.dig('dungeon', 'name') }
+                    .transform_values { |runs| runs.map { |run| run.dig('mythic_rating', 'rating') }.max }
+
+      MYTHIC_DUNGEONS.values.each do |dungeon|
+        @character.data["#{dungeon}_score"] = best_runs[dungeon]
+      end
+
       encounters.each_with_index do |encounter, index|
         great_vault_list[index] = {}
 
@@ -65,14 +75,10 @@ module Audit
         @character.data['ahead_of_the_curve'] =
           AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
 
-        KEYSTONE_ACHIEVEMENTS.each do |achievement_id, level|
-          @character.data['keystone_master_level'] = level if @achievements[achievement_id]
-        end
-
         total_layers = 0
         @achievements[14810]['criteria']['child_criteria'].each do |wing|
-          @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"] = wing['amount'] / 6
-          total_layers += wing['amount'] / 6
+          @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"] = TORGHAST_LAYER_CRITERIA.index(wing['amount']) || 0
+          total_layers += @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"]
         end rescue nil
 
         @character.data['torghast_layers_twisting_corridors'] =

@@ -8,13 +8,15 @@ module Audit
           if match
             if name == 'venari'
               @character.data["#{name}_standing"] = MAW_STANDINGS[match['standing']['tier']]
+            elsif name == 'archivists_codex'
+              @character.data["#{name}_standing"] = CODEX_STANDINGS[match['standing']['tier']]
             else
               @character.data["#{name}_standing"] = STANDINGS[match['standing']['tier']]
             end
 
             @character.data["#{name}_value"] = match['standing']['value']
           else
-            @character.data["#{name}_standing"] = (name == 'venari' ? 'Dubious' : 'Neutral')
+            @character.data["#{name}_standing"] = DEFAULT_STANDING[name] || 'Neutral'
             @character.data["#{name}_value"] = 0
           end
         end

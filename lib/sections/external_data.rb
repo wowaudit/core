@@ -18,9 +18,6 @@ module Audit
     end
 
     def add_raiderio_data
-      @character.data['m+_score'] =
-        (@character.details['raiderio']['score'] rescue '')
-
       @character.data['season_highest_m+'] =
         (@character.details['raiderio']['season_highest'] rescue '-')
 

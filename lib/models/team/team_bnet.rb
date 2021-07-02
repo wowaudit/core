@@ -33,7 +33,7 @@ module Audit
       api_limited = []
 
       result = RBattlenet::Wow::Character.find(
-        characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, source: ch } }, fields: self.class::FIELDS
+        characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, season: CURRENT_KEYSTONE_SEASON, source: ch } }, fields: self.class::FIELDS
       ) do |character, result|
         begin
           if character[:source].process_result(result)

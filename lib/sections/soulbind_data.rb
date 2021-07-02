@@ -1,6 +1,12 @@
 module Audit
   class SoulbindData < Data
     def add
+      (1..6).to_a.each do |conduit_slot|
+        @character.data["conduit_#{conduit_slot}_ilvl"] = ''
+        @character.data["conduit_#{conduit_slot}_id"] = ''
+        @character.data["conduit_#{conduit_slot}_name"] = ''
+      end
+
       unless @data[:soulbinds].class == RBattlenet::EmptyHashResult || !@data[:soulbinds]['soulbinds']
         soulbind = @data[:soulbinds]['soulbinds'].select{ |soulbind| soulbind["is_active"] }.first
 

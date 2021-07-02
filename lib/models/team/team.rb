@@ -29,7 +29,7 @@ module Audit
     end
 
     def raids_path
-      "https://wowaudit.com/raids/#{guild.path}/#{name.gsub(" ","-").downcase}"
+      "https://wowaudit.com/#{guild.path}/#{name.gsub(" ","-").downcase}/raids"
     end
 
     def slugged_region

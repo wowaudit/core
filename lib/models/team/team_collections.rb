@@ -12,6 +12,7 @@ module Audit
       :pvp_bracket_3v3,
       :pvp_bracket_rbg,
       :pvp_summary,
+      :season_keystones,
       :reputations,
       :soulbinds,
       :status,

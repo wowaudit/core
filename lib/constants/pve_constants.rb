@@ -7,7 +7,10 @@ MYTHIC_DUNGEONS = {
   14205 => 'Sanguine Depths',
   14401 => 'Spires of Ascension',
   14407 => 'Theater of Pain',
+  15177 => 'Tazavesh, the Veiled Market',
 }
+
+CURRENT_KEYSTONE_SEASON = 5
 
 KEYSTONE_DUNGEONS = [375, 376, 377, 378, 379, 380, 381, 382]
 
@@ -36,6 +39,8 @@ TORGHAST_WINGS = {
   89006 => 'mortregar',
   89007 => 'upper_reaches',
 }
+
+TORGHAST_LAYER_CRITERIA = [0, 6, 12, 18, 24, 30, 36, 42, 48, 53, 58, 63, 68]
 
 TORGHAST_TWISTING_CORRIDORS_IDS = [
   14468, 14469, 14470, 14471, 14472, 14568, 14569, 14570
@@ -77,12 +82,6 @@ GREAT_VAULT_TO_ILVL = {
     1400 => 207,
     0 => 200,
   }
-}
-
-KEYSTONE_ACHIEVEMENTS = {
-  14938 => 5,
-  14531 => 10,
-  14532 => 15,
 }
 
 CUTTING_EDGE_ACHIEVEMENTS = [
