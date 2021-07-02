@@ -46,8 +46,8 @@ module Audit
       @character.data['m+_score'] = @data[:season_keystones].dig('mythic_rating', 'rating') || ''
 
       best_runs = @data[:season_keystones]['best_runs']
-                    .group_by { |run| run.dig('dungeon', 'name') }
-                    .transform_values { |runs| runs.map { |run| run.dig('mythic_rating', 'rating') }.max }
+                    &.group_by { |run| run.dig('dungeon', 'name') }
+                    &.transform_values { |runs| runs.map { |run| run.dig('mythic_rating', 'rating') }.max } || {}
 
       MYTHIC_DUNGEONS.values.each do |dungeon|
         @character.data["#{dungeon}_score"] = best_runs[dungeon]
