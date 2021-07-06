@@ -106,6 +106,7 @@ CUTTING_EDGE_ACHIEVEMENTS = [
   13785, # Queen Azshara
   14069, # N'zoth the Corruptor
   14461, # Sire Denathrius
+  15135, # Sylvanas Windrunner
 ]
 
 AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
@@ -130,10 +131,11 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
   13784, # Queen Azshara
   14068, # N'zoth the Corruptor
   14460, # Sire Denathrius
+  15134, # Sylvanas Windrunner
 ]
 
 VALID_RAIDS = [{
-  'name' => 'Castle Nathria', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 26,
+  'name' => 'Castle Nathria', 'days' => [], 'id' => 26,
   'encounters' => [{
     'id' => 2398, 'name' => 'Shriekwing', 'raid_ids' => {
       'raid_finder' => [14422], 'normal' => [14419], 'heroic' => [14420], 'mythic' => [14421]
@@ -173,6 +175,49 @@ VALID_RAIDS = [{
   }, {
     'id' => 2407, 'name' => "Sire Denathrius", 'raid_ids' => {
       'raid_finder' => [14458], 'normal' => [14455], 'heroic' => [14456], 'mythic' => [14457]
+    }
+  }]
+}, {
+  'name' => 'Sanctum of Domination', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 28,
+  'encounters' => [{
+    'id' => 2423, 'name' => 'The Tarragrue', 'raid_ids' => {
+      'raid_finder' => [15136], 'normal' => [15137], 'heroic' => [15138], 'mythic' => [15139]
+    }
+  }, {
+    'id' => 2433, 'name' => "The Eye of the Jailer", 'raid_ids' => {
+      'raid_finder' => [15140], 'normal' => [15141], 'heroic' => [15142], 'mythic' => [15143]
+    }
+  }, {
+    'id' => 2429, 'name' => "The Nine", 'raid_ids' => {
+      'raid_finder' => [15144], 'normal' => [15145], 'heroic' => [15146], 'mythic' => [15147]
+    }
+  }, {
+    'id' => 2432, 'name' => "Remnant of Ner'zhul", 'raid_ids' => {
+      'raid_finder' => [15148], 'normal' => [15149], 'heroic' => [15150], 'mythic' => [15151]
+    }
+  }, {
+    'id' => 2434, 'name' => "Soulrender Dormazain", 'raid_ids' => {
+      'raid_finder' => [15152], 'normal' => [15153], 'heroic' => [15154], 'mythic' => [15155]
+    }
+  }, {
+    'id' => 2430, 'name' => "Painsmith Raznal", 'raid_ids' => {
+      'raid_finder' => [15156], 'normal' => [15157], 'heroic' => [15158], 'mythic' => [15159]
+    }
+  }, {
+    'id' => 2436, 'name' => "Guardian of the First Ones", 'raid_ids' => {
+      'raid_finder' => [15160], 'normal' => [15161], 'heroic' => [15162], 'mythic' => [15163]
+    }
+  }, {
+    'id' => 2431, 'name' => "Fatescribe Roh-Kalo", 'raid_ids' => {
+      'raid_finder' => [15164], 'normal' => [15165], 'heroic' => [15166], 'mythic' => [15167]
+    }
+  }, {
+    'id' => 2422, 'name' => "Kel'Thuzad", 'raid_ids' => {
+      'raid_finder' => [15169], 'normal' => [15170], 'heroic' => [15171], 'mythic' => [15172]
+    }
+  }, {
+    'id' => 2435, 'name' => "Sylvanas Windrunner", 'raid_ids' => {
+      'raid_finder' => [15173], 'normal' => [15174], 'heroic' => [15175], 'mythic' => [15176]
     }
   }]
 }]
