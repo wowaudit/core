@@ -212,7 +212,7 @@ HEADER = [
   'current_legendary_ilvl',
   'current_legendary_id',
   'current_legendary_name',
-  '',
+  'mission_table_completions',
   'great_vault_slot_1',
   'great_vault_slot_2',
   'great_vault_slot_3',
