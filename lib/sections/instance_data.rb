@@ -77,7 +77,7 @@ module Audit
 
         total_layers = 0
         @achievements[14810]['criteria']['child_criteria'].each do |wing|
-          @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"] = TORGHAST_LAYER_CRITERIA.index(wing['amount']) || 0
+          @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"] = TORGHAST_LAYER_CRITERIA.count { |layer| layer <= (wing['amount'] || 0) }
           total_layers += @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"]
         end rescue nil
 
