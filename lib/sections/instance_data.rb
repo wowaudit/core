@@ -133,13 +133,13 @@ module Audit
       highest_rating = 0
 
       BRACKETS.each do |bracket, endpoint|
-        if @data[endpoint.to_sym].class == RBattlenet::HashResult
+        if @data[endpoint.to_sym].class == RBattlenet::HashResult && @data[endpoint.to_sym]['season']['id'] == CURRENT_PVP_SEASON
           # Assume that players haven't played more than 3 different days.. Hacky for now
           honor_earned += [@data[endpoint.to_sym]['weekly_match_statistics']['won'], 3].min * HONOR_PER_WIN[bracket][:daily]
           honor_earned += [@data[endpoint.to_sym]['weekly_match_statistics']['won'] - 3, 0].max * HONOR_PER_WIN[bracket][:win]
           honor_earned += @data[endpoint.to_sym]['weekly_match_statistics']['lost'] * HONOR_PER_WIN[bracket][:loss]
 
-          if @data[endpoint.to_sym]['season']['id'] == 30 && @data[endpoint.to_sym]['weekly_match_statistics']['won'] > 0
+          if @data[endpoint.to_sym]['season']['id'] == CURRENT_PVP_SEASON && @data[endpoint.to_sym]['weekly_match_statistics']['won'] > 0
             highest_rating = [highest_rating, @data[endpoint.to_sym]['rating']].max
           end
         end
