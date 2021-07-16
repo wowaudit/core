@@ -6,11 +6,17 @@ module Audit
       # Check equipped gear
       items_equipped = 0
       bfa_level_detected = false
+      @domination_sockets = { Blood: [], Frost: [], Unholy: [] }
       @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
       @character.data["enchant_quality_off_hand"] = ''
       @character.data["off_hand_enchant"] = ''
+      (1..5).to_a.each do |slot|
+        @character.data["domination_socket_#{slot}_name"] = ""
+        @character.data["domination_socket_#{slot}_rank"] = ""
+        @character.data["domination_socket_#{slot}_id"] = ""
+      end
 
       # Reset equipped legendary status, we don't want it to use last refresh data
       @character.data['current_legendary_ilvl'] = ''
@@ -21,6 +27,7 @@ module Audit
         begin
           equipped_item = @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == item.upcase }.first
           check_enchant(item, equipped_item)
+          check_sockets(item, equipped_item)
 
           items_equipped += 1
           @character.ilvl += equipped_item['level']['value']
@@ -85,23 +92,19 @@ module Audit
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
       @character.data['gem_list'] = @character.gems.join('|')
+
+      type, sockets = @domination_sockets.find { |type, sockets| sockets.length >= 4 }
+      @character.data["domination_socket_bonus_name"] = type || ""
+      @character.data["domination_socket_bonus_rank"] = type ? sockets.min : ""
     end
 
     def check_enchant(item, equipped_item)
-      (equipped_item['sockets'] || []).each do |socket|
-        if has_gem = GEMS[socket.dig('item', 'id')]
-          @character.gems << has_gem
-        elsif !socket.dig('item', 'id')
-          @character.data['empty_sockets'] += 1
-        end
-      end
-
       if ENCHANTS.include? item
         column = ['wrist', 'hands', 'feet'].include?(item) ? 'primary' : item
 
         begin
           # Off-hand items that are not weapons can't be enchanted
-          return if !equipped_item['weapon'] && item == "off_hand"
+          return if !equipped_item&.dig('weapon') && item == "off_hand"
 
           # Don't store enchant data for primary enchant when it's not there
           return if !ENCHANTS[item][equipped_item['enchantments']&.first&.dig('enchantment_id')] && column == 'primary'
@@ -114,6 +117,36 @@ module Audit
         rescue
           @character.data["enchant_quality_#{column}"] = 0
           @character.data["#{column}_enchant"] = ''
+        end
+      end
+    end
+
+    def check_sockets(item, equipped_item)
+      (equipped_item['sockets'] || []).each do |socket|
+        if has_gem = GEMS[socket.dig('item', 'id')]
+          @character.gems << has_gem
+        elsif !socket.dig('item', 'id') && socket.dig('socket_type', 'type') != "DOMINATION"
+          @character.data['empty_sockets'] += 1
+        end
+      end
+
+      (equipped_item["spells"] || []).each do |spell|
+        if DOMINATION_SET_BONUSES.keys.include? spell.dig('spell', 'name')
+          @domination_sockets[DOMINATION_SET_BONUSES[spell.dig('spell', 'name')]] << 5
+        end
+      end
+
+      if slot = SHARD_OF_DOMINATION_SLOTS[@character.class_id || @data.dig('character_class', 'id')].index(item)
+        (equipped_item['sockets'] || []).each do |socket|
+          next unless socket.dig('socket_type', 'type') == "DOMINATION"
+
+          if socket.dig('item', 'id')
+            rank = SHARD_OF_DOMINATION_LEVELS[socket.dig('item', 'name').split(' ').first]
+            @domination_sockets[SHARD_OF_DOMINATION_TYPES[socket.dig('item', 'name').split(' ').last]] << rank
+            @character.data["domination_socket_#{slot + 1}_name"] = socket.dig('item', 'name').split(' ').last
+            @character.data["domination_socket_#{slot + 1}_rank"] = rank
+            @character.data["domination_socket_#{slot + 1}_id"] = socket.dig('item', 'id')
+          end
         end
       end
     end

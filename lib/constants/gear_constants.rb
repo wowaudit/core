@@ -162,6 +162,10 @@ GEMS = {
 }
 
 CONDUIT_ID_TO_SPELL = {
+  5=>180842,
+  7=>180844,
+  8=>180847,
+  9=>180896,
   10=>180932,
   11=>180933,
   12=>180935,
@@ -429,6 +433,8 @@ CONDUIT_ID_TO_SPELL = {
   280=>183474,
   281=>183463,
   282=>184587,
+  283=>187506,
+  284=>187507,
 }
 
 CONDUIT_RANK_TO_ILVL = {
@@ -456,4 +462,46 @@ SOULBIND_NAME = {
   'Nadjia the Mistblade' => 'Nadjia',
   'Theotar the Mad Duke' => 'Theotar',
   'General Draven' => 'Draven',
+}
+
+SHARD_OF_DOMINATION_SLOTS = {
+  1 => ['head', 'shoulder', 'chest', 'wrist', 'hands'],
+  2 => ['head', 'shoulder', 'chest', 'wrist', 'hands'],
+  3 => ['head', 'shoulder', 'chest', 'waist', 'feet'],
+  4 => ['head', 'shoulder', 'chest', 'hands', 'feet'],
+  5 => ['head', 'shoulder', 'chest', 'wrist', 'waist'],
+  6 => ['head', 'shoulder', 'chest', 'wrist', 'hands'],
+  7 => ['head', 'shoulder', 'chest', 'waist', 'feet'],
+  8 => ['head', 'shoulder', 'chest', 'wrist', 'waist'],
+  9 => ['head', 'shoulder', 'chest', 'wrist', 'waist'],
+  10 =>['head', 'shoulder', 'chest', 'hands', 'feet'],
+  11 =>['head', 'shoulder', 'chest', 'hands', 'feet'],
+  12 =>['head', 'shoulder', 'chest', 'hands', 'feet'],
+  nil => []
+}
+
+SHARD_OF_DOMINATION_LEVELS = {
+  "Shard" => 1,
+  "Ominous" => 2,
+  "Desolate" => 3,
+  "Foreboding" => 4,
+  "Portentous" => 5,
+}
+
+SHARD_OF_DOMINATION_TYPES = {
+  'Bek' => :Blood,
+  'Jas' => :Blood,
+  'Rev' => :Blood,
+  'Cor' => :Frost,
+  'Tel' => :Frost,
+  'Kyr' => :Frost,
+  'Dyz' => :Unholy,
+  'Zed' => :Unholy,
+  'Oth' => :Unholy,
+}
+
+DOMINATION_SET_BONUSES = {
+  'Blood Link' => :Blood,
+  'Winds of Winter' => :Frost,
+  'Chaos Bane' => :Unholy,
 }

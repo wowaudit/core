@@ -1,4 +1,4 @@
-CURRENT_VERSION = 910
+CURRENT_VERSION = 911
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -333,4 +333,21 @@ HEADER = [
   'conduit_6_ilvl',
   'conduit_6_id',
   'conduit_6_name',
+  'domination_socket_bonus_name',
+  'domination_socket_bonus_rank',
+  'domination_socket_1_name',
+  'domination_socket_1_rank',
+  'domination_socket_1_id',
+  'domination_socket_2_name',
+  'domination_socket_2_rank',
+  'domination_socket_2_id',
+  'domination_socket_3_name',
+  'domination_socket_3_rank',
+  'domination_socket_3_id',
+  'domination_socket_4_name',
+  'domination_socket_4_rank',
+  'domination_socket_4_id',
+  'domination_socket_5_name',
+  'domination_socket_5_rank',
+  'domination_socket_5_id',
 ]
