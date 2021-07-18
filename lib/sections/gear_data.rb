@@ -59,7 +59,7 @@ module Audit
           @character.data[item + '_quality'] = ''
         end
 
-        if (@character.details['best_gear'][item]['ilvl'].to_f || 0) > 250
+        if (@character.details['best_gear'][item]['ilvl'].to_f || 0) > 400
           bfa_level_detected = true
         end
 
@@ -76,7 +76,7 @@ module Audit
       end
 
       # Correct broken average item levels
-      if @character.details['max_ilvl'].to_f > 250 || bfa_level_detected
+      if @character.details['max_ilvl'].to_f > 400 || bfa_level_detected
         @character.details['max_ilvl'] = 0
 
         ITEMS.each do |item|
