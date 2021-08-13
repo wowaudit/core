@@ -72,7 +72,7 @@ module Audit
       ) do |schedule|
         schedule.type = type
         schedule.active = true
-        schedule.zone = zone
+        schedule.zone = (type.to_s == 'wcl' ? 1 : zone)
         schedule.created_at = DateTime.now
         schedule.updated_at = DateTime.now
       end
