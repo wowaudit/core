@@ -81,7 +81,7 @@ begin
     zone = register
   end
 
-  ZONE = zone
+  ZONE = (TYPE.to_s == 'wcl' ? 1 : zone)
   unless TYPE.include?("dedicated")
     KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet")).first
     Audit.authenticate(KEY.client_id, KEY.client_secret) unless TYPE == "wcl"
