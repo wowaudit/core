@@ -6,7 +6,8 @@ module Wowaudit
       @output = []
       @character = character
       @response = response
-      @data = character.details&.dig('last_refresh') || {}
+      puts character
+      @data = {}
 
       # Populate identifying data regardless of response
       @data['name'] = character.name
