@@ -1,5 +1,5 @@
-module Audit
-  class ProfessionDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::Professions < DataProcessor::Base
     def add
       if @data[:professions].class == RBattlenet::HashResult && @data[:professions]['primaries']
         professions = @data[:professions]['primaries'].select{ |p| BASE_PROFESSIONS.keys.include?(p['profession']['id']) }

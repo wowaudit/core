@@ -1,5 +1,5 @@
-module Audit
-  class InstanceDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::Instances < DataProcessor::Base
     def add
       encounters = VALID_RAIDS.map{ |raid|
         raid['encounters'].map{ |boss|

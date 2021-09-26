@@ -1,5 +1,5 @@
-module Audit
-  class PvPDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::PvP < DataProcessor::Base
     def add
       @result.data['honor_level'] = @data[:pvp_summary]['honor_level']
       @result.data['honorable_kills'] = @data[:pvp_summary]['honorable_kills']

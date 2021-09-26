@@ -9,16 +9,16 @@ ALL_UPDATABLE_FIELDS = [
 ]
 
 module Wowaudit
-  cattr_accessor :updatable_fields { ALL_UPDATABLE_FIELDS }
-  cattr_accessor :extended { true }
-  cattr_accessor :retry_on_api_limit { true }
+  cattr_accessor(:updatable_fields) { ALL_UPDATABLE_FIELDS }
+  cattr_accessor(:extended) { true }
+  cattr_accessor(:retry_on_api_limit) { true }
 
   def self.updatable_fields=(fields)
     @@updatable_fields = fields.map(&:to_sym) & ALL_UPDATABLE_FIELDS
   end
 
   def self.client
-    @@client ||= Wowaudit::Client.new(self, ENV['BLIZZARD_CLIENT_ID'], ENV['BLIZZARD_CLIENT_SECRET'])
+    @@client ||= Wowaudit::Client.new(ENV['BLIZZARD_CLIENT_ID'], ENV['BLIZZARD_CLIENT_SECRET'])
   end
 
   def self.retrieve(characters, client_id = nil, client_secret = nil)

@@ -1,5 +1,5 @@
-module Audit
-  class BasicDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::Basic < DataProcessor::Base
     ESSENTIAL = true
 
     def add

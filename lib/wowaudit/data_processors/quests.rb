@@ -1,5 +1,5 @@
-module Audit
-  class QuestDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::Quests < DataProcessor::Base
     def add
       if @achievements
         @result.data['quests_done_total'] = @achievements[508]['criteria']['child_criteria'].first['amount'] rescue 0

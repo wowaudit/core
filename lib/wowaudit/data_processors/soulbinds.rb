@@ -1,5 +1,5 @@
-module Audit
-  class SoulbindDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::Soulbinds < DataProcessor::Base
     def add
       (1..6).to_a.each do |conduit_slot|
         @result.data["conduit_#{conduit_slot}_ilvl"] = ''

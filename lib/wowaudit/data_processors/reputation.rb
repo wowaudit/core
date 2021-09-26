@@ -1,5 +1,5 @@
-module Audit
-  class ReputationDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::Reputation < DataProcessor::Base
     def add
       unless @data[:reputations].class == RBattlenet::EmptyHashResult
         REPUTATIONS[@data.dig('faction', 'name')].each do |reputation, name|

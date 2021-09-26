@@ -1,5 +1,5 @@
-module Audit
-  class CollectionDataProcessor < DataProcessor
+module Wowaudit
+  class DataProcessor::Collections < DataProcessor::Base
     def add
       @result.data['achievement_points'] = @data['achievement_points']
 
