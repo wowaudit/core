@@ -42,7 +42,7 @@ module Wowaudit
           end, fields: (Wowaudit.extended ? EXTENDED_FIELDS : FIELDS)
         ) do |character, response|
           begin
-            output[character[:source]] << Wowaudit::Result.new(character, response)
+            output[character[:source]] << Wowaudit::Result.new(character[:source], response)
           rescue ApiLimitReachedException
             api_limited << character[:source]
           end
