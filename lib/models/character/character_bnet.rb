@@ -23,7 +23,7 @@ module Audit
 
     def process_result(response)
       init
-      raise ApiLimitReachedException if response[:status_code] == 429 || response[:status_code] == { status_code: 429 }
+      raise ApiLimitReachedException if check_api_limit_reached(response)
 
       if check_character_api_status(response) && !self.marked_for_deletion_at && check_data_completeness(response)
         self.changed = true if self.status != "tracking"
@@ -38,6 +38,12 @@ module Audit
     end
 
     def return_error(response)
+      timeouts = response.values.map { | v| v.dig(:timeout) if v.is_a? Hash }.compact.count(&:itself)
+      if timeouts > 0
+        Logger.c(INFO_CHARACTER_TIMEOUTS_ENCOUNTERED.gsub("%N%", timeouts.to_s), id)
+        raise TimeoutsEncounteredException
+      end
+
       Logger.c(ERROR_CHARACTER + "Response code: #{response[:status_code]}", id)
       set_status(response[:status_code])
       to_output
@@ -64,6 +70,10 @@ module Audit
       end
       self.changed = new_status != self.status
       self.status = new_status
+    end
+
+    def check_api_limit_reached(response)
+      response[:status_code] == 429 || response.values.any? { |v| v.respond_to?(:dig) && v[:status_code] == 429 }
     end
 
     def check_character_api_status(response)
