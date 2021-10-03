@@ -15,35 +15,35 @@ CLASSES = {
 }
 
 DEFAULT_ROLES = {
-  'Death Knight' => 'Melee',
-  'Demon Hunter' => 'Melee',
-  'Druid' => 'Melee',
-  'Hunter' => 'Ranged',
-  'Mage' => 'Ranged',
-  'Monk' => 'Melee',
-  'Paladin' => 'Melee',
-  'Priest' => 'Ranged',
-  'Rogue' => 'Melee',
-  'Shaman' => 'Ranged',
-  'Warlock' => 'Ranged',
-  'Warrior' => 'Melee'
+  'Death Knight' => 'melee',
+  'Demon Hunter' => 'melee',
+  'Druid' => 'melee',
+  'Hunter' => 'ranged',
+  'Mage' => 'ranged',
+  'Monk' => 'melee',
+  'Paladin' => 'melee',
+  'Priest' => 'ranged',
+  'Rogue' => 'melee',
+  'Shaman' => 'ranged',
+  'Warlock' => 'ranged',
+  'Warrior' => 'melee'
 }
 
 ROLES_TO_SPEC = {
-  'Heal' => [
+  'heal' => [
     'Restoration',
     'Holy',
     'Discipline',
     'Mistweaver'
   ],
-  'Tank' => [
+  'tank' => [
     'Blood',
     'Vengeance',
     'Protection',
     'Brewmaster',
     'Guardian'
   ],
-  'Melee' => [
+  'melee' => [
     'Outlaw',
     'Subtlety',
     'Assassination',
@@ -57,7 +57,7 @@ ROLES_TO_SPEC = {
     'Unholy',
     'Frost'
   ],
-  'Ranged' => [
+  'ranged' => [
     'Shadow',
     'Affliction',
     'Demonology',
@@ -73,7 +73,7 @@ ROLES_TO_SPEC = {
 }
 
 ROLES = {
-  'Tank' => {
+  'tank' => {
     'Death Knight' => [1],
     'Demon Hunter' => [2],
     'Druid' => [2],
@@ -81,14 +81,14 @@ ROLES = {
     'Paladin' => [2],
     'Warrior' => [3]
   },
-  'Heal' => {
+  'heal' => {
     'Druid' => [3],
     'Monk' => [2],
     'Paladin' => [1],
     'Priest' => [1,2],
     'Shaman' => [3]
   },
-  'Ranged'=> {
+  'ranged'=> {
     'Druid' => [4],
     'Hunter' => [1,2],
     'Mage' => [1,2,3],
@@ -96,7 +96,7 @@ ROLES = {
     'Shaman' => [2],
     'Warlock' => [1,2,3]
   },
-  'Melee'=> {
+  'melee'=> {
     'Death Knight' => [2,3],
     'Demon Hunter' => [1],
     'Druid' => [1],

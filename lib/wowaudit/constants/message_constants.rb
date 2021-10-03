@@ -28,7 +28,9 @@ INFO_TEAM_STARTING = "Going to refresh this team now. "
 
 INFO_TEAM_REFRESHED = "Finished refreshing the team's data. "
 
-INFO_TEAM_RETRYING_API_LIMITED = "Encountered API rate limit for some characters. Retrying these: "
+INFO_CHARACTER_TIMEOUTS_ENCOUNTERED = "Encountered %N% timeouts for this character. "
+
+INFO_TEAM_RETRYING_API_LIMITED = "Encountered API rate limit or timeouts for some characters. Retrying these: "
 
 INFO_REALM_REFRESHED = "Finished refreshing character's dungeon level based on this realm's leaderboard. "
 

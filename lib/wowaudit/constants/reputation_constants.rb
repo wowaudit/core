@@ -22,6 +22,13 @@ REPUTATIONS = {
   nil => {} # For people who enjoy tracking neutral Pandaren
 }
 
+FACTIONS = {
+  'Alliance' => 0,
+  'Horde' => 1,
+  'Neutral' => 2,
+  nil => 2,
+}
+
 STANDINGS = {
   0 => 'Hated',
   1 => 'Hostile',

@@ -16,9 +16,9 @@ module Wowaudit
 
       class << self
         def process(result, data)
-          PROCESSORS.constantize.each do |type|
-            next if character.essentials_only? && !type::ESSENTIAL
-            type.new(character, data).add
+          PROCESSORS.map(&:constantize).each do |type|
+            next if !Wowaudit.extended && !type::ESSENTIAL
+            type.new(result, data).add
           end
 
           result
@@ -30,7 +30,7 @@ module Wowaudit
         @character = @result.character
         @data = data
 
-        unless @character.essentials_only?
+        if Wowaudit.extended
           @achievements = @data[:achievements]['achievements']
                             .group_by{ |ach| ach['id'] }
                             .transform_values(&:first)

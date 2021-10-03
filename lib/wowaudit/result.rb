@@ -6,7 +6,6 @@ module Wowaudit
       @output = []
       @character = character
       @response = response
-      puts character
       @data = {}
 
       # Populate identifying data regardless of response
@@ -18,13 +17,14 @@ module Wowaudit
       @gems = []
       @ilvl = 0.0
 
-      raise ApiLimitReachedException if [429, { status_code: 429 }].include?(@response[:status_code])
+      raise Wowaudit::Exception::ApiLimitReached if check_api_limit_reached
       if character_available? && check_data_completeness
-        Wowaudit.update_field(@character, :tracking, true)
-        DataProcessor.process(self, @response)
+        Wowaudit.update_field(@character, :status, 'tracking')
+        DataProcessor::Base.process(self, @response)
       else
-        # TODO: Set status in database?
-        raise CharacterUnavailableException.new(@response[:status_code])
+        # TODO: Set status in database? What do we want to do with tiemouts?
+        timeouts = @response.values.map { | v| v.dig(:timeout) if v.is_a? Hash }.compact.count(&:itself)
+        raise Wowaudit::Exception::CharacterUnavailable.new(@response[:status_code])
       end
     end
 
@@ -32,10 +32,10 @@ module Wowaudit
 
     def character_available?
       if Wowaudit.extended
-        if gdpr_deletion?(@response) && !character.marked_for_deletion_at
+        if gdpr_deletion? && !character.marked_for_deletion_at
           Wowaudit.update_field(@character, :marked_for_deletion_at, DateTime.now)
           return false
-        elsif !gdpr_deletion?(@response) && character.marked_for_deletion_at
+        elsif !gdpr_deletion? && character.marked_for_deletion_at
           Wowaudit.update_field(@character, :marked_for_deletion_at, nil)
           return true
         end
@@ -46,7 +46,7 @@ module Wowaudit
 
     def gdpr_deletion?
       return false if !@response[:status]
-      raise ApiLimitReachedException if @response[:status][:status_code] == 429
+      raise Wowaudit::Exception::ApiLimitReached if @response[:status][:status_code] == 429
       return true if @response[:status][:status_code] == 404
       return true unless @response[:status]['is_valid']
       false
@@ -55,15 +55,19 @@ module Wowaudit
     def check_data_completeness
       if Wowaudit.extended
         [:achievements, :pets, :mounts, :reputations, :equipment].each do |type|
-          raise ApiLimitReachedException if @response.dig(type, :status_code) == 429
+          raise Wowaudit::Exception::ApiLimitReached if @response.dig(type, :status_code) == 429
           return false unless @response[type] && @response[type][type == :equipment ? 'equipped_items' : type.to_s]
         end
 
         true
       else
-        raise ApiLimitReachedException if @response.dig(:equipment, :status_code) == 429
+        raise Wowaudit::Exception::ApiLimitReached if @response.dig(:equipment, :status_code) == 429
         @response[:equipment] && @response[:equipment]['equipped_items']
       end
+    end
+
+    def check_api_limit_reached
+      @response[:status_code] == 429 || @response.values.any? { |v| v.respond_to?(:dig) && v[:status_code] == 429 }
     end
   end
 end

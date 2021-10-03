@@ -5,11 +5,12 @@ require 'require_all'
 require_rel './wowaudit'
 
 ALL_UPDATABLE_FIELDS = [
-  :guild, :race_id, :faction_id, :thumbnail_url, :transfer_id, :level, :marked_for_deletion_at, :status
+  :guild_uid, :race_id, :faction_id, :media_zone, :transfer_id, :level, :marked_for_deletion_at, :status
 ]
 
 module Wowaudit
   cattr_accessor(:updatable_fields) { ALL_UPDATABLE_FIELDS }
+  cattr_accessor(:extra_fields) { [] }
   cattr_accessor(:extended) { true }
   cattr_accessor(:retry_on_api_limit) { true }
 

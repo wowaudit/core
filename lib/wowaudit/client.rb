@@ -22,7 +22,7 @@ module Wowaudit
 
     def initialize(client_id, client_secret)
       authenticate(client_id, client_secret)
-      RBattlenet.set_options(concurrency: 50, response_type: :hash)
+      RBattlenet.set_options(concurrency: 25, timeout: 5, retries: 5, response_type: :hash)
     end
 
     def retrieve(characters, output = {})
@@ -39,21 +39,20 @@ module Wowaudit
               season: CURRENT_KEYSTONE_SEASON,
               source: ch
             }
-          end, fields: (Wowaudit.extended ? EXTENDED_FIELDS : FIELDS)
+          end, fields: (Wowaudit.extended ? EXTENDED_FIELDS : FIELDS) + Wowaudit.extra_fields
         ) do |character, response|
           begin
-            output[character[:source]] << Wowaudit::Result.new(character[:source], response)
-          rescue ApiLimitReachedException
+            output[character[:source]] = Wowaudit::Result.new(character[:source], response)
+          rescue Wowaudit::Exception::ApiLimitReached
             api_limited << character[:source]
           end
         end
       end
 
       if api_limited.any?
-        raise ApiLimitReachedException unless Wowaudit.retry_on_api_limit
+        raise Wowaudit::Exception::ApiLimitReached unless Wowaudit.retry_on_api_limit
         retrieve(api_limited, output)
       else
-        update_characters(output)
         output
       end
     end
@@ -72,12 +71,6 @@ module Wowaudit
       end
 
       @authenticated_at = DateTime.now
-    end
-
-    private
-
-    def update_characters(output)
-      byebug
     end
   end
 end

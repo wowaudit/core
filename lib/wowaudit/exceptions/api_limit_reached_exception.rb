@@ -1,2 +1,0 @@
-class ApiLimitReachedException < StandardError
-end
