@@ -131,8 +131,8 @@ module Audit
       end
 
       (equipped_item["spells"] || []).each do |spell|
-        if DOMINATION_SET_BONUSES.keys.include?(spell.dig('spell', 'name')) && !@domination_sockets[DOMINATION_SET_BONUSES[spell.dig('spell', 'name')]].include?(5)
-          @domination_sockets[DOMINATION_SET_BONUSES[spell.dig('spell', 'name')]] << 5
+        if DOMINATION_SET_BONUSES.keys.include?(spell.dig('spell', 'name')) && !@domination_sockets[DOMINATION_SET_BONUSES[spell.dig('spell', 'name')]].include?(6)
+          @domination_sockets[DOMINATION_SET_BONUSES[spell.dig('spell', 'name')]] << 6
         end
       end
 
