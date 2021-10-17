@@ -5,7 +5,8 @@ require 'require_all'
 require_rel './wowaudit'
 
 ALL_UPDATABLE_FIELDS = [
-  :guild_uid, :race_id, :faction_id, :media_zone, :transfer_id, :level, :marked_for_deletion_at, :status
+  :guild_uid, :race_id, :faction_id, :media_zone, :transfer_id,
+  :level, :marked_for_deletion_at, :status, :refreshed_at
 ]
 
 module Wowaudit

@@ -20,6 +20,7 @@ module Wowaudit
       raise Wowaudit::Exception::ApiLimitReached if check_api_limit_reached
       if character_available? && check_data_completeness
         Wowaudit.update_field(@character, :status, 'tracking')
+        Wowaudit.update_field(@character, :refreshed_at, DateTime.now)
         DataProcessor::Base.process(self, @response)
       else
         # TODO: Set status in database? What do we want to do with tiemouts?
