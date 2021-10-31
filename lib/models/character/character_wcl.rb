@@ -3,6 +3,7 @@ module Audit
 
     def process_result(response)
       if response.code == 200
+        raise ApiLimitReachedException if response.headers['content-type'].include?("text/html")
         data = JSON.parse response.body
         store_result(data) unless (data["hidden"] rescue false)
       elsif response.code == 403 or response.code == 429
