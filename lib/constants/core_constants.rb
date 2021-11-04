@@ -350,4 +350,5 @@ HEADER = [
   'domination_socket_5_name',
   'domination_socket_5_rank',
   'domination_socket_5_id',
+  'sylvanas_mount',
 ]
