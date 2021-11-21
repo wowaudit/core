@@ -73,7 +73,10 @@ module Audit
     end
 
     def check_api_limit_reached(response)
-      response[:status_code] == 429 || response.values.any? { |v| v.respond_to?(:dig) && v[:status_code] == 429 }
+      response[:status_code] == 429 || response[:status_code][:status_code] == 429
+    rescue
+      # TODO: Improve on this, figure out why the structure is different sometimes
+      false
     end
 
     def check_character_api_status(response)
