@@ -75,11 +75,11 @@ begin
   schedule = register
 
   sleep 1
-  if REGISTER && Audit.fetch_occurrences(TYPE)[schedule&.zone || 0] > (MAX_OCCURRENCES[TYPE.to_sym] || 99)
+  if REGISTER && Audit.fetch_occurrences(TYPE)[schedule&.zone || 1] > (MAX_OCCURRENCES[TYPE.to_sym] || 99)
     schedule = register
   end
 
-  ZONE = (TYPE.to_s == 'wcl' ? 1 : schedule&.zone || 0)
+  ZONE = (TYPE.to_s == 'wcl' ? 1 : schedule&.zone || 1)
   unless TYPE.include?("dedicated")
     schedules = Audit::Schedule.all
     KEY = Audit::ApiKey
