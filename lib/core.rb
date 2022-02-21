@@ -27,8 +27,6 @@ def register
   occurrences = Audit.fetch_occurrences(TYPE)
   zone = occurrences.select { |_, v| v == occurrences.values.min }.keys.sample
   Audit.register_worker(TYPE, zone) if REGISTER
-
-  zone
 end
 
 # File Storage
@@ -74,16 +72,21 @@ begin
   # Store realm data in memory
   REALMS = Audit::Realm.all.map{ |realm| [realm.id, realm] }.to_h
 
-  zone = register
+  schedule = register
 
   sleep 1
-  if REGISTER && Audit.fetch_occurrences(TYPE)[zone] > (MAX_OCCURRENCES[TYPE.to_sym] || 99)
-    zone = register
+  if REGISTER && Audit.fetch_occurrences(TYPE)[schedule.zone] > (MAX_OCCURRENCES[TYPE.to_sym] || 99)
+    schedule = register
   end
 
-  ZONE = (TYPE.to_s == 'wcl' ? 1 : zone)
+  ZONE = (TYPE.to_s == 'wcl' ? 1 : schedule.zone)
   unless TYPE.include?("dedicated")
-    KEY = Audit::ApiKey.where(guild_id: nil, zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet")).first
+    schedules = Audit::Schedule.all
+    KEY = Audit::ApiKey
+      .where(zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet"))
+      .reject { |key| schedules.map(&:api_key_id).include?(key.id) }.sample
+
+    schedule.update(api_key: KEY)
     Audit.authenticate(KEY.client_id, KEY.client_secret) unless TYPE == "wcl"
   end
 
