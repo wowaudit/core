@@ -1,4 +1,4 @@
-CURRENT_VERSION = 911
+CURRENT_VERSION = 920
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -141,9 +141,9 @@ HEADER = [
   'Sanguine Depths',
   'Spires of Ascension',
   'Theater of Pain',
-  'Tazavesh, the Veiled Market',
-  '', # Future dungeon
-  '', # Future dungeon
+  "Tazavesh: So'leah's Gambit",
+  'the_enlightened_standing',
+  'the_enlightened_value',
   'dungeons_this_week',
   'wqs_done_total',
   'wqs_this_week',
@@ -323,7 +323,7 @@ HEADER = [
   'Sanguine Depths_score',
   'Spires of Ascension_score',
   'Theater of Pain_score',
-  'Tazavesh, the Veiled Market_score',
+  "Tazavesh: So'leah's Gambit_score",
   'conduit_4_ilvl',
   'conduit_4_id',
   'conduit_4_name',
@@ -351,4 +351,15 @@ HEADER = [
   'domination_socket_5_rank',
   'domination_socket_5_id',
   'sylvanas_mount',
+  'jailer_mount',
+  'tier_head_ilvl',
+  'tier_shoulder_ilvl',
+  'tier_chest_ilvl',
+  'tier_hands_ilvl',
+  'tier_legs_ilvl',
+  'Tazavesh: Streets of Wonder_score',
+  'torghast_layers_jailers_gauntlet',
+  'second_legendary_ilvl',
+  'second_legendary_id',
+  'second_legendary_name',
 ]

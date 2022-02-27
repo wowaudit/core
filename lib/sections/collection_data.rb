@@ -28,6 +28,7 @@ module Audit
 
       unless @data[:mounts].class == RBattlenet::EmptyHashResult
         @character.data['sylvanas_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1471 } ? "yes" : "no"
+        @character.data['jailer_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1587 } ? "yes" : "no"
       end
     end
   end

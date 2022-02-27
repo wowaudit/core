@@ -43,14 +43,14 @@ module Audit
         @character.data['dungeons_done_total'] = total_dungeons
       end
 
-      @character.data['m+_score'] = @data[:season_keystones].dig('mythic_rating', 'rating') || ''
+      @character.data['m+_score'] = (@data[:season_keystones].dig('mythic_rating', 'rating') || 0).to_i
 
       best_runs = @data[:season_keystones]['best_runs']
                     &.group_by { |run| run.dig('dungeon', 'name') }
                     &.transform_values { |runs| runs.map { |run| run.dig('mythic_rating', 'rating') }.max } || {}
 
       MYTHIC_DUNGEONS.values.each do |dungeon|
-        @character.data["#{dungeon}_score"] = best_runs[dungeon]
+        @character.data["#{dungeon}_score"] = best_runs[dungeon].to_i
       end
 
       encounters.each_with_index do |encounter, index|
@@ -84,7 +84,10 @@ module Audit
         @character.data['torghast_layers_twisting_corridors'] =
           TORGHAST_TWISTING_CORRIDORS_IDS.count{ |layer| @achievements[layer] }
 
-        @character.data['torghast_floors'] = total_layers + @character.data['torghast_layers_twisting_corridors']
+        @character.data['torghast_layers_jailers_gauntlet'] =
+          TORGHAST_JAILERS_GAUNTLET_IDS.count{ |layer| @achievements[layer] }
+
+        @character.data['torghast_floors'] = total_layers + @character.data['torghast_layers_twisting_corridors'] + @character.data['torghast_layers_jailers_gauntlet']
       end
     end
 
@@ -127,7 +130,7 @@ module Audit
 
       @character.data['great_vault_slot_4'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 15].min]
       @character.data['great_vault_slot_5'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 15].min]
-      @character.data['great_vault_slot_6'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[9] || 0, 15].min]
+      @character.data['great_vault_slot_6'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 15].min]
 
       honor_earned = 0
       highest_rating = 0
@@ -149,7 +152,7 @@ module Audit
 
       @character.data['great_vault_slot_7'] = honor_earned >= 1250 ? item_level : ''
       @character.data['great_vault_slot_8'] = honor_earned >= 2500 ? item_level : ''
-      @character.data['great_vault_slot_9'] = honor_earned >= 6250 ? item_level : ''
+      @character.data['great_vault_slot_9'] = honor_earned >= 5500 ? item_level : ''
     end
   end
 end

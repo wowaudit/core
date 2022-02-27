@@ -7,12 +7,13 @@ MYTHIC_DUNGEONS = {
   14205 => 'Sanguine Depths',
   14401 => 'Spires of Ascension',
   14407 => 'Theater of Pain',
-  15177 => 'Tazavesh, the Veiled Market',
+  0 => 'Tazavesh: Streets of Wonder',
+  15168 => "Tazavesh: So'leah's Gambit",
 }
 
 CURRENT_KEYSTONE_SEASON = 6
 
-KEYSTONE_DUNGEONS = [375, 376, 377, 378, 379, 380, 381, 382]
+KEYSTONE_DUNGEONS = [375, 376, 377, 378, 379, 380, 381, 382, 391, 392]
 
 WEEKLY_EVENT_QUESTS = [
   62631,
@@ -40,48 +41,52 @@ TORGHAST_WINGS = {
   89007 => 'upper_reaches',
 }
 
-TORGHAST_LAYER_CRITERIA = [6, 12, 18, 24, 30, 36, 42, 48, 53, 58, 63, 68]
+TORGHAST_LAYER_CRITERIA = [6, 12, 18, 24, 30, 36, 42, 48, 53, 58, 63, 68, 73, 78, 83, 88]
 
 TORGHAST_TWISTING_CORRIDORS_IDS = [
   14468, 14469, 14470, 14471, 14472, 14568, 14569, 14570
 ]
 
+TORGHAST_JAILERS_GAUNTLET_IDS = [
+  15251, 15252, 15253, 15254, 15255, 15256, 15257, 15258
+]
+
 GREAT_VAULT_RAID_KILLS_NEEDED = {
-  1 => 3,
-  2 => 6,
-  3 => 9,
+  1 => 2,
+  2 => 5,
+  3 => 8,
 }
 
 GREAT_VAULT_TO_ILVL = {
   'raid' => {
-    'mythic' => 252,
-    'heroic' => 239,
-    'normal' => 226,
-    'raid_finder' => 213,
+    'mythic' => 278,
+    'heroic' => 265,
+    'normal' => 252,
+    'raid_finder' => 239,
   },
   'dungeon' => {
-    15 => 252,
-    14 => 249,
-    13 => 246,
-    12 => 246,
-    11 => 242,
-    10 => 239,
-    9 => 236,
-    8 => 236,
-    7 => 233,
-    6 => 229,
-    5 => 229,
-    4 => 226,
-    3 => 226,
-    2 => 226,
+    15 => 278,
+    14 => 275,
+    13 => 272,
+    12 => 272,
+    11 => 268,
+    10 => 265,
+    9 => 262,
+    8 => 262,
+    7 => 259,
+    6 => 255,
+    5 => 255,
+    4 => 252,
+    3 => 252,
+    2 => 252,
     0 => '',
   },
   'pvp' => {
-    2100 => 246,
-    1800 => 240,
-    1600 => 233,
-    1400 => 226,
-    0 => 220,
+    2100 => 272,
+    1800 => 265,
+    1600 => 259,
+    1400 => 252,
+    0 => 249,
   }
 }
 
@@ -108,6 +113,7 @@ CUTTING_EDGE_ACHIEVEMENTS = [
   14069, # N'zoth the Corruptor
   14461, # Sire Denathrius
   15135, # Sylvanas Windrunner
+  15471, # The Jailer
 ]
 
 AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
@@ -133,6 +139,7 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
   14068, # N'zoth the Corruptor
   14460, # Sire Denathrius
   15134, # Sylvanas Windrunner
+  15470, # The Jailer
 ]
 
 VALID_RAIDS = [{
@@ -179,7 +186,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Sanctum of Domination', 'days' => [0, 1, 2, 3, 4, 5, 6], 'id' => 28,
+  'name' => 'Sanctum of Domination', 'days' => [], 'id' => 28,
   'encounters' => [{
     'id' => 2423, 'name' => 'The Tarragrue', 'raid_ids' => {
       'raid_finder' => [15136], 'normal' => [15137], 'heroic' => [15138], 'mythic' => [15139]
@@ -221,6 +228,9 @@ VALID_RAIDS = [{
       'raid_finder' => [15173], 'normal' => [15174], 'heroic' => [15175], 'mythic' => [15176]
     }
   }]
-}]
+},
+# Automatically generated
+{"name"=>"Sepulcher of the First Ones", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>29, "encounters"=>[{"id"=>2512, "name"=>"Vigilant Guardian", "raid_ids"=>{"raid_finder"=>[15424], "normal"=>[15425], "heroic"=>[15426], "mythic"=>[15427]}}, {"id"=>2542, "name"=>"Skolex", "raid_ids"=>{"raid_finder"=>[15428], "normal"=>[15429], "heroic"=>[15430], "mythic"=>[15431]}}, {"id"=>2553, "name"=>"Artificer Xy'mox", "raid_ids"=>{"raid_finder"=>[15432], "normal"=>[15433], "heroic"=>[15434], "mythic"=>[15435]}}, {"id"=>2540, "name"=>"Dausegne", "raid_ids"=>{"raid_finder"=>[15436], "normal"=>[15437], "heroic"=>[15438], "mythic"=>[15439]}}, {"id"=>2544, "name"=>"Prototype Pantheon", "raid_ids"=>{"raid_finder"=>[15440], "normal"=>[15441], "heroic"=>[15442], "mythic"=>[15443]}}, {"id"=>2539, "name"=>"Lihuvim", "raid_ids"=>{"raid_finder"=>[15444], "normal"=>[15445], "heroic"=>[15446], "mythic"=>[15447]}}, {"id"=>2529, "name"=>"Halondrus", "raid_ids"=>{"raid_finder"=>[15448], "normal"=>[15449], "heroic"=>[15450], "mythic"=>[15451]}}, {"id"=>2546, "name"=>"Anduin Wrynn", "raid_ids"=>{"raid_finder"=>[15452], "normal"=>[15453], "heroic"=>[15454], "mythic"=>[15455]}}, {"id"=>2543, "name"=>"Lords of Dread", "raid_ids"=>{"raid_finder"=>[15456], "normal"=>[15457], "heroic"=>[15458], "mythic"=>[15459]}}, {"id"=>2549, "name"=>"Rygelon", "raid_ids"=>{"raid_finder"=>[15460], "normal"=>[15461], "heroic"=>[15462], "mythic"=>[15463]}}, {"id"=>2537, "name"=>"The Jailer", "raid_ids"=>{"raid_finder"=>[15464], "normal"=>[15465], "heroic"=>[15466], "mythic"=>[15467]}}]},
+]
 
 WCL_IDS = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["id"].to_s } }.flatten

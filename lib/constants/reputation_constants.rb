@@ -8,6 +8,7 @@ REPUTATIONS = {
     2465 => 'the_wild_hunt',
     2470 => 'deaths_advance',
     2472 => 'archivists_codex',
+    2478 => 'the_enlightened',
   },
   'Horde' => {
     2407 => 'the_ascended',
@@ -18,6 +19,7 @@ REPUTATIONS = {
     2465 => 'the_wild_hunt',
     2470 => 'deaths_advance',
     2472 => 'archivists_codex',
+    2478 => 'the_enlightened',
   },
   nil => {} # For people who enjoy tracking neutral Pandaren
 }

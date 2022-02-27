@@ -65,6 +65,10 @@ module Audit
         details['best_gear'] = ITEMS.map { |item| [item, { ilvl: 0 }] }.to_h
       end
 
+      if !details['tier_items'].is_a? Hash
+        details['tier_items'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
+      end
+
       if !details['great_vault'].is_a? Hash
         details['great_vault'] = {
           'dungeons' => [],

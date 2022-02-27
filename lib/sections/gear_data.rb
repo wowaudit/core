@@ -5,6 +5,7 @@ module Audit
     def add
       # Check equipped gear
       items_equipped = 0
+      legendaries_equipped = 0
       bfa_level_detected = false
       @domination_sockets = { Blood: [], Frost: [], Unholy: [] }
       @character.data['empty_sockets'] = 0
@@ -41,11 +42,21 @@ module Audit
             }
           end
 
-          # Don't trigger the Legendary cloak from BfA or other legacy legendaries here (so check item level)
-          if equipped_item['quality']['type'] == 'LEGENDARY' && equipped_item['level']['value'].to_i > 170
-            @character.data['current_legendary_ilvl'] = equipped_item['level']['value']
-            @character.data['current_legendary_id'] = equipped_item['item']['id']
-            @character.data['current_legendary_name'] = equipped_item['name']
+          if TIER_ITEMS_BY_SLOT.keys.include? item
+            if TIER_ITEMS.include?(equipped_item['level']['id'].to_i) && equipped_item['level']['value'] > @character.details['tier_items'][item]
+              @character.details['tier_items'][item] = equipped_item['level']['value']
+            end
+
+            # TODO: Change to real data
+            @character.data["tier_#{item}_ilvl"] = @character.details['tier_items'][item]
+          end
+
+          # Don't trigger the Legendary cloak from BfA or other legacy legendaries here (so check item level), and exclude bow from Sylvanas
+          if equipped_item['quality']['type'] == 'LEGENDARY' && equipped_item['level']['value'].to_i > 170 && equipped_item['item']['id'].to_i != 186414
+            @character.data["#{legendaries_equipped == 0 ? 'current' : 'second'}_legendary_ilvl"] = equipped_item['level']['value']
+            @character.data["#{legendaries_equipped == 0 ? 'current' : 'second'}_legendary_id"] = equipped_item['spells']&.first&.dig('spell', 'id')
+            @character.data["#{legendaries_equipped == 0 ? 'current' : 'second'}_legendary_name"] = equipped_item['name']
+            legendaries_equipped += 1
           end
 
           @character.data[item + '_ilvl'] = equipped_item['level']['value']
