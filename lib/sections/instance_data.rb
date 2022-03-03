@@ -7,6 +7,7 @@ module Audit
         }
       }.flatten
       boss_ids = encounters.map{ |encounter| encounter.values }.flatten
+      vault_boss_ids = boss_ids.last(VALID_RAIDS.last['encounters'].size * 4)
       raid_list = {}
       great_vault_list = {}
       raid_output = {'raids_raid_finder' => [], 'raids_raid_finder_weekly' => [],
@@ -53,13 +54,20 @@ module Audit
         @character.data["#{dungeon}_score"] = best_runs[dungeon].to_i
       end
 
+      vault_index = -1
       encounters.each_with_index do |encounter, index|
-        great_vault_list[index] = {}
+        if (vault_boss_ids & encounter['normal']).any?
+          vault_index += 1
+          great_vault_list[vault_index] = {}
+        end
 
         encounter.each do |difficulty, ids|
           raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max
           raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
-          great_vault_list[index][difficulty] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+
+          if (vault_boss_ids & ids).any?
+            great_vault_list[vault_index][difficulty] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+          end
         end
       end
 

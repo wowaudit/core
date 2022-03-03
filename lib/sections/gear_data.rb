@@ -43,7 +43,7 @@ module Audit
           end
 
           if TIER_ITEMS_BY_SLOT.keys.include? item
-            if TIER_ITEMS.include?(equipped_item['level']['id'].to_i) && equipped_item['level']['value'] > @character.details['tier_items'][item]
+            if TIER_ITEMS.include?(equipped_item['item']['id'].to_i) && equipped_item['level']['value'] > @character.details['tier_items'][item]
               @character.details['tier_items'][item] = equipped_item['level']['value']
             end
 

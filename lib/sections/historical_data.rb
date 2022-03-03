@@ -31,8 +31,9 @@ module Audit
         @character.data["historical_great_vault_slot_#{slot}"] = data.join('|')
       end
 
-      @character.data['dungeons_this_week'] =
-        [@character.data['dungeons_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'], 0].max rescue 0
+      weekly_dungeons_from_criteria = [@character.data['dungeons_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['dungeons'], 0].max rescue 0
+      weekly_dungeons_from_raiderio = @character.details['raiderio']['top_ten_highest'].size
+      @character.data['dungeons_this_week'] = [weekly_dungeons_from_criteria, weekly_dungeons_from_raiderio].max
 
       @character.data['wqs_this_week'] =
         [@character.data['wqs_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['wqs'], 0].max rescue 0
