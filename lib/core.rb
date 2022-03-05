@@ -84,7 +84,7 @@ begin
     schedules = Audit::Schedule.all
     KEY = Audit::ApiKey
       .where(zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet"))
-      .reject { |key| schedules.map(&:api_key_id).include?(key.id) }.sample
+      .reject { |key| TYPE != "wcl" && schedules.map(&:api_key_id).include?(key.id) }.sample
 
     schedule.update(api_key: KEY) if schedule
     Audit.authenticate(KEY.client_id, KEY.client_secret) unless TYPE == "wcl"
