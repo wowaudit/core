@@ -86,6 +86,7 @@ module Audit
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
         raiderio: details["raiderio"],
+        tier_items: details["tier_items"],
         last_refresh: last_refresh_data,
         best_gear: details['best_gear']
       }
