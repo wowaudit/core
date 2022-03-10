@@ -362,4 +362,9 @@ HEADER = [
   'second_legendary_ilvl',
   'second_legendary_id',
   'second_legendary_name',
+  'tier_real_head_ilvl',
+  'tier_real_shoulder_ilvl',
+  'tier_real_chest_ilvl',
+  'tier_real_hands_ilvl',
+  'tier_real_legs_ilvl',
 ]

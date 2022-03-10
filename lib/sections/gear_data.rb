@@ -47,8 +47,9 @@ module Audit
               @character.details['tier_items'][item] = equipped_item['level']['value']
             end
 
-            # TODO: Change to real data
-            @character.data["tier_#{item}_ilvl"] = @character.details['tier_items'][item]
+            # The sheet relies on specific item levels on the summary tab, use the closest match to fix bugs related to it
+            @character.data["tier_#{item}_ilvl"] = [285, 278, 272, 265, 259, 252, 246, 239].find { |ilvl| ilvl <= @character.details['tier_items'][item] }
+            @character.data["tier_real_#{item}_ilvl"] = @character.details['tier_items'][item]
           end
 
           # Don't trigger the Legendary cloak from BfA or other legacy legendaries here (so check item level), and exclude bow from Sylvanas
