@@ -29,6 +29,31 @@ DEFAULT_ROLES = {
   'Warrior' => 'Melee'
 }
 
+DPS_SPECS = [
+  'Outlaw',
+  'Subtlety',
+  'Assassination',
+  'Feral',
+  'Windwalker',
+  'Havoc',
+  'Enhancement',
+  'Survival',
+  'Arms','Fury',
+  'Retribution',
+  'Unholy',
+  'Frost',
+  'Shadow',
+  'Affliction',
+  'Demonology',
+  'Destruction',
+  'Arcane',
+  'Fire',
+  'Balance',
+  'Marksmanship',
+  'Beast Mastery',
+  'Elemental',
+]
+
 ROLES_TO_SPEC = {
   'Heal' => [
     'Restoration',
@@ -43,33 +68,8 @@ ROLES_TO_SPEC = {
     'Brewmaster',
     'Guardian'
   ],
-  'Melee' => [
-    'Outlaw',
-    'Subtlety',
-    'Assassination',
-    'Feral',
-    'Windwalker',
-    'Havoc',
-    'Enhancement',
-    'Survival',
-    'Arms','Fury',
-    'Retribution',
-    'Unholy',
-    'Frost'
-  ],
-  'Ranged' => [
-    'Shadow',
-    'Affliction',
-    'Demonology',
-    'Destruction',
-    'Arcane',
-    'Fire',
-    'Frost',
-    'Balance',
-    'Marksmanship',
-    'Beast Mastery',
-    'Elemental'
-  ]
+  'Melee' => DPS_SPECS,
+  'Ranged' => DPS_SPECS,
 }
 
 ROLES = {
