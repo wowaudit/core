@@ -30,7 +30,7 @@ module Audit
     end
 
     def check_data_completeness(response)
-      [:achievements, :pets, :mounts, :reputations, :equipment].each do |type|
+      [:achievements, :mounts, :reputations, :equipment].each do |type|
         raise ApiLimitReachedException if response.dig(type, :status_code) == 429
         return false unless response[type] && response[type][type == :equipment ? 'equipped_items' : type.to_s]
       end
