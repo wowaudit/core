@@ -1,5 +1,5 @@
 GIT
-  remote: git://github.com/emielvanlankveld/rbattlenet.git
+  remote: https://github.com/emielvanlankveld/rbattlenet.git
   revision: 2982d74cc9c3dbb9ae9fe4c8ffc321da9526d9b3
   branch: master
   specs:
