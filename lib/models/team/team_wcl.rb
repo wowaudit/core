@@ -9,6 +9,7 @@ module Audit
           begin
             response = Typhoeus.get(uri(character, zone))
             character.process_result(response)
+            sleep 0.1
           rescue ApiLimitReachedException
             Logger.t(ERROR_API_LIMIT_REACHED, id)
             sleep 10
