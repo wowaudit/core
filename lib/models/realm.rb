@@ -34,10 +34,10 @@ module Audit
         end
 
         characters = CharacterRaiderio.where(realm: realm)
-        metadata = Redis.get_characters(characters.map(&:key).compact)
+        metadata = Redis.get_characters(characters.map(&:redis_id).compact)
         characters = characters.to_a.map! do |character|
-          next unless character.key
-          character.details = metadata[character.key] || {}
+          next unless character.redis_id
+          character.details = metadata[character.redis_id] || {}
           character.verify_details
           changed = character.process_leaderboard_result((runs_by_character[character.key.to_i] || []).sort_by { |h| h * -1 })
           character if changed

@@ -13,6 +13,10 @@ module Audit
       super && key
     end
 
+    def redis_id
+      "character:#{key}_#{realm_id}" if key
+    end
+
     def historical_snapshots
       return @historical_snapshots if @historical_snapshots
       @historical_snapshots = []

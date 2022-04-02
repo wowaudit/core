@@ -18,14 +18,14 @@ module Audit
     def characters(characters)
       characters.each_with_index do |character, index|
         character.realm_slug = REALMS[character.realm_id || guild.realm_id].blizzard_name
-        character.details = character_details(characters)[character.key].to_h
+        character.details = character_details(characters)[character.redis_id].to_h
         character.verify_details
       end
       characters.select(&:active)
     end
 
     def character_details(characters)
-      @character_details ||= Redis.get_characters(characters.map(&:key).compact)
+      @character_details ||= Redis.get_characters(characters.map(&:redis_id).compact)
     end
 
     def raids_path
