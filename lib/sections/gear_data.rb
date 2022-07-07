@@ -33,6 +33,12 @@ module Audit
           items_equipped += 1
           @character.ilvl += equipped_item['level']['value']
 
+          @character.details['current_gear'][item] = {
+            'ilvl' => equipped_item['level']['value'],
+            'id' => equipped_item['item']['id'],
+            'bonus_ids' => equipped_item['bonus_list'],
+          }
+
           if equipped_item['level']['value'] >= @character.details['best_gear'][item]['ilvl'].to_f
             @character.details['best_gear'][item] = {
               'ilvl' => equipped_item['level']['value'],

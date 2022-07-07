@@ -69,6 +69,10 @@ module Audit
         details['best_gear'] = ITEMS.map { |item| [item, { ilvl: 0 }] }.to_h
       end
 
+      if !details['current_gear'].is_a? Hash
+        details['current_gear'] = ITEMS.map { |item| [item, { ilvl: 0 }] }.to_h
+      end
+
       if !details['tier_items'].is_a? Hash
         details['tier_items'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
       end
@@ -92,7 +96,8 @@ module Audit
         raiderio: details["raiderio"],
         tier_items: details["tier_items"],
         last_refresh: last_refresh_data,
-        best_gear: details['best_gear']
+        best_gear: details['best_gear'],
+        current_gear: details['current_gear'],
       }
     end
   end
