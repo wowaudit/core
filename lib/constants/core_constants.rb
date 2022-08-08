@@ -344,7 +344,7 @@ HEADER = [
   '',
   '',
   '',
-  '',
+  'dinar_requirement',
   'total_fated_kills',
   'dinar_earned',
   'dinar_progress',
