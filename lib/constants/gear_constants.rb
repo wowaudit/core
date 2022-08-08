@@ -464,48 +464,6 @@ SOULBIND_NAME = {
   'General Draven' => 'Draven',
 }
 
-SHARD_OF_DOMINATION_SLOTS = {
-  1 => ['head', 'shoulder', 'chest', 'wrist', 'hands'],
-  2 => ['head', 'shoulder', 'chest', 'wrist', 'hands'],
-  3 => ['head', 'shoulder', 'chest', 'waist', 'feet'],
-  4 => ['head', 'shoulder', 'chest', 'hands', 'feet'],
-  5 => ['head', 'shoulder', 'chest', 'wrist', 'waist'],
-  6 => ['head', 'shoulder', 'chest', 'wrist', 'hands'],
-  7 => ['head', 'shoulder', 'chest', 'waist', 'feet'],
-  8 => ['head', 'shoulder', 'chest', 'wrist', 'waist'],
-  9 => ['head', 'shoulder', 'chest', 'wrist', 'waist'],
-  10 =>['head', 'shoulder', 'chest', 'hands', 'feet'],
-  11 =>['head', 'shoulder', 'chest', 'hands', 'feet'],
-  12 =>['head', 'shoulder', 'chest', 'hands', 'feet'],
-  nil => []
-}
-
-SHARD_OF_DOMINATION_LEVELS = {
-  "Shard" => 1,
-  "Ominous" => 2,
-  "Desolate" => 3,
-  "Foreboding" => 4,
-  "Portentous" => 5,
-}
-
-SHARD_OF_DOMINATION_TYPES = {
-  'Bek' => :Blood,
-  'Jas' => :Blood,
-  'Rev' => :Blood,
-  'Cor' => :Frost,
-  'Tel' => :Frost,
-  'Kyr' => :Frost,
-  'Dyz' => :Unholy,
-  'Zed' => :Unholy,
-  'Oth' => :Unholy,
-}
-
-DOMINATION_SET_BONUSES = {
-  'Blood Link' => :Blood,
-  'Winds of Winter' => :Frost,
-  'Chaos Bane' => :Unholy,
-}
-
 TIER_ITEMS_BY_SLOT = {
   'head'     => [188942, 188933, 188859, 188901, 188880, 188868, 188923, 188844, 188889, 188910, 188847, 188892],
   'shoulder' => [188941, 188932, 188856, 188905, 188879, 188867, 188920, 188843, 188888, 188914, 188851, 188896],

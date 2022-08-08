@@ -77,6 +77,14 @@ module Audit
         details['tier_items'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
       end
 
+      if !details['keystones'].is_a? Hash
+        details['keystones'] = {}
+      end
+
+      if !details['raid_kills'].is_a? Hash
+        details['raid_kills'] = {}
+      end
+
       if !details['great_vault'].is_a? Hash
         details['great_vault'] = {
           'dungeons' => [],
@@ -97,6 +105,8 @@ module Audit
         tier_items: details["tier_items"],
         last_refresh: last_refresh_data,
         best_gear: details['best_gear'],
+        raid_kills: details['raid_kills'],
+        keystones: details['keystones'],
         current_gear: details['current_gear'],
       }
     end

@@ -12,7 +12,6 @@ module Audit
       end.to_h })
 
       if !current_week['wqs']&.nonzero?
-        details['snapshots'][Audit.year][Audit.week]['dungeons'] = self.data['dungeons_done_total']
         details['snapshots'][Audit.year][Audit.week]['wqs'] = self.data['wqs_done_total']
 
         # Update the previous week with M+ and Vault data

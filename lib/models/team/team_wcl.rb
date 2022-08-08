@@ -5,7 +5,10 @@ module Audit
       # Requests are not made in parallel, otherwise
       # load on the Warcraft Logs API would be too high
       characters.each do |character|
-        VALID_RAIDS.select{ |r| r['days'].include? Time.now.wday }.each do |zone|
+        VALID_RAIDS.select do |r|
+          # Fetch current week's Fated raid and the previous week's
+          r['days'].include?(Time.now.wday) && (r[:fated_periods].include?(Audit.period) || r[:fated_periods].include?(Audit.period - 1))
+        end.each do |zone|
           begin
             response = Typhoeus.get(uri(character, zone))
             character.process_result(response)

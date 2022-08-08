@@ -131,6 +131,10 @@ module Audit
       641 + ((@@reset_timestamp + 302400) - 1523372400) / 604799
     end
 
+    def period_from_timestamp(timestamp)
+      period - (((@@reset_timestamp + 604799) - timestamp) / 604799)
+    end
+
     def previous_week_year
       @@previous_year_number
     end

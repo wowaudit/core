@@ -7,17 +7,11 @@ module Audit
       items_equipped = 0
       legendaries_equipped = 0
       bfa_level_detected = false
-      @domination_sockets = { Blood: [], Frost: [], Unholy: [] }
       @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
       @character.data["enchant_quality_off_hand"] = ''
       @character.data["off_hand_enchant"] = ''
-      (1..5).to_a.each do |slot|
-        @character.data["domination_socket_#{slot}_name"] = ""
-        @character.data["domination_socket_#{slot}_rank"] = ""
-        @character.data["domination_socket_#{slot}_id"] = ""
-      end
 
       # Reset equipped legendary status, we don't want it to use last refresh data
       @character.data['current_legendary_ilvl'] = ''
@@ -54,7 +48,7 @@ module Audit
             end
 
             # The sheet relies on specific item levels on the summary tab, use the closest match to fix bugs related to it
-            @character.data["tier_#{item}_ilvl"] = [285, 278, 272, 265, 259, 252, 246, 239].find { |ilvl| ilvl <= @character.details['tier_items'][item] }
+            @character.data["tier_#{item}_ilvl"] = [311, 304, 298, 291, 285, 278, 272, 265, 259, 252, 246, 239].find { |ilvl| ilvl <= @character.details['tier_items'][item] }
             @character.data["tier_real_#{item}_ilvl"] = @character.details['tier_items'][item]
           end
 
@@ -105,15 +99,11 @@ module Audit
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
 
       # Set item level to 0 if it's above 300, so inactive BfA characters aren't being shown as top
-      @character.data['ilvl'] = 0 if @character.data['ilvl'] > 300
+      @character.data['ilvl'] = 0 if @character.data['ilvl'] > 400
 
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
       @character.data['gem_list'] = @character.gems.join('|')
-
-      type, sockets = @domination_sockets.find { |type, sockets| sockets.length >= 4 }
-      @character.data["domination_socket_bonus_name"] = type || ""
-      @character.data["domination_socket_bonus_rank"] = type ? sockets.min : ""
     end
 
     def check_enchant(item, equipped_item)
@@ -145,26 +135,6 @@ module Audit
           @character.gems << has_gem
         elsif !socket.dig('item', 'id') && socket.dig('socket_type', 'type') != "DOMINATION"
           @character.data['empty_sockets'] += 1
-        end
-      end
-
-      (equipped_item["spells"] || []).each do |spell|
-        if DOMINATION_SET_BONUSES.keys.include?(spell.dig('spell', 'name')) && !@domination_sockets[DOMINATION_SET_BONUSES[spell.dig('spell', 'name')]].include?(6)
-          @domination_sockets[DOMINATION_SET_BONUSES[spell.dig('spell', 'name')]] << 6
-        end
-      end
-
-      if slot = SHARD_OF_DOMINATION_SLOTS[@character.class_id || @data.dig('character_class', 'id')].index(item)
-        (equipped_item['sockets'] || []).each do |socket|
-          next unless socket.dig('socket_type', 'type') == "DOMINATION"
-
-          if socket.dig('item', 'id')
-            rank = SHARD_OF_DOMINATION_LEVELS[socket.dig('item', 'name').split(' ').first]
-            @domination_sockets[SHARD_OF_DOMINATION_TYPES[socket.dig('item', 'name').split(' ').last]] << rank
-            @character.data["domination_socket_#{slot + 1}_name"] = socket.dig('item', 'name').split(' ').last
-            @character.data["domination_socket_#{slot + 1}_rank"] = rank
-            @character.data["domination_socket_#{slot + 1}_id"] = socket.dig('item', 'id')
-          end
         end
       end
     end

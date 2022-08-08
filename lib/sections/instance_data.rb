@@ -1,13 +1,12 @@
 module Audit
   class InstanceData < Data
     def add
-      encounters = VALID_RAIDS.map{ |raid|
+      encounters_by_raid = VALID_RAIDS.map{ |raid|
         raid['encounters'].map{ |boss|
           boss['raid_ids']
         }
-      }.flatten
-      boss_ids = encounters.map{ |encounter| encounter.values }.flatten
-      vault_boss_ids = boss_ids.last(VALID_RAIDS.last['encounters'].size * 4)
+      }
+      boss_ids = encounters_by_raid.flatten.map{ |encounter| encounter.values }.flatten
       raid_list = {}
       great_vault_list = {}
       raid_output = {'raids_raid_finder' => [], 'raids_raid_finder_weekly' => [],
@@ -15,7 +14,6 @@ module Audit
                      'raids_heroic' => [],      'raids_heroic_weekly' => [],
                      'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
-      total_dungeons = 0
 
       begin
         dungeons_and_raids =  @data[:achievement_statistics]['categories'].find do |category|
@@ -23,16 +21,19 @@ module Audit
         end
 
         dungeons_and_raids['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
-          if MYTHIC_DUNGEONS.include?(instance['id'])
-            @character.data[MYTHIC_DUNGEONS[instance['id']]] = instance['quantity'].to_i
-            total_dungeons += instance['quantity'].to_i
-          end
-
           # Track weekly Raid kills through the statistics
           if boss_ids.include?(instance['id'])
+            raid = VALID_RAIDS.find { |raid| instance['name'].include? raid['name'] }
+            last_fated_period = raid[:fated_periods].reject { |period| period > Audit.period }.max
+            killed_this_rotation = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp - (604799 * (Audit.period - last_fated_period))
+
+            if killed_this_rotation
+              (@character.details['raid_kills'][last_fated_period] ||= {})[instance['id']] = instance['last_updated_timestamp'] / 1000
+            end
+
             raid_list[instance['id']] = [
               instance['quantity'].to_i,
-              (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0
+              killed_this_rotation ? 1 : 0
             ]
           end
         end
@@ -40,23 +41,72 @@ module Audit
         nil
       end
 
-      unless total_dungeons.zero?
-        @character.data['dungeons_done_total'] = total_dungeons
+      kills_by_difficulty = { 'heroic' => 0, 'mythic' => 0 }
+      total_fated_kills = encounters_by_raid.sum do |encounters|
+        @character.details['raid_kills'].keys.sum do |period|
+          encounters.select do |encounter_ids|
+            kills = (@character.details['raid_kills'][period].keys & encounter_ids.values.flatten)
+            kills_by_difficulty.keys.each do |difficulty|
+              if (kills & encounter_ids[difficulty]).any?
+                kills_by_difficulty[difficulty] += 1
+              end
+            end
+
+            kills.any?
+          end.size
+        end
       end
+
+      @character.data['dinar_earned'] = [30, 50, 60].select { |q| total_fated_kills >= q }.size
+      @character.data['dinar_progress'] = if @character.data['dinar_earned'] == 3
+        "-"
+      elsif @character.data['dinar_earned'].zero?
+        "#{total_fated_kills} / 30"
+      else
+        "#{total_fated_kills - [30, 50, 60][@character.data['dinar_earned'] - 1]} / #{[30, 20, 10][@character.data['dinar_earned']]}"
+      end
+
+      @character.data["heroic_upgrade_tokens"] = kills_by_difficulty["heroic"]
+      @character.data["mythic_upgrade_tokens"] = kills_by_difficulty["mythic"]
+
+      @data[:season_keystones]['best_runs'].each do |run|
+        run_id = run['completed_timestamp'] / 1000
+        run_period = Audit.period_from_timestamp(run_id).to_s
+        unless @character.details['keystones'][run_period]&.include?(run_id.to_s)
+          (@character.details['keystones'][run_period] ||= {})[run_id.to_s] = {
+            "level" => run['keystone_level'],
+            "dungeon" => run.dig('dungeon', 'id'),
+          }
+        end
+      end
+
+      best_runs = @data[:season_keystones]['best_runs']
+                    &.group_by { |run| run.dig('dungeon', 'id') }
+                    &.transform_values { |runs| runs.map { |run| run.dig('mythic_rating', 'rating') }.max } || {}
+
+      SLUGIFIED_DUNGEON_NAMES.each do |dungeon_id, dungeon_name|
+        @character.data["#{dungeon_name}_score"] = best_runs[dungeon_id.to_i].to_i
+        @character.data[dungeon_name] = (@character.details['keystones'].values[0] || {}).sum do |run_id, run|
+          run['dungeon'].to_i == dungeon_id.to_i ? 1 : 0
+        end
+      end
+
+      @character.data['dungeons_this_week'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
+      dungeons_per_week_in_season = @character.details['keystones'].map do |period, runs|
+        if period.to_i < FIRST_PERIOD_OF_SEASON
+          0
+        else
+          runs.size
+        end
+      end
+      @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum
+      @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
       @character.data['m+_score'] = (@data[:season_keystones].dig('mythic_rating', 'rating') || 0).to_i
 
-      best_runs = @data[:season_keystones]['best_runs']
-                    &.group_by { |run| run.dig('dungeon', 'name') }
-                    &.transform_values { |runs| runs.map { |run| run.dig('mythic_rating', 'rating') }.max } || {}
-
-      MYTHIC_DUNGEONS.values.each do |dungeon|
-        @character.data["#{dungeon}_score"] = best_runs[dungeon].to_i
-      end
-
       vault_index = -1
-      encounters.each_with_index do |encounter, index|
-        if (vault_boss_ids & encounter['normal']).any?
+      encounters_by_raid.flatten.each_with_index do |encounter, index|
+        if (boss_ids & encounter['normal']).any?
           vault_index += 1
           great_vault_list[vault_index] = {}
         end
@@ -65,7 +115,7 @@ module Audit
           raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max
           raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
 
-          if (vault_boss_ids & ids).any?
+          if (boss_ids & ids).any?
             great_vault_list[vault_index][difficulty] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
           end
         end

@@ -20,6 +20,18 @@ module Audit
           run.dig('mythic_level').to_i
         end.compact
 
+        (data['mythic_plus_weekly_highest_level_runs'] + data['mythic_plus_highest_level_runs'] + data['mythic_plus_recent_runs']).each do |run|
+          run_id = Time.parse(run['completed_at']).to_i
+          run_period = Audit.period_from_timestamp(run_id).to_s
+
+          unless details['keystones'][run_period]&.include?(run_id.to_s)
+            (details['keystones'][run_period] ||= {})[run_id.to_s] = {
+              "level" => run['mythic_level'],
+              "dungeon" => run['map_challenge_mode_id'],
+            }
+          end
+        end
+
       elsif response.code == 403 or response.code == 0 or response.code == 429
         # Treat response code of 0 as API Limit, to reduce
         # load on RaiderIO's API (it's a sign of too many requests)
@@ -29,13 +41,30 @@ module Audit
       end
     end
 
-    def process_leaderboard_result(levels)
+    def process_leaderboard_result(runs)
+      updated = false
+
+      levels = runs.map { |run| run['keystone_level'] }.sort_by { |h| h * -1 }
       if details['raiderio']['period'] != Audit.period || details['raiderio']['leaderboard_runs'] != levels
         details['raiderio']['weekly_highest'] = levels.max
         details['raiderio']['leaderboard_runs'] = levels
         details['raiderio']['period'] = Audit.period
-        true
+        updated = true
       end
+
+      runs.each do |run|
+        run_id = run['completed_timestamp'] / 1000
+        run_period = Audit.period_from_timestamp(run_id).to_s
+        unless details['keystones'][run_period]&.include?(run_id.to_s)
+          updated = true
+          (details['keystones'][run_period] ||= {})[run_id.to_s] = {
+            "level" => run['keystone_level'],
+            "dungeon" => run['dungeon_id'],
+          }
+        end
+      end
+
+      updated
     end
 
     def last_refresh_data

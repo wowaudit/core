@@ -12,24 +12,27 @@ module Audit
         slug.downcase
       end
 
-      def refresh(id, refresh_type)
+      def refresh(id, refresh_type, period_number = nil)
         realm = Realm.where(id: id).first
         RBattlenet.set_options(region: realm.region, locale: "en_GB", concurrency: 50, response_type: :hash)
         Audit.timestamp = realm.region
 
-        leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(KEYSTONE_DUNGEONS.map{ |dungeon|
+        leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(LEADERBOARD_KEYSTONE_DUNGEONS.keys.map{ |dungeon|
           {
             connected_realm_id: realm.connected_realm_id,
             dungeon_id: dungeon,
-            period: Audit.period
+            period: period_number || Audit.period
           }
         })
 
         runs_by_character = {}
-        leaderboards.results.map{ |r| r['leading_groups']}.flatten.each do |group|
-          next unless group && group['members']
-          group['members'].each do |member|
-            (runs_by_character[member['profile']['id']] ||= []) << group['keystone_level']
+        leaderboards.results.each do |dungeon|
+          (dungeon.dig('leading_groups') || []).each do |group|
+            next unless group && group['members']
+            group['dungeon_id'] = dungeon[:source][:dungeon_id]
+            group['members'].each do |member|
+              (runs_by_character[member['profile']['id']] ||= []) << group
+            end
           end
         end
 
@@ -39,7 +42,7 @@ module Audit
           next unless character.redis_id
           character.details = metadata[character.redis_id] || {}
           character.verify_details
-          changed = character.process_leaderboard_result((runs_by_character[character.key.to_i] || []).sort_by { |h| h * -1 })
+          changed = character.process_leaderboard_result((runs_by_character[character.key.to_i] || []))
           character if changed
         end.compact
 
