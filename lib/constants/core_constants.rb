@@ -345,7 +345,7 @@ HEADER = [
   '',
   '',
   '',
-  '',
+  'total_fated_kills',
   'dinar_earned',
   'dinar_progress',
   'heroic_upgrade_tokens',

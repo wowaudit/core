@@ -57,6 +57,7 @@ module Audit
         end
       end
 
+      @character.data['total_fated_kills'] = total_fated_kills
       @character.data['dinar_earned'] = [30, 50, 60].select { |q| total_fated_kills >= q }.size
       @character.data['dinar_progress'] = if @character.data['dinar_earned'] == 3
         "-"
