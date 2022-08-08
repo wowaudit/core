@@ -69,7 +69,7 @@ module Audit
       @character.data["heroic_upgrade_tokens"] = kills_by_difficulty["heroic"]
       @character.data["mythic_upgrade_tokens"] = kills_by_difficulty["mythic"]
 
-      @data[:season_keystones]['best_runs'].each do |run|
+      (@data.dig(:season_keystones, 'best_runs') || []).each do |run|
         run_id = run['completed_timestamp'] / 1000
         run_period = Audit.period_from_timestamp(run_id).to_s
         unless @character.details['keystones'][run_period]&.include?(run_id.to_s)
