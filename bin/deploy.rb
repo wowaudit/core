@@ -2,6 +2,8 @@ REGISTER = false
 TYPE = "deployer"
 require_relative('../lib/core')
 
+system("kubectl config use-context do-nyc3-wowaudit-scrapers")
+
 system("kubectl delete deployments wcl-deployment")
 system("kubectl delete deployments essentials-deployment")
 system("kubectl delete deployments collections-deployment")

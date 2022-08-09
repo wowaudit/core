@@ -27,12 +27,16 @@ module Audit
 
         runs_by_character = {}
         leaderboards.results.each do |dungeon|
-          (dungeon.dig('leading_groups') || []).each do |group|
-            next unless group && group['members']
-            group['dungeon_id'] = dungeon[:source][:dungeon_id]
-            group['members'].each do |member|
-              (runs_by_character[member['profile']['id']] ||= []) << group
+          if dungeon.key?('leading_groups')
+            (dungeon.dig('leading_groups') || []).each do |group|
+              next unless group && group['members']
+              group['dungeon_id'] = dungeon[:source][:dungeon_id]
+              group['members'].each do |member|
+                (runs_by_character[member['profile']['id']] ||= []) << group
+              end
             end
+          else
+            Logger.g("Got a 404 response for realm #{realm.connected_realm_id}, dungeon #{dungeon[:source][:dungeon_id]}")
           end
         end
 
