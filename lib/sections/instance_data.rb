@@ -33,7 +33,8 @@ module Audit
 
             raid_list[instance['id']] = [
               instance['quantity'].to_i,
-              killed_this_rotation ? 1 : 0
+              (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0,
+              killed_this_rotation ? 1 : 0,
             ]
           end
         end
@@ -114,7 +115,7 @@ module Audit
 
         encounter.each do |difficulty, ids|
           raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max
-          raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+          raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][2] || 0 }.max
 
           if (boss_ids & ids).any?
             great_vault_list[vault_index][difficulty] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
