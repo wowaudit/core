@@ -21,7 +21,7 @@ module Audit
       details['last_refresh'] || {}
     end
 
-    def process_result(response)
+    def process_result(response, depth = 0)
       init
       raise ApiLimitReachedException if check_api_limit_reached(response)
 
@@ -33,13 +33,13 @@ module Audit
         update_snapshots
         to_output
       else
-        return_error(response)
+        return_error(response, depth)
       end
     end
 
-    def return_error(response)
+    def return_error(response, depth)
       timeouts = response.values.map { | v| v.dig(:timeout) if v.is_a? Hash }.compact.count(&:itself)
-      if timeouts > 0
+      if timeouts > 0 && depth < 3
         Logger.c(INFO_CHARACTER_TIMEOUTS_ENCOUNTERED.gsub("%N%", timeouts.to_s), id)
         raise TimeoutsEncounteredException
       end

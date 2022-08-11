@@ -2,7 +2,7 @@ module Audit
   class TeamBnet < Team
 
     def refresh(authentication_attempt = 0)
-      RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 25, timeout: 5, retries: 5, response_type: :hash)
+      RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 25, timeout: 10, retries: 5, response_type: :hash)
       $errors = { :tracking => 0, :role => 0 }
       if guild.api_key && guild.api_key.active
         begin
@@ -35,24 +35,24 @@ module Audit
       end
     end
 
-    def process_request(characters, output = [])
+    def process_request(characters, output = [], depth = 0)
       api_limited = []
 
       result = RBattlenet::Wow::Character.find(
         characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, season: CURRENT_KEYSTONE_SEASON, source: ch } }, fields: self.class::FIELDS
       ) do |character, result|
         begin
-          if character[:source].process_result(result)
+          if character[:source].process_result(result, depth)
             output << character[:source]
           end
-        rescue ApiLimitReachedException, TimeoutsEncounteredException
+        rescue ApiLimitReachedException, TimeoutsEncounteredException => err
           api_limited << character[:source]
         end
       end
 
       if api_limited.any?
         Logger.t(INFO_TEAM_RETRYING_API_LIMITED + api_limited.map(&:id).join(', '), id)
-        process_request(api_limited, output)
+        process_request(api_limited, output, depth + 1)
       else
         output
       end
