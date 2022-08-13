@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: historical-keystones-deployment
+  labels:
+    app: historical-keystones
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: historical-keystones
+  template:
+    metadata:
+      labels:
+        app: historical-keystones
+    spec:
+      containers:
+      - name: historical-keystones
+        image: shedi/wowaudit:latest
+        command: ["/srv/bin/refresh"]
+        args: ["historical_keystones"]
+
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 1500Mi
+
+          limits:
+            cpu: 1000m
+            memory: 2000Mi
+
+      imagePullSecrets:
+        - name: regcred

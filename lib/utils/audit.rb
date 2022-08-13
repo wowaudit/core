@@ -7,7 +7,7 @@ module Audit
       entities.each do |team|
         begin
           Logger.t(INFO_TEAM_STARTING, team.to_i)
-          (type == "keystones" ? Realm : Team).refresh(team.to_i, type)
+          (type.include?("keystones") ? Realm : Team).refresh(team.to_i, type)
         rescue ApiLimitReachedException
           Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
           sleep 60
