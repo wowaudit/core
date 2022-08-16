@@ -41,15 +41,17 @@ module Audit
       end
     end
 
-    def process_leaderboard_result(runs)
+    def process_leaderboard_result(runs, current_week)
       updated = false
 
-      levels = runs.map { |run| run['keystone_level'] }.sort_by { |h| h * -1 }
-      if details['raiderio']['period'] != Audit.period || details['raiderio']['leaderboard_runs'] != levels
-        details['raiderio']['weekly_highest'] = levels.max
-        details['raiderio']['leaderboard_runs'] = levels
-        details['raiderio']['period'] = Audit.period
-        updated = true
+      if current_week
+        levels = runs.map { |run| run['keystone_level'] }.sort_by { |h| h * -1 }
+        if details['raiderio']['period'] != Audit.period || details['raiderio']['leaderboard_runs'] != levels
+          details['raiderio']['weekly_highest'] = levels.max
+          details['raiderio']['leaderboard_runs'] = levels
+          details['raiderio']['period'] = Audit.period
+          updated = true
+        end
       end
 
       runs.each do |run|

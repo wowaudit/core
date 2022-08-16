@@ -47,7 +47,7 @@ module Audit
             next unless character.redis_id
             character.details = metadata[character.redis_id] || {}
             character.verify_details
-            changed = character.process_leaderboard_result((runs_by_character[character.key.to_i] || []))
+            changed = character.process_leaderboard_result((runs_by_character[character.key.to_i] || []), Audit.period == period)
             character if changed
           end.compact
 
