@@ -59,13 +59,13 @@ module Audit
       end
 
       @character.data['total_fated_kills'] = total_fated_kills
-      @character.data['dinar_earned'] = [30, 50, 60].select { |q| total_fated_kills >= q }.size
+      @character.data['dinar_earned'] = [30, 45, 50].select { |q| total_fated_kills >= q }.size
       @character.data['dinar_progress'] = if @character.data['dinar_earned'] == 3
         "-"
       elsif @character.data['dinar_earned'].zero?
         "#{total_fated_kills} / 30"
       else
-        "#{total_fated_kills - [30, 50, 60][@character.data['dinar_earned'] - 1]} / #{[30, 20, 10][@character.data['dinar_earned']]}"
+        "#{total_fated_kills - [30, 45, 50][@character.data['dinar_earned'] - 1]} / #{[30, 15, 5][@character.data['dinar_earned']]}"
       end
 
       @character.data["heroic_upgrade_tokens"] = kills_by_difficulty["heroic"]
