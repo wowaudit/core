@@ -19,7 +19,7 @@ module Audit
             worker.update(updated_at: DateTime.now)
           elsif (DateTime.now - worker.updated_at.to_datetime).to_f * 24 * 60 > TIMEOUTS[worker.base_type.to_sym]
             worker.destroy
-            system("kubectl delete pods #{worker.name}")
+            system("kubectl delete pods #{worker.name} --wait=false")
             Logger.g(INFO_SCHEDULER_DESTROYED_WORKER + "Worker: #{worker.type} #{worker.name}")
           end
         end

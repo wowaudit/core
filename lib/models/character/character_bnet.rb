@@ -23,7 +23,9 @@ module Audit
 
     def process_result(response, depth = 0)
       init
-      raise ApiLimitReachedException if check_api_limit_reached(response)
+      if check_api_limit_reached(response)
+        depth < 3 ? (raise ApiLimitReachedException) : (return return_error(response, depth))
+      end
 
       if check_character_api_status(response) && !self.marked_for_deletion_at && check_data_completeness(response)
         self.changed = true if self.status != "tracking"
