@@ -28,7 +28,7 @@ module Audit
             killed_this_rotation = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp - (604799 * (Audit.period - last_fated_period))
 
             if killed_this_rotation
-              (@character.details['raid_kills'][last_fated_period] ||= {})[instance['id']] = instance['last_updated_timestamp'] / 1000
+              (@character.details['raid_kills'][last_fated_period.to_s] ||= {})[instance['id'].to_s] = instance['last_updated_timestamp'] / 1000
             end
 
             raid_list[instance['id']] = [
@@ -42,13 +42,20 @@ module Audit
         nil
       end
 
+      # Remove incorrectly stored raid kill data
+      @character.details['raid_kills'].delete(866)
+      @character.details['raid_kills'].delete(867)
+      @character.details['raid_kills'].delete(868)
+      @character.details['raid_kills'].delete(869)
+      @character.details['raid_kills'].delete(870)
+
       kills_by_difficulty = { 'heroic' => 0, 'mythic' => 0 }
       total_fated_kills = encounters_by_raid.sum do |encounters|
         @character.details['raid_kills'].keys.sum do |period|
           encounters.select do |encounter_ids|
-            kills = (@character.details['raid_kills'][period].keys & encounter_ids.values.flatten)
+            kills = (@character.details['raid_kills'][period.to_s].keys & encounter_ids.values.flatten.map(&:to_s))
             kills_by_difficulty.keys.each do |difficulty|
-              if (kills & encounter_ids[difficulty]).any?
+              if (kills & encounter_ids[difficulty].map(&:to_s)).any?
                 kills_by_difficulty[difficulty] += 1
               end
             end
