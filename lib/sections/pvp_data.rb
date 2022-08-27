@@ -18,11 +18,11 @@ module Audit
         end
       end
 
-      @character.data['max_2v2_rating'] = @data[:achievement_statistics]['categories'][7]['sub_categories'][0]['statistics'].select do |stat|
+      @character.data['max_2v2_rating'] = @data[:achievement_statistics]['categories'][8]['sub_categories'][0]['statistics'].select do |stat|
         stat['name'] == "Highest 2v2 personal rating"
       end.first&.dig('quantity')&.to_i rescue 0
 
-      @character.data['max_3v3_rating'] = @data[:achievement_statistics]['categories'][7]['sub_categories'][0]['statistics'].select do |stat|
+      @character.data['max_3v3_rating'] = @data[:achievement_statistics]['categories'][8]['sub_categories'][0]['statistics'].select do |stat|
         stat['name'] == "Highest 3v3 personal rating"
       end.first&.dig('quantity')&.to_i rescue 0
     end
