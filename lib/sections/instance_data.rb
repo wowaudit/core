@@ -25,7 +25,8 @@ module Audit
           if boss_ids.include?(instance['id'])
             raid = VALID_RAIDS.find { |raid| instance['name'].include? raid['name'] }
             last_fated_period = raid[:fated_periods].reject { |period| period > Audit.period }.max
-            killed_this_rotation = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp - (604799 * (Audit.period - last_fated_period))
+            killed_this_rotation = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp - (604799 * (Audit.period - last_fated_period)) &&
+              (instance['last_updated_timestamp'] / 1000) < Audit.timestamp - (604799 * ((Audit.period - last_fated_period) + 1))
 
             if killed_this_rotation
               (@character.details['raid_kills'][last_fated_period.to_s] ||= {})[instance['id'].to_s] = instance['last_updated_timestamp'] / 1000
