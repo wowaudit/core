@@ -43,12 +43,16 @@ module Audit
         nil
       end
 
-      # Remove incorrectly stored raid kill data
-      @character.details['raid_kills'].delete(866)
-      @character.details['raid_kills'].delete(867)
-      @character.details['raid_kills'].delete(868)
-      @character.details['raid_kills'].delete(869)
-      @character.details['raid_kills'].delete(870)
+      # Fix weekly raid kills that were stored in the wrong week
+      @character.details['raid_kills'].each do |period, kills|
+        actual_cutoff = Audit.timestamp - (604799 * ((Audit.period - period.to_i) - 1))
+        kills.each do |encounter, timestamp|
+          if timestamp > actual_cutoff
+            @character.details['raid_kills'][period].delete(encounter)
+          end
+        end
+      end
+
 
       kills_by_difficulty = { 'heroic' => 0, 'mythic' => 0 }
       total_fated_kills = encounters_by_raid.sum do |encounters|
