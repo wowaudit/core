@@ -11,7 +11,7 @@ module Audit
         end.each do |zone|
           begin
             response = Typhoeus.get(uri(character, zone))
-            character.process_result(response)
+            character.process_result(response, zone)
             sleep 0.1
           rescue ApiLimitReachedException
             Logger.t(ERROR_API_LIMIT_REACHED, id)
