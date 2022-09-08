@@ -26,14 +26,14 @@ module Audit
             raid = VALID_RAIDS.find { |raid| instance['name'].include? raid['name'] }
             last_fated_period = raid[:fated_periods].reject { |period| period > Audit.period }.max
             killed_this_rotation = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp - (604799 * (Audit.period - last_fated_period)) &&
-              (instance['last_updated_timestamp'] / 1000) < Audit.timestamp - (604799 * ((Audit.period - last_fated_period) + 1))
+              (instance['last_updated_timestamp'] / 1000) < Audit.timestamp - (604799 * ((Audit.period - last_fated_period) - 1))
 
             if killed_this_rotation
               (@character.details['raid_kills'][last_fated_period.to_s] ||= {})[instance['id'].to_s] = instance['last_updated_timestamp'] / 1000
             end
 
             raid_list[instance['id']] = [
-              instance['quantity'].to_i,
+              @character.details['raid_kills'].values.select { |kills| kills[instance['id'].to_s] }.size,
               (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0,
               killed_this_rotation ? 1 : 0,
             ]
