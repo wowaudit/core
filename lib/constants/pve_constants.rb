@@ -157,7 +157,7 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
 ]
 
 VALID_RAIDS = [{
-  'name' => 'Castle Nathria', "days"=> [0, 1, 2, 3, 4, 5, 6], fated_periods: [866, 869, 872], 'id' => 26,
+  'name' => 'Castle Nathria', "days"=> [0, 1, 2, 3, 4, 5, 6], fated_periods: [866, 869, 872, 875, 878, 879, 880, 881, 882], 'id' => 26,
   'encounters' => [{
     'id' => 2398, 'name' => 'Shriekwing', 'raid_ids' => {
       'raid_finder' => [14422], 'normal' => [14419], 'heroic' => [14420], 'mythic' => [14421]
@@ -200,7 +200,7 @@ VALID_RAIDS = [{
     }
   }]
 }, {
-  'name' => 'Sanctum of Domination', "days"=> [0, 1, 2, 3, 4, 5, 6], fated_periods: [867, 870, 873], 'id' => 28,
+  'name' => 'Sanctum of Domination', "days"=> [0, 1, 2, 3, 4, 5, 6], fated_periods: [867, 870, 873, 876, 878, 879, 880, 881, 882], 'id' => 28,
   'encounters' => [{
     'id' => 2423, 'name' => 'The Tarragrue', 'raid_ids' => {
       'raid_finder' => [15136], 'normal' => [15137], 'heroic' => [15138], 'mythic' => [15139]
@@ -244,7 +244,7 @@ VALID_RAIDS = [{
   }]
 },
 # Automatically generated
-{"name"=>"Sepulcher of the First Ones", "days"=>[0, 1, 2, 3, 4, 5, 6], fated_periods: [868, 871, 874], "id"=>29, "encounters"=>[{"id"=>2512, "name"=>"Vigilant Guardian", "raid_ids"=>{"raid_finder"=>[15424], "normal"=>[15425], "heroic"=>[15426], "mythic"=>[15427]}}, {"id"=>2542, "name"=>"Skolex", "raid_ids"=>{"raid_finder"=>[15428], "normal"=>[15429], "heroic"=>[15430], "mythic"=>[15431]}}, {"id"=>2553, "name"=>"Artificer Xy'mox", "raid_ids"=>{"raid_finder"=>[15432], "normal"=>[15433], "heroic"=>[15434], "mythic"=>[15435]}}, {"id"=>2540, "name"=>"Dausegne", "raid_ids"=>{"raid_finder"=>[15436], "normal"=>[15437], "heroic"=>[15438], "mythic"=>[15439]}}, {"id"=>2544, "name"=>"Prototype Pantheon", "raid_ids"=>{"raid_finder"=>[15440], "normal"=>[15441], "heroic"=>[15442], "mythic"=>[15443]}}, {"id"=>2539, "name"=>"Lihuvim", "raid_ids"=>{"raid_finder"=>[15444], "normal"=>[15445], "heroic"=>[15446], "mythic"=>[15447]}}, {"id"=>2529, "name"=>"Halondrus", "raid_ids"=>{"raid_finder"=>[15448], "normal"=>[15449], "heroic"=>[15450], "mythic"=>[15451]}}, {"id"=>2546, "name"=>"Anduin Wrynn", "raid_ids"=>{"raid_finder"=>[15452], "normal"=>[15453], "heroic"=>[15454], "mythic"=>[15455]}}, {"id"=>2543, "name"=>"Lords of Dread", "raid_ids"=>{"raid_finder"=>[15456], "normal"=>[15457], "heroic"=>[15458], "mythic"=>[15459]}}, {"id"=>2549, "name"=>"Rygelon", "raid_ids"=>{"raid_finder"=>[15460], "normal"=>[15461], "heroic"=>[15462], "mythic"=>[15463]}}, {"id"=>2537, "name"=>"The Jailer", "raid_ids"=>{"raid_finder"=>[15464], "normal"=>[15465], "heroic"=>[15466], "mythic"=>[15467]}}]},
+{"name"=>"Sepulcher of the First Ones", "days"=>[0, 1, 2, 3, 4, 5, 6], fated_periods: [868, 871, 874, 877, 878, 879, 880, 881, 882], "id"=>29, "encounters"=>[{"id"=>2512, "name"=>"Vigilant Guardian", "raid_ids"=>{"raid_finder"=>[15424], "normal"=>[15425], "heroic"=>[15426], "mythic"=>[15427]}}, {"id"=>2542, "name"=>"Skolex", "raid_ids"=>{"raid_finder"=>[15428], "normal"=>[15429], "heroic"=>[15430], "mythic"=>[15431]}}, {"id"=>2553, "name"=>"Artificer Xy'mox", "raid_ids"=>{"raid_finder"=>[15432], "normal"=>[15433], "heroic"=>[15434], "mythic"=>[15435]}}, {"id"=>2540, "name"=>"Dausegne", "raid_ids"=>{"raid_finder"=>[15436], "normal"=>[15437], "heroic"=>[15438], "mythic"=>[15439]}}, {"id"=>2544, "name"=>"Prototype Pantheon", "raid_ids"=>{"raid_finder"=>[15440], "normal"=>[15441], "heroic"=>[15442], "mythic"=>[15443]}}, {"id"=>2539, "name"=>"Lihuvim", "raid_ids"=>{"raid_finder"=>[15444], "normal"=>[15445], "heroic"=>[15446], "mythic"=>[15447]}}, {"id"=>2529, "name"=>"Halondrus", "raid_ids"=>{"raid_finder"=>[15448], "normal"=>[15449], "heroic"=>[15450], "mythic"=>[15451]}}, {"id"=>2546, "name"=>"Anduin Wrynn", "raid_ids"=>{"raid_finder"=>[15452], "normal"=>[15453], "heroic"=>[15454], "mythic"=>[15455]}}, {"id"=>2543, "name"=>"Lords of Dread", "raid_ids"=>{"raid_finder"=>[15456], "normal"=>[15457], "heroic"=>[15458], "mythic"=>[15459]}}, {"id"=>2549, "name"=>"Rygelon", "raid_ids"=>{"raid_finder"=>[15460], "normal"=>[15461], "heroic"=>[15462], "mythic"=>[15463]}}, {"id"=>2537, "name"=>"The Jailer", "raid_ids"=>{"raid_finder"=>[15464], "normal"=>[15465], "heroic"=>[15466], "mythic"=>[15467]}}]},
 ]
 
 WCL_IDS = VALID_RAIDS.map{ |raid| raid["encounters"].map{ |encounter| encounter["id"].to_s } }.flatten
