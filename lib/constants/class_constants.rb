@@ -11,6 +11,7 @@ CLASSES = {
   10 => 'Monk',
   11 => 'Druid',
   12 => 'Demon Hunter',
+  13 => 'Evoker',
   nil => ''
 }
 
@@ -26,7 +27,8 @@ DEFAULT_ROLES = {
   'Rogue' => 'Melee',
   'Shaman' => 'Ranged',
   'Warlock' => 'Ranged',
-  'Warrior' => 'Melee'
+  'Warrior' => 'Melee',
+  'Evoker' => 'Ranged'
 }
 
 DPS_SPECS = [
@@ -52,6 +54,7 @@ DPS_SPECS = [
   'Marksmanship',
   'Beast Mastery',
   'Elemental',
+  'Devastation',
 ]
 
 ROLES_TO_SPEC = {
@@ -59,7 +62,8 @@ ROLES_TO_SPEC = {
     'Restoration',
     'Holy',
     'Discipline',
-    'Mistweaver'
+    'Mistweaver',
+    'Preservation'
   ],
   'Tank' => [
     'Blood',
@@ -86,7 +90,8 @@ ROLES = {
     'Monk' => [2],
     'Paladin' => [1],
     'Priest' => [1,2],
-    'Shaman' => [3]
+    'Shaman' => [3],
+    'Evoker' => [2]
   },
   'Ranged'=> {
     'Druid' => [4],
@@ -94,7 +99,8 @@ ROLES = {
     'Mage' => [1,2,3],
     'Priest' => [3],
     'Shaman' => [2],
-    'Warlock' => [1,2,3]
+    'Warlock' => [1,2,3],
+    "Evoker" => [1]
   },
   'Melee'=> {
     'Death Knight' => [2,3],
