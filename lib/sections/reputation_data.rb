@@ -15,13 +15,6 @@ module Audit
         end
       end
 
-      @character.data["total_renown_score"] = rand(0..100)
-
-      @character.data["dragonscale_expedition_renown"] = rand(0..25)
-      @character.data["maruuk_centaur_renown"] = rand(0..20)
-      @character.data["iskaara_tuskarr_renown"] = rand(0..30)
-      @character.data["valdrakken_accord_renown"] = rand(0..30)
-
       if @achievements
         @character.data['exalted_amount'] = @achievements[12866]['criteria']['amount'] rescue 0
       end
