@@ -25,11 +25,6 @@ module Audit
         @character.data['unique_pets'] = pets_owned.size # Await Blizzard to add account wide collection achievement again
         @character.data['lvl_25_pets'] = level_25_pets
       end
-
-      unless @data[:mounts].class == RBattlenet::EmptyHashResult
-        @character.data['sylvanas_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1471 } ? "yes" : "no"
-        @character.data['jailer_mount'] = @data[:mounts]['mounts'].any? { |owned| owned['mount']['id'] == 1587 } ? "yes" : "no"
-      end
     end
   end
 end

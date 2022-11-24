@@ -1,15 +1,15 @@
-SL_PROFESSIONS = {
-  2750 => "Alchemy",
-  2751 => "Blacksmithing",
-  2753 => "Enchanting",
-  2755 => "Engineering",
-  2760 => "Herbalism",
-  2756 => "Inscription",
-  2757 => "Jewelcrafting",
-  2758 => "Leatherworking",
-  2761 => "Mining",
-  2762 => "Skinning",
-  2759 => "Tailoring"
+DF_PROFESSIONS = {
+  2823 => "Alchemy",
+  2822 => "Blacksmithing",
+  2825 => "Enchanting",
+  2827 => "Engineering",
+  2832 => "Herbalism",
+  2828 => "Inscription",
+  2829 => "Jewelcrafting",
+  2830 => "Leatherworking",
+  2833 => "Mining",
+  2834 => "Skinning",
+  2831 => "Tailoring"
 }
 
 BASE_PROFESSIONS = {

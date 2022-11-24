@@ -14,7 +14,7 @@ module Audit
     end
 
     def redis_id
-      "character:#{key}_#{realm_id}" if key
+      "dragonflight:#{key}_#{realm_id}" if key
     end
 
     def historical_snapshots
@@ -81,10 +81,6 @@ module Audit
         details['keystones'] = {}
       end
 
-      if !details['raid_kills'].is_a? Hash
-        details['raid_kills'] = {}
-      end
-
       if !details['great_vault'].is_a? Hash
         details['great_vault'] = {
           'dungeons' => [],
@@ -105,7 +101,6 @@ module Audit
         tier_items: details["tier_items"],
         last_refresh: last_refresh_data,
         best_gear: details['best_gear'],
-        raid_kills: details['raid_kills'],
         keystones: details['keystones'],
         current_gear: details['current_gear'],
       }

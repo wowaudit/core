@@ -5,20 +5,15 @@ module Audit
     def add
       # Check equipped gear
       items_equipped = 0
-      legendaries_equipped = 0
-      bfa_level_detected = false
       @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
       @character.data["enchant_quality_off_hand"] = ''
       @character.data["off_hand_enchant"] = ''
 
-      # Reset equipped legendary status, we don't want it to use last refresh data
-      @character.data['current_legendary_ilvl'] = ''
-      @character.data['current_legendary_id'] = ''
-      @character.data['current_legendary_name'] = ''
-
       ITEMS.each do |item|
+        @character.data["tier_#{item}_difficulty"] = ''
+
         begin
           equipped_item = @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == item.upcase }.first
           check_enchant(item, equipped_item)
@@ -44,20 +39,11 @@ module Audit
 
           if TIER_ITEMS_BY_SLOT.keys.include? item
             if TIER_ITEMS.include?(equipped_item['item']['id'].to_i) && equipped_item['level']['value'] > @character.details['tier_items'][item]
-              @character.details['tier_items'][item] = equipped_item['level']['value']
+              @character.data["tier_#{item}_ilvl"] = equipped_item['level']['value']
+              @character.data["tier_#{item}_difficulty"] = ''
+              # Temporarily disable storing of tier data until the raid releases. TODO: enable once the redis index is changed to DF
+              #@character.details['tier_items'][item] = equipped_item['level']['value']
             end
-
-            # The sheet relies on specific item levels on the summary tab, use the closest match to fix bugs related to it
-            @character.data["tier_#{item}_ilvl"] = [311, 304, 298, 291, 285, 278, 272, 265, 239].find { |ilvl| ilvl <= @character.details['tier_items'][item] }
-            @character.data["tier_real_#{item}_ilvl"] = @character.details['tier_items'][item]
-          end
-
-          # Don't trigger the Legendary cloak from BfA or other legacy legendaries here (so check item level), and exclude bow from Sylvanas
-          if equipped_item['quality']['type'] == 'LEGENDARY' && equipped_item['level']['value'].to_i > 170 && equipped_item['item']['id'].to_i != 186414
-            @character.data["#{legendaries_equipped == 0 ? 'current' : 'second'}_legendary_ilvl"] = equipped_item['level']['value']
-            @character.data["#{legendaries_equipped == 0 ? 'current' : 'second'}_legendary_id"] = equipped_item['spells']&.first&.dig('spell', 'id')
-            @character.data["#{legendaries_equipped == 0 ? 'current' : 'second'}_legendary_name"] = equipped_item['name']
-            legendaries_equipped += 1
           end
 
           @character.data[item + '_ilvl'] = equipped_item['level']['value']
@@ -69,10 +55,6 @@ module Audit
           @character.data[item + '_id'] = ''
           @character.data[item + '_name'] = ''
           @character.data[item + '_quality'] = ''
-        end
-
-        if (@character.details['best_gear'][item]['ilvl'].to_f || 0) > 400
-          bfa_level_detected = true
         end
 
         @character.data["best_#{item}_ilvl"] = @character.details['best_gear'][item]['ilvl'] || ''
@@ -87,15 +69,6 @@ module Audit
         @character.ilvl += @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == "MAIN_HAND" }.first['level']['value'] rescue 0
       end
 
-      # Correct broken average item levels
-      if @character.details['max_ilvl'].to_f > 400 || bfa_level_detected
-        @character.details['max_ilvl'] = 0
-
-        ITEMS.each do |item|
-          @character.details['best_gear'][item] = { 'ilvl' => '', 'id' => '', 'name' => '', 'quality' => '' }
-        end
-      end
-
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
 
       # Set item level to 0 if it's above 300, so inactive BfA characters aren't being shown as top
@@ -107,6 +80,8 @@ module Audit
     end
 
     def check_enchant(item, equipped_item)
+      @character.data["#{column}_enchant"] = ''
+
       if ENCHANTS.include? item
         column = ['wrist', 'hands', 'feet'].include?(item) ? 'primary' : item
 
@@ -124,7 +99,6 @@ module Audit
             ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][1]
         rescue
           @character.data["enchant_quality_#{column}"] = 0
-          @character.data["#{column}_enchant"] = ''
         end
       end
     end

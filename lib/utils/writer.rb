@@ -2,15 +2,6 @@ module Audit
   module Writer
 
     def self.write(team, result, header)
-      file = STORAGE.bucket(BUCKET).object("#{team.key}.csv")
-      data = CSV.generate do |csv|
-        csv << header
-        result.sort_by{|c| c.name}.each do |character|
-          csv << character.output if character.output && character.output.any?
-        end
-      end
-      file.put(body: data)
-
       json = ([header] + result.sort_by{|c| c.name}.map(&:output).compact.reject(&:empty?)).to_json
       file = STORAGE.bucket(BUCKET).object("#{team.key}.json")
       file.put(body: json)

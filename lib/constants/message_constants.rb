@@ -1,6 +1,6 @@
 # User-facing messages
 
-VERSION_MESSAGE = "Your spreadsheet is out of date, for more features make a new copy at https://wowaudit.com/copy"
+VERSION_MESSAGE = "Your spreadsheet is out of date, for more features click the update arrow below."
 
 NO_WARNING = "good|All added members are being tracked, there are no problems!"
 

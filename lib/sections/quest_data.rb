@@ -5,7 +5,6 @@ module Audit
         @character.data['quests_done_total'] = @achievements[508]['criteria']['child_criteria'].first['amount'] rescue 0
         @character.data['wqs_done_total'] = @achievements[11132]['criteria']['child_criteria'].first['amount'] rescue 0
         @character.data['dailies_done_total'] = @achievements[977]['criteria']['child_criteria'].first['amount'] rescue 0
-        @character.data['mission_table_completions'] = @achievements[14847]['criteria']['child_criteria'].first['amount'] rescue 0
       end
 
       unless @data[:completed_quests].class == RBattlenet::EmptyHashResult

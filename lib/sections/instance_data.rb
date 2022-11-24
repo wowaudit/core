@@ -14,6 +14,7 @@ module Audit
                      'raids_heroic' => [],      'raids_heroic_weekly' => [],
                      'raids_mythic' => [],      'raids_mythic_weekly' => []}
       dungeon_list = {}
+      weekly_regular_dungeons_done = 0
 
       begin
         dungeons_and_raids =  @data[:achievement_statistics]['categories'].find do |category|
@@ -21,67 +22,23 @@ module Audit
         end
 
         dungeons_and_raids['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
+          if MYTHIC_DUNGEONS.include?(instance['id'])
+            completed = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0
+            weekly_regular_dungeons_done += completed
+            @character.data["weekly_#{MYTHIC_DUNGEONS[instance['id']]}"] = completed
+          end
+
           # Track weekly Raid kills through the statistics
           if boss_ids.include?(instance['id'])
-            raid = VALID_RAIDS.find { |raid| instance['name'].include? raid['name'] }
-            last_fated_period = raid[:fated_periods].reject { |period| period > Audit.period }.max
-            killed_this_rotation = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp - (604799 * (Audit.period - last_fated_period)) &&
-              (instance['last_updated_timestamp'] / 1000) < Audit.timestamp - (604799 * ((Audit.period - last_fated_period) - 1))
-
-            if killed_this_rotation
-              (@character.details['raid_kills'][last_fated_period.to_s] ||= {})[instance['id'].to_s] = instance['last_updated_timestamp'] / 1000
-            end
-
             raid_list[instance['id']] = [
-              @character.details['raid_kills'].values.select { |kills| kills[instance['id'].to_s] }.size,
+              instance['quantity'].to_i,
               (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0,
-              killed_this_rotation ? 1 : 0,
             ]
           end
         end
       rescue
         nil
       end
-
-      # Fix weekly raid kills that were stored in the wrong week
-      @character.details['raid_kills'].each do |period, kills|
-        actual_cutoff = Audit.timestamp - (604799 * ((Audit.period - period.to_i) - 1))
-        kills.each do |encounter, timestamp|
-          if timestamp > actual_cutoff
-            @character.details['raid_kills'][period].delete(encounter)
-          end
-        end
-      end
-
-
-      kills_by_difficulty = { 'heroic' => 0, 'mythic' => 0 }
-      total_fated_kills = encounters_by_raid.sum do |encounters|
-        @character.details['raid_kills'].keys.sum do |period|
-          encounters.select do |encounter_ids|
-            kills = (@character.details['raid_kills'][period.to_s].keys & encounter_ids.values.flatten.map(&:to_s))
-            kills_by_difficulty.keys.each do |difficulty|
-              if (kills & encounter_ids[difficulty].map(&:to_s)).any?
-                kills_by_difficulty[difficulty] += 1
-              end
-            end
-
-            kills.any?
-          end.size
-        end
-      end
-
-      @character.data['total_fated_kills'] = total_fated_kills
-      @character.data['dinar_earned'] = [30, 45, 50].select { |q| total_fated_kills >= q }.size
-      @character.data['dinar_progress'] = if @character.data['dinar_earned'] == 3
-        "-"
-      elsif @character.data['dinar_earned'].zero?
-        "#{total_fated_kills} / 30"
-      else
-        "#{total_fated_kills - [30, 45, 50][@character.data['dinar_earned'] - 1]} / #{[30, 15, 5][@character.data['dinar_earned']]}"
-      end
-
-      @character.data["heroic_upgrade_tokens"] = kills_by_difficulty["heroic"]
-      @character.data["mythic_upgrade_tokens"] = kills_by_difficulty["mythic"]
 
       (@data.dig(:season_keystones, 'best_runs') || []).each do |run|
         run_id = run['completed_timestamp'] / 1000
@@ -100,7 +57,7 @@ module Audit
 
       SLUGIFIED_DUNGEON_NAMES.each do |dungeon_id, dungeon_name|
         @character.data["#{dungeon_name}_score"] = best_runs[dungeon_id.to_i].to_i
-        @character.data[dungeon_name] = (@character.details['keystones'].values[0] || {}).sum do |run_id, run|
+        @character.data["#{dungeon_name}_total"] = (@character.details['keystones'].values[0] || {}).sum do |run_id, run|
           run['dungeon'].to_i == dungeon_id.to_i ? 1 : 0
         end
       end
@@ -113,6 +70,7 @@ module Audit
           runs.size
         end
       end
+      @character.data['weekly_regular_dungeons_done'] = weekly_regular_dungeons_done
       @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum
       @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
@@ -146,20 +104,6 @@ module Audit
           CUTTING_EDGE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
         @character.data['ahead_of_the_curve'] =
           AHEAD_OF_THE_CURVE_ACHIEVEMENTS.count{ |raid| @achievements[raid] }
-
-        total_layers = 0
-        @achievements[14810]['criteria']['child_criteria'].each do |wing|
-          @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"] = TORGHAST_LAYER_CRITERIA.count { |layer| layer <= (wing['amount'] || 0) }
-          total_layers += @character.data["torghast_layers_#{TORGHAST_WINGS[wing['id']]}"]
-        end rescue nil
-
-        @character.data['torghast_layers_twisting_corridors'] =
-          TORGHAST_TWISTING_CORRIDORS_IDS.count{ |layer| @achievements[layer] }
-
-        @character.data['torghast_layers_jailers_gauntlet'] =
-          TORGHAST_JAILERS_GAUNTLET_IDS.count{ |layer| @achievements[layer] }
-
-        @character.data['torghast_floors'] = total_layers + @character.data['torghast_layers_twisting_corridors'] + @character.data['torghast_layers_jailers_gauntlet']
       end
     end
 

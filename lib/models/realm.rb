@@ -18,7 +18,7 @@ module Audit
         Audit.timestamp = realm.region
 
         (refresh_type == 'historical_keystones' ? (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a : [Audit.period]).each do |period|
-          leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(LEADERBOARD_KEYSTONE_DUNGEONS.keys.map{ |dungeon|
+          leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(KEYSTONE_DUNGEONS.keys.map{ |dungeon|
             {
               connected_realm_id: realm.connected_realm_id,
               dungeon_id: dungeon,
