@@ -1,19 +1,22 @@
 module Audit
   class ReputationData < Data
     def add
+      total_renown = 0
+
       unless @data[:reputations].class == RBattlenet::EmptyHashResult
-        REPUTATIONS[@data.dig('faction', 'name')].each do |reputation, name|
+        REPUTATIONS.each do |reputation, name|
           match = @data[:reputations]['reputations'].select{ |r| r['faction']['id'] == reputation }.first
 
           if match
-            @character.data["#{name}_standing"] = STANDINGS[match['standing']['tier']]
-            @character.data["#{name}_value"] = match['standing']['value']
+            total_renown += 0
+            @character.data["#{name}_renown"] = 0 # TODO
           else
-            @character.data["#{name}_standing"] = 'Neutral'
-            @character.data["#{name}_value"] = 0
+            @character.data["#{name}_renown"] = 0
           end
         end
       end
+
+      @character.data['total_renown_score'] = total_renown
 
       if @achievements
         @character.data['exalted_amount'] = @achievements[12866]['criteria']['amount'] rescue 0

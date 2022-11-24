@@ -1,7 +1,8 @@
 REPUTATIONS = {
-  'Alliance' => {},
-  'Horde' => {},
-  nil => {} # For people who enjoy tracking neutral Pandaren
+  2503 => "maruuk_centaur",
+  2507 => "dragonscale_expedition",
+  2510 => 'valdrakken_accord',
+  2511 => "iskaara_tuskarr",
 }
 
 STANDINGS = {
