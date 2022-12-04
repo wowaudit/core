@@ -85,11 +85,20 @@ module Audit
           # Off-hand items that are not weapons can't be enchanted
           return if !equipped_item&.dig('weapon') && item == "off_hand"
 
-          @character.data["enchant_quality_#{item}"] =
-            ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][0]
 
-          @character.data["#{item}_enchant"] =
-            ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][1] || ''
+          if ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']]
+            @character.data["enchant_quality_#{item}"] =
+              ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][0]
+
+            @character.data["#{item}_enchant"] =
+              ENCHANTS[item][equipped_item['enchantments'].first['enchantment_id']][1] || ''
+          else
+            name = equipped_item['enchantments'].first['display_string'].split('Enchanted: ').reject(&:empty?).first.split(' |').first
+            quality = (equipped_item['enchantments'].first['display_string'].split('Tier')[1])
+
+            @character.data["#{item}_enchant"] = name
+            @character.data["enchant_quality_#{item}"] = quality
+          end
         rescue
           @character.data["#{item}_enchant"] = ''
           @character.data["enchant_quality_#{item}"] = 0

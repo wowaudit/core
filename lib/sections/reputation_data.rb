@@ -8,8 +8,8 @@ module Audit
           match = @data[:reputations]['reputations'].select{ |r| r['faction']['id'] == reputation }.first
 
           if match
-            total_renown += 0
-            @character.data["#{name}_renown"] = 0 # TODO
+            total_renown += (match.dig('standing', 'raw') || 0)
+            @character.data["#{name}_renown"] = match.dig('standing', 'renown_level')
           else
             @character.data["#{name}_renown"] = 0
           end
