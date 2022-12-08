@@ -1,4 +1,4 @@
-CURRENT_VERSION = 1001
+CURRENT_VERSION = 1002
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -166,7 +166,7 @@ HEADER = [
   'back_enchant',
   'chest_enchant',
   'feet_enchant',
-  '',
+  'aiding_the_accord',
   'blizzard_last_modified',
   'rank',
   'wrist_enchant',
@@ -202,7 +202,7 @@ HEADER = [
   'season_highest_m+',
   'profession_1',
   'profession_2',
-  '',
+  'weekly_feast',
   'weekly_event_completed',
   'titles',
   'cutting_edge',
