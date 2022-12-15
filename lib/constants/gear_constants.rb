@@ -408,3 +408,5 @@ TIER_ITEMS_BY_SLOT = {
 }
 
 TIER_ITEMS = TIER_ITEMS_BY_SLOT.values.flatten
+
+TIER_CUTOFFS = { 1 => 'R', 389 => 'N', 402 => 'H', 415 => 'M' }

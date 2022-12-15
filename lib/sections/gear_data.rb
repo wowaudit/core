@@ -39,11 +39,11 @@ module Audit
 
           if TIER_ITEMS_BY_SLOT.keys.include? item
             if TIER_ITEMS.include?(equipped_item['item']['id'].to_i) && equipped_item['level']['value'] > @character.details['tier_items'][item]
-              @character.data["tier_#{item}_ilvl"] = equipped_item['level']['value']
-              @character.data["tier_#{item}_difficulty"] = ''
-              # Temporarily disable storing of tier data until the raid releases. TODO: enable once the redis index is changed to DF
-              #@character.details['tier_items'][item] = equipped_item['level']['value']
+              @character.details['tier_items'][item] = equipped_item['level']['value']
             end
+
+            @character.data["tier_#{item}_ilvl"] = @character.details['tier_items'][item]
+            @character.data["tier_#{item}_difficulty"] = TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items'][item] }.compact.last || ''
           end
 
           @character.data[item + '_ilvl'] = equipped_item['level']['value']
