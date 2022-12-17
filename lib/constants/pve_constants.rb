@@ -28,13 +28,7 @@ SLUGIFIED_DUNGEON_NAMES = KEYSTONE_DUNGEONS.transform_values do |dungeon_name|
 end
 
 WEEKLY_EVENT_QUESTS = [
-  62631,
-  62635,
-  62636,
-  62637,
-  62638,
-  62639,
-  62640,
+  72728, # The World Awaits
 ]
 
 RAID_DIFFICULTIES = {
