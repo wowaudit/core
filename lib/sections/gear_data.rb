@@ -71,9 +71,6 @@ module Audit
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
 
-      # Set item level to 0 if it's above 300, so inactive BfA characters aren't being shown as top
-      @character.data['ilvl'] = 0 if @character.data['ilvl'] > 400
-
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
       @character.data['gem_list'] = @character.gems.join('|')
