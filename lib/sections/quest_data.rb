@@ -11,7 +11,7 @@ module Audit
       @character.data['weekly_feast'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| quest['id'] == 70893 } ? 'yes' : 'no'
 
       unless @data[:completed_quests].class == RBattlenet::EmptyHashResult
-        @character.data['weekly_event_completed'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest['id'] }
+        @character.data['weekly_event_completed'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest['id'] } ? 'yes' : 'no'
       end
     end
   end
