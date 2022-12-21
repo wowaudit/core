@@ -112,7 +112,7 @@ ENCHANTS = {
     6607 => [3, "Plainsrunner's Breeze (3)"],
     6611 => [2, "Watcher's Loam (1)"],
     6612 => [2, "Watcher's Loam (2)"],
-    6613 => [2, "Watcher's Loam (3)"],
+    6613 => [3, "Watcher's Loam (3)"],
   },
   'finger_1' => {
     6545 => [2, "Writ of Critical Strike (1)"],

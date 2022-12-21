@@ -21,5 +21,10 @@ HONOR_PER_WIN = {
     daily: 850,
     win: 425, # Estimated
     loss: 125, # Estimated
+  },
+  'shuffle' => {
+    daily: 600,
+    win: 300, # Estimated
+    loss: 75, # Estimated
   }
 }

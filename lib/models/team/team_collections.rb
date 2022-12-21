@@ -14,7 +14,6 @@ module Audit
       :pvp_summary,
       :season_keystones,
       :reputations,
-      :soulbinds,
       :status,
       :titles,
     ]

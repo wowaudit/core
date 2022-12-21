@@ -164,6 +164,19 @@ module Audit
         end
       end
 
+      # TODO: Refactor and DRY
+      @data.keys.select { |key| key.to_s.include? 'shuffle' }.each do |key|
+        bracket = @data[key]
+
+        honor_earned += [bracket['weekly_match_statistics']['won'], 3].min * HONOR_PER_WIN['shuffle'][:daily]
+        honor_earned += [bracket['weekly_match_statistics']['won'] - 3, 0].max * HONOR_PER_WIN['shuffle'][:win]
+        honor_earned += bracket['weekly_match_statistics']['lost'] * HONOR_PER_WIN['shuffle'][:loss]
+
+        if @data[key]['season']['id'] == CURRENT_PVP_SEASON && @data[key]['weekly_match_statistics']['won'] > 0
+          highest_rating = [highest_rating, @data[key]['rating']].max
+        end
+      end
+
       item_level = GREAT_VAULT_TO_ILVL['pvp'][GREAT_VAULT_TO_ILVL['pvp'].keys.find { |rating| highest_rating >= rating }]
 
       @character.data['great_vault_slot_7'] = honor_earned >= 1250 ? item_level : ''
