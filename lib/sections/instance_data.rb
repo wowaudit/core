@@ -153,12 +153,15 @@ module Audit
 
       BRACKETS.each do |bracket, endpoint|
         if @data[endpoint.to_sym].class == RBattlenet::HashResult && @data[endpoint.to_sym]['season']['id'] == CURRENT_PVP_SEASON
-          # Assume that players haven't played more than 3 different days.. Hacky for now
-          honor_earned += [@data[endpoint.to_sym]['weekly_match_statistics']['won'], 3].min * HONOR_PER_WIN[bracket][:daily]
-          honor_earned += [@data[endpoint.to_sym]['weekly_match_statistics']['won'] - 3, 0].max * HONOR_PER_WIN[bracket][:win]
-          honor_earned += @data[endpoint.to_sym]['weekly_match_statistics']['lost'] * HONOR_PER_WIN[bracket][:loss]
+          won = @data[endpoint.to_sym].dig('weekly_match_statistics', 'won') || 0
+          lost = @data[endpoint.to_sym].dig('weekly_match_statistics', 'lost') || 0
 
-          if @data[endpoint.to_sym]['season']['id'] == CURRENT_PVP_SEASON && @data[endpoint.to_sym]['weekly_match_statistics']['won'] > 0
+          # Assume that players haven't played more than 3 different days.. Hacky for now
+          honor_earned += [won, 3].min * HONOR_PER_WIN[bracket][:daily]
+          honor_earned += [won - 3, 0].max * HONOR_PER_WIN[bracket][:win]
+          honor_earned += lost * HONOR_PER_WIN[bracket][:loss]
+
+          if @data[endpoint.to_sym]['season']['id'] == CURRENT_PVP_SEASON && won > 0
             highest_rating = [highest_rating, @data[endpoint.to_sym]['rating']].max
           end
         end
@@ -167,12 +170,14 @@ module Audit
       # TODO: Refactor and DRY
       @data.keys.select { |key| key.to_s.include? 'shuffle' }.each do |key|
         bracket = @data[key]
+        won = bracket.dig('weekly_match_statistics', 'won') || 0
+        lost = bracket.dig('weekly_match_statistics', 'lost') || 0
 
-        honor_earned += [bracket['weekly_match_statistics']['won'], 3].min * HONOR_PER_WIN['shuffle'][:daily]
-        honor_earned += [bracket['weekly_match_statistics']['won'] - 3, 0].max * HONOR_PER_WIN['shuffle'][:win]
-        honor_earned += bracket['weekly_match_statistics']['lost'] * HONOR_PER_WIN['shuffle'][:loss]
+        honor_earned += [won, 3].min * HONOR_PER_WIN['shuffle'][:daily]
+        honor_earned += [won - 3, 0].max * HONOR_PER_WIN['shuffle'][:win]
+        honor_earned += lost * HONOR_PER_WIN['shuffle'][:loss]
 
-        if @data[key]['season']['id'] == CURRENT_PVP_SEASON && @data[key]['weekly_match_statistics']['won'] > 0
+        if @data[key]['season']['id'] == CURRENT_PVP_SEASON && won > 0
           highest_rating = [highest_rating, @data[key]['rating']].max
         end
       end
