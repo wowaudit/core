@@ -100,6 +100,8 @@ module Audit
           @character.data["#{item}_enchant"] = ''
           @character.data["enchant_quality_#{item}"] = 0
         end
+      elsif item == 'neck'
+        @character.data["enchant_quality_#{item}"] = equipped_item&.dig('sockets')&.size || 0
       end
     end
 

@@ -229,7 +229,7 @@ HEADER = [
   'total_renown_score',
   'court_of_stars_total',
   'court_of_stars_score',
-  '',
+  'enchant_quality_neck',
   '',
   'best_head_ilvl',
   'best_head_id',
