@@ -5,6 +5,7 @@ module Audit
     def add
       # Check equipped gear
       items_equipped = 0
+      sparks_used = 0
       @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -21,6 +22,12 @@ module Audit
 
           items_equipped += 1
           @character.ilvl += equipped_item['level']['value']
+
+          if SPARK_ITEM_IDS.include? equipped_item['item']['id']
+            sparks_used += 1
+          elsif SPARK_ITEM_IDS_2H.include? equipped_item['item']['id']
+            sparks_used += 2
+          end
 
           @character.details['current_gear'][item] = {
             'ilvl' => equipped_item['level']['value'],
@@ -70,6 +77,7 @@ module Audit
       end
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
+      @character.data['ingenuity_sparks_equipped'] = sparks_used
 
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']

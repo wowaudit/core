@@ -230,7 +230,7 @@ HEADER = [
   'court_of_stars_total',
   'court_of_stars_score',
   'enchant_quality_neck',
-  '',
+  'ingenuity_sparks_equipped',
   'best_head_ilvl',
   'best_head_id',
   'best_head_name',
