@@ -1,4 +1,4 @@
-CURRENT_VERSION = 1002
+CURRENT_VERSION = 1003
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
