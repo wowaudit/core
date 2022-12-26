@@ -314,4 +314,12 @@ HEADER = [
   'tier_chest_difficulty',
   'tier_hands_difficulty',
   'tier_legs_difficulty',
+  'embellished_item_id_1',
+  'embellished_item_level_1',
+  'embellished_spell_id_1',
+  'embellished_spell_name_1',
+  'embellished_item_id_2',
+  'embellished_item_level_2',
+  'embellished_spell_id_2',
+  'embellished_spell_name_2',
 ]

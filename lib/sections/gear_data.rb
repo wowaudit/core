@@ -6,6 +6,7 @@ module Audit
       # Check equipped gear
       items_equipped = 0
       sparks_used = 0
+      embellished_found = 0
       @character.data['empty_sockets'] = 0
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -19,6 +20,7 @@ module Audit
           equipped_item = @data[:equipment]['equipped_items'].select{ |eq_item| eq_item['slot']['type'] == item.upcase }.first
           check_enchant(item, equipped_item)
           check_sockets(item, equipped_item)
+          embellished_found += check_embellished(embellished_found, item, equipped_item)
 
           items_equipped += 1
           @character.ilvl += equipped_item['level']['value']
@@ -120,6 +122,28 @@ module Audit
         elsif !socket.dig('item', 'id') && socket.dig('socket_type', 'type') != "DOMINATION"
           @character.data['empty_sockets'] += 1
         end
+      end
+    end
+
+    def check_embellished(occurrence, item, equipped_item)
+      # Scuffed, improve
+      @character.data["embellished_item_id_#{occurrence + 1}"] = ''
+      @character.data["embellished_item_level_#{occurrence + 1}"] = ''
+      @character.data["embellished_spell_id_#{occurrence + 1}"] = ''
+      @character.data["embellished_spell_name_#{occurrence + 1}"] = ''
+      @character.data["embellished_item_id_#{occurrence + 2}"] = ''
+      @character.data["embellished_item_level_#{occurrence + 2}"] = ''
+      @character.data["embellished_spell_id_#{occurrence + 2}"] = ''
+      @character.data["embellished_spell_name_#{occurrence + 2}"] = ''
+
+      if equipped_item['limit_category'] == 'Unique-Equipped: Embellished (2)'
+        @character.data["embellished_item_id_#{occurrence + 1}"] = equipped_item['item']['id']
+        @character.data["embellished_item_level_#{occurrence + 1}"] = equipped_item['level']['value']
+        @character.data["embellished_spell_id_#{occurrence + 1}"] = equipped_item['spells'][0].dig('spell', 'id')
+        @character.data["embellished_spell_name_#{occurrence + 1}"] = equipped_item['spells'][0].dig('spell', 'name')
+        1
+      else
+        0
       end
     end
   end
