@@ -322,4 +322,5 @@ HEADER = [
   'embellished_item_level_2',
   'embellished_spell_id_2',
   'embellished_spell_name_2',
+  'profession_recipes',
 ]

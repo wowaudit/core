@@ -27,6 +27,10 @@ module Audit
       end
       new_header[142] = data.join("")
 
+      new_header[283] = SPARK_RECIPE_NAME_TO_ITEM_ID.map do |name, details|
+        "#{details[:profession]}_#{details[:id]}_#{name}"
+      end.join('|')
+
       new_header
     end
   end
