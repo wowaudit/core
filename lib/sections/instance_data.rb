@@ -177,7 +177,7 @@ module Audit
         honor_earned += [won - 3, 0].max * HONOR_PER_WIN['shuffle'][:win]
         honor_earned += lost * HONOR_PER_WIN['shuffle'][:loss]
 
-        if @data[key]['season']['id'] == CURRENT_PVP_SEASON && won > 0
+        if bracket.dig('season', 'id') == CURRENT_PVP_SEASON && won > 0
           highest_rating = [highest_rating, @data[key]['rating']].max
         end
       end
