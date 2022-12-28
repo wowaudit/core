@@ -29,6 +29,10 @@ end
 
 WEEKLY_EVENT_QUESTS = [
   72728, # The World Awaits
+  72720, # The Arena Calls
+  72722, # Emissary of War
+  72723, # A Calll to Battle
+  72725, # A Shrouded Path Through Time
 ]
 
 RAID_DIFFICULTIES = {
