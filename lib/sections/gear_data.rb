@@ -139,8 +139,14 @@ module Audit
       if equipped_item['limit_category'] == 'Unique-Equipped: Embellished (2)'
         @character.data["embellished_item_id_#{occurrence + 1}"] = equipped_item['item']['id']
         @character.data["embellished_item_level_#{occurrence + 1}"] = equipped_item['level']['value']
-        @character.data["embellished_spell_id_#{occurrence + 1}"] = equipped_item['spells'][0].dig('spell', 'id')
-        @character.data["embellished_spell_name_#{occurrence + 1}"] = equipped_item['spells'][0].dig('spell', 'name')
+
+        if equipped_item['spells']
+          @character.data["embellished_spell_id_#{occurrence + 1}"] = equipped_item['spells'][0].dig('spell', 'id')
+          @character.data["embellished_spell_name_#{occurrence + 1}"] = equipped_item['spells'][0].dig('spell', 'name')
+        else
+          @character.data["embellished_spell_id_#{occurrence + 1}"] = equipped_item['item']['id']
+          @character.data["embellished_spell_name_#{occurrence + 1}"] = equipped_item['name']
+        end
         1
       else
         0
