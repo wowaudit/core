@@ -16,7 +16,7 @@ module Audit
           end
         end
 
-        @character.data['profession_recipes'] = spark_items.join('|')
+        @character.data['profession_recipes'] = "|#{spark_items.join('|')}|"
       end
     end
   end
