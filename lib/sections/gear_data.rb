@@ -25,10 +25,15 @@ module Audit
           items_equipped += 1
           @character.ilvl += equipped_item['level']['value']
 
-          if SPARK_ITEM_IDS.include? equipped_item['item']['id']
-            sparks_used += 1
-          elsif SPARK_ITEM_IDS_2H.include? equipped_item['item']['id']
-            sparks_used += 2
+          if (SPARK_ITEM_IDS + SPARK_ITEM_IDS_2H).include? equipped_item['item']['id']
+            sparks_used += SPARK_ITEM_IDS_2H.include?(equipped_item['item']['id']) ? 2 : 1
+
+            @character.details['spark_gear'][item] = {
+              'ilvl' => equipped_item['level']['value'],
+              'id' => equipped_item['item']['id'],
+              'name' => equipped_item['name'],
+              'quality' => QUALITIES[equipped_item['quality']['type'].to_sym]
+            }
           end
 
           @character.details['current_gear'][item] = {
@@ -70,6 +75,11 @@ module Audit
         @character.data["best_#{item}_id"] = @character.details['best_gear'][item]['id'] || ''
         @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
         @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
+
+        @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear'][item]['ilvl'] || ''
+        @character.data["spark_#{item}_id"] = @character.details['spark_gear'][item]['id'] || ''
+        @character.data["spark_#{item}_name"] = @character.details['spark_gear'][item]['name'] || ''
+        @character.data["spark_#{item}_quality"] = @character.details['spark_gear'][item]['quality'] || ''
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types
