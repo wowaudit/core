@@ -24,7 +24,7 @@ module Audit
       @character.data["shuffle_week_played"] = 0
       @data.keys.select { |key| key.to_s.include? 'shuffle' }.each do |key|
         bracket = @data[key]
-        if bracket['season']['id'] == CURRENT_PVP_SEASON
+        if bracket.dig('season', 'id') == CURRENT_PVP_SEASON
           @character.data["shuffle_rating"] = [@character.data["shuffle_rating"], bracket['rating']].max
           @character.data["shuffle_season_played"] += bracket['season_match_statistics']['played']
           @character.data["shuffle_week_played"] += bracket['weekly_match_statistics']['played']
