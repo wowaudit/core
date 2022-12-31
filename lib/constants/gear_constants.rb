@@ -543,4 +543,7 @@ SPARK_RECIPE_NAME_TO_ITEM_ID = {
   "Enchant Weapon - Wafting Devotion" => { id: 199974, profession: 'Enchanting' },
   "Dragoncloth Tailoring Vestments" => { id: 193540, profession: 'Tailoring' },
   "Khaz'gorite Fisherfriend" => { id: 198226, profession: 'Engineering' },
+  "Tinker: Arclight Vital Correctors" => { id: 201407, profession: 'Engineering' },
+  "Tinker: Supercollide-O-Tron" => { id: 198301, profession: 'Engineering' },
+  "Projectile Propulsion Pinion" => { id: 198313, profession: 'Engineering' },
 }
