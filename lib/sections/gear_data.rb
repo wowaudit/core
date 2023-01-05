@@ -129,6 +129,10 @@ module Audit
       (equipped_item['sockets'] || []).each do |socket|
         if has_gem = GEMS[socket.dig('item', 'id')]
           @character.gems << has_gem
+
+          if epic_gem = EPIC_GEMS[socket.dig('item', 'id')]
+            @character.data['epic_gem'] = epic_gem
+          end
         elsif !socket.dig('item', 'id') && socket.dig('socket_type', 'type') != "DOMINATION"
           @character.data['empty_sockets'] += 1
         end

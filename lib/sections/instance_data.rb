@@ -70,6 +70,7 @@ module Audit
           runs.size
         end
       end
+
       @character.data['weekly_regular_dungeons_done'] = weekly_regular_dungeons_done
       @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum
       @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')

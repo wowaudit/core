@@ -1,4 +1,4 @@
-CURRENT_VERSION = 1005
+CURRENT_VERSION = 1006
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -390,4 +390,5 @@ HEADER = [
   'shuffle_rating',
   'shuffle_season_played',
   'shuffle_week_played',
+  'epic_gem',
 ]

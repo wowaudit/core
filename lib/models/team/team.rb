@@ -32,6 +32,10 @@ module Audit
       "https://wowaudit.com/#{guild.path}/#{name.gsub(" ","-").downcase}/raids"
     end
 
+    def roster_path
+      "https://wowaudit.com/#{guild.path}/#{name.gsub(" ","-").downcase}/roster"
+    end
+
     def slugged_region
       case region
       when "US"

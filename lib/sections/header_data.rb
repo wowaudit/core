@@ -14,6 +14,7 @@ module Audit
       new_header[7] = team.name
       new_header[8] = team.raids_path
       new_header[9] = Audit.now
+      new_header[10] = team.roster_path
 
       # Parse messages
       new_header[4] = "#{CURRENT_VERSION}|#{VERSION_MESSAGE}"
