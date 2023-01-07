@@ -91,13 +91,6 @@ module Audit
       if !details['keystones'].is_a? Hash
         details['keystones'] = {}
       end
-
-      if !details['great_vault'].is_a? Hash
-        details['great_vault'] = {
-          'dungeons' => [],
-
-        }
-      end
     end
 
     def metadata

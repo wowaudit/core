@@ -12,12 +12,26 @@ module Audit
         mplus.insert(0, week['m+'] || '-')
 
         vault.keys.each do |slot|
-          value = week.dig('vault', slot.to_s) || "-"
-          vault[slot].insert(0, value.to_s.empty? ? "-" : value)
+          # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
+          if [4, 5, 6].include?(slot)
+            nil
+          else
+            value = week.dig('vault', slot.to_s) || "-"
+            vault[slot].insert(0, value.to_s.empty? ? "-" : value)
+          end
         end
       end
 
-      # Current week's highest M+ completion and vault data are is not stored as a snapshot
+
+      # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
+      (FIRST_PERIOD_OF_EXPANSION..(Audit.period)).each do |period|
+        dungeon_data = (@character.details['keystones'][period.to_s]&.values || []).map { |run| run['level'] }.sort.reverse
+        vault[4].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 20].min] || "-")
+        vault[5].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 20].min] || "-")
+        vault[6].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 20].min] || "-")
+      end
+
+      # Current week's highest M+ completion and vault data are not stored as a snapshot
       vault.values.each { |slot| slot.shift(1) }
       mplus.shift(1)
 

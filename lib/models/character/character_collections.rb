@@ -16,13 +16,12 @@ module Audit
 
         # Update the previous week with M+ and Vault data
         if (details['snapshots'][Audit.previous_week_year] || {}).include? Audit.previous_week
-          details['snapshots'][Audit.previous_week_year][Audit.previous_week]['m+'] ||=
-            self.data['weekly_highest_m+']
+          details['snapshots'][Audit.previous_week_year][Audit.previous_week]['m+'] ||=  self.data['weekly_highest_m+']
 
-          last_week_vault = details['snapshots'][Audit.previous_week_year][Audit.previous_week]['vault'] || { '1' => '-', '2' => '-', '3' => '-' }
+          last_week_vault = details['snapshots'][Audit.previous_week_year][Audit.previous_week]['vault'] || { '1' => '-', '2' => '-', '3' => '-', '4' => '-', '5' => '-', '6' => '-' }
 
-          details['snapshots'][Audit.previous_week_year][Audit.previous_week]['vault'] = last_week_vault.merge(6.times.map do |i|
-            [(i + 4).to_s, self.last_refresh["great_vault_slot_#{i + 4}"] || self.data["great_vault_slot_#{i + 4}"]]
+          details['snapshots'][Audit.previous_week_year][Audit.previous_week]['vault'] = last_week_vault.merge(3.times.map do |i|
+            [(i + 7).to_s, self.last_refresh["great_vault_slot_#{i + 7}"] || self.data["great_vault_slot_#{i + 7}"]]
           end.to_h)
         end
       end

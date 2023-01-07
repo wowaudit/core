@@ -1,3 +1,5 @@
+FIRST_PERIOD_OF_EXPANSION = 885
+
 CURRENT_KEYSTONE_SEASON = 9
 FIRST_PERIOD_OF_SEASON = 885
 
@@ -75,7 +77,7 @@ GREAT_VAULT_TO_ILVL = {
     4 => 385,
     3 => 385,
     2 => 382,
-    0 => '',
+    0 => nil,
   },
   'pvp' => { # Estimates
     2400 => 415,
