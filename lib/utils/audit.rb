@@ -145,16 +145,10 @@ module Audit
       reset_time -= (DateTime.now > reset_time ? 0 : 7)
       @@first_day = reset_time.to_date
       @@reset_timestamp = reset_time.to_time.to_i
-      @@week_number = [reset_time.cweek, 48].max.to_s
-
-      # There is no weekly reset between week 47 and 48
-      if reset_time.cweek == 48
-        @@reset_timestamp -= 604799
-      end
-
+      @@week_number = reset_time.cweek.to_s
       @@year_number = reset_time.year.to_s
       @@region = region
-      @@previous_week_number = [reset_time.cweek - 1, 47].max.to_s
+      @@previous_week_number = (reset_time.cweek - 1).to_s
       @@keystone_period = 0
       if @@previous_week_number.to_i < 1
         @@previous_year_number = ((reset_time + 7).year - 1).to_s

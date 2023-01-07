@@ -18,14 +18,21 @@ module Audit
     end
 
     def historical_snapshots
-      return @historical_snapshots if @historical_snapshots
-      @historical_snapshots = []
-      details['snapshots'].keys.sort_by(&:to_i).each do |year|
-        details['snapshots'][year].keys.sort_by(&:to_i).each do |week|
-          @historical_snapshots << details['snapshots'][year][week]
+      @historical_snapshots ||= begin
+        # Temporary code to fix snapshot bug
+        if details['snapshots']['2023']['48']
+          details['snapshots']['2023']['1'] = details['snapshots']['2023']['48']
+          details['snapshots']['2023'].delete('48')
         end
+
+        snapshots = []
+        details['snapshots'].keys.sort_by(&:to_i).each do |year|
+          details['snapshots'][year].keys.sort_by(&:to_i).each do |week|
+            snapshots << details['snapshots'][year][week]
+          end
+        end
+        snapshots
       end
-      @historical_snapshots
     end
 
     def verify_details
