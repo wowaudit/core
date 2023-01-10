@@ -34,6 +34,7 @@ WEEKLY_EVENT_QUESTS = [
   72720, # The Arena Calls
   72722, # Emissary of War
   72723, # A Calll to Battle
+  72724, # A Savage Path Through Time
   72725, # A Shrouded Path Through Time
 ]
 
