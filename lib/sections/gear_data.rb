@@ -133,7 +133,7 @@ module Audit
           if epic_gem = EPIC_GEMS[socket.dig('item', 'id')]
             @character.data['epic_gem'] = epic_gem
           end
-        elsif !socket.dig('item', 'id') && socket.dig('socket_type', 'type') != "DOMINATION"
+        elsif !socket.dig('item', 'id') && socket.dig('socket_type', 'type') != "TINKER"
           @character.data['empty_sockets'] += 1
         end
       end
