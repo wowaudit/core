@@ -13,7 +13,7 @@ RAIDER_IO_URL = "https://raider.io/api/v1/characters/profile?region={region}&rea
 EXPANSION_START = Date.new(2022, 11, 29)
 
 DAILY_RESET = {
-  'EU' => 7,
+  'EU' => 4,
   'US' => 15,
   'KR' => 2,
   'TW' => 2
@@ -21,11 +21,11 @@ DAILY_RESET = {
 
 WEEKLY_RESET = {
   'EU' => {
-    'hour' => 5,
+    'hour' => 4,
     'day' => "Wednesday"
   },
   'US' => {
-    'hour' => 11,
+    'hour' => 15,
     'day' => "Tuesday"
   },
   'KR' => {
