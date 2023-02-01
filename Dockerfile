@@ -1,4 +1,4 @@
-FROM voormedia/ruby:3.9
+FROM voormedia/ruby:3.16
 
 RUN \
   apk add --no-cache \

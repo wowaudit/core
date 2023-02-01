@@ -3,7 +3,7 @@ module Audit
 
     def process_result(response)
       if response.code == 200
-        data = JSON.parse response.body
+        data = Oj.load response.body
         details['raiderio']['score'] =
           (data['mythic_plus_scores_by_season'][0]['scores']['all'] rescue 0)
 

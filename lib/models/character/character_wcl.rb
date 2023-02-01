@@ -4,7 +4,7 @@ module Audit
     def process_result(response, raid)
       if response.code == 200
         raise ApiLimitReachedException if response.headers['content-type'].include?("text/html")
-        data = JSON.parse response.body
+        data = Oj.load response.body
         store_result(data, raid) unless (data["hidden"] rescue false)
       elsif response.code == 403 or response.code == 429
         raise ApiLimitReachedException
@@ -20,7 +20,7 @@ module Audit
       if data == []
         # If there are no parses, we want to wipe any parses from previous non-fated seasons
         percentiles.keys.each do |difficulty|
-          raid['encounters'].map { |e| e['id'].to_s }.each do |encounter_id|
+          raid['encounters'].map { |e| e[F_ID].to_s }.each do |encounter_id|
             details['warcraftlogs'][difficulty.to_s][encounter_id] = '-'
           end
         end

@@ -5,7 +5,7 @@ module Audit
 
       unless @data[:reputations].class == RBattlenet::EmptyHashResult
         REPUTATIONS.each do |reputation, name|
-          match = @data[:reputations]['reputations'].select{ |r| r['faction']['id'] == reputation }.first
+          match = @data[:reputations]['reputations'].select{ |r| r[F_FACTION][F_ID] == reputation }.first
 
           if match
             total_renown += (match.dig('standing', 'raw') || 0)

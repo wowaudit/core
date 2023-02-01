@@ -7,11 +7,11 @@ module Audit
         @character.data['dailies_done_total'] = @achievements[977]['criteria']['child_criteria'].first['amount'] rescue 0
       end
 
-      @character.data['aiding_the_accord'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| quest['id'] == 70750 } ? 'yes' : 'no'
-      @character.data['weekly_feast'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| quest['id'] == 70893 } ? 'yes' : 'no'
+      @character.data['aiding_the_accord'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| quest[F_ID] == 70750 } ? 'yes' : 'no'
+      @character.data['weekly_feast'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| quest[F_ID] == 70893 } ? 'yes' : 'no'
 
       unless @data[:completed_quests].class == RBattlenet::EmptyHashResult
-        @character.data['weekly_event_completed'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest['id'] } ? 'yes' : 'no'
+        @character.data['weekly_event_completed'] = @data.dig(:completed_quests, 'quests')&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest[F_ID] } ? 'yes' : 'no'
       end
     end
   end

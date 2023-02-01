@@ -18,19 +18,19 @@ module Audit
 
       begin
         dungeons_and_raids =  @data[:achievement_statistics]['categories'].find do |category|
-          category['name'] == "Dungeons & Raids"
+          category[F_NAME] == "Dungeons & Raids"
         end
 
         dungeons_and_raids['sub_categories'].map{ |cat| cat['statistics'] }.flatten.each do |instance|
-          if MYTHIC_DUNGEONS.include?(instance['id'])
+          if MYTHIC_DUNGEONS.include?(instance[F_ID])
             completed = (instance['last_updated_timestamp'] / 1000) > Audit.timestamp
             weekly_regular_dungeons_done += (completed ? 1 : 0)
-            @character.data["weekly_#{MYTHIC_DUNGEONS[instance['id']]}"] = (completed ? 'yes' : 'no')
+            @character.data["weekly_#{MYTHIC_DUNGEONS[instance[F_ID]]}"] = (completed ? 'yes' : 'no')
           end
 
           # Track weekly Raid kills through the statistics
-          if boss_ids.include?(instance['id'])
-            raid_list[instance['id']] = [
+          if boss_ids.include?(instance[F_ID])
+            raid_list[instance[F_ID]] = [
               instance['quantity'].to_i,
               (instance['last_updated_timestamp'] / 1000) > Audit.timestamp ? 1 : 0,
             ]
@@ -149,7 +149,7 @@ module Audit
       highest_rating = 0
 
       BRACKETS.each do |bracket, endpoint|
-        if @data[endpoint.to_sym].class == RBattlenet::HashResult && @data[endpoint.to_sym]['season']['id'] == CURRENT_PVP_SEASON
+        if @data[endpoint.to_sym].class == RBattlenet::HashResult && @data[endpoint.to_sym]['season'][F_ID] == CURRENT_PVP_SEASON
           won = @data[endpoint.to_sym].dig('weekly_match_statistics', 'won') || 0
           lost = @data[endpoint.to_sym].dig('weekly_match_statistics', 'lost') || 0
 
@@ -158,7 +158,7 @@ module Audit
           honor_earned += [won - 3, 0].max * HONOR_PER_WIN[bracket][:win]
           honor_earned += lost * HONOR_PER_WIN[bracket][:loss]
 
-          if @data[endpoint.to_sym]['season']['id'] == CURRENT_PVP_SEASON && won > 0
+          if @data[endpoint.to_sym]['season'][F_ID] == CURRENT_PVP_SEASON && won > 0
             highest_rating = [highest_rating, @data[endpoint.to_sym]['rating']].max
           end
         end

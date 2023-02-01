@@ -4,7 +4,10 @@ module Audit
 
     class << self
       def process(character, data)
-        ObjectSpace.each_object(Class).select { |klass| klass < self }.each do |type|
+        [
+          Audit::BasicData, Audit::CollectionData, Audit::ExternalData, Audit::GearData, Audit::HistoricalData,
+          Audit::InstanceData, Audit::ProfessionData, Audit::PvPData, Audit::QuestData, Audit::ReputationData
+        ].each do |type|
           next if character.essentials_only? && !type::ESSENTIAL
           type.new(character, data).add
         end
@@ -17,7 +20,7 @@ module Audit
 
       unless character.essentials_only?
         @achievements = @data[:achievements]['achievements']
-                          .group_by{ |ach| ach['id'] }
+                          .group_by{ |ach| ach[F_ID] }
                           .transform_values(&:first)
       end
     end

@@ -11,7 +11,7 @@ module Audit
 
           if tier
             spark_items += tier['known_recipes'].map do |recipe|
-              SPARK_RECIPE_NAME_TO_ITEM_ID[recipe['name']][:id] if SPARK_RECIPE_NAME_TO_ITEM_ID.keys.include?(recipe['name'])
+              SPARK_RECIPE_NAME_TO_ITEM_ID[recipe[F_NAME]][:id] if SPARK_RECIPE_NAME_TO_ITEM_ID.keys.include?(recipe[F_NAME])
             end.compact
           end
         end

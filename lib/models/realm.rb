@@ -33,7 +33,7 @@ module Audit
                 next unless group && group['members']
                 group['dungeon_id'] = dungeon[:source][:dungeon_id]
                 group['members'].each do |member|
-                  (runs_by_character[member['profile']['id']] ||= []) << group
+                  (runs_by_character[member[F_PROFILE][F_ID]] ||= []) << group
                 end
               end
             else

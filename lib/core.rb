@@ -4,13 +4,14 @@ require 'sequel'
 require 'redis'
 require 'rbattlenet'
 require 'typhoeus'
-require 'aws-sdk'
+require 'aws-sdk-s3'
 require 'date'
 require 'mysql2'
 require 'yaml'
 require 'tzinfo'
 require 'csv'
 require 'rollbar'
+require 'oj'
 
 MAX_OCCURRENCES = {
   essentials: 2,
@@ -22,7 +23,7 @@ MAX_OCCURRENCES = {
 
 def register
   # TODO: Figure out a way to properly fix registration race conditions
-  sleep rand(0..15.0)
+  sleep(rand(0..15.0)) if REGISTER
 
   occurrences = Audit.fetch_occurrences(TYPE)
   zone = occurrences.select { |_, v| v == occurrences.values.min }.keys.sample

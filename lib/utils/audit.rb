@@ -31,7 +31,7 @@ module Audit
       loop do
         worker = Schedule.where(name: `hostname`.strip).first || register_worker(type)
         if worker.schedule
-          schedule = JSON.parse worker.schedule
+          schedule = Oj.load worker.schedule
           Logger.g(INFO_STARTING_SCHEDULE + "Entities: #{schedule.join(', ')}")
 
           # Ask for a new schedule
