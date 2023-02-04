@@ -100,10 +100,10 @@ module Audit
       return false if !response[:status]
       raise ApiLimitReachedException if response[:status][:status_code] == 429
       return true if response[:status][:status_code] == 404
-      return true unless response[:status]['is_valid']
+      return true unless response[:status][:is_valid]
 
-      if self.key.to_s != response[:status]['id'].to_s
-        self.key = response[:status]['id'].to_s
+      if self.key.to_s != response[:status][:id].to_s
+        self.key = response[:status][:id].to_s
       end
 
       false

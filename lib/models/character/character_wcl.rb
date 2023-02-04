@@ -20,7 +20,7 @@ module Audit
       if data == []
         # If there are no parses, we want to wipe any parses from previous non-fated seasons
         percentiles.keys.each do |difficulty|
-          raid['encounters'].map { |e| e[F_ID].to_s }.each do |encounter_id|
+          raid['encounters'].map { |e| e[:id].to_s }.each do |encounter_id|
             details['warcraftlogs'][difficulty.to_s][encounter_id] = '-'
           end
         end

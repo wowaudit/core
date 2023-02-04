@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby ">= 3.1"
+ruby ">= 3.0"
 
 gem 'rbattlenet', git: "https://github.com/emielvanlankveld/rbattlenet.git", branch: 'master'
 gem 'mysql2'

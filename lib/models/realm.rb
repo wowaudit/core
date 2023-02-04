@@ -28,12 +28,12 @@ module Audit
 
           runs_by_character = {}
           leaderboards.results.each do |dungeon|
-            if dungeon.key?('leading_groups')
-              (dungeon.dig('leading_groups') || []).each do |group|
-                next unless group && group['members']
-                group['dungeon_id'] = dungeon[:source][:dungeon_id]
-                group['members'].each do |member|
-                  (runs_by_character[member[F_PROFILE][F_ID]] ||= []) << group
+            if dungeon.key?(:leading_groups)
+              (dungeon.dig(:leading_groups) || []).each do |group|
+                next unless group && group[:members]
+                group[:dungeon_id] = dungeon[:source][:dungeon_id]
+                group[:members].each do |member|
+                  (runs_by_character[member[:profile][:id]] ||= []) << group
                 end
               end
             else

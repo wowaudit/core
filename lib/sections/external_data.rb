@@ -5,6 +5,7 @@ module Audit
     def add
       add_warcraftlogs_data
       add_raiderio_data
+      add_leaderboard_data
     end
 
     def add_warcraftlogs_data
@@ -26,6 +27,19 @@ module Audit
           (@character.details['raiderio']['weekly_highest'] rescue 0) || 0,
           (@character.details['raiderio']['top_ten_highest'][0] rescue 0) || 0
         ].max
+    end
+
+    def add_leaderboard_data
+      # Use either Raider.io data or leaderboard data, whichever is more complete at the moment
+      dungeon_data = if @character.details['raiderio']['top_ten_highest'].sum > @character.details['raiderio']['leaderboard_runs'].sum
+        @character.details['raiderio']['top_ten_highest']
+      else
+        (@character.details['raiderio']['leaderboard_runs'] || []).sort_by { |h| h * -1 }
+      end
+
+      @character.data['great_vault_slot_4'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 20].min] || ""
+      @character.data['great_vault_slot_5'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 20].min] || ""
+      @character.data['great_vault_slot_6'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 20].min] || ""
     end
   end
 end

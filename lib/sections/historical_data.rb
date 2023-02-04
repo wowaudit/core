@@ -25,7 +25,7 @@ module Audit
 
       # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
       (FIRST_PERIOD_OF_EXPANSION..(Audit.period)).each do |period|
-        dungeon_data = (@character.details['keystones'][period.to_s]&.values || []).map { |run| run[F_LEVEL] }.sort.reverse
+        dungeon_data = (@character.details['keystones'][period.to_s]&.values || []).map { |run| run['level'] }.sort.reverse
         vault[4].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 20].min] || "-")
         vault[5].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 20].min] || "-")
         vault[6].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 20].min] || "-")
