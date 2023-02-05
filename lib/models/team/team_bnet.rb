@@ -38,7 +38,7 @@ module Audit
     def process_request(characters, output = [], depth = 0)
       api_limited = []
 
-      result = RBattlenet::Wow::Character.find(
+      RBattlenet::Wow::Character.find(
         characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, season: CURRENT_KEYSTONE_SEASON, source: ch } }, fields: self.class::FIELDS
       ) do |character, result|
         begin

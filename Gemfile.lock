@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/emielvanlankveld/rbattlenet.git
-  revision: 0eca3dc94c3a1de9b3d2bc1e0589e5d24ce1bea0
+  revision: 7d5b3c15c8312cc725850232627d74e44a3c41b4
   branch: master
   specs:
     rbattlenet (2.0.0)
@@ -38,7 +38,6 @@ GEM
     ffi (1.15.5)
     jmespath (1.6.2)
     json (2.6.3)
-    memory_profiler (1.0.1)
     mysql2 (0.5.5)
     oj (3.14.0)
     public_suffix (5.0.1)
@@ -49,7 +48,6 @@ GEM
     require_all (3.0.0)
     rexml (3.2.5)
     rollbar (3.4.0)
-    ruby-prof (1.4.5)
     sequel (5.65.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
@@ -63,7 +61,6 @@ DEPENDENCIES
   aws-sdk-s3
   byebug
   json
-  memory_profiler
   mysql2
   oj
   rbattlenet!
@@ -71,7 +68,6 @@ DEPENDENCIES
   require_all
   rexml
   rollbar
-  ruby-prof
   sequel
   typhoeus
   tzinfo

@@ -7,15 +7,15 @@ module Audit
         @character.data['mounts'] = @achievements[2143][:criteria][:child_criteria].first[:amount] rescue 0
       end
 
-      unless !@data[:titles][:titles] || @data[:titles].class == RBattlenet::EmptyHashResult
-        @character.data[:titles] = @data[:titles][:titles].size
+      unless !@data[:titles]
+        @character.data[:titles] = @data[:titles].size
       end
 
-      unless @data[:pets].class == RBattlenet::EmptyHashResult || !@data[:pets][:pets]
+      unless !@data[:pets]
         pets_owned = []
         level_25_pets = 0
 
-        @data[:pets][:pets].lazy.each do |pet|
+        @data[:pets].lazy.each do |pet|
           unless pets_owned.lazy.include?(pet[:species][:id])
             pets_owned << pet[:species][:id]
             level_25_pets += pet[:level] == 25 ? 1 : 0

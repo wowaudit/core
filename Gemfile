@@ -16,6 +16,4 @@ gem 'rexml'
 
 group :development do
   gem 'byebug'
-  gem 'ruby-prof'
-  gem 'memory_profiler'
 end

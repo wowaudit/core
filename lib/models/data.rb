@@ -19,7 +19,7 @@ module Audit
       @data = data
 
       unless character.essentials_only?
-        @achievements = @data[:achievements][:achievements]
+        @achievements = @data[:achievements]
                           .group_by{ |ach| ach[:id] }
                           .transform_values(&:first)
       end

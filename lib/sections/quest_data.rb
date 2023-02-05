@@ -10,7 +10,7 @@ module Audit
       @character.data['aiding_the_accord'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == 70750 } ? 'yes' : 'no'
       @character.data['weekly_feast'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == 70893 } ? 'yes' : 'no'
 
-      unless @data[:completed_quests].class == RBattlenet::EmptyHashResult
+      unless !@data[:completed_quests]
         @character.data['weekly_event_completed'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest[:id] } ? 'yes' : 'no'
       end
     end

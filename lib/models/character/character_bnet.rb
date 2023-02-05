@@ -40,14 +40,15 @@ module Audit
     end
 
     def return_error(response, depth)
-      timeouts = response.values.map { | v| v.dig(:timeout) if v.is_a? Hash }.compact.count(&:itself)
+      timeouts = response[:status_codes].values.select { |status| status[:timeout] }.size
       if timeouts > 0 && depth < 3
         Logger.c(INFO_CHARACTER_TIMEOUTS_ENCOUNTERED.gsub("%N%", timeouts.to_s), id)
         raise TimeoutsEncounteredException
       end
 
-      Logger.c(ERROR_CHARACTER + "Response code: #{response[:status_code]}", id)
-      set_status(response[:status_code])
+      code = response[:status_codes].values.map { |status| status[:code] }.max
+      Logger.c(ERROR_CHARACTER + "Response code: #{code}", id)
+      set_status(code)
       to_output
     end
 
@@ -75,10 +76,7 @@ module Audit
     end
 
     def check_api_limit_reached(response)
-      response[:status_code] == 429 || response[:status_code][:status_code] == 429
-    rescue
-      # TODO: Improve on this, figure out why the structure is different sometimes
-      false
+      response[:status_codes].values.any? { |status| status[:code] == 429 }
     end
 
     def check_character_api_status(response)
@@ -93,13 +91,12 @@ module Audit
         end
       end
 
-      response[:status_code] == 200 && response.class == RBattlenet::HashResult
+      response[:status_codes][:itself][:code] == 200 && response.class == RBattlenet::HashResult
     end
 
     def gdpr_deletion?(response)
       return false if !response[:status]
-      raise ApiLimitReachedException if response[:status][:status_code] == 429
-      return true if response[:status][:status_code] == 404
+      return true if response[:status_codes][:status][:code] == 404
       return true unless response[:status][:is_valid]
 
       if self.key.to_s != response[:status][:id].to_s

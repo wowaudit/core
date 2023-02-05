@@ -21,7 +21,7 @@ module Audit
           category[:name] == "Dungeons & Raids"
         end
 
-        dungeons_and_raids[:sub_categories].lazy.map{ |cat| cat[:statistics] }.flatten.lazy.each do |instance|
+        dungeons_and_raids[:sub_categories].map{ |cat| cat[:statistics] }.flatten.lazy.each do |instance|
           if MYTHIC_DUNGEONS.include?(instance[:id])
             completed = (instance[:last_updated_timestamp] / 1000) > Audit.timestamp
             weekly_regular_dungeons_done += (completed ? 1 : 0)

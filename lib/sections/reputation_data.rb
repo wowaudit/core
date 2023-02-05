@@ -3,9 +3,9 @@ module Audit
     def add
       total_renown = 0
 
-      unless @data[:reputations].class == RBattlenet::EmptyHashResult
+      unless !@data[:reputations]
         REPUTATIONS.each do |reputation, name|
-          match = @data[:reputations][:reputations].lazy.select{ |r| r[:faction][:id] == reputation }.first
+          match = @data[:reputations].lazy.select{ |r| r[:faction][:id] == reputation }.first
 
           if match
             total_renown += (match.dig(:standing, :raw) || 0)

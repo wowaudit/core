@@ -5,7 +5,7 @@ module Audit
       :achievement_statistics,
       :completed_quests,
       :equipment,
-      :mounts,
+      # :mounts, # Only needed to track Mythic raid mounts, when relevant
       :pets,
       :professions,
       :pvp_bracket_2v2,
