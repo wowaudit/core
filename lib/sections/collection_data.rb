@@ -16,6 +16,8 @@ module Audit
         level_25_pets = 0
 
         @data[:pets].lazy.each do |pet|
+          next unless pet.is_a? Hash
+
           unless pets_owned.lazy.include?(pet[:species][:id])
             pets_owned << pet[:species][:id]
             level_25_pets += pet[:level] == 25 ? 1 : 0
