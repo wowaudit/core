@@ -23,7 +23,6 @@ WORKDIR /srv
 COPY bin /srv/bin
 COPY lib /srv/lib
 COPY config /srv/config
-COPY config/external_database.yml /srv/config/database.yml
 COPY Gemfile Gemfile.lock /srv/
 
 RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
