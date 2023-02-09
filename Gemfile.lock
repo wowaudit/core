@@ -48,7 +48,6 @@ GEM
     require_all (3.0.0)
     rexml (3.2.5)
     rollbar (3.4.0)
-    ruby-prof (1.4.5)
     sequel (5.65.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
@@ -69,7 +68,6 @@ DEPENDENCIES
   require_all
   rexml
   rollbar
-  ruby-prof
   sequel
   typhoeus
   tzinfo
