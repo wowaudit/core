@@ -14,7 +14,7 @@ module Audit
 
       def refresh(id, refresh_type)
         realm = Realm.where(id: id).first
-        RBattlenet.set_options(region: realm.region, locale: "en_GB", concurrency: 50, response_type: :hash)
+        RBattlenet.set_options(region: realm.region, locale: "en_GB", concurrency: 25, response_type: :hash)
         Audit.timestamp = realm.region
 
         (refresh_type == 'historical_keystones' ? (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a : [Audit.period]).each do |period|
@@ -27,17 +27,17 @@ module Audit
           })
 
           runs_by_character = {}
-          leaderboards.results.each do |dungeon|
+          leaderboards.each do |dungeon|
             if dungeon.key?(:leading_groups)
               (dungeon.dig(:leading_groups) || []).each do |group|
                 next unless group && group[:members]
-                group[:dungeon_id] = dungeon[:source][:dungeon_id]
+                group[:dungeon_id] = dungeon[:map_challenge_mode_id]
                 group[:members].each do |member|
                   (runs_by_character[member[:profile][:id]] ||= []) << group
                 end
               end
             else
-              Logger.g("Got a 404 response for realm #{realm.connected_realm_id}, dungeon #{dungeon[:source][:dungeon_id]}")
+              Logger.g("Got a 404 response for realm #{realm.connected_realm_id}, dungeon #{dungeon[:map_challenge_mode_id]}")
             end
           end
 

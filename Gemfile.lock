@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/emielvanlankveld/rbattlenet.git
-  revision: 7d5b3c15c8312cc725850232627d74e44a3c41b4
+  revision: 121455ba7d36ca02e0a9554f75a6cf2706d54090
   branch: master
   specs:
     rbattlenet (2.0.0)
@@ -39,7 +39,7 @@ GEM
     jmespath (1.6.2)
     json (2.6.3)
     mysql2 (0.5.5)
-    oj (3.14.0)
+    oj (3.14.1)
     public_suffix (5.0.1)
     redis (5.0.6)
       redis-client (>= 0.9.0)
@@ -48,6 +48,7 @@ GEM
     require_all (3.0.0)
     rexml (3.2.5)
     rollbar (3.4.0)
+    ruby-prof (1.4.5)
     sequel (5.65.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
@@ -68,6 +69,7 @@ DEPENDENCIES
   require_all
   rexml
   rollbar
+  ruby-prof
   sequel
   typhoeus
   tzinfo

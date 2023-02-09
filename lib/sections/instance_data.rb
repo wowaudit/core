@@ -51,7 +51,7 @@ module Audit
         end
       end
 
-      best_runs = @data[:season_keystones][:best_runs]
+      best_runs = @data.dig(:season_keystones, :best_runs)
                     &.group_by { |run| run.dig(:dungeon, :id) }
                     &.transform_values { |runs| runs.map { |run| run.dig(:mythic_rating, :rating) }.max } || {}
 
@@ -71,7 +71,7 @@ module Audit
       @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum + @character.data['dungeons_this_week']
       @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
-      @character.data['m+_score'] = (@data[:season_keystones].dig(:mythic_rating, :rating) || 0).to_i
+      @character.data['m+_score'] = (@data.dig(:season_keystones, :mythic_rating, :rating) || 0).to_i
 
       vault_index = -1
       encounters_by_raid.flatten.lazy.each_with_index do |encounter, index|
