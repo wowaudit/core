@@ -13,7 +13,8 @@ module Audit
     end
 
     def check_data_completeness(response)
-      response[:equipment] && response[:equipment][:equipped_items]
+      return false unless response[:equipment] && response[:equipment][:equipped_items]
+
       [:achievements, :reputations].each do |type|
         return false unless response[type]&.is_a? Array
       end
