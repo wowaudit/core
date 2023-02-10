@@ -155,7 +155,8 @@ module Audit
 
       # TODO: Refactor and DRY
       @data.keys.select { |key| key.to_s.include? 'shuffle' }.each do |key|
-        bracket = @data[key]
+        next unless bracket = @data[key]
+
         won = bracket.dig(:weekly_match_statistics, :won) || 0
         lost = bracket.dig(:weekly_match_statistics, :lost) || 0
 
