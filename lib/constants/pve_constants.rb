@@ -53,10 +53,10 @@ GREAT_VAULT_RAID_KILLS_NEEDED = {
 
 GREAT_VAULT_TO_ILVL = {
   'raid' => {
-    'mythic' => 415,
-    'heroic' => 402,
-    'normal' => 389,
-    'raid_finder' => 376,
+    mythic: 415,
+    heroic: 402,
+    normal: 389,
+    raid_finder: 376,
   },
   'dungeon' => {
     20 => 421,
