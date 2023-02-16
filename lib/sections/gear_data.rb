@@ -8,6 +8,7 @@ module Audit
       sparks_used = 0
       embellished_found = 0
       @character.data['empty_sockets'] = 0
+      @character.data["food_embellishment"] = 'no'
 
       # Quickfix to not have a 0 returned, which messes up the spreadsheet
       @character.data["enchant_quality_off_hand"] = ''
@@ -140,6 +141,10 @@ module Audit
     end
 
     def check_embellished(occurrence, item, equipped_item)
+      if equipped_item[:spells].any? { |spell| spell.dig(:spell, :id) == 372120 }
+        @character.data["food_embellishment"] = 'yes'
+      end
+
       # Scuffed, improve
       @character.data["embellished_item_id_#{occurrence + 1}"] = ''
       @character.data["embellished_item_level_#{occurrence + 1}"] = ''

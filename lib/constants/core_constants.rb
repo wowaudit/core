@@ -391,4 +391,5 @@ HEADER = [
   'shuffle_season_played',
   'shuffle_week_played',
   'epic_gem',
+  'food_embellishment',
 ]
