@@ -141,7 +141,7 @@ module Audit
     end
 
     def check_embellished(occurrence, item, equipped_item)
-      if equipped_item[:spells].any? { |spell| spell.dig(:spell, :id) == 372120 }
+      if (equipped_item[:spells] || []).any? { |spell| spell.dig(:spell, :id) == 372120 }
         @character.data["food_embellishment"] = 'yes'
       end
 
