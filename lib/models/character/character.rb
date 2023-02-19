@@ -100,7 +100,7 @@ module Audit
         _key: id.to_s,
         team_id: team_id,
         character_id: id,
-        timestamp: data['blizzard_last_modified'],
+        timestamp: (last_refresh_data || {})['blizzard_last_modified'],
         max_ilvl: details['max_ilvl'],
         current_version: details['current_version'],
         snapshots: details["snapshots"],
