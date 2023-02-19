@@ -34,6 +34,7 @@ module Audit
       details['team_id'] = team_id if !details['team_id']
       details['character_id'] = id if !details['character_id']
       details['max_ilvl'] = 0 if !details['max_ilvl']
+      details['current_version'] = 0 if !details['current_version']
 
       # Initialise snapshots if not present
       if !details['snapshots'].is_a? Hash
@@ -87,12 +88,21 @@ module Audit
       end
     end
 
+    def last_modified
+      # Don't skip a character if the last refresh was made with an older version
+      return 0 if details['current_version'] < CURRENT_VERSION
+
+      (data || {})['blizzard_last_modified'] || self.last_refresh['blizzard_last_modified']
+    end
+
     def metadata
       {
         _key: id.to_s,
         team_id: team_id,
         character_id: id,
+        timestamp: data['blizzard_last_modified'],
         max_ilvl: details['max_ilvl'],
+        current_version: details['current_version'],
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
         raiderio: details["raiderio"],

@@ -1,6 +1,7 @@
 .DS_Store
 .bin
 .byebug_history
+.bundle
 config/ca-certificate.crt
 config/database.yml
 config/external_database.yml

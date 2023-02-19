@@ -21,21 +21,27 @@ module Audit
       details['last_refresh'] || {}
     end
 
-    def process_result(response, depth = 0)
+    def process_result(response, skipped, depth = 0)
       init
-      if check_api_limit_reached(response)
-        depth < 3 ? (raise ApiLimitReachedException) : (return return_error(response, depth))
-      end
-
-      if check_character_api_status(response) && !self.marked_for_deletion_at && check_data_completeness(response)
-        self.changed = true if self.status != "tracking"
-        self.status = "tracking"
-
-        Data.process(self, response)
-        update_snapshots
+      if skipped
+        Data.process(self, response, true)
+        update_snapshots(skipped)
         to_output
       else
-        return_error(response, depth)
+        if check_api_limit_reached(response)
+          depth < 3 ? (raise ApiLimitReachedException) : (return return_error(response, depth))
+        end
+
+        if check_character_api_status(response) && !self.marked_for_deletion_at && check_data_completeness(response)
+          self.changed = true if self.status != "tracking"
+          self.status = "tracking"
+
+          Data.process(self, response, false)
+          update_snapshots(skipped)
+          to_output
+        else
+          return_error(response, depth)
+        end
       end
     end
 

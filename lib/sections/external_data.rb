@@ -1,6 +1,7 @@
 module Audit
   class ExternalData < Data
     ESSENTIAL = true
+    SKIPPABLE = false
 
     def add
       add_warcraftlogs_data

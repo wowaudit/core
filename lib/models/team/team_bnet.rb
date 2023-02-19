@@ -39,10 +39,10 @@ module Audit
       api_limited = []
 
       RBattlenet::Wow::Character.find(
-        characters.map{ |ch| { name: ch.name.downcase, realm: ch.realm_slug, season: CURRENT_KEYSTONE_SEASON, source: ch } }, fields: self.class::FIELDS
+        characters.map{ |ch| character_query(ch) }, fields: self.class::FIELDS
       ) do |character, result|
         begin
-          if character[:source].process_result(result, depth)
+          if character[:source].process_result(result, character[:skipped], depth)
             output << character[:source]
           end
         rescue ApiLimitReachedException, TimeoutsEncounteredException => err

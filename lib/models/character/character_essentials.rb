@@ -4,7 +4,7 @@ module Audit
       true
     end
 
-    def update_snapshots
+    def update_snapshots(skipped)
       nil # Don't update snapshots when only the essential data is there
     end
 

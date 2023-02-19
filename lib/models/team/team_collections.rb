@@ -21,5 +21,15 @@ module Audit
     def characters
       @characters ||= super(CharacterCollections.where(:team_id => id).to_a)
     end
+
+    def character_query(character)
+      {
+        name: character.name.downcase,
+        realm: character.realm_slug,
+        season: CURRENT_KEYSTONE_SEASON,
+        source: character,
+        timestamp: character.last_modified
+      }
+    end
   end
 end
