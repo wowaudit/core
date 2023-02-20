@@ -138,7 +138,7 @@ module Audit
       highest_rating = 0
 
       BRACKETS.each do |bracket, endpoint|
-        if @data[endpoint.to_sym].class == RBattlenet::HashResult && @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON
+        if !@data[endpoint.to_sym][:empty] && @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON
           won = @data[endpoint.to_sym].dig(:weekly_match_statistics, :won) || 0
           lost = @data[endpoint.to_sym].dig(:weekly_match_statistics, :lost) || 0
 

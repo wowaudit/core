@@ -1,7 +1,7 @@
 module Audit
   class ProfessionData < Data
     def add
-      if @data[:professions].class == RBattlenet::HashResult && @data[:professions][:primaries]
+      if !@data[:professions][:empty] && @data[:professions][:primaries]
         spark_items = []
         professions = @data[:professions][:primaries].select{ |p| BASE_PROFESSIONS.keys.include?(p[:profession][:id]) }
 
