@@ -60,7 +60,7 @@ end
 
 begin
   # Connections
-  DB = Sequel.connect(db_config['mysql'])
+  DB = Sequel.connect(db_config['mysql'], servers: { read_only: db_config['mysql_replica'] })
   DB2 = Mysql2::Client.new(db_config['mysql'])
   REDIS = Redis.new(url: db_config['redis']['host'], password: db_config['redis']['password'])
 

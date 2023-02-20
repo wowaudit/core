@@ -8,6 +8,9 @@ mysql:
   host:
   port:
 
+mysql_replica:
+  host:
+
 redis:
   host:
   password:
