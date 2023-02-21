@@ -30,12 +30,14 @@ SLUGIFIED_DUNGEON_NAMES = KEYSTONE_DUNGEONS.transform_values do |dungeon_name|
 end
 
 WEEKLY_EVENT_QUESTS = [
-  72728, # The World Awaits
+  72719, # A Fel Path Through Time
   72720, # The Arena Calls
   72722, # Emissary of War
   72723, # A Calll to Battle
   72724, # A Savage Path Through Time
   72725, # A Shrouded Path Through Time
+  72727, # A Burning Path Through Time
+  72728, # The World Awaits
 ]
 
 RAID_DIFFICULTIES = {
