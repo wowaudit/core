@@ -39,6 +39,13 @@ module Audit
         (@character.details['raiderio']['leaderboard_runs'] || []).sort_by { |h| h * -1 }
       end
 
+      @character.data['dungeons_this_week'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
+      dungeons_per_week_in_season = (FIRST_PERIOD_OF_EXPANSION..(Audit.period - 1)).to_a.reverse.map do |period|
+        @character.details['keystones'][period.to_s]&.size || 0
+      end
+      @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum + @character.data['dungeons_this_week']
+      @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
+
       @character.data['great_vault_slot_4'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 20].min] || ""
       @character.data['great_vault_slot_5'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 20].min] || ""
       @character.data['great_vault_slot_6'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 20].min] || ""

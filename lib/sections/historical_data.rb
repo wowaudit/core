@@ -23,7 +23,6 @@ module Audit
         end
       end
 
-
       # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
       (FIRST_PERIOD_OF_EXPANSION..(Audit.period)).each do |period|
         dungeon_data = (@character.details['keystones'][period.to_s]&.values || []).map { |run| run['level'] }.sort.reverse
