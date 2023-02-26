@@ -12,6 +12,7 @@ module Audit
       end.to_h })
 
       details['current_version'] = CURRENT_VERSION unless skipped
+      details['current_period'] = Audit.period unless skipped
     end
 
     def check_data_completeness(response)

@@ -35,6 +35,7 @@ module Audit
       details['character_id'] = id if !details['character_id']
       details['max_ilvl'] = 0 if !details['max_ilvl']
       details['current_version'] = 0 if !details['current_version']
+      details['current_period'] = 0 if !details['current_period']
 
       # Initialise snapshots if not present
       if !details['snapshots'].is_a? Hash
@@ -89,8 +90,10 @@ module Audit
     end
 
     def last_modified
-      # Don't skip a character if the last refresh was made with an older version
+      # Don't skip a character if the last refresh was made with an older version,
+      # or when the new week has started
       return 0 if details['current_version'] < CURRENT_VERSION
+      return 0 if details['current_period'] < Audit.period
 
       (data || {})['blizzard_last_modified'] || self.last_refresh['blizzard_last_modified']
     end
@@ -102,6 +105,7 @@ module Audit
         character_id: id,
         timestamp: (last_refresh_data || {})['blizzard_last_modified'],
         max_ilvl: details['max_ilvl'],
+        current_period: details['current_period'],
         current_version: details['current_version'],
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
