@@ -1,6 +1,5 @@
 module Audit
   class HistoricalData < Data
-    ESSENTIAL = true
     SKIPPABLE = false
 
     def add

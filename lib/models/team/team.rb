@@ -11,7 +11,11 @@ module Audit
       end
 
       def type(refresh_type)
-        Audit.const_get("Team#{refresh_type.capitalize}")
+        if refresh_type.include? "collections"
+          TeamBlizzard
+        else
+          Audit.const_get("Team#{refresh_type.capitalize}")
+        end
       end
     end
 

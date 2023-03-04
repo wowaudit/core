@@ -36,4 +36,4 @@ RUN \
 
 ENV LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libjemalloc.so.2
 
-CMD ["bundle", "exec", "ruby", "/srv/bin/refresh_ids.rb", "43443", "essentials"]
+CMD ["bundle", "exec", "ruby", "/srv/bin/refresh_ids.rb", "43443", "blizzard"]

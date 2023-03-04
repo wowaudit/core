@@ -1,7 +1,5 @@
 module Audit
   class GearData < Data
-    ESSENTIAL = true
-
     def add
       # Check equipped gear
       items_equipped = 0

@@ -1,33 +1,33 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: dedicated-essentials-deployment
+  name: blizzard-deployment
   labels:
-    app: dedicated-essentials
+    app: blizzard
 spec:
-  replicas: 4
+  replicas: 16
   selector:
     matchLabels:
-      app: dedicated-essentials
+      app: blizzard
   template:
     metadata:
       labels:
-        app: dedicated-essentials
+        app: blizzard
     spec:
       containers:
-      - name: dedicated-essentials
+      - name: blizzard
         image: shedi/wowaudit:latest
         command: ["/srv/bin/refresh"]
-        args: ["dedicated-essentials"]
+        args: ["blizzard"]
 
         resources:
           requests:
             cpu: 250m
-            memory: 200Mi
+            memory: 350Mi
 
           limits:
             cpu: 250m
-            memory: 400Mi
+            memory: 600Mi
 
       imagePullSecrets:
         - name: regcred

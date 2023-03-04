@@ -1,5 +1,22 @@
 module Audit
-  class TeamBnet < Team
+  class TeamBlizzard < Team
+    FIELDS = [
+      :achievements,
+      :achievement_statistics,
+      :completed_quests,
+      :equipment,
+      # :mounts, # Only needed to track Mythic raid mounts, when relevant
+      :pets,
+      :professions,
+      :pvp_bracket_2v2,
+      :pvp_bracket_3v3,
+      :pvp_bracket_rbg,
+      :pvp_summary,
+      :season_keystones,
+      :reputations,
+      :status,
+      :titles,
+    ]
 
     def refresh(authentication_attempt = 0)
       RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 25, timeout: 60, retries: 5, response_type: :hash, eager_children: true)
@@ -66,6 +83,20 @@ module Audit
       else
         NO_WARNING
       end
+    end
+
+    def characters
+      @characters ||= super(CharacterBlizzard.where(:team_id => id).to_a)
+    end
+
+    def character_query(character)
+      {
+        name: character.name.downcase,
+        realm: character.realm_slug,
+        season: CURRENT_KEYSTONE_SEASON,
+        source: character,
+        timestamp: character.last_modified
+      }
     end
   end
 end

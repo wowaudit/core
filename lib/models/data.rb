@@ -1,6 +1,5 @@
 module Audit
   class Data
-    ESSENTIAL = false
     SKIPPABLE = true
 
     class << self
@@ -9,7 +8,6 @@ module Audit
           Audit::BasicData, Audit::CollectionData, Audit::ExternalData, Audit::GearData, Audit::HistoricalData,
           Audit::InstanceData, Audit::ProfessionData, Audit::PvPData, Audit::QuestData, Audit::ReputationData
         ].each do |type|
-          next if character.essentials_only? && !type::ESSENTIAL
           next if skipped && type::SKIPPABLE
 
           type.new(character, data, skipped).add
@@ -21,7 +19,7 @@ module Audit
       @character = character
       @data = data
 
-      unless character.essentials_only? || skipped
+      unless skipped
         @achievements = @data[:achievements]
                           .group_by{ |ach| ach[:id] }
                           .transform_values(&:first)

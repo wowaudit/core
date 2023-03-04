@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: collections-deployment
+  name: dedicated-blizzard-deployment
   labels:
-    app: collections
+    app: dedicated-blizzard
 spec:
   replicas: 8
   selector:
     matchLabels:
-      app: collections
+      app: dedicated-blizzard
   template:
     metadata:
       labels:
-        app: collections
+        app: dedicated-blizzard
     spec:
       containers:
-      - name: collections
+      - name: dedicated-blizzard
         image: shedi/wowaudit:latest
         command: ["/srv/bin/refresh"]
-        args: ["collections"]
+        args: ["dedicated-blizzard"]
 
         resources:
           requests:

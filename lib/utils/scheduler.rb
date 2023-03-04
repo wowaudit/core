@@ -1,8 +1,7 @@
 module Audit
   class Scheduler
     TIMEOUTS = {
-      essentials: 5,
-      collections: 10,
+      collections: 5,
       raiderio: 60,
       wcl: 15,
       keystones: 5,

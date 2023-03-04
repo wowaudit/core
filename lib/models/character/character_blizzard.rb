@@ -1,5 +1,5 @@
 module Audit
-  class CharacterBnet < Character
+  class CharacterBlizzard < Character
     def init
       # Main variables
       self.output = []
@@ -86,15 +86,13 @@ module Audit
     end
 
     def check_character_api_status(response)
-      unless self.class == Audit::CharacterEssentials
-        if gdpr_deletion?(response) && !self.marked_for_deletion_at
-          update(marked_for_deletion_at: DateTime.now)
-          return false
-        elsif !gdpr_deletion?(response) && self.marked_for_deletion_at
-          self.marked_for_deletion_at = nil
-          self.save
-          return true
-        end
+      if gdpr_deletion?(response) && !self.marked_for_deletion_at
+        update(marked_for_deletion_at: DateTime.now)
+        return false
+      elsif !gdpr_deletion?(response) && self.marked_for_deletion_at
+        self.marked_for_deletion_at = nil
+        self.save
+        return true
       end
 
       response[:status_codes][:itself][:code] == 200 && response.class == RBattlenet::HashResult
@@ -114,6 +112,27 @@ module Audit
 
     def last_refresh_data
       [HEADER, output].transpose.to_h rescue false
+    end
+
+    def update_snapshots(skipped)
+      current_week = details['snapshots'][Audit.year][Audit.week] || {}
+
+      details['snapshots'][Audit.year][Audit.week] = current_week.merge({ 'vault' => 9.times.map do |i|
+        [(i + 1).to_s, self.last_refresh["great_vault_slot_#{i + 1}"] || self.data["great_vault_slot_#{i + 1}"]]
+      end.to_h })
+
+      details['current_version'] = CURRENT_VERSION unless skipped
+      details['current_period'] = Audit.period unless skipped
+    end
+
+    def check_data_completeness(response)
+      return false unless response[:equipment] && response[:equipment][:equipped_items]
+
+      [:achievements, :reputations].each do |type|
+        return false unless response[type]&.is_a? Array
+      end
+
+      true
     end
   end
 end

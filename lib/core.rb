@@ -14,8 +14,7 @@ require 'rollbar'
 require 'oj'
 
 MAX_OCCURRENCES = {
-  essentials: 2,
-  collections: 1,
+  blizzard: 2,
   wcl: 1,
   raiderio: 3,
   keystones: 1,
