@@ -121,6 +121,7 @@ module Audit
         [(i + 1).to_s, self.last_refresh["great_vault_slot_#{i + 1}"] || self.data["great_vault_slot_#{i + 1}"]]
       end.to_h })
 
+      details['snapshots'][Audit.year][Audit.week]['wqs'] ||= self.data['wqs_done_total'] unless skipped
       details['current_version'] = CURRENT_VERSION unless skipped
       details['current_period'] = Audit.period unless skipped
     end

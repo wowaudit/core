@@ -5,7 +5,7 @@ metadata:
   labels:
     app: blizzard
 spec:
-  replicas: 16
+  replicas: 12
   selector:
     matchLabels:
       app: blizzard
