@@ -1,5 +1,7 @@
 module Audit
   class BasicData < Data
+    SKIPPABLE = false
+
     def add
       @character.data['name'] = @character.name
       @character.data['realm'] = REALMS[@character.realm_id]&.name
