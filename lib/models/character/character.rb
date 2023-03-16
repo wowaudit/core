@@ -91,9 +91,10 @@ module Audit
 
     def last_modified
       # Don't skip a character if the last refresh was made with an older version,
-      # or when the new week has started
+      # when the new week has started, or when the character's last refresh failed
       return 0 if details['current_version'] < CURRENT_VERSION
       return 0 if details['current_period'] < Audit.period
+      return 0 if status != "tracking"
 
       (data || {})['blizzard_last_modified'] || self.last_refresh['blizzard_last_modified']
     end
