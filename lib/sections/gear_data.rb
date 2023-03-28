@@ -141,7 +141,7 @@ module Audit
 
     def check_onyx_annulet(item, equipped_item)
       if equipped_item[:name] == 'Onyx Annulet'
-        equipped_item[:sockets].each_with_index do |socket, index|
+        equipped_item[:sockets].sort_by { |socket| socket.dig(:item, :name) || "" }.each_with_index do |socket, index|
           @character.data["primordial_stone_#{index + 1}_id"] = socket.dig(:item, :id)
           @character.data["primordial_stone_#{index + 1}_name"] = socket.dig(:item, :name)&.split(" ")&.first
         end
