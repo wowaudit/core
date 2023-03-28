@@ -392,4 +392,11 @@ HEADER = [
   'shuffle_week_played',
   'epic_gem',
   'food_embellishment',
+  'onyx_annulet_ilvl',
+  'primordial_stone_1_id',
+  'primordial_stone_1_name',
+  'primordial_stone_2_id',
+  'primordial_stone_2_name',
+  'primordial_stone_3_id',
+  'primordial_stone_3_name',
 ]

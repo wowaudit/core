@@ -95,6 +95,7 @@ module Audit
       return 0 if details['current_version'] < CURRENT_VERSION
       return 0 if details['current_period'] < Audit.period
       return 0 if status != "tracking"
+      return 0 unless REGISTER # Don't skip in development
 
       (data || {})['blizzard_last_modified'] || self.last_refresh['blizzard_last_modified']
     end

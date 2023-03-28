@@ -19,6 +19,7 @@ module Audit
           equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
           check_enchant(item, equipped_item)
           check_sockets(item, equipped_item)
+          check_onyx_annulet(item, equipped_item)
           embellished_found += check_embellished(embellished_found, item, equipped_item)
 
           items_equipped += 1
@@ -135,6 +136,18 @@ module Audit
         elsif !socket.dig(:item, :id) && socket.dig(:socket_type, :type) != "TINKER"
           @character.data['empty_sockets'] += 1
         end
+      end
+    end
+
+    def check_onyx_annulet(item, equipped_item)
+      if equipped_item[:name] == 'Onyx Annulet'
+        equipped_item[:sockets].each_with_index do |socket, index|
+          @character.data["primordial_stone_#{index + 1}_id"] = socket.dig(:item, :id)
+          @character.data["primordial_stone_#{index + 1}_name"] = socket.dig(:item, :name)&.split(" ")&.first
+        end
+
+        # Item level is bugged at the moment on the Armory, correct it here
+        @character.data["onyx_annulet_ilvl"] = 405 + ((equipped_item.dig(:level, :value) - 405) / 2)
       end
     end
 
