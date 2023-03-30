@@ -19,11 +19,8 @@ module Audit
           equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
           check_enchant(item, equipped_item)
           check_sockets(item, equipped_item)
-          check_onyx_annulet(item, equipped_item)
           embellished_found += check_embellished(embellished_found, item, equipped_item)
-
           items_equipped += 1
-          @character.ilvl += equipped_item[:level][:value]
 
           if (SPARK_ITEM_IDS + SPARK_ITEM_IDS_2H).include? equipped_item[:item][:id]
             sparks_used += SPARK_ITEM_IDS_2H.include?(equipped_item[:item][:id]) ? 2 : 1
@@ -60,7 +57,10 @@ module Audit
             @character.data["tier_#{item}_difficulty"] = TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items'][item] }.compact.last || ''
           end
 
-          @character.data[item + '_ilvl'] = equipped_item[:level][:value]
+          if !check_onyx_annulet(item, equipped_item)
+            @character.ilvl += equipped_item[:level][:value]
+            @character.data[item + '_ilvl'] = equipped_item[:level][:value]
+          end
           @character.data[item + '_id'] = equipped_item[:item][:id]
           @character.data[item + '_name'] = equipped_item[:name]
           @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
@@ -148,6 +148,10 @@ module Audit
 
         # Item level is bugged at the moment on the Armory, correct it here
         @character.data["onyx_annulet_ilvl"] = 405 + ((equipped_item.dig(:level, :value) - 405) / 2)
+        @character.ilvl += @character.data["onyx_annulet_ilvl"]
+        @character.data[item + '_ilvl'] = @character.data["onyx_annulet_ilvl"]
+
+        true
       end
     end
 
