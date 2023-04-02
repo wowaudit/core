@@ -38,6 +38,7 @@ WEEKLY_EVENT_QUESTS = [
   72725, # A Shrouded Path Through Time
   72727, # A Burning Path Through Time
   72728, # The World Awaits
+  72810, # A Shattered Path Through Time
 ]
 
 RAID_DIFFICULTIES = {
