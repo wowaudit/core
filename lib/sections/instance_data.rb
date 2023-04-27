@@ -57,7 +57,7 @@ module Audit
 
       SLUGIFIED_DUNGEON_NAMES.lazy.each do |dungeon_id, dungeon_name|
         @character.data["#{dungeon_name}_score"] = best_runs[dungeon_id.to_i].to_i
-        @character.data["#{dungeon_name}_total"] = (@character.details['keystones'].values[0] || {}).sum do |run_id, run|
+        @character.data["#{dungeon_name}_total"] = (@character.details['keystones'].values.reduce(:merge) || {}).sum do |run_id, run|
           run['dungeon'].to_i == dungeon_id.to_i ? 1 : 0
         end
       end
