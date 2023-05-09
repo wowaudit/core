@@ -12,6 +12,10 @@ module Audit
       @character.data["enchant_quality_off_hand"] = ''
       @character.data["off_hand_enchant"] = ''
 
+      # TODO: Revert me
+      @character.details['spark_gear'] = ITEMS.map { |item| [item, {}] }.to_h
+      @character.details['tier_items'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
+
       ITEMS.each do |item|
         @character.data["tier_#{item}_difficulty"] = ''
 
@@ -22,16 +26,16 @@ module Audit
           embellished_found += check_embellished(embellished_found, item, equipped_item)
           items_equipped += 1
 
-          if (SPARK_ITEM_IDS + SPARK_ITEM_IDS_2H).include? equipped_item[:item][:id]
-            sparks_used += SPARK_ITEM_IDS_2H.include?(equipped_item[:item][:id]) ? 2 : 1
+          # if (SPARK_ITEM_IDS + SPARK_ITEM_IDS_2H).include? equipped_item[:item][:id]
+          #   sparks_used += SPARK_ITEM_IDS_2H.include?(equipped_item[:item][:id]) ? 2 : 1
 
-            @character.details['spark_gear'][item] = {
-              'ilvl' => equipped_item[:level][:value],
-              'id' => equipped_item[:item][:id],
-              'name' => equipped_item[:name],
-              'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
-            }
-          end
+          #   @character.details['spark_gear'][item] = {
+          #     'ilvl' => equipped_item[:level][:value],
+          #     'id' => equipped_item[:item][:id],
+          #     'name' => equipped_item[:name],
+          #     'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
+          #   }
+          # end
 
           @character.details['current_gear'][item] = {
             'ilvl' => equipped_item[:level][:value],
@@ -49,12 +53,12 @@ module Audit
           end
 
           if TIER_ITEMS_BY_SLOT.keys.include? item
-            if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] > @character.details['tier_items'][item]
-              @character.details['tier_items'][item] = equipped_item[:level][:value]
-            end
+            # if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] > @character.details['tier_items'][item]
+            #   @character.details['tier_items'][item] = equipped_item[:level][:value]
+            # end
 
-            @character.data["tier_#{item}_ilvl"] = @character.details['tier_items'][item]
-            @character.data["tier_#{item}_difficulty"] = TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items'][item] }.compact.last || ''
+            @character.data["tier_#{item}_ilvl"] = '' #@character.details['tier_items'][item]
+            @character.data["tier_#{item}_difficulty"] = '' #TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items'][item] }.compact.last || ''
           end
 
           if !check_onyx_annulet(item, equipped_item)
@@ -76,10 +80,10 @@ module Audit
         @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
         @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
 
-        @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear'][item]['ilvl'] || ''
-        @character.data["spark_#{item}_id"] = @character.details['spark_gear'][item]['id'] || ''
-        @character.data["spark_#{item}_name"] = @character.details['spark_gear'][item]['name'] || ''
-        @character.data["spark_#{item}_quality"] = @character.details['spark_gear'][item]['quality'] || ''
+        @character.data["spark_#{item}_ilvl"] = '' #@character.details['spark_gear'][item]['ilvl'] || ''
+        @character.data["spark_#{item}_id"] = '' #@character.details['spark_gear'][item]['id'] || ''
+        @character.data["spark_#{item}_name"] = '' #@character.details['spark_gear'][item]['name'] || ''
+        @character.data["spark_#{item}_quality"] = '' #@character.details['spark_gear'][item]['quality'] || ''
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types
@@ -89,7 +93,7 @@ module Audit
       end
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
-      @character.data['ingenuity_sparks_equipped'] = sparks_used
+      @character.data['ingenuity_sparks_equipped'] = 0 #sparks_used
 
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
