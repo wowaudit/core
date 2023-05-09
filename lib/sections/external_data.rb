@@ -39,7 +39,7 @@ module Audit
       end
 
       @character.data['dungeons_this_week'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
-      dungeons_per_week_in_season = (FIRST_PERIOD_OF_EXPANSION..(Audit.period - 1)).to_a.reverse.map do |period|
+      dungeons_per_week_in_season = (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a.reverse.map do |period|
         @character.details['keystones'][period.to_s]&.size || 0
       end
       @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum + @character.data['dungeons_this_week']

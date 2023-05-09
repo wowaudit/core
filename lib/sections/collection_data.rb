@@ -5,6 +5,7 @@ module Audit
 
       if @achievements
         @character.data['mounts'] = @achievements[2143][:criteria][:child_criteria].first[:amount] rescue 0
+        @character.data['toys_owned'] = @achievements[9670][:criteria][:child_criteria].first[:amount] rescue 0
       end
 
       unless !@data[:titles]
