@@ -12,9 +12,6 @@ module Audit
       @character.data["enchant_quality_off_hand"] = ''
       @character.data["off_hand_enchant"] = ''
 
-      # TODO: Revert me
-      @character.details['spark_gear'] = ITEMS.map { |item| [item, {}] }.to_h
-
       ITEMS.each do |item|
         @character.data["tier_#{item}_difficulty"] = ''
 
@@ -25,16 +22,17 @@ module Audit
           embellished_found += check_embellished(embellished_found, item, equipped_item)
           items_equipped += 1
 
-          # if (SPARK_ITEM_IDS + SPARK_ITEM_IDS_2H).include? equipped_item[:item][:id]
-          #   sparks_used += SPARK_ITEM_IDS_2H.include?(equipped_item[:item][:id]) ? 2 : 1
+          if equipped_item.dig(:name_description, :display_string) == "Shadowflame Crafted"
+            # 2 handed weapons cost 2 sparks
+            sparks_used += (@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" } ? 1 : 2)
 
-          #   @character.details['spark_gear'][item] = {
-          #     'ilvl' => equipped_item[:level][:value],
-          #     'id' => equipped_item[:item][:id],
-          #     'name' => equipped_item[:name],
-          #     'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
-          #   }
-          # end
+            @character.details['spark_gear'][item] = {
+              'ilvl' => equipped_item[:level][:value],
+              'id' => equipped_item[:item][:id],
+              'name' => equipped_item[:name],
+              'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
+            }
+          end
 
           @character.details['current_gear'][item] = {
             'ilvl' => equipped_item[:level][:value],
@@ -79,10 +77,10 @@ module Audit
         @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
         @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
 
-        @character.data["spark_#{item}_ilvl"] = '' #@character.details['spark_gear'][item]['ilvl'] || ''
-        @character.data["spark_#{item}_id"] = '' #@character.details['spark_gear'][item]['id'] || ''
-        @character.data["spark_#{item}_name"] = '' #@character.details['spark_gear'][item]['name'] || ''
-        @character.data["spark_#{item}_quality"] = '' #@character.details['spark_gear'][item]['quality'] || ''
+        @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear'][item]['ilvl'] || ''
+        @character.data["spark_#{item}_id"] = @character.details['spark_gear'][item]['id'] || ''
+        @character.data["spark_#{item}_name"] = @character.details['spark_gear'][item]['name'] || ''
+        @character.data["spark_#{item}_quality"] = @character.details['spark_gear'][item]['quality'] || ''
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types
@@ -92,7 +90,7 @@ module Audit
       end
 
       @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
-      @character.data['ingenuity_sparks_equipped'] = 0 #sparks_used
+      @character.data['ingenuity_sparks_equipped'] = sparks_used
 
       @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
       @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
