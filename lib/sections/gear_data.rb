@@ -14,7 +14,6 @@ module Audit
 
       # TODO: Revert me
       @character.details['spark_gear'] = ITEMS.map { |item| [item, {}] }.to_h
-      @character.details['tier_items'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
 
       ITEMS.each do |item|
         @character.data["tier_#{item}_difficulty"] = ''
@@ -53,12 +52,12 @@ module Audit
           end
 
           if TIER_ITEMS_BY_SLOT.keys.include? item
-            # if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] > @character.details['tier_items'][item]
-            #   @character.details['tier_items'][item] = equipped_item[:level][:value]
-            # end
+            if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] > @character.details['tier_items'][item]
+              @character.details['tier_items'][item] = equipped_item[:level][:value]
+            end
 
-            @character.data["tier_#{item}_ilvl"] = '' #@character.details['tier_items'][item]
-            @character.data["tier_#{item}_difficulty"] = '' #TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items'][item] }.compact.last || ''
+            @character.data["tier_#{item}_ilvl"] = @character.details['tier_items'][item]
+            @character.data["tier_#{item}_difficulty"] = TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items'][item] }.compact.last || ''
           end
 
           if !check_onyx_annulet(item, equipped_item)
