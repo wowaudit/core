@@ -95,7 +95,7 @@ module Audit
         realm: character.realm_slug,
         season: CURRENT_KEYSTONE_SEASON,
         source: character,
-        timestamp: character.last_modified
+        timestamp: character.last_modified(self)
       }
     end
   end

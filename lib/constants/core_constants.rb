@@ -1,5 +1,7 @@
 CURRENT_VERSION = 1010
 
+PREVENT_SKIP_TIMESTAMP = Time.parse("2023-05-10 23:59:37 +0200").to_i
+
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
 

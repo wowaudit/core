@@ -89,13 +89,14 @@ module Audit
       end
     end
 
-    def last_modified
+    def last_modified(team)
       # Don't skip a character if the last refresh was made with an older version,
       # when the new week has started, or when the character's last refresh failed
       return 0 if details['current_version'] < CURRENT_VERSION
       return 0 if details['current_period'] < Audit.period
       return 0 if status != "tracking"
       return 0 unless REGISTER # Don't skip in development
+      return 0 if PREVENT_SKIP_TIMESTAMP.to_i > team.last_refreshed_collections
 
       (data || {})['blizzard_last_modified'] || self.last_refresh['blizzard_last_modified']
     end
