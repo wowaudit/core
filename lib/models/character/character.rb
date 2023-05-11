@@ -80,8 +80,8 @@ module Audit
         details['current_gear'] = ITEMS.map { |item| [item, { ilvl: 0 }] }.to_h
       end
 
-      if !details['tier_items'].is_a? Hash
-        details['tier_items'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
+      if !details['tier_items_s2'].is_a? Hash
+        details['tier_items_s2'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
       end
 
       if !details['keystones'].is_a? Hash
@@ -113,7 +113,7 @@ module Audit
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
         raiderio: details["raiderio"],
-        tier_items: details["tier_items"],
+        tier_items_s2: details["tier_items_s2"],
         last_refresh: last_refresh_data,
         best_gear: details['best_gear'],
         spark_gear: details['spark_gear'],
