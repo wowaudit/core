@@ -26,7 +26,7 @@ module Audit
             # 2 handed weapons cost 2 sparks
             sparks_used += (@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" } ? 1 : 2)
 
-            @character.details['spark_gear'][item] = {
+            @character.details['spark_gear_s2'][item] = {
               'ilvl' => equipped_item[:level][:value],
               'id' => equipped_item[:item][:id],
               'name' => equipped_item[:name],
@@ -77,10 +77,10 @@ module Audit
         @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
         @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
 
-        @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear'][item]['ilvl'] || ''
-        @character.data["spark_#{item}_id"] = @character.details['spark_gear'][item]['id'] || ''
-        @character.data["spark_#{item}_name"] = @character.details['spark_gear'][item]['name'] || ''
-        @character.data["spark_#{item}_quality"] = @character.details['spark_gear'][item]['quality'] || ''
+        @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear_s2'][item]['ilvl'] || ''
+        @character.data["spark_#{item}_id"] = @character.details['spark_gear_s2'][item]['id'] || ''
+        @character.data["spark_#{item}_name"] = @character.details['spark_gear_s2'][item]['name'] || ''
+        @character.data["spark_#{item}_quality"] = @character.details['spark_gear_s2'][item]['quality'] || ''
       end
 
       # For 2H weapons the item level is counted twice to normalise between weapon types

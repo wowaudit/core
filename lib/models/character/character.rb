@@ -72,8 +72,8 @@ module Audit
         details['best_gear'] = ITEMS.map { |item| [item, { ilvl: 0 }] }.to_h
       end
 
-      if !details['spark_gear'].is_a? Hash
-        details['spark_gear'] = ITEMS.map { |item| [item, {}] }.to_h
+      if !details['spark_gear_s2'].is_a? Hash
+        details['spark_gear_s2'] = ITEMS.map { |item| [item, {}] }.to_h
       end
 
       if !details['current_gear'].is_a? Hash
@@ -116,7 +116,7 @@ module Audit
         tier_items_s2: details["tier_items_s2"],
         last_refresh: last_refresh_data,
         best_gear: details['best_gear'],
-        spark_gear: details['spark_gear'],
+        spark_gear_s2: details['spark_gear_s2'],
         keystones: details['keystones'],
         current_gear: details['current_gear'],
       }
