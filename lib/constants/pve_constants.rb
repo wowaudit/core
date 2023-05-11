@@ -49,9 +49,9 @@ RAID_DIFFICULTIES = {
 }
 
 GREAT_VAULT_RAID_KILLS_NEEDED = {
-  1 => 2,
-  2 => 4,
-  3 => 6,
+  1 => 3,
+  2 => 5,
+  3 => 7,
 }
 
 GREAT_VAULT_TO_ILVL = {
