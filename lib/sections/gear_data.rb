@@ -103,13 +103,9 @@ module Audit
           # Off-hand items that are not weapons can't be enchanted
           return if !equipped_item&.dig(:weapon) && item == "off_hand"
 
-
-          if ENCHANTS[item][equipped_item[:enchantments].first[:enchantment_id]]
-            @character.data["enchant_quality_#{item}"] =
-              ENCHANTS[item][equipped_item[:enchantments].first[:enchantment_id]][0]
-
-            @character.data["#{item}_enchant"] =
-              ENCHANTS[item][equipped_item[:enchantments].first[:enchantment_id]][1] || ''
+          if (match = equipped_item[:enchantments].map { |e| ENCHANTS[item][e[:enchantment_id]] }.compact.first)
+            @character.data["enchant_quality_#{item}"] = match[0]
+            @character.data["#{item}_enchant"] = match[1] || ''
           else
             name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
             quality = (equipped_item[:enchantments].first[:display_string].split('Tier')[1])
