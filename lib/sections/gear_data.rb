@@ -50,12 +50,23 @@ module Audit
           end
 
           if TIER_ITEMS_BY_SLOT.keys.include? item
-            if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] > @character.details['tier_items_s2'][item]
-              @character.details['tier_items_s2'][item] = equipped_item[:level][:value]
+            # Convert legacy format stored tier data
+            if @character.details['tier_items_s2'][item].is_a?(Integer)
+              @character.details['tier_items_s2'][item] = {
+                'ilvl' => @character.details['tier_items_s2'][item],
+                'difficulty' => LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items_s2'][item] }.compact.last || ''
+              }
             end
 
-            @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s2'][item]
-            @character.data["tier_#{item}_difficulty"] = TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items_s2'][item] }.compact.last || ''
+            if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s2', item, 'ilvl') || 0)
+              @character.details['tier_items_s2'][item] = {
+                'ilvl' => equipped_item[:level][:value],
+                'difficulty' => UPGRADE_BONUS_IDS[equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }] || 'M'
+              }
+            end
+
+            @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s2'][item]['ilvl']
+            @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s2'][item]['difficulty']
           end
 
           if !check_onyx_annulet(item, equipped_item)

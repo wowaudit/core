@@ -447,7 +447,31 @@ TIER_ITEMS_BY_SLOT = {
 
 TIER_ITEMS = TIER_ITEMS_BY_SLOT.values.flatten
 
-TIER_CUTOFFS = { 1 => 'R', 415 => 'N', 428 => 'H', 441 => 'M' }
+LEGACY_TIER_CUTOFFS = { 1 => 'R', 415 => 'N', 428 => 'H', 441 => 'M' }
+
+UPGRADE_BONUS_IDS = {
+  9313 => 'R', # Veteran 1/8
+  9314 => 'R',
+  9315 => 'R',
+  9316 => 'R',
+  9317 => 'R',
+  9318 => 'R',
+  9319 => 'R',
+  9320 => 'R', # Veteran 8/8
+  9321 => 'N', # Champion 1/8
+  9322 => 'N',
+  9323 => 'N',
+  9324 => 'N',
+  9325 => 'N',
+  9327 => 'N',
+  9328 => 'N',
+  9329 => 'N', # Champion 8/8
+  9330 => 'H', # Hero 1/5
+  9331 => 'H',
+  9332 => 'H',
+  9333 => 'H',
+  9334 => 'H', # Hero 5/5
+}
 
 SPARK_RECIPE_NAME_TO_ITEM_ID = {
   "Elemental Lariat" =>	{ id: 193001, profession: 'Jewelcrafting' },

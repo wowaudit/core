@@ -81,7 +81,7 @@ module Audit
       end
 
       if !details['tier_items_s2'].is_a? Hash
-        details['tier_items_s2'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, 0] }.to_h
+        details['tier_items_s2'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
       end
 
       if !details['keystones'].is_a? Hash
