@@ -118,8 +118,9 @@ module Audit
             @character.data["enchant_quality_#{item}"] = quality
           end
         rescue
+          # Don't require the stamina belt clasp on casual or lenient modes
+          @character.data["enchant_quality_#{item}"] = item == 'waist' ? 2 : 0
           @character.data["#{item}_enchant"] = ''
-          @character.data["enchant_quality_#{item}"] = 0
         end
       elsif item == 'neck'
         @character.data["enchant_quality_#{item}"] = equipped_item&.dig(:sockets)&.size || 0

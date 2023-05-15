@@ -398,4 +398,6 @@ HEADER = [
   'primordial_stone_1_name',
   'primordial_stone_2_name',
   'primordial_stone_3_name',
+  'waist_enchant',
+  'enchant_quality_waist',
 ]

@@ -83,6 +83,11 @@ ENCHANTS = {
     6585 => [2, "Devotion of Speed (2)"],
     6586 => [3, "Devotion of Speed (3)"],
   },
+  'waist' => {
+    6906 => [2, "Shadowed Belt Clasp (1)"],
+    6905 => [2, "Shadowed Belt Clasp (2)"],
+    6904 => [3, "Shadowed Belt Clasp (3)"],
+  },
   'legs' => {
     6488 => [2, "Fierce Armor Kit (1)"],
     6489 => [2, "Fierce Armor Kit (2)"],
@@ -102,6 +107,9 @@ ENCHANTS = {
     6542 => [2, "Temporal Spellthread (1)"],
     6543 => [2, "Temporal Spellthread (2)"],
     6544 => [3, "Temporal Spellthread (3)"],
+    6828 => [2, "Lambent Armor Kit (1)"],
+    6829 => [2, "Lambent Armor Kit (2)"],
+    6830 => [3, "Lambent Armor Kit (3)"],
   },
   'feet' => {
     6608 => [1, "Rider's Reassurance (1)"],
@@ -214,6 +222,12 @@ ENCHANTS = {
     6526 => [3, "High Intensity Thermal Scanner (1)"],
     6527 => [3, "High Intensity Thermal Scanner (2)"],
     6528 => [3, "High Intensity Thermal Scanner (3)"],
+    6822 => [2, "Spore Tender (1)"],
+    6823 => [2, "Spore Tender (2)"],
+    6824 => [3, "Spore Tender (3)"],
+    6825 => [2, "Shadowflame Wreathe (1)"],
+    6826 => [2, "Shadowflame Wreathe (2)"],
+    6827 => [3, "Shadowflame Wreathe (3)"],
   },
   'off_hand' => {
     3370 => [3, "Rune of Razorice"],
@@ -254,6 +268,12 @@ ENCHANTS = {
     6653 =>  [2, "Wafting Devotion (1)"],
     6654 =>  [2, "Wafting Devotion (2)"],
     6655 =>  [3, "Wafting Devotion (3)"],
+    6822 => [2, "Spore Tender (1)"],
+    6823 => [2, "Spore Tender (2)"],
+    6824 => [2, "Spore Tender (3)"],
+    6825 => [2, "Shadowflame Wreathe (1)"],
+    6826 => [2, "Shadowflame Wreathe (2)"],
+    6827 => [3, "Shadowflame Wreathe (3)"],
   }
 }
 
