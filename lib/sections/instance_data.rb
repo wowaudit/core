@@ -67,18 +67,22 @@ module Audit
       @character.data['m+_score'] = (@data.dig(:season_keystones, :mythic_rating, :rating) || 0).to_i
 
       vault_index = -1
-      encounters_by_raid.flatten.lazy.each_with_index do |encounter, index|
-        if (boss_ids & encounter['normal']).any?
-          vault_index += 1
-          great_vault_list[vault_index] = {}
-        end
+      encounters_by_raid.each_with_index do |raid_encounters, raid_index|
+        for_vault = raid_index + 1 == encounters_by_raid.length
 
-        encounter.each do |difficulty, ids|
-          raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max
-          raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+        raid_encounters.each_with_index do |encounter, index|
+          if (boss_ids & encounter['normal']).any? && for_vault
+            vault_index += 1
+            great_vault_list[vault_index] = {}
+          end
 
-          if (boss_ids & ids).any?
-            great_vault_list[vault_index][difficulty.to_sym] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+          encounter.each do |difficulty, ids|
+            raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max
+            raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+
+            if (boss_ids & ids).any? && for_vault
+              great_vault_list[vault_index][difficulty.to_sym] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+            end
           end
         end
       end
