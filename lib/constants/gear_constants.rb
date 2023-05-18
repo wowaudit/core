@@ -653,4 +653,5 @@ SPARK_RECIPE_NAME_TO_ITEM_ID = {
   "Shadowflame-Tempered Armor Patch" => { id: 204708, profession: 'Leatherworking' },
   "Lambent Armor Kit" => { id: 204700, profession: 'Leatherworking' },
   "Shadowed Belt Clasp" => { id: 205043, profession: 'Blacksmithing' },
+  "Shadowflame Wreathe" => { id: 204621, profession: 'Enchanting' },
 }
