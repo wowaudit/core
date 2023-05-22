@@ -59,9 +59,10 @@ module Audit
             end
 
             if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s2', item, 'ilvl') || 0)
+              upgradeable_difficulty = UPGRADE_BONUS_IDS[equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }]
               @character.details['tier_items_s2'][item] = {
                 'ilvl' => equipped_item[:level][:value],
-                'difficulty' => UPGRADE_BONUS_IDS[equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }] || 'M'
+                'difficulty' => upgradeable_difficulty || LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last || ''
               }
             end
 

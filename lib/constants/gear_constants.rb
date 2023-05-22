@@ -447,7 +447,7 @@ TIER_ITEMS_BY_SLOT = {
 
 TIER_ITEMS = TIER_ITEMS_BY_SLOT.values.flatten
 
-LEGACY_TIER_CUTOFFS = { 1 => 'R', 415 => 'N', 428 => 'H', 441 => 'M' }
+LEGACY_TIER_CUTOFFS = { 1 => 'R', 418 => 'N', 431 => 'H', 444 => 'M' }
 
 UPGRADE_BONUS_IDS = {
   9313 => 'R', # Veteran 1/8
