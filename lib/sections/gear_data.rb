@@ -131,7 +131,7 @@ module Audit
           @character.data["#{item}_enchant"] = ''
         end
       elsif item == 'neck'
-        @character.data["enchant_quality_#{item}"] = equipped_item&.dig(:sockets)&.size || 0
+        @character.data["enchant_quality_#{item}"] = equipped_item&.dig(:sockets)&.size == 3 ? 4 : 0
       end
     end
 
