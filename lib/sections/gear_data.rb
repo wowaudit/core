@@ -24,7 +24,7 @@ module Audit
 
           if equipped_item.dig(:name_description, :display_string) == "Shadowflame Crafted"
             # 2 handed weapons cost 2 sparks
-            sparks_used += (equipped_item[:slot][:type] != "MAIN_HAND" || @data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" } ? 1 : 2)
+            sparks_used += (equipped_item[:inventory_type][:type] == "TWOHWEAPON" ? 2 : 1)
 
             @character.details['spark_gear_s2'][item] = {
               'ilvl' => equipped_item[:level][:value],
