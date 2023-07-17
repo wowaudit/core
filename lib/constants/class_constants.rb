@@ -55,6 +55,7 @@ DPS_SPECS = [
   'Beast Mastery',
   'Elemental',
   'Devastation',
+  'Augmentation',
 ]
 
 ROLES_TO_SPEC = {
@@ -100,7 +101,7 @@ ROLES = {
     'Priest' => [3],
     'Shaman' => [2],
     'Warlock' => [1,2,3],
-    "Evoker" => [1]
+    "Evoker" => [1,3]
   },
   'Melee'=> {
     'Death Knight' => [2,3],
