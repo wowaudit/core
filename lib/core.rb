@@ -70,7 +70,7 @@ begin
   require_rel 'utils'
 
   # Store realm data in memory
-  REALMS = Audit::Realm.all.map{ |realm| [realm.id, realm] }.to_h
+  REALMS = Audit::Realm.where(kind: 'live').map{ |realm| [realm.id, realm] }.to_h
 
   schedule = register
 
