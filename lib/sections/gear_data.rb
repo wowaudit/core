@@ -24,7 +24,6 @@ module Audit
 
           if equipped_item.dig(:name_description, :display_string) == "Shadowflame Crafted"
             # 2 handed weapons cost 2 sparks
-            byebug if @character.name == "Meisterjäger"
             sparks_used += (equipped_item[:inventory_type][:type] == "TWOHWEAPON" || (equipped_item[:inventory_type][:name] == "Ranged" && equipped_item.dig(:weapon, :damage, :damage_class, :type) == "PHYSICAL") ? 2 : 1)
 
             @character.details['spark_gear_s2'][item] = {

@@ -19,7 +19,7 @@ module Audit
     ]
 
     def refresh(authentication_attempt = 0)
-      RBattlenet.set_options(region: REALMS[guild.realm_id].region, locale: "en_GB", concurrency: 25, timeout: 60, retries: 5, response_type: :hash, eager_children: true)
+      RBattlenet.set_options(region: REALMS[guild.realm_id].region, namespace: REALMS[guild.realm_id].region.downcase, locale: "en_GB", concurrency: 25, timeout: 60, retries: 5, response_type: :hash, eager_children: true)
       $errors = { :tracking => 0, :role => 0 }
       if guild.api_key && guild.api_key.active
         begin

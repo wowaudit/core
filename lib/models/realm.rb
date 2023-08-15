@@ -14,7 +14,7 @@ module Audit
 
       def refresh(id, refresh_type)
         realm = Realm.where(id: id).first
-        RBattlenet.set_options(region: realm.region, locale: "en_GB", concurrency: 25, response_type: :hash)
+        RBattlenet.set_options(region: realm.region, namespace: realm.region.downcase, locale: "en_GB", concurrency: 25, response_type: :hash)
         Audit.timestamp = realm.region
 
         (refresh_type == 'historical_keystones' ? (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a : [Audit.period]).each do |period|
