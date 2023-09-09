@@ -33,7 +33,7 @@ module Audit
         end
 
         percentiles.each do |difficulty, encounters|
-          WCL_IDS.each do |encounter_id|
+          WCL_IDS[REALMS[realm_id].kind.to_sym].each do |encounter_id|
             details['warcraftlogs'][difficulty.to_s][encounter_id] = encounters[encounter_id] ||
               details['warcraftlogs'][difficulty.to_s][encounter_id] rescue '-'
           end

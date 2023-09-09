@@ -2,6 +2,8 @@ module Audit
   class TeamRaiderio < Team
 
     def refresh
+      return unless REALMS[guild.realm_id].kind == 'live'
+
       characters.each do |character|
         realm = REALMS[character.realm_id || guild.realm_id]
         uri = RAIDER_IO_URL[0 .. RAIDER_IO_URL.length]

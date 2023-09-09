@@ -32,12 +32,15 @@ end
 # File Storage
 storage_data = YAML::load(File.open('config/storage.yml'))
 Aws.config.update(
-  endpoint: storage_data["endpoint"],
   access_key_id: storage_data["access_key"],
   secret_access_key: storage_data["secret_access_key"],
   region: storage_data["region"]
 )
-STORAGE = Aws::S3::Resource.new
+STORAGE = {
+  live: Aws::S3::Resource.new(endpoint: storage_data["endpoint"]["live"]),
+  classic_era: Aws::S3::Resource.new(endpoint: storage_data["endpoint"]["classic_era"]),
+  classic_progression: Aws::S3::Resource.new(endpoint: storage_data["endpoint"]["classic_progression"]),
+}
 BUCKET = storage_data["bucket"]
 
 # Load keys
@@ -70,7 +73,7 @@ begin
   require_rel 'utils'
 
   # Store realm data in memory
-  REALMS = Audit::Realm.where(kind: 'live').map{ |realm| [realm.id, realm] }.to_h
+  REALMS = Audit::Realm.all.map{ |realm| [realm.id, realm] }.to_h
 
   schedule = register
 

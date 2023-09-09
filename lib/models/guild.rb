@@ -5,15 +5,11 @@ module Audit
     many_to_one :realm
 
     def path
-      "#{REALMS[realm_id].region.downcase}/#{slugged_realm}/#{slugged_name}"
+      "#{REALMS[realm_id].region.downcase}/#{REALMS[realm_id].name_for_path}/#{slugged_name}"
     end
 
     def slugged_name
       name.gsub(" ","-").downcase
-    end
-
-    def slugged_realm
-      Realm.to_slug(REALMS[realm_id])
     end
 
     def api_key

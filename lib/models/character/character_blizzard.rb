@@ -24,7 +24,7 @@ module Audit
     def process_result(response, skipped, depth = 0)
       init
       if skipped
-        Data.process(self, response, true)
+        Data.process(self, response, true, REALMS[realm_id])
         update_snapshots(skipped)
         to_output
       else
@@ -36,7 +36,7 @@ module Audit
           self.changed = true if self.status != "tracking"
           self.status = "tracking"
 
-          Data.process(self, response, false)
+          Data.process(self, response, false, REALMS[realm_id])
           update_snapshots(skipped)
           to_output
         else
@@ -59,7 +59,7 @@ module Audit
     end
 
     def to_output
-      HEADER.each do |value|
+      HEADER[REALMS[realm_id].kind.to_sym].each do |value|
         self.output << (self.data[value] || 0)
       end
     end
@@ -111,26 +111,31 @@ module Audit
     end
 
     def last_refresh_data
-      [HEADER, output].transpose.to_h rescue false
+      [HEADER[REALMS[realm_id].kind.to_sym], output].transpose.to_h rescue false
     end
 
     def update_snapshots(skipped)
-      current_week = details['snapshots'][Audit.year][Audit.week] || {}
+      if REALMS[realm_id].kind == 'live'
+        current_week = details['snapshots'][Audit.year][Audit.week] || {}
 
-      details['snapshots'][Audit.year][Audit.week] = current_week.merge({ 'vault' => 9.times.map do |i|
-        [(i + 1).to_s, self.last_refresh["great_vault_slot_#{i + 1}"] || self.data["great_vault_slot_#{i + 1}"]]
-      end.to_h })
+        details['snapshots'][Audit.year][Audit.week] = current_week.merge({ 'vault' => 9.times.map do |i|
+          [(i + 1).to_s, self.last_refresh["great_vault_slot_#{i + 1}"] || self.data["great_vault_slot_#{i + 1}"]]
+        end.to_h })
 
-      details['snapshots'][Audit.year][Audit.week]['wqs'] ||= self.data['wqs_done_total'] unless skipped
-      details['current_version'] = CURRENT_VERSION unless skipped
+        details['snapshots'][Audit.year][Audit.week]['wqs'] ||= self.data['wqs_done_total'] unless skipped
+      end
+
+      details['current_version'] = CURRENT_VERSION[REALMS[realm_id].kind.to_sym] unless skipped
       details['current_period'] = Audit.period unless skipped
     end
 
     def check_data_completeness(response)
       return false unless response[:equipment] && response[:equipment][:equipped_items]
 
-      [:achievements, :reputations].each do |type|
-        return false unless response[type]&.is_a? Array
+      if REALMS[realm_id].kind == 'live'
+        [:achievements, :reputations].each do |type|
+          return false unless response[type]&.is_a? Array
+        end
       end
 
       true

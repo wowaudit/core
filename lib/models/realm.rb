@@ -14,7 +14,7 @@ module Audit
 
       def refresh(id, refresh_type)
         realm = Realm.where(id: id).first
-        RBattlenet.set_options(region: realm.region, namespace: realm.region.downcase, locale: "en_GB", concurrency: 25, response_type: :hash)
+        RBattlenet.set_options(region: realm.region, namespace: realm.namespace, locale: "en_GB", concurrency: 25, response_type: :hash)
         Audit.timestamp = realm.region
 
         (refresh_type == 'historical_keystones' ? (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a : [Audit.period]).each do |period|
@@ -55,6 +55,37 @@ module Audit
           Writer.update_db(characters) if characters.any?
         end
       end
+    end
+
+    def name_for_path
+      "#{blizzard_name}#{kind.to_s == 'live' ? '' : kind.to_s == 'classic_era' ? "-classic-era" : kind.to_s == 'tournament' ? '-tournament' : "-classic"}"
+    end
+
+    def namespace
+      {
+        live: '',
+        classic_progression: 'classic-',
+        classic_era: 'classic1x-',
+        tournament: '',
+      }[kind.to_sym] + region.downcase
+    end
+
+    def section
+      {
+        live: Live,
+        classic_progression: ClassicProgression,
+        classic_era: ClassicEra,
+        tournament: ClassicEra,
+      }[kind.to_sym]
+    end
+
+    def redis_prefix
+      {
+        live: 'dragonflight',
+        classic_progression: 'wotlk',
+        classic_era: 'vanilla',
+        tournament: 'tournament',
+      }[kind.to_sym]
     end
   end
 end

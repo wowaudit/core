@@ -3,7 +3,7 @@ module Audit
 
     def self.write(team, result, header)
       json = ([header] + result.sort_by{|c| c.name}.map(&:output).compact.reject(&:empty?)).to_json
-      file = STORAGE.bucket(BUCKET).object("#{team.key}.json")
+      file = STORAGE[REALMS[team.guild.realm_id].kind.to_sym].bucket(BUCKET).object("#{team.key}.json")
       file.put(body: json)
 
       Logger.t(INFO_TEAM_WRITTEN, team.id)

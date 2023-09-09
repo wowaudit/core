@@ -1,4 +1,7 @@
 endpoint:
+  live:
+  classic_era:
+  classic_progression:
 access_key:
 secret_access_key:
 region:

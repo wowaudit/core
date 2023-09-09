@@ -2,10 +2,12 @@ module Audit
   class TeamWcl < Team
 
     def refresh
+      return unless REALMS[guild.realm_id].kind == 'live'
+
       # Requests are not made in parallel, otherwise
       # load on the Warcraft Logs API would be too high
       characters.each do |character|
-        VALID_RAIDS.select{ |r| r['days'].include? Time.now.wday }.each do |zone|
+        VALID_RAIDS[REALMS[guild.realm_id].kind.to_sym].select{ |r| r['days'].include? Time.now.wday }.each do |zone|
           begin
             response = Typhoeus.get(uri(character, zone))
             character.process_result(response, zone)
