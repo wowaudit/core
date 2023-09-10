@@ -158,10 +158,8 @@ VALID_RAIDS = {
     {"name"=>"Aberrus, the Shadowed Crucible", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>33, "encounters"=>[{"id"=>2688, "name"=>"Kazzara, the Hellforged", "raid_ids"=>{"raid_finder"=>[18180], "normal"=>[18189], "heroic"=>[18210], "mythic"=>[18219]}}, {"id"=>2687, "name"=>"The Amalgamation Chamber", "raid_ids"=>{"raid_finder"=>[18181], "normal"=>[18190], "heroic"=>[18211], "mythic"=>[18220]}}, {"id"=>2693, "name"=>"The Forgotten Experiments", "raid_ids"=>{"raid_finder"=>[18182], "normal"=>[18191], "heroic"=>[18212], "mythic"=>[18221]}}, {"id"=>2682, "name"=>"Assault of the Zaqali", "raid_ids"=>{"raid_finder"=>[18183], "normal"=>[18192], "heroic"=>[18213], "mythic"=>[18222]}}, {"id"=>2680, "name"=>"Rashok, the Elder", "raid_ids"=>{"raid_finder"=>[18184], "normal"=>[18194], "heroic"=>[18214], "mythic"=>[18223]}}, {"id"=>2689, "name"=>"Zskarn, the Vigilant Steward", "raid_ids"=>{"raid_finder"=>[18185], "normal"=>[18195], "heroic"=>[18215], "mythic"=>[18224]}}, {"id"=>2683, "name"=>"Magmorax", "raid_ids"=>{"raid_finder"=>[18186], "normal"=>[18196], "heroic"=>[18216], "mythic"=>[18225]}}, {"id"=>2684, "name"=>"Echo of Neltharion", "raid_ids"=>{"raid_finder"=>[18188], "normal"=>[18197], "heroic"=>[18217], "mythic"=>[18226]}}, {"id"=>2685, "name"=>"Scalecommander Sarkareth", "raid_ids"=>{"raid_finder"=>[18187], "normal"=>[18198], "heroic"=>[18218], "mythic"=>[18227]}}]}
   ],
   classic_era: [
-
   ],
   classic_progression: [
-
   ],
 }
 

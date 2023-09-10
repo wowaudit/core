@@ -76,7 +76,7 @@ module Audit
         end
 
         tier_statuses.each do |tier, amount|
-          @character.data["tier_#{tier}_status"] = "#{amount} / #{CLASSIC_ERA_TIER_ITEMS_BY_SLOT[tier].keys.size}"
+          @character.data["tier_#{tier}_status"] = amount
         end
 
         @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
@@ -92,9 +92,9 @@ module Audit
             return if !equipped_item&.dig(:weapon) && !equipped_item&.dig(:shield_block) && item == "off_hand"
 
             name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
-            source = equipped_item[:enchantments].first[:source_item][:name].gsub("QA", "")
+            source = equipped_item[:enchantments].first.dig(:source_item, :name)&.gsub("QA", "")
 
-            display_name = if name.split(" ").all? { |word| source.include? word }
+            display_name = if !source || name.split(" ").all? { |word| source.include? word }
               name
             else
               "#{source} (#{name})"

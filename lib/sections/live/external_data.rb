@@ -12,7 +12,7 @@ module Audit
       def add_warcraftlogs_data
         RAID_DIFFICULTIES.each_key do |diff|
           output = []
-          WCL_IDS[REALMS[@character.realm_id].kind.to_sym].each do |boss|
+          WCL_IDS[:live].each do |boss|
             value = @character.details['warcraftlogs'][diff.to_s][boss]
             output << (value ? (value == '-' ? '-' : value&.to_f.to_i) : '-')
           end

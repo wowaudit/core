@@ -62,6 +62,7 @@ CLASSIC_ERA_ENCHANT_SLOTS = [
   'back',
   'chest',
   'wrist',
+  'hands',
   'legs',
   'feet',
   'main_hand',

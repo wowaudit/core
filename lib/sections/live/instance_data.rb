@@ -2,7 +2,7 @@ module Audit
   module Live
     class InstanceData < Data
       def add
-        encounters_by_raid = VALID_RAIDS.map{ |raid|
+        encounters_by_raid = VALID_RAIDS[:live].map{ |raid|
           raid['encounters'].map{ |boss|
             boss['raid_ids']
           }
