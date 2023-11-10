@@ -4,7 +4,7 @@ BRACKETS = {
   'rbg' => 'pvp_bracket_rbg',
 }
 
-CURRENT_PVP_SEASON = 35
+CURRENT_PVP_SEASON = 36
 
 HONOR_PER_WIN = {
   '2v2' => {

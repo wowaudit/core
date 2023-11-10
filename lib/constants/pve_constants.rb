@@ -1,7 +1,7 @@
 FIRST_PERIOD_OF_EXPANSION = 885
 
-CURRENT_KEYSTONE_SEASON = 10
-FIRST_PERIOD_OF_SEASON = 906
+CURRENT_KEYSTONE_SEASON = 11
+FIRST_PERIOD_OF_SEASON = 933
 
 MYTHIC_DUNGEONS = {
   16076 => "Brackenhide Hollow",
@@ -15,14 +15,14 @@ MYTHIC_DUNGEONS = {
 }
 
 KEYSTONE_DUNGEONS = {
-  206 => "Neltharion's Lair", #"Shadowmoon Burial Grounds",
-  245 => "Freehold", #"Halls of Valor",
-  251 => "The Underrot", #"Court of Stars",
-  403 => "Uldaman: Legacy of Tyr", #"Algeth'ar Academy",
-  404 => "Neltharus", #"The Azure Vault",
-  405 => "Brackenhide Hollow", #"Ruby Life Pools",
-  406 => "Halls of Infusion", #"The Nokhud Offensive",
-  438 => "The Vortex Pinnacle", #"Temple of the Jade Serpent",
+  168 => "The Everbloom", #"Freehold", #"Halls of Valor",
+  198 => "Darkheart Thicket", #"Neltharus", #"The Azure Vault",
+  199 => "Black Rook Hold", #"Brackenhide Hollow", #"Ruby Life Pools",
+  244 => "Atal'Dazar", #"Uldaman: Legacy of Tyr", #"Algeth'ar Academy",
+  248 => "Waycrest Manor", #"The Underrot", #"Court of Stars",
+  456 => "Throne of the Tides", #"Halls of Infusion", #"The Nokhud Offensive",
+  463 => "Galakrond's Fall", #"Neltharion's Lair", #"Shadowmoon Burial Grounds",
+  464 => "Murozond's Rise", #"The Vortex Pinnacle", #"Temple of the Jade Serpent",
 }
 
 SLUGIFIED_DUNGEON_NAMES = KEYSTONE_DUNGEONS.transform_values do |dungeon_name|
@@ -49,50 +49,52 @@ RAID_DIFFICULTIES = {
 }
 
 GREAT_VAULT_RAID_KILLS_NEEDED = {
-  1 => 3,
-  2 => 5,
+  1 => 2,
+  2 => 4,
   3 => 7,
 }
 
+GREAT_VAULT_BLACKLISTED_PERIODS = [932]
+
 GREAT_VAULT_TO_ILVL = {
   'raid' => {
-    mythic: 441,
-    heroic: 428,
-    normal: 415,
-    raid_finder: 402,
+    mythic: 480,
+    heroic: 467,
+    normal: 454,
+    raid_finder: 441,
   },
   'dungeon' => {
-    20 => 447,
-    19 => 444,
-    18 => 444,
-    17 => 441,
-    16 => 441,
-    15 => 437,
-    14 => 437,
-    13 => 434,
-    12 => 434,
-    11 => 431,
-    10 => 431,
-    9 => 428,
-    8 => 428,
-    7 => 424,
-    6 => 424,
-    5 => 421,
-    4 => 421,
-    3 => 418,
-    2 => 415,
+    20 => 483,
+    19 => 480,
+    18 => 480,
+    17 => 476,
+    16 => 476,
+    15 => 476,
+    14 => 473,
+    13 => 473,
+    12 => 473,
+    11 => 470,
+    10 => 470,
+    9 => 467,
+    8 => 467,
+    7 => 463,
+    6 => 463,
+    5 => 460,
+    4 => 460,
+    3 => 457,
+    2 => 454,
     0 => nil,
   },
   'pvp' => { # Estimates
-    2400 => 447,
-    2100 => 441,
-    1950 => 437,
-    1800 => 434,
-    1600 => 431,
-    1400 => 428,
-    1200 => 424,
-    1000 => 421,
-    0 => 415,
+    2400 => 483,
+    2100 => 480,
+    1950 => 476,
+    1800 => 473,
+    1600 => 470,
+    1400 => 467,
+    1200 => 463,
+    1000 => 460,
+    0 => 454,
   }
 }
 
