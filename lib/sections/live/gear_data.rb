@@ -23,7 +23,7 @@ module Audit
             embellished_found += check_embellished(embellished_found, item, equipped_item)
             items_equipped += 1
 
-            if equipped_item.dig(:name_description, :display_string) == "Shadowflame Crafted"
+            if equipped_item.dig(:name_description, :display_string) == "Dream Crafted"
               # 2 handed weapons cost 2 sparks
               sparks_used += (equipped_item[:inventory_type][:type] == "TWOHWEAPON" || (equipped_item[:inventory_type][:name] == "Ranged" && equipped_item.dig(:weapon, :damage, :damage_class, :type) == "PHYSICAL") ? 2 : 1)
 
