@@ -404,6 +404,10 @@ HEADER = {
     'primordial_stone_3_name',
     'waist_enchant',
     'enchant_quality_waist',
+    'head_enchant',
+    'enchant_quality_head',
+    'fyrakk_mount',
+    'dream_warden_renown',
   ],
   classic_era: [
     'name',

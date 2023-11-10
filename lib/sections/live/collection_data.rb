@@ -13,6 +13,10 @@ module Audit
           @character.data[:titles] = @data[:titles].size
         end
 
+        unless !@data[:mounts]
+          @character.data['fyrakk_mount'] = @data[:mounts].lazy.find { |entry| entry.dig(:mount, :id) == 1818 } ? 'yes' : 'no'
+        end
+
         unless !@data[:pets]
           pets_owned = []
           level_25_pets = 0
