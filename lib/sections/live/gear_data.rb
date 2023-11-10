@@ -27,7 +27,7 @@ module Audit
               # 2 handed weapons cost 2 sparks
               sparks_used += (equipped_item[:inventory_type][:type] == "TWOHWEAPON" || (equipped_item[:inventory_type][:name] == "Ranged" && equipped_item.dig(:weapon, :damage, :damage_class, :type) == "PHYSICAL") ? 2 : 1)
 
-              @character.details['spark_gear_s2'][item] = {
+              @character.details['spark_gear_s3'][item] = {
                 'ilvl' => equipped_item[:level][:value],
                 'id' => equipped_item[:item][:id],
                 'name' => equipped_item[:name],
@@ -52,23 +52,23 @@ module Audit
 
             if TIER_ITEMS_BY_SLOT.keys.include? item
               # Convert legacy format stored tier data
-              if @character.details['tier_items_s2'][item].is_a?(Integer)
-                @character.details['tier_items_s2'][item] = {
-                  'ilvl' => @character.details['tier_items_s2'][item],
-                  'difficulty' => LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items_s2'][item] }.compact.last || ''
+              if @character.details['tier_items_s3'][item].is_a?(Integer)
+                @character.details['tier_items_s3'][item] = {
+                  'ilvl' => @character.details['tier_items_s3'][item],
+                  'difficulty' => LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items_s3'][item] }.compact.last || ''
                 }
               end
 
-              if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s2', item, 'ilvl') || 0)
+              if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s3', item, 'ilvl') || 0)
                 upgradeable_difficulty = UPGRADE_BONUS_IDS[equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }]
-                @character.details['tier_items_s2'][item] = {
+                @character.details['tier_items_s3'][item] = {
                   'ilvl' => equipped_item[:level][:value],
                   'difficulty' => upgradeable_difficulty || LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last || ''
                 }
               end
 
-              @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s2'][item]['ilvl']
-              @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s2'][item]['difficulty']
+              @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s3'][item]['ilvl']
+              @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s3'][item]['difficulty']
             end
 
             if !check_onyx_annulet(item, equipped_item)
@@ -90,10 +90,10 @@ module Audit
           @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
           @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
 
-          @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear_s2'][item]['ilvl'] || ''
-          @character.data["spark_#{item}_id"] = @character.details['spark_gear_s2'][item]['id'] || ''
-          @character.data["spark_#{item}_name"] = @character.details['spark_gear_s2'][item]['name'] || ''
-          @character.data["spark_#{item}_quality"] = @character.details['spark_gear_s2'][item]['quality'] || ''
+          @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear_s3'][item]['ilvl'] || ''
+          @character.data["spark_#{item}_id"] = @character.details['spark_gear_s3'][item]['id'] || ''
+          @character.data["spark_#{item}_name"] = @character.details['spark_gear_s3'][item]['name'] || ''
+          @character.data["spark_#{item}_quality"] = @character.details['spark_gear_s3'][item]['quality'] || ''
         end
 
         # For 2H weapons the item level is counted twice to normalise between weapon types
