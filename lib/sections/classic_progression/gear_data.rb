@@ -27,7 +27,7 @@ module Audit
             end
 
             @character.details['current_gear'][item] = {
-              'ilvl' => 0,
+              'ilvl' => equipped_item[:level][:value],
               'id' => equipped_item[:item][:id],
               'name' => equipped_item[:name],
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
@@ -47,7 +47,7 @@ module Audit
             end
 
             @character.data[item + '_id'] = equipped_item[:item][:id]
-            @character.data[item + '_ilvl'] = 0
+            @character.data[item + '_ilvl'] = equipped_item[:level][:value]
             @character.data[item + '_name'] = equipped_item[:name]
             @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
           rescue => err
@@ -61,7 +61,7 @@ module Audit
         # For 2H weapons the item level is counted twice to normalise between weapon types
         if @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
           items_equipped += 1
-          main_hand_ilvl = @data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:item][:ITEMLEVEL]
+          main_hand_ilvl = @data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:level][:value]
           @character.ilvl += main_hand_ilvl
         end
 
