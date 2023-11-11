@@ -127,9 +127,13 @@ module Audit
         end
 
         GREAT_VAULT_RAID_KILLS_NEEDED.each do |slot, kills_needed|
-          @character.data["great_vault_slot_#{slot}"] = if raid_bosses_killed >= kills_needed
-            GREAT_VAULT_TO_ILVL['raid'][slot_info[kills_needed - 1]]
-          end || ''
+          if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)
+            @character.data["great_vault_slot_#{slot}"] = ""
+          else
+            @character.data["great_vault_slot_#{slot}"] = if raid_bosses_killed >= kills_needed
+              GREAT_VAULT_TO_ILVL['raid'][slot_info[kills_needed - 1]]
+            end || ''
+          end
         end
 
         honor_earned = 0
@@ -169,9 +173,15 @@ module Audit
 
         item_level = GREAT_VAULT_TO_ILVL['pvp'][GREAT_VAULT_TO_ILVL['pvp'].keys.find { |rating| highest_rating >= rating }]
 
-        @character.data['great_vault_slot_7'] = honor_earned >= 1250 ? item_level : ''
-        @character.data['great_vault_slot_8'] = honor_earned >= 2500 ? item_level : ''
-        @character.data['great_vault_slot_9'] = honor_earned >= 5500 ? item_level : ''
+        if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)
+          @character.data['great_vault_slot_7'] = ''
+          @character.data['great_vault_slot_8'] = ''
+          @character.data['great_vault_slot_9'] = ''
+        else
+          @character.data['great_vault_slot_7'] = honor_earned >= 1250 ? item_level : ''
+          @character.data['great_vault_slot_8'] = honor_earned >= 2500 ? item_level : ''
+          @character.data['great_vault_slot_9'] = honor_earned >= 5500 ? item_level : ''
+        end
       end
     end
   end

@@ -46,9 +46,15 @@ module Audit
         @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum + @character.data['dungeons_this_week']
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
-        @character.data['great_vault_slot_4'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 20].min] || ""
-        @character.data['great_vault_slot_5'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 20].min] || ""
-        @character.data['great_vault_slot_6'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 20].min] || ""
+        if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)
+          @character.data['great_vault_slot_4'] = ""
+          @character.data['great_vault_slot_5'] = ""
+          @character.data['great_vault_slot_6'] = ""
+        else
+          @character.data['great_vault_slot_4'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 20].min] || ""
+          @character.data['great_vault_slot_5'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 20].min] || ""
+          @character.data['great_vault_slot_6'] = GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 20].min] || ""
+        end
       end
     end
   end

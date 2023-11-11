@@ -3,7 +3,8 @@ REPUTATIONS = {
   2507 => "dragonscale_expedition",
   2510 => 'valdrakken_accord',
   2511 => "iskaara_tuskarr",
-  2564 => "loamm_niffen"
+  2564 => "loamm_niffen",
+  2574 => "dream_warden"
 }
 
 STANDINGS = {
