@@ -14,7 +14,11 @@ module Audit
         end
 
         unless !@data[:mounts]
-          @character.data['fyrakk_mount'] = @data[:mounts].lazy.find { |entry| entry.dig(:mount, :id) == 1818 } ? 'yes' : 'no'
+          @character.data['fyrakk_mount'] = @data[:mounts].lazy.find do |entry|
+            next unless entry.is_a? Hash
+
+            entry.dig(:mount, :id) == 1818
+          end ? 'yes' : 'no'
         end
 
         unless !@data[:pets]
