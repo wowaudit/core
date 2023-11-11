@@ -10,7 +10,6 @@ module Audit
 
         @character.historical_snapshots.drop(1).each_with_index do |week, index|
           wqs.insert(0, [(week['wqs'] || 0) - (@character.historical_snapshots[index]['wqs'] || 0), 0].max)
-          mplus.insert(0, week['m+'] || '-')
 
           vault.keys.each do |slot|
             # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
@@ -29,6 +28,8 @@ module Audit
           vault[4].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 20].min] || "-")
           vault[5].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 20].min] || "-")
           vault[6].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 20].min] || "-")
+
+          mplus << dungeon_data.join(',')
         end
 
         # Current week's highest M+ completion and vault data are not stored as a snapshot
