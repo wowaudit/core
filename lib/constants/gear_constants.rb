@@ -631,4 +631,12 @@ SPARK_RECIPE_NAME_TO_ITEM_ID = {
   "Lambent Armor Kit" => { id: 204700, profession: 'Leatherworking' },
   "Shadowed Belt Clasp" => { id: 205043, profession: 'Blacksmithing' },
   "Shadowflame Wreathe" => { id: 204621, profession: 'Enchanting' },
+  "Enchanted Whelpling's Dreaming Crest" => { id: 206977, profession: 'Enchanting' },
+  "Enchanted Wyrm's Dreaming Crest" => { id: 206960, profession: 'Enchanting' },
+  "Enchanted Aspect's Dreaming Crest" => { id: 206961, profession: 'Enchanting' },
+  "Flourishing Dream Helm" => { id: 210646, profession: 'Blacksmithing' },
+  "Dreamtender's Charm" => { id: 208746, profession: 'Jewelcrafting' },
+  "Dreaming Devotion" => { id: 207087, profession: 'Enchanting' },
+  "Verdant Conduit" => { id: 208187, profession: 'Leatherworking' },
+  "Verdant Tether" => { id: 210671, profession: 'Tailoring' },
 }
