@@ -1,10 +1,10 @@
 CURRENT_VERSION = {
-  live: 1015,
+  live: 1016,
   classic_era: 100,
   classic_progression: 300,
 }
 
-PREVENT_SKIP_TIMESTAMP = Time.parse("2023-05-12 00:25:37 +0200").to_i
+PREVENT_SKIP_TIMESTAMP = Time.parse("2023-11-21 12:51:37 +0200").to_i
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)

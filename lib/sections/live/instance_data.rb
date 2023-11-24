@@ -44,11 +44,31 @@ module Audit
         (@data.dig(:season_keystones, :best_runs) || []).lazy.each do |run|
           run_id = run[:completed_timestamp] / 1000
           run_period = Audit.period_from_timestamp(run_id).to_s
-          unless @character.details['keystones'][run_period]&.include?(run_id.to_s)
+
+          # Apparently the timestamp in Blizzard's API can change sometimes to be 1 second earlier or later.
+          # Don't count occurrences within the same 120 seconds as multiple dungeons.
+          already_stored = (@character.details['keystones'][run_period] || {}).keys.map(&:to_i).any? do |other_timestamp|
+            other_timestamp - 60 < run_id && other_timestamp + 60 > run_id
+          end
+
+          unless already_stored
             (@character.details['keystones'][run_period] ||= {})[run_id.to_s] = {
               "level" => run[:keystone_level],
               "dungeon" => run.dig(:dungeon, :id),
             }
+          end
+        end
+
+        # Clear runs that were stored multiple times incorrectly, with an insignificant timestamp difference
+        @character.details['keystones'].each do |period, runs|
+          runs.keys.map(&:to_i).each do |timestamp|
+            duplicate = @character.details['keystones'][period].keys.map(&:to_i).any? do |other_timestamp|
+              other_timestamp - 60 < timestamp && other_timestamp + 60 > timestamp && timestamp != other_timestamp
+            end
+
+            if duplicate
+              @character.details['keystones'][period].delete(timestamp.to_s)
+            end
           end
         end
 
