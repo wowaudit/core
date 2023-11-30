@@ -220,10 +220,13 @@ ENCHANTS = {
   'off_hand' => weapon_enchants,
 }
 
-# 1 = Legacy gem
-# 2 = Uncommon gem
-# 3 = Rare gem
-# 4 = Epic gem
+GEM_QUALITY_MAPPING = {
+  legacy: 1,
+  uncommon: 2,
+  rare: 3,
+  epic: 4,
+}
+
 GEMS = {
   130215 => 1, # Legion
   130216 => 1,
@@ -393,27 +396,32 @@ TIER_ITEMS = TIER_ITEMS_BY_SLOT.values.flatten
 LEGACY_TIER_CUTOFFS = { 1 => 'R', 454 => 'N', 467 => 'H', 480 => 'M' }
 
 UPGRADE_BONUS_IDS = {
-  9313 => 'R', # Veteran 1/8
-  9314 => 'R',
-  9315 => 'R',
-  9316 => 'R',
-  9317 => 'R',
-  9318 => 'R',
-  9319 => 'R',
-  9320 => 'R', # Veteran 8/8
-  9321 => 'N', # Champion 1/8
-  9322 => 'N',
-  9323 => 'N',
-  9324 => 'N',
-  9325 => 'N',
-  9327 => 'N',
-  9328 => 'N',
-  9329 => 'N', # Champion 8/8
-  9330 => 'H', # Hero 1/5
-  9331 => 'H',
-  9332 => 'H',
-  9333 => 'H',
-  9334 => 'H', # Hero 5/5
+  9552 => 'R', # Veteran 1/8
+  9553 => 'R',
+  9554 => 'R',
+  9555 => 'R',
+  9556 => 'R',
+  9557 => 'R',
+  9558 => 'R',
+  9559 => 'R', # Veteran 8/8
+  9560 => 'N', # Champion 1/8
+  9561 => 'N',
+  9562 => 'N',
+  9563 => 'N',
+  9564 => 'N',
+  9565 => 'N',
+  9566 => 'N',
+  9567 => 'N', # Champion 8/8
+  9568 => 'H', # Hero 1/6
+  9569 => 'H',
+  9570 => 'H',
+  9571 => 'H',
+  9572 => 'H',
+  9581 => 'H', # Hero 6/6
+  9573 => 'M',
+  9574 => 'M',
+  9575 => 'M',
+  9576 => 'M',
 }
 
 SPARK_RECIPE_NAME_TO_ITEM_ID = {

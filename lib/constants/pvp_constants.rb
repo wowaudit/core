@@ -1,10 +1,20 @@
 BRACKETS = {
-  '2v2' => 'pvp_bracket_2v2',
-  '3v3' => 'pvp_bracket_3v3',
-  'rbg' => 'pvp_bracket_rbg',
+  live: {
+    '2v2' => 'pvp_bracket_2v2',
+    '3v3' => 'pvp_bracket_3v3',
+    'rbg' => 'pvp_bracket_rbg',
+  },
+  classic_progression: {
+    '2v2' => 'pvp_bracket_2v2',
+    '3v3' => 'pvp_bracket_3v3',
+    '5v5' => 'pvp_bracket_5v5',
+  }
 }
 
-CURRENT_PVP_SEASON = 36
+CURRENT_PVP_SEASON = {
+  live: 36,
+  classic_progression: 5,
+}
 
 HONOR_PER_WIN = {
   '2v2' => {

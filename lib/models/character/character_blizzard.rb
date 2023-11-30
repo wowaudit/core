@@ -132,10 +132,8 @@ module Audit
     def check_data_completeness(response)
       return false unless response[:equipment] && response[:equipment][:equipped_items]
 
-      if REALMS[realm_id].kind == 'live'
-        [:achievements, :reputations].each do |type|
-          return false unless response[type]&.is_a? Array
-        end
+      if REALMS[realm_id].kind != 'classic_era'
+        return false unless response[:achievements]&.is_a? Array
       end
 
       true

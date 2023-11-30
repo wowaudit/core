@@ -4,6 +4,8 @@ module Audit
       def add
         # Check equipped gear
         items_equipped = 0
+        @character.data['empty_sockets'] = 0
+        @character.data['meta_gem_quality'] = 0
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
         @character.data["off_hand_enchant_quality"] = ''
@@ -19,6 +21,7 @@ module Audit
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             check_enchant(item, equipped_item)
+            check_sockets(item, equipped_item)
             items_equipped += 1
 
             if WOTLK_LEGENDARIES.keys.include?(equipped_item[:item][:id].to_i)
@@ -27,27 +30,33 @@ module Audit
             end
 
             @character.details['current_gear'][item] = {
-              'ilvl' => equipped_item[:level][:value],
+              'ilvl' => WOTLK_ITEM_LEVELS[equipped_item[:item][:id]] || 0,
               'id' => equipped_item[:item][:id],
               'name' => equipped_item[:name],
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
             }
 
-            @character.ilvl += WOTLK_TIER_ITEMS[equipped_item[:item][:id]] || 0
+            if equipped_item[:quality][:type].to_sym == :HEIRLOOM
+              @character.details['current_gear'][item]['ilvl'] = 187
+              @character.ilvl += 187
+            else
+              @character.ilvl += WOTLK_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+            end
+
 
             WOTLK_TIER_ITEMS_BY_SLOT.each do |tier, slots|
               if slots.keys.include? item
                 if WOTLK_TIER_ITEMS[tier].include?(equipped_item[:item][:id].to_i)
-                  @character.details["tier_#{tier}_#{item}"] = true
+                  @character.details["tier_#{tier}_#{item}"] = @character.details['current_gear'][item]['ilvl']
                 end
 
                 tier_statuses[tier] += @character.details["tier_#{tier}_#{item}"] ? 1 : 0
-                @character.data["tier_#{tier}_#{item}"] = @character.details["tier_#{tier}_#{item}"] ? 'yes' : 'no'
+                @character.data["tier_#{tier}_#{item}"] = @character.details["tier_#{tier}_#{item}"] || ""
               end
             end
 
             @character.data[item + '_id'] = equipped_item[:item][:id]
-            @character.data[item + '_ilvl'] = equipped_item[:level][:value]
+            @character.data[item + '_ilvl'] = @character.details['current_gear'][item]['ilvl']
             @character.data[item + '_name'] = equipped_item[:name]
             @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
           rescue => err
@@ -61,8 +70,7 @@ module Audit
         # For 2H weapons the item level is counted twice to normalise between weapon types
         if @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
           items_equipped += 1
-          main_hand_ilvl = @data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:level][:value]
-          @character.ilvl += main_hand_ilvl
+          @character.ilvl += (@character.details.dig('current_gear', 'main_hand', 'ilvl') || 0)
         end
 
         WOTLK_LEGENDARIES.values.uniq.each do |legendary|
@@ -78,6 +86,29 @@ module Audit
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
+        @character.data['gem_list'] = @character.gems.join('|')
+        @character.data['gearscore'] = Audit::GearScore.new(@character, @data[:equipment][:equipped_items]).total
+      end
+
+      def check_sockets(item, equipped_item)
+        return unless equipped_item
+
+        sockets_expected = (item == 'waist' ? 1 : 0) + (WOTLK_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0)
+        if sockets_expected > 0
+          [2, 3, 4].first(sockets_expected).each do |enchantment_slot|
+            if enchantment = equipped_item[:enchantments]&.find { |e| e.dig(:enchantment_slot, :id) == enchantment_slot }
+              if meta_gem_type = WOTLK_META_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
+                @character.data['meta_gem_quality'] = GEM_QUALITY_MAPPING[meta_gem_type]
+              elsif gem_type = WOTLK_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
+                @character.gems << GEM_QUALITY_MAPPING[gem_type]
+              else
+                @character.gems << 1 # unknown?
+              end
+            else
+              @character.data['empty_sockets'] += 1
+            end
+          end
+        end
       end
 
       def check_enchant(item, equipped_item)
@@ -86,18 +117,19 @@ module Audit
             # Off-hand items that are not weapons or shields can't be enchanted
             return if !equipped_item&.dig(:weapon) && !equipped_item&.dig(:shield_block) && item == "off_hand"
 
-            name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
-            source = equipped_item[:enchantments].first.dig(:source_item, :name)&.gsub("QA", "")
+            enchantment = equipped_item[:enchantments].find { |e| e.dig(:enchantment_slot, :id) == 0 }
+            name = enchantment[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
+            source = enchantment.dig(:source_item, :name)&.gsub("QA", "")
 
             display_name = if !source || name.split(" ").all? { |word| source.include? word }
               name
             else
               "#{source} (#{name})"
-            end
+            end.gsub("+", "")
 
             @character.data["#{item}_enchant_name"] = display_name
-            @character.data["#{item}_enchant_quality"] = 3 # TODO: How to identify what is BIS?
-          rescue
+            @character.data["#{item}_enchant_quality"] = 3
+          rescue => err
             @character.data["#{item}_enchant_quality"] = 0
             @character.data["#{item}_enchant_name"] = ''
           end

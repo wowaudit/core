@@ -66,7 +66,7 @@ module Audit
       return 0 unless item
 
       quality = item[:quality][:type].to_sym
-      item_level = quality == :HEIRLOOM ? 187.05 : item[:level][:value]
+      item_level = quality == :HEIRLOOM ? 187.05 : WOTLK_ITEM_LEVELS[item[:item][:id]] || CLASSIC_ERA_ITEM_LEVELS[item[:item][:id]] || 0
       modifier = item_level > 120 ? QUALITY_MODIFIER[quality] : LEGACY_QUALITY_MODIFIER[quality]
 
       slot_scale = if slot == 'ranged' && @character.data['class'] == 'Hunter'
@@ -77,7 +77,7 @@ module Audit
         SLOT_SCALE[slot.to_sym]
       end
 
-      if false # two handed weapon main_hand and off hand is not two handed weapon
+      if slot == "main_hand" && item[:inventory_type][:type] == "TWOHWEAPON" && !@gear.any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
         slot_scale *= 2
       end
 

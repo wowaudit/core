@@ -159,8 +159,8 @@ module Audit
         honor_earned = 0
         highest_rating = 0
 
-        BRACKETS.each do |bracket, endpoint|
-          if !@data[endpoint.to_sym][:empty] && @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON
+        BRACKETS[:live].each do |bracket, endpoint|
+          if !@data[endpoint.to_sym][:empty] && @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON[:live]
             won = @data[endpoint.to_sym].dig(:weekly_match_statistics, :won) || 0
             lost = @data[endpoint.to_sym].dig(:weekly_match_statistics, :lost) || 0
 
@@ -169,7 +169,7 @@ module Audit
             honor_earned += [won - 3, 0].max * HONOR_PER_WIN[bracket][:win]
             honor_earned += lost * HONOR_PER_WIN[bracket][:loss]
 
-            if @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON && won > 0
+            if @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON[:live] && won > 0
               highest_rating = [highest_rating, @data[endpoint.to_sym][:rating]].max
             end
           end
@@ -186,7 +186,7 @@ module Audit
           honor_earned += [won - 3, 0].max * HONOR_PER_WIN['shuffle'][:win]
           honor_earned += lost * HONOR_PER_WIN['shuffle'][:loss]
 
-          if bracket.dig(:season, :id) == CURRENT_PVP_SEASON && won > 0
+          if bracket.dig(:season, :id) == CURRENT_PVP_SEASON[:live] && won > 0
             highest_rating = [highest_rating, @data[key][:rating]].max
           end
         end
