@@ -16,6 +16,11 @@ module Audit
           ],
           classic_progression: [
             Audit::ClassicProgression::BasicData,
+            Audit::ClassicProgression::CollectionData,
+            Audit::ClassicProgression::GearData,
+            Audit::ClassicProgression::InstanceData,
+            Audit::ClassicProgression::ProfessionData,
+            Audit::ClassicProgression::PvPData,
           ]
         }[realm.kind.to_sym].each do |type|
           next if skipped && type::SKIPPABLE
@@ -31,7 +36,7 @@ module Audit
       @skipped = skipped
       @realm = realm
 
-      if !@skipped && @realm.kind == 'live'
+      if !@skipped && @realm.kind != 'classic_era'
         @achievements = @data[:achievements]
                           .group_by{ |ach| ach[:id] }
                           .transform_values(&:first)

@@ -24,6 +24,13 @@ module Audit
         :status,
       ],
       classic_progression: [
+        :equipment,
+        :achievements,
+        :achievement_statistics,
+        :pvp_summary,
+        :pvp_bracket_2v2,
+        :pvp_bracket_3v3,
+        :pvp_bracket_5v5,
         :status,
       ]
     }
