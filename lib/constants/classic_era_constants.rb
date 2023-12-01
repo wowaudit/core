@@ -87,7 +87,6 @@ CLASSIC_ERA_HONOR_TITLES = {
     'Marshal',
     'Field Marshal',
     'Grand Marshal',
-    'Grand Marshal', # For some reason honor level 15 exists???
   ],
   horde: [
     '-',
@@ -105,7 +104,6 @@ CLASSIC_ERA_HONOR_TITLES = {
     'General',
     'Warlord',
     'High Warlord',
-    'High Warlord', # For some reason honor level 15 exists???
   ]
 }
 
