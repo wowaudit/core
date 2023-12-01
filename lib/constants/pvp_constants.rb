@@ -13,7 +13,7 @@ BRACKETS = {
 
 CURRENT_PVP_SEASON = {
   live: 36,
-  classic_progression: 5,
+  classic_progression: 8,
 }
 
 HONOR_PER_WIN = {

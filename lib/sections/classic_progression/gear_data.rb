@@ -88,6 +88,7 @@ module Audit
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
         @character.data['gem_list'] = @character.gems.join('|')
         @character.data['gearscore'] = Audit::GearScore.new(@character, @data[:equipment][:equipped_items]).total
+        @character.data['meta_gem'] = @character.data['meta_gem_quality'] == 3 ? 'yes' : 'no'
       end
 
       def check_sockets(item, equipped_item)

@@ -19,7 +19,7 @@ module Audit
             end
 
             @character.data["max_#{bracket}_rating"] = @data[:achievement_statistics][:categories].find { |cat| cat[:name] == "Player vs. Player" }[:sub_categories][0][:statistics].select do |stat|
-              stat[:name] == "Highest #{bracket} personal rating"
+              stat[:name] == "Highest #{bracket[0]} man personal rating"
             end.first&.dig(:quantity)&.to_i rescue 0
           end
         end
