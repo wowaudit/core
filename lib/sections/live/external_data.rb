@@ -32,19 +32,14 @@ module Audit
       end
 
       def add_leaderboard_data
-        # Use either Raider.io data or leaderboard data, whichever is more complete at the moment
-        dungeon_data = if @character.details['raiderio']['top_ten_highest'].sum > @character.details['raiderio']['leaderboard_runs'].sum
-          @character.details['raiderio']['top_ten_highest']
-        else
-          (@character.details['raiderio']['leaderboard_runs'] || []).sort_by { |h| h * -1 }
-        end
-
         @character.data['dungeons_this_week'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
         dungeons_per_week_in_season = (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a.reverse.map do |period|
           @character.details['keystones'][period.to_s]&.size || 0
         end
         @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum + @character.data['dungeons_this_week']
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
+
+        dungeon_data = (@character.details['keystones'][Audit.period.to_s]&.values&.map { |dungeon| dungeon['level'] } || []).sort.reverse
 
         if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)
           @character.data['great_vault_slot_4'] = ""

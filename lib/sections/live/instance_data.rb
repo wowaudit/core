@@ -59,19 +59,6 @@ module Audit
           end
         end
 
-        # Clear runs that were stored multiple times incorrectly, with an insignificant timestamp difference
-        @character.details['keystones'].each do |period, runs|
-          runs.keys.map(&:to_i).each do |timestamp|
-            duplicate = @character.details['keystones'][period].keys.map(&:to_i).any? do |other_timestamp|
-              other_timestamp - 60 < timestamp && other_timestamp + 60 > timestamp && timestamp != other_timestamp
-            end
-
-            if duplicate
-              @character.details['keystones'][period].delete(timestamp.to_s)
-            end
-          end
-        end
-
         best_runs = @data.dig(:season_keystones, :best_runs)
                       &.group_by { |run| run.dig(:dungeon, :id) }
                       &.transform_values { |runs| runs.map { |run| run.dig(:mythic_rating, :rating) }.max } || {}
