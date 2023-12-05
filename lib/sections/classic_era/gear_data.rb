@@ -66,7 +66,7 @@ module Audit
         # For 2H weapons the item level is counted twice to normalise between weapon types
         if @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
           items_equipped += 1
-          main_hand_ilvl = CLASSIC_ERA_ITEM_LEVELS[@data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:item][:id]] rescue 0
+          main_hand_ilvl = (CLASSIC_ERA_ITEM_LEVELS[@data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:item][:id]] || 0) rescue 0
           @character.ilvl += main_hand_ilvl
         end
 
