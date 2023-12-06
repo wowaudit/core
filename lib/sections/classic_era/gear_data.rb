@@ -20,7 +20,7 @@ module Audit
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             check_enchant(item, equipped_item)
-            items_equipped += 1
+            items_equipped += 1 if equipped_item
 
             if CLASSIC_ERA_LEGENDARIES.keys.include?(equipped_item[:item][:id].to_i)
               key = "legendary_#{CLASSIC_ERA_LEGENDARIES[equipped_item[:item][:id].to_i]}"

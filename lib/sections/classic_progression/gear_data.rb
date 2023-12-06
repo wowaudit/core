@@ -22,7 +22,7 @@ module Audit
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             check_enchant(item, equipped_item)
             check_sockets(item, equipped_item)
-            items_equipped += 1
+            items_equipped += 1 if equipped_item
 
             if WOTLK_LEGENDARIES.keys.include?(equipped_item[:item][:id].to_i)
               key = "legendary_#{WOTLK_LEGENDARIES[equipped_item[:item][:id].to_i]}"
