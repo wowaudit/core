@@ -119,7 +119,7 @@ ring_enchants = {
 
 ENCHANTS = {
   'head' => {
-    7052 => [3, "Incandescent Essence"],
+    7052 => [4, "Incandescent Essence"],
   },
   'back' => {
     6587 => [2, "Writ of Avoidance (1)"],
