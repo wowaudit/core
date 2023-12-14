@@ -7,6 +7,7 @@ module Audit
         sparks_used = 0
         embellished_found = 0
         @character.data['empty_sockets'] = 0
+        @character.data['epic_gem'] = 0
         @character.data["food_embellishment"] = 'no'
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
