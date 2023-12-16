@@ -46,7 +46,7 @@ module Audit
           characters = characters.to_a.map! do |character|
             next unless character.redis_id
             character.details = metadata[character.redis_id] || {}
-            character.verify_details
+            Audit.verify_details(character, character.details, REALMS[character.realm_id])
             changed = character.process_leaderboard_result((runs_by_character[character.key.to_i] || []), Audit.period == period)
             character if changed
           end.compact
@@ -70,15 +70,6 @@ module Audit
       }[kind.to_sym] + region.downcase
     end
 
-    def section
-      {
-        live: Live,
-        classic_progression: ClassicProgression,
-        classic_era: ClassicEra,
-        tournament: ClassicEra,
-      }[kind.to_sym]
-    end
-
     def redis_prefix
       {
         live: 'dragonflight',
@@ -86,6 +77,11 @@ module Audit
         classic_era: 'vanilla',
         tournament: 'tournament',
       }[kind.to_sym]
+    end
+
+    # The new website database table doesn't have the `blizzard_name` attribute. Temporary workaround.
+    def blizzard_name
+      defined?(slug) ? slug : super
     end
   end
 end

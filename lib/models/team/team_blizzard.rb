@@ -1,40 +1,5 @@
 module Audit
   class TeamBlizzard < Team
-    FIELDS = {
-      live: [
-        :achievements,
-        :achievement_statistics,
-        :completed_quests,
-        :equipment,
-        :mounts, # Only needed to track Mythic raid mounts, when relevant
-        :pets,
-        :professions,
-        :pvp_bracket_2v2,
-        :pvp_bracket_3v3,
-        :pvp_bracket_rbg,
-        :pvp_summary,
-        :season_keystones,
-        :reputations,
-        :status,
-        :titles,
-      ],
-      classic_era: [
-        :equipment,
-        :pvp_summary,
-        :status,
-      ],
-      classic_progression: [
-        :equipment,
-        :achievements,
-        :achievement_statistics,
-        :pvp_summary,
-        :pvp_bracket_2v2,
-        :pvp_bracket_3v3,
-        :pvp_bracket_5v5,
-        :status,
-      ]
-    }
-
     def refresh(authentication_attempt = 0)
       RBattlenet.set_options(region: REALMS[guild.realm_id].region, namespace: REALMS[guild.realm_id].namespace, locale: "en_GB", concurrency: 25, timeout: 60, retries: 5, response_type: :hash, eager_children: true)
       $errors = { :tracking => 0, :role => 0 }
@@ -57,8 +22,15 @@ module Audit
         output = process_request(characters)
         Logger.t(INFO_TEAM_REFRESHED, id)
 
+        section = {
+          live: Live,
+          classic_progression: ClassicProgression,
+          classic_era: ClassicEra,
+          tournament: ClassicEra,
+        }[REALMS[guild.realm_id].kind.to_sym]
+
         # Writer.write(self, output.reject(&:marked_for_deletion_at), HeaderData.altered_header(self))
-        Writer.write(self, output, REALMS[guild.realm_id].section::HeaderData.altered_header(self))
+        Writer.write(self, output, section::HeaderData.altered_header(self))
         Writer.update_db(output, true)
       else
         Logger.t(INFO_TEAM_EMPTY, id)
@@ -73,7 +45,7 @@ module Audit
       api_limited = []
 
       RBattlenet::Wow::Character.find(
-        characters.map{ |ch| character_query(ch) }, fields: self.class::FIELDS[REALMS[guild.realm_id].kind.to_sym]
+        characters.map{ |ch| character_query(ch) }, fields: FIELDS[REALMS[guild.realm_id].kind.to_sym]
       ) do |character, result|
         begin
           if character[:source].process_result(result, character[:skipped], depth)

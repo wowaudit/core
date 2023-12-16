@@ -44,6 +44,41 @@ WEEKLY_RESET = {
   }
 }
 
+FIELDS = {
+  live: [
+    :achievements,
+    :achievement_statistics,
+    :completed_quests,
+    :equipment,
+    :mounts, # Only needed to track Mythic raid mounts, when relevant
+    :pets,
+    :professions,
+    :pvp_bracket_2v2,
+    :pvp_bracket_3v3,
+    :pvp_bracket_rbg,
+    :pvp_summary,
+    :season_keystones,
+    :reputations,
+    :status,
+    :titles,
+  ],
+  classic_era: [
+    :equipment,
+    :pvp_summary,
+    :status,
+  ],
+  classic_progression: [
+    :equipment,
+    :achievements,
+    :achievement_statistics,
+    :pvp_summary,
+    :pvp_bracket_2v2,
+    :pvp_bracket_3v3,
+    :pvp_bracket_5v5,
+    :status,
+  ]
+}
+
 HEADER = {
   live: [
     'name',
@@ -762,3 +797,10 @@ HEADER = {
     'achievement_invincible',
   ],
 }
+
+CHARACTER_IDENTIFICATION_IDS = [
+  6, # Level 10
+  131, # Journeyman Medic
+  973, # 5 Daily Quests Completed
+  14271, # WoW's 16th Anniversary
+]

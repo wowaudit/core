@@ -24,7 +24,7 @@ module Audit
     def process_result(response, skipped, depth = 0)
       init
       if skipped
-        Data.process(self, response, true, REALMS[realm_id])
+        Data.process(self, response, true, REALMS[realm_id], self)
         update_snapshots(skipped)
         to_output
       else
@@ -36,7 +36,7 @@ module Audit
           self.changed = true if self.status != "tracking"
           self.status = "tracking"
 
-          Data.process(self, response, false, REALMS[realm_id])
+          Data.process(self, response, false, REALMS[realm_id], self)
           update_snapshots(skipped)
           to_output
         else

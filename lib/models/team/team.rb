@@ -23,7 +23,7 @@ module Audit
       characters.each_with_index do |character, index|
         character.realm_slug = REALMS[character.realm_id || guild.realm_id].blizzard_name
         character.details = character_details(characters)[character.redis_id].to_h
-        character.verify_details
+        Audit.verify_details(character, character.details, REALMS[character.realm_id])
       end
       characters.select(&:active)
     end

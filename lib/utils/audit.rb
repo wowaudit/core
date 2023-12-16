@@ -162,5 +162,67 @@ module Audit
       tz = TZInfo::Timezone.get(TIME_ZONE)
       Time.now.getlocal(tz.current_period.offset.utc_total_offset)
     end
+
+    def verify_details(character, details, realm)
+      # Set ids and max item level if not present
+      details['team_id'] = character.team_id if !details['team_id'] && defined?(character.team_id)
+      details['character_id'] = character.id if !details['character_id']
+      details['max_ilvl'] = 0 if !details['max_ilvl']
+      details['current_version'] = 0 if !details['current_version']
+      details['current_period'] = 0 if !details['current_period']
+
+      # Disable last refresh if not present
+      if !details['last_refresh'].is_a? Hash
+        details['last_refresh'] = false
+      end
+
+      if !details['current_gear'].is_a? Hash
+        details['current_gear'] = ITEMS[realm.kind.to_sym].map { |item| [item, { ilvl: 0 }] }.to_h
+      end
+
+      if realm.kind == 'live'
+        # Initialise snapshots if not present
+        if !details['snapshots'].is_a? Hash
+          details['snapshots'] = {}
+        end
+
+        if !details['snapshots'].include? Audit.year
+          details['snapshots'][Audit.year] = {}
+        end
+
+        # Initialise Raider.io data if not present
+        if !details['raiderio'].is_a? Hash
+          details['raiderio'] = {
+            'score' => 0,
+            'season_highest' => 0,
+            'weekly_highest' => 0,
+            'period' => 0,
+            'top_ten_highest' => [],
+            'leaderboard_runs' => [],
+          }
+        end
+
+        # Initialise Warcraft Logs data if not present
+        if !details['warcraftlogs'].is_a? Hash
+          details['warcraftlogs'] = { '1' => {}, '3' => {}, '4' => {}, '5' => {} }
+        end
+
+        if !details['best_gear'].is_a? Hash
+          details['best_gear'] = ITEMS[:live].map { |item| [item, { ilvl: 0 }] }.to_h
+        end
+
+        if !details['spark_gear_s3'].is_a? Hash
+          details['spark_gear_s3'] = ITEMS[:live].map { |item| [item, {}] }.to_h
+        end
+
+        if !details['tier_items_s3'].is_a? Hash
+          details['tier_items_s3'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
+        end
+
+        if !details['keystones'].is_a? Hash
+          details['keystones'] = {}
+        end
+      end
+    end
   end
 end
