@@ -19,7 +19,7 @@ module Audit
         @character.data['level'] = @data[:level]
 
         # Parse the role if it's valid, otherwise set the default role
-        if type == :live
+        if type != :live
           @character.data['role'] = @temp_character.role.capitalize
         else
           begin
