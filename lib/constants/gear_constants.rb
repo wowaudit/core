@@ -613,4 +613,7 @@ SPARK_RECIPE_NAME_TO_ITEM_ID = {
   "Dreaming Devotion" => { id: 207087, profession: 'Enchanting' },
   "Verdant Conduit" => { id: 208187, profession: 'Leatherworking' },
   "Verdant Tether" => { id: 210671, profession: 'Tailoring' },
+  "Vantus Rune: Vault of the Incarnates" => { id: 198956, profession: 'Inscription' },
+  "Vantus Rune: Aberrus, the Shadowed Crucible" => { id: 205134, profession: 'Inscription' },
+  "Vantus Rune: Amirdrassil, the Dream's Hope" => { id: 210490, profession: 'Inscription' },
 }
