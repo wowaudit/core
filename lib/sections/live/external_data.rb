@@ -34,6 +34,14 @@ module Audit
       def add_leaderboard_data
         @character.data['dungeons_this_week'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
         dungeons_per_week_in_season = (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a.reverse.map do |period|
+
+          # If for any reason there's a duplicate run stored with a slightly different timestamp, delete it.
+          (@character.details['keystones'][period.to_s] || {}).keys.map(&:to_i).each do |timestamp|
+            if @character.details['keystones'][period.to_s].keys.map(&:to_i).any? { |other| other != timestamp && other - 60 < timestamp && other + 60 > timestamp }
+              @character.details['keystones'][period.to_s].delete(timestamp.to_s)
+            end
+          end
+
           @character.details['keystones'][period.to_s]&.size || 0
         end
         @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum + @character.data['dungeons_this_week']
