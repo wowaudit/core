@@ -19,7 +19,6 @@ module Audit
         ITEMS[:classic_era].each do |item|
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
-            check_enchant(item, equipped_item)
             items_equipped += 1 if equipped_item
 
             if CLASSIC_ERA_LEGENDARIES.keys.include?(equipped_item[:item][:id].to_i)
@@ -30,7 +29,10 @@ module Audit
             @character.details['current_gear'][item] = {
               'ilvl' => CLASSIC_ERA_ITEM_LEVELS[equipped_item[:item][:id]] || 0,
               'id' => equipped_item[:item][:id],
+              'bonus_ids' => [],
               'name' => equipped_item[:name],
+              'enchant' => check_enchant(item, equipped_item),
+              'sockets' => [],
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
             }
 
@@ -106,6 +108,8 @@ module Audit
             @character.data["#{item}_enchant_quality"] = 0
             @character.data["#{item}_enchant_name"] = ''
           end
+
+          { name: @character.data["#{item}_enchant_name"], quality: @character.data["#{item}_enchant_quality"] }
         end
       end
     end

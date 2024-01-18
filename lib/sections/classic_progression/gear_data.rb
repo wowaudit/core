@@ -20,8 +20,6 @@ module Audit
         ITEMS[:classic_progression].each do |item|
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
-            check_enchant(item, equipped_item)
-            check_sockets(item, equipped_item)
             items_equipped += 1 if equipped_item
 
             if WOTLK_LEGENDARIES.keys.include?(equipped_item[:item][:id].to_i)
@@ -33,7 +31,10 @@ module Audit
               'ilvl' => WOTLK_ITEM_LEVELS[equipped_item[:item][:id]] || 0,
               'id' => equipped_item[:item][:id],
               'name' => equipped_item[:name],
+              'bonus_ids' => [],
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
+              'enchant' => check_enchant(item, equipped_item),
+              'sockets' => check_sockets(item, equipped_item),
             }
 
             if equipped_item[:quality][:type].to_sym == :HEIRLOOM
@@ -94,6 +95,8 @@ module Audit
       def check_sockets(item, equipped_item)
         return unless equipped_item
 
+        socket_info = []
+
         sockets_expected = (item == 'waist' ? 1 : 0) + (WOTLK_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0)
         if sockets_expected > 0
           [2, 3, 4].first(sockets_expected).each do |enchantment_slot|
@@ -105,11 +108,16 @@ module Audit
               else
                 @character.gems << 1 # unknown?
               end
+
+              socket_info << { type: meta_gem_type ? 'meta' : 'socket', gem: enchantment[:source_item][:id] }
             else
               @character.data['empty_sockets'] += 1
+              socket_info << { type: nil, gem: nil }
             end
           end
         end
+
+        socket_info
       end
 
       def check_enchant(item, equipped_item)
@@ -134,6 +142,8 @@ module Audit
             @character.data["#{item}_enchant_quality"] = 0
             @character.data["#{item}_enchant_name"] = ''
           end
+
+          { name: @character.data["#{item}_enchant_name"], quality: @character.data["#{item}_enchant_quality"] }
         end
       end
     end

@@ -19,8 +19,6 @@ module Audit
 
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
-            check_enchant(item, equipped_item)
-            check_sockets(item, equipped_item)
             embellished_found += check_embellished(embellished_found, item, equipped_item)
             items_equipped += 1
 
@@ -40,15 +38,14 @@ module Audit
               'ilvl' => equipped_item[:level][:value],
               'id' => equipped_item[:item][:id],
               'bonus_ids' => equipped_item[:bonus_list],
+              'name' => equipped_item[:name],
+              'enchant' => check_enchant(item, equipped_item),
+              'sockets' => check_sockets(item, equipped_item),
+              'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
             }
 
             if equipped_item[:level][:value] >= @character.details['best_gear'][item]['ilvl'].to_f
-              @character.details['best_gear'][item] = {
-                'ilvl' => equipped_item[:level][:value],
-                'id' => equipped_item[:item][:id],
-                'name' => equipped_item[:name],
-                'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
-              }
+              @character.details['best_gear'][item] = @character.details['current_gear'][item]
             end
 
             if TIER_ITEMS_BY_SLOT.keys.include? item
@@ -132,12 +129,18 @@ module Audit
             @character.data["enchant_quality_#{item}"] = item == 'waist' ? 3 : 0
             @character.data["#{item}_enchant"] = ''
           end
+
+          { name: @character.data["#{item}_enchant"], quality: @character.data["enchant_quality_#{item}"] }
         elsif item == 'neck'
           @character.data["enchant_quality_#{item}"] = equipped_item&.dig(:sockets)&.size == 3 ? 4 : 0
+
+          nil
         end
       end
 
       def check_sockets(item, equipped_item)
+        socket_info = []
+
         (equipped_item[:sockets] || []).each do |socket|
           if has_gem = GEMS[socket.dig(:item, :id)]
             @character.gems << has_gem
@@ -148,7 +151,11 @@ module Audit
           elsif !socket.dig(:item, :id) && socket.dig(:socket_type, :type) != "TINKER"
             @character.data['empty_sockets'] += 1
           end
+
+          socket_info << { type: socket.dig(:socket_type, :type), gem: socket.dig(:item, :id) }
         end
+
+        socket_info
       end
 
       def check_onyx_annulet(item, equipped_item)
