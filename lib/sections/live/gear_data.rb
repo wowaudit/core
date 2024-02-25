@@ -6,6 +6,7 @@ module Audit
         items_equipped = 0
         sparks_used = 0
         embellished_found = 0
+        total_upgrades_missing = 0
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
         @character.data["food_embellishment"] = 'no'
@@ -13,6 +14,7 @@ module Audit
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
         @character.data["enchant_quality_off_hand"] = ''
         @character.data["off_hand_enchant"] = ''
+        @character.data["upgrade_level_off_hand"] = ''
 
         ITEMS[:live].each do |item|
           @character.data["tier_#{item}_difficulty"] = ''
@@ -47,6 +49,11 @@ module Audit
             if equipped_item[:level][:value] >= @character.details['best_gear'][item]['ilvl'].to_f
               @character.details['best_gear'][item] = @character.details['current_gear'][item]
             end
+
+            upgrade_id = equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }
+            track = UPGRADE_BONUS_IDS_BY_DIFFICULTY.values.find { |ids| ids.include? upgrade_id.to_i }
+            @character.data["upgrade_level_#{item}"] = track ? "#{track.index(upgrade_id) + 1} / #{track.size}" : '-'
+            total_upgrades_missing += (track.size - (track.index(upgrade_id) + 1)) if track
 
             if TIER_ITEMS_BY_SLOT.keys.include? item
               # Convert legacy format stored tier data
@@ -102,6 +109,7 @@ module Audit
 
         @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
         @character.data['ingenuity_sparks_equipped'] = sparks_used
+        @character.data['total_upgrades_missing'] = total_upgrades_missing
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
