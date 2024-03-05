@@ -13,8 +13,8 @@ module Audit
             raise e
           end
         rescue RBattlenet::Errors::Unauthorized
-          raise if TYPE.include?("dedicated")
           guild.api_key.update(active: false)
+          raise if TYPE.include?("dedicated")
         end
       end
 
