@@ -28,29 +28,44 @@ module Audit
     end
 
     def refresh_from_schedule(type)
+      current_api_key = nil
       loop do
         worker = Schedule.where(name: `hostname`.strip).first || register_worker(type)
-        if worker.schedule
-          schedule = Oj.load worker.schedule
-          Logger.g(INFO_STARTING_SCHEDULE + "Entities: #{schedule.join(', ')}")
 
-          # Ask for a new schedule
-          worker.schedule = nil
-          worker.save_changes
+        if worker.api_key && worker.api_key.token
+          if current_api_key != worker.api_key_id
+            Logger.g(INFO_SWITCHING_TOKEN) if current_api_key
+            RBattlenet.set_options(token: worker.api_key.token)
+            current_api_key = worker.api_key_id
+          end
 
+          if worker.schedule
+            schedule = Oj.load worker.schedule
+            Logger.g(INFO_STARTING_SCHEDULE + "Entities: #{schedule.join(', ')}")
+
+            # Ask for a new schedule
+            worker.schedule = nil
+            worker.save_changes
+
+          else
+            # Schedule own work if no schedule is available
+            Logger.g(INFO_NO_SCHEDULE)
+            schedule = Scheduler.schedule_work(worker)
+            worker.update(updated_at: DateTime.now)
+          end
+
+          self.refresh(schedule, worker.base_type)
+          Logger.g(INFO_FINISHED_SCHEDULE)
         else
-          # Schedule own work if no schedule is available
-          Logger.g(INFO_NO_SCHEDULE)
-          schedule = Scheduler.schedule_work(worker)
-          worker.update(updated_at: DateTime.now)
+          puts Logger.g(INFO_NO_TOKEN_AVAILABLE)
+          sleep 3
         end
-
-        self.refresh(schedule, worker.base_type)
-        Logger.g(INFO_FINISHED_SCHEDULE)
       end
     end
 
     def refresh_without_schedule(type, entities = nil)
+      RBattlenet.authenticate(client_id: BLIZZARD_CLIENT_ID, client_secret: BLIZZARD_CLIENT_SECRET)
+
       loop do
         Logger.g(INFO_STARTING_SCHEDULE + "Entities: #{entities.join(', ')}")
         self.refresh(entities, type)
@@ -75,21 +90,6 @@ module Audit
         schedule.zone = (type.to_s == 'wcl' ? 1 : zone)
         schedule.created_at = DateTime.now
         schedule.updated_at = DateTime.now
-      end
-    end
-
-    def authenticate(id, secret)
-      attempts = 0
-
-      begin
-        RBattlenet.authenticate(client_id: id, client_secret: secret)
-      rescue
-        attempts += 1
-        if attempts < 5
-          retry
-        else
-          raise
-        end
       end
     end
 

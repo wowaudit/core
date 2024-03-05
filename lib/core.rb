@@ -46,6 +46,8 @@ BUCKET = storage_data["bucket"]
 # Load keys
 keys = YAML::load(File.open('config/keys.yml'))
 ROLLBAR_KEY = keys["rollbar_key"]
+WCL_CLIENT_ID = keys["wcl_client_id"]
+WCL_CLIENT_SECRET = keys["wcl_client_secret"]
 db_config = {}
 
 Rollbar.configure do |config|
@@ -55,6 +57,9 @@ Rollbar.configure do |config|
     config.enabled = false
     require 'byebug'
     db_config = YAML::load(File.open('config/external_database.yml'))
+
+    BLIZZARD_CLIENT_ID = keys["blizzard_client_id"]
+    BLIZZARD_CLIENT_SECRET = keys["blizzard_client_secret"]
   else
     db_config = YAML::load(File.open('config/database.yml'))
   end
@@ -80,17 +85,6 @@ begin
   sleep 1
   if REGISTER && Audit.fetch_occurrences(TYPE)[schedule&.zone || 1] > (MAX_OCCURRENCES[TYPE.to_sym] || 99)
     schedule = register
-  end
-
-  ZONE = (TYPE.to_s == 'wcl' ? 1 : schedule&.zone || 1)
-  unless TYPE.include?("dedicated")
-    schedules = Audit::Schedule.all
-    KEY = Audit::ApiKey
-      .where(zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet"), active: true)
-      .reject { |key| TYPE != "wcl" && schedules.map(&:api_key_id).include?(key.id) }.sample
-
-    schedule.update(api_key: KEY) if schedule
-    Audit.authenticate(KEY.client_id, KEY.client_secret) unless TYPE == "wcl"
   end
 
 rescue Mysql2::Error => e

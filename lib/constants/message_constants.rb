@@ -59,3 +59,7 @@ INFO_SCHEDULER_CYCLE_DONE = "Finished assigning schedules to all workers. Pausin
 INFO_WORKER_BUSY = "This worker hasn't started working on the newest schedule yet. "
 
 INFO_ITEM_QUERY = "New legendary item discovered through the feed. Querying item info."
+
+INFO_NO_TOKEN_AVAILABLE = "Couldn't find a token to perform requests with. Waiting..."
+
+INFO_SWITCHING_TOKEN = "Token was invalidated, switching to a new token."

@@ -3,20 +3,6 @@ module Audit
     def refresh(authentication_attempt = 0)
       RBattlenet.set_options(region: REALMS[guild.realm_id].region, namespace: REALMS[guild.realm_id].namespace, locale: "en_GB", concurrency: 25, timeout: 60, retries: 5, response_type: :hash, eager_children: true)
       $errors = { :tracking => 0, :role => 0 }
-      if guild.api_key && guild.api_key.active
-        begin
-          Audit.authenticate(guild.api_key.client_id, guild.api_key.client_secret)
-        rescue JSON::ParserError => e
-          if authentication_attempt < 5
-            return refresh(authentication_attempt + 1)
-          else
-            raise e
-          end
-        rescue RBattlenet::Errors::Unauthorized
-          guild.api_key.update(active: false)
-          raise if TYPE.include?("dedicated")
-        end
-      end
 
       if characters.any?
         output = process_request(characters)

@@ -32,7 +32,7 @@ module Audit
       uri["{name}"] = character.name
       uri["{zone}"] = zone["id"].to_s
       uri["{metric}"] = character.wcl_role
-      uri["{key}"] = KEY.client_id
+      uri["{key}"] = WCL_CLIENT_ID
       uri
     end
 

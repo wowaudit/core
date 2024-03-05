@@ -14,7 +14,7 @@ it's not built with individual use in mind. Therefore, setting up the scripts ca
         Enter your SQL and Redis credentials in `config/database.yml`
 
         In `config/keys.yml`:
-        $ wcl_key: <your Warcraft Logs API key>
+        $ wcl_client_id: <your Warcraft Logs API key>
 
         The generated JSON files will be uploaded to a S3 server that you configure, so they can be
         easily fetched by the spreadsheet. In `config/storage.yml` you can enter your S3 credentials.
