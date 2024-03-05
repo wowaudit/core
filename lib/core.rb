@@ -86,7 +86,7 @@ begin
   unless TYPE.include?("dedicated")
     schedules = Audit::Schedule.all
     KEY = Audit::ApiKey
-      .where(zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet"))
+      .where(zone: ZONE, target: (TYPE == "wcl" ? "wcl" : "bnet"), active: true)
       .reject { |key| TYPE != "wcl" && schedules.map(&:api_key_id).include?(key.id) }.sample
 
     schedule.update(api_key: KEY) if schedule
