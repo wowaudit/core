@@ -29,10 +29,13 @@ module Audit
 
     def refresh_from_schedule(type)
       current_api_key = nil
+      waiting_since = Time.now
       loop do
-        worker = Schedule.where(name: `hostname`.strip).first || register_worker(type)
+        worker = Schedule.where(name: `hostname`.strip).first || register_worker(type, 1)
 
-        if worker.api_key && worker.api_key.token
+        if worker.api_key && !worker.api_key.expired?
+          waiting_since = nil
+
           if current_api_key != worker.api_key_id
             Logger.g(INFO_SWITCHING_TOKEN) if current_api_key
             RBattlenet.set_options(token: worker.api_key.token)
@@ -58,6 +61,13 @@ module Audit
           Logger.g(INFO_FINISHED_SCHEDULE)
         else
           puts Logger.g(INFO_NO_TOKEN_AVAILABLE)
+
+          waiting_since ||= Time.now
+          if (Time.now - waiting_since) > 15 # seconds
+            Rollbar.error('Waiting too long for a token...')
+            waiting_since = nil
+          end
+
           sleep 3
         end
       end
