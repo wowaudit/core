@@ -33,10 +33,10 @@ module Audit
       loop do
         worker = Schedule.where(name: `hostname`.strip).first || register_worker(type, 1)
 
-        if worker.api_key && !worker.api_key.expired?
+        if type != 'blizzard' || (worker.api_key && !worker.api_key.expired?)
           waiting_since = nil
 
-          if current_api_key != worker.api_key_id
+          if worker.api_key_id && current_api_key != worker.api_key_id
             Logger.g(INFO_SWITCHING_TOKEN) if current_api_key
             RBattlenet.set_options(token: worker.api_key.token)
             current_api_key = worker.api_key_id
