@@ -33,7 +33,7 @@ module Audit
       loop do
         worker = Schedule.where(name: `hostname`.strip).first || register_worker(type, 1)
 
-        if type != 'blizzard' || (worker.api_key && !worker.api_key.expired?)
+        if ['wcl', 'raiderio'].include?(type) || (worker.api_key && !worker.api_key.expired?)
           waiting_since = nil
 
           if worker.api_key_id && current_api_key != worker.api_key_id
