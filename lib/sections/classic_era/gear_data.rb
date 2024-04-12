@@ -5,6 +5,9 @@ module Audit
         # Check equipped gear
         items_equipped = 0
 
+        # Wipe current gear (it will be repopulated)
+        @character.details['current_gear'] = {}
+
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
         @character.data["off_hand_enchant_quality"] = ''
         @character.data["off_hand_enchant_name"] = ''

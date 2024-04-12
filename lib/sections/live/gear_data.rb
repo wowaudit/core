@@ -16,6 +16,9 @@ module Audit
         @character.data["off_hand_enchant"] = ''
         @character.data["upgrade_level_off_hand"] = ''
 
+        # Wipe current gear (it will be repopulated)
+        @character.details['current_gear'] = {}
+
         ITEMS[:live].each do |item|
           @character.data["tier_#{item}_difficulty"] = ''
 
@@ -36,6 +39,11 @@ module Audit
               }
             end
 
+            upgrade_id = equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }
+            track = UPGRADE_BONUS_IDS_BY_DIFFICULTY.values.find { |ids| ids.include? upgrade_id.to_i }
+            @character.data["upgrade_level_#{item}"] = track ? "#{track.index(upgrade_id) + 1} / #{track.size}" : '-'
+            total_upgrades_missing += (track.size - (track.index(upgrade_id) + 1)) if track
+
             @character.details['current_gear'][item] = {
               'ilvl' => equipped_item[:level][:value],
               'id' => equipped_item[:item][:id],
@@ -43,17 +51,13 @@ module Audit
               'name' => equipped_item[:name],
               'enchant' => check_enchant(item, equipped_item),
               'sockets' => check_sockets(item, equipped_item),
-              'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
+              'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
+              'upgrade_level' => @character.data["upgrade_level_#{item}"],
             }
 
             if equipped_item[:level][:value] >= @character.details['best_gear'][item]['ilvl'].to_f
               @character.details['best_gear'][item] = @character.details['current_gear'][item]
             end
-
-            upgrade_id = equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }
-            track = UPGRADE_BONUS_IDS_BY_DIFFICULTY.values.find { |ids| ids.include? upgrade_id.to_i }
-            @character.data["upgrade_level_#{item}"] = track ? "#{track.index(upgrade_id) + 1} / #{track.size}" : '-'
-            total_upgrades_missing += (track.size - (track.index(upgrade_id) + 1)) if track
 
             if TIER_ITEMS_BY_SLOT.keys.include? item
               # Convert legacy format stored tier data
@@ -138,7 +142,7 @@ module Audit
             @character.data["#{item}_enchant"] = ''
           end
 
-          { name: @character.data["#{item}_enchant"], quality: @character.data["enchant_quality_#{item}"] }
+          { name: @character.data["#{item}_enchant"], quality: @character.data["enchant_quality_#{item}"], id: equipped_item[:enchantments].first[:enchantment_id] }
         elsif item == 'neck'
           @character.data["enchant_quality_#{item}"] = equipped_item&.dig(:sockets)&.size == 3 ? 4 : 0
 
