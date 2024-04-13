@@ -87,7 +87,7 @@ module Audit
             @character.data[item + '_id'] = equipped_item[:item][:id]
             @character.data[item + '_name'] = equipped_item[:name]
             @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
-          rescue
+          rescue => err
             @character.data[item + '_ilvl'] = ''
             @character.data[item + '_id'] = ''
             @character.data[item + '_name'] = ''
@@ -142,7 +142,7 @@ module Audit
             @character.data["#{item}_enchant"] = ''
           end
 
-          { name: @character.data["#{item}_enchant"], quality: @character.data["enchant_quality_#{item}"], id: equipped_item[:enchantments].first[:enchantment_id] }
+          { name: @character.data["#{item}_enchant"], quality: @character.data["enchant_quality_#{item}"], id: equipped_item[:enchantments]&.first&.dig(:enchantment_id) }
         elsif item == 'neck'
           @character.data["enchant_quality_#{item}"] = equipped_item&.dig(:sockets)&.size == 3 ? 4 : 0
 
