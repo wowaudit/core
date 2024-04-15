@@ -24,6 +24,24 @@ module Audit
 
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
+            if !check_onyx_annulet(item, equipped_item)
+              @character.ilvl += equipped_item[:level][:value]
+              @character.data[item + '_ilvl'] = equipped_item[:level][:value]
+            end
+            @character.data[item + '_id'] = equipped_item[:item][:id]
+            @character.data[item + '_name'] = equipped_item[:name]
+            @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
+          rescue => err
+            @character.data[item + '_ilvl'] = ''
+            @character.data[item + '_id'] = ''
+            @character.data[item + '_name'] = ''
+            @character.data[item + '_quality'] = ''
+          end
+
+          begin
+            equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
+            next unless equipped_item
+
             embellished_found += check_embellished(embellished_found, item, equipped_item)
             items_equipped += 1
 
@@ -79,19 +97,9 @@ module Audit
               @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s3'][item]['ilvl']
               @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s3'][item]['difficulty']
             end
-
-            if !check_onyx_annulet(item, equipped_item)
-              @character.ilvl += equipped_item[:level][:value]
-              @character.data[item + '_ilvl'] = equipped_item[:level][:value]
-            end
-            @character.data[item + '_id'] = equipped_item[:item][:id]
-            @character.data[item + '_name'] = equipped_item[:name]
-            @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
           rescue => err
-            @character.data[item + '_ilvl'] = ''
-            @character.data[item + '_id'] = ''
-            @character.data[item + '_name'] = ''
-            @character.data[item + '_quality'] = ''
+            puts err
+            nil # Don't care about supplemental information if something goes wrong, somehow...
           end
 
           @character.data["best_#{item}_ilvl"] = @character.details['best_gear'][item]['ilvl'] || ''
