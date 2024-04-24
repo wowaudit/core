@@ -12,7 +12,7 @@ BRACKETS = {
 }
 
 CURRENT_PVP_SEASON = {
-  live: 36,
+  live: 37,
   classic_progression: 8,
 }
 
