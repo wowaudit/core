@@ -213,8 +213,8 @@ module Audit
         end
 
         # Initialise Warcraft Logs data if not present
-        if !details['warcraftlogs'].is_a? Hash
-          details['warcraftlogs'] = { '1' => {}, '3' => {}, '4' => {}, '5' => {} }
+        if !details['warcraftlogs_awakened'].is_a? Hash
+          details['warcraftlogs_awakened'] = { '1' => {}, '3' => {}, '4' => {}, '5' => {} }
         end
 
         if !details['best_gear'].is_a? Hash

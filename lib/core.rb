@@ -53,7 +53,7 @@ db_config = {}
 Rollbar.configure do |config|
   config.access_token = ROLLBAR_KEY
 
-  if `hostname`.strip.start_with?("L061")
+  if `hostname`.strip.downcase.start_with?("l061")
     config.enabled = false
     require 'byebug'
     db_config = YAML::load(File.open('config/external_database.yml'))

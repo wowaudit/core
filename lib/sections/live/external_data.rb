@@ -13,7 +13,7 @@ module Audit
         RAID_DIFFICULTIES.each_key do |diff|
           output = []
           WCL_IDS[:live].each do |boss|
-            value = @character.details['warcraftlogs'][diff.to_s][boss]
+            value = @character.details['warcraftlogs_awakened'][diff.to_s][boss]
             output << (value ? (value == '-' ? '-' : value&.to_f.to_i) : '-')
           end
           @character.data["WCL_#{RAID_DIFFICULTIES[diff]}"] = output.join('|')

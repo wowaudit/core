@@ -57,7 +57,7 @@ module Audit
         spark_gear_s4: details['spark_gear_s4'],
         keystones: details['keystones'],
         snapshots: details["snapshots"],
-        warcraftlogs: details["warcraftlogs"],
+        warcraftlogs_awakened: details["warcraftlogs_awakened"],
         raiderio: details["raiderio"],
         tier_items_s4: details["tier_items_s4"],
       } : {})

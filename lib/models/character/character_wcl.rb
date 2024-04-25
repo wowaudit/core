@@ -21,7 +21,7 @@ module Audit
         # If there are no parses, we want to wipe any parses from previous non-fated seasons
         percentiles.keys.each do |difficulty|
           raid['encounters'].map { |e| e[:id].to_s }.each do |encounter_id|
-            details['warcraftlogs'][difficulty.to_s][encounter_id] = '-'
+            details['warcraftlogs_awakened'][difficulty.to_s][encounter_id] = '-'
           end
         end
       else
@@ -34,8 +34,8 @@ module Audit
 
         percentiles.each do |difficulty, encounters|
           WCL_IDS[:live].each do |encounter_id|
-            details['warcraftlogs'][difficulty.to_s][encounter_id] = encounters[encounter_id] ||
-              details['warcraftlogs'][difficulty.to_s][encounter_id] rescue '-'
+            details['warcraftlogs_awakened'][difficulty.to_s][encounter_id] = encounters[encounter_id] ||
+              details['warcraftlogs_awakened'][difficulty.to_s][encounter_id] rescue '-'
           end
         end
       end

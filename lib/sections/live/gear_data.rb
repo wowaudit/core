@@ -5,6 +5,7 @@ module Audit
         # Check equipped gear
         items_equipped = 0
         sparks_used = 0
+        bulion_items = 0
         embellished_found = 0
         total_upgrades_missing = 0
         @character.data['empty_sockets'] = 0
@@ -55,6 +56,10 @@ module Audit
                 'name' => equipped_item[:name],
                 'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
               }
+            end
+
+            if (equipped_item[:bonus_list] & (10490..10503).to_a).any?
+              bulion_items += 1
             end
 
             upgrade_id = equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }
@@ -122,6 +127,7 @@ module Audit
         @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
         @character.data['ingenuity_sparks_equipped'] = sparks_used
         @character.data['total_upgrades_missing'] = total_upgrades_missing
+        @character.data['bulion_items'] = bulion_items
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']

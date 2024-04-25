@@ -1,10 +1,10 @@
 CURRENT_VERSION = {
-  live: 1018,
+  live: 1019,
   classic_era: 103,
   classic_progression: 302,
 }
 
-PREVENT_SKIP_TIMESTAMP = Time.parse("2023-11-21 12:51:37 +0200").to_i
+PREVENT_SKIP_TIMESTAMP = Time.parse("2024-04-25 19:51:37 +0200").to_i
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -460,7 +460,8 @@ HEADER = {
     'upgrade_level_trinket_2',
     'upgrade_level_main_hand',
     'upgrade_level_off_hand',
-    'total_upgrades_missing'
+    'total_upgrades_missing',
+    'bulion_items',
   ],
   classic_era: [
     'name',
