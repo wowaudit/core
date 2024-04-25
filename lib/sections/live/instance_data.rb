@@ -76,7 +76,10 @@ module Audit
 
         vault_index = -1
         encounters_by_raid.each_with_index do |raid_encounters, raid_index|
-          for_vault = raid_index + 1 == encounters_by_raid.length
+          # Fated season
+          for_vault = VALID_RAIDS[:live][raid_index]["periods"].include?(Audit.period) || Audit.period >= 962
+          # Normal season
+          # for_vault = raid_index + 1 == encounters_by_raid.length
 
           raid_encounters.each_with_index do |encounter, index|
             if (boss_ids & encounter['normal']).any? && for_vault
