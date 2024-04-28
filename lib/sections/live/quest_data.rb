@@ -8,7 +8,10 @@ module Audit
           @character.data['dailies_done_total'] = @achievements[977][:criteria][:child_criteria].first[:amount] rescue 0
         end
 
-        @character.data['aiding_the_accord'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == 70750 } ? 'yes' : 'no'
+
+        last_hurrah_id =  [80385, 80386, 80388][(Audit.period - 956) % 3]
+        @character.data['aiding_the_accord'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == last_hurrah_id } ? 'yes' : 'no'
+
         @character.data['weekly_feast'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == 70893 } ? 'yes' : 'no'
 
         unless !@data[:completed_quests]
