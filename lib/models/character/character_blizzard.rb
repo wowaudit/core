@@ -105,6 +105,7 @@ module Audit
 
       if self.key.to_s != response[:status][:id].to_s
         self.key = response[:status][:id].to_s
+        self.changed = true
       end
 
       false
