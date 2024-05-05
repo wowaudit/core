@@ -58,7 +58,7 @@ module Audit
               }
             end
 
-            if (equipped_item[:bonus_list] & (10490..10503).to_a).any?
+            if (equipped_item[:bonus_list] & ((10490..10503).to_a + (10407..10418).to_a + (10951..10964).to_a)).any?
               bulion_items += 1
             end
 
