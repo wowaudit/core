@@ -4,7 +4,7 @@ CURRENT_VERSION = {
   classic_progression: 302,
 }
 
-PREVENT_SKIP_TIMESTAMP = Time.parse("2024-04-25 19:51:37 +0200").to_i
+PREVENT_SKIP_TIMESTAMP = Time.parse("2024-05-06 19:51:37 +0200").to_i
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
