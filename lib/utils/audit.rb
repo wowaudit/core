@@ -217,6 +217,10 @@ module Audit
           details['warcraftlogs_awakened'] = { '1' => {}, '3' => {}, '4' => {}, '5' => {} }
         end
 
+        if !details['bullion_ids'].is_a? Array
+          details['bullion_ids'] = []
+        end
+
         if !details['best_gear'].is_a? Hash
           details['best_gear'] = ITEMS[:live].map { |item| [item, { ilvl: 0 }] }.to_h
         end
