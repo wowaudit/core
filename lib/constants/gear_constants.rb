@@ -400,6 +400,9 @@ UPGRADE_BONUS_IDS_BY_DIFFICULTY = {
   N: (10313..10320).to_a, # Champion
   H: (10329..10334).to_a, # Hero
   M: (10335..10338).to_a, # Myth
+  M2: (10490..10503).to_a, # Awakened
+  M3: (10407..10418).to_a, # Awakened
+  M4: (10951..10964).to_a, # Awakened
 }
 
 UPGRADE_BONUS_IDS = UPGRADE_BONUS_IDS_BY_DIFFICULTY.map { |d, v| v.map { |id| [id, d.to_s] } }.flatten(1).to_h

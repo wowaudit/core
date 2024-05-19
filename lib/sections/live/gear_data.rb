@@ -5,7 +5,7 @@ module Audit
         # Check equipped gear
         items_equipped = 0
         sparks_used = 0
-        bulion_items = 0
+        bullion_items = 0
         embellished_found = 0
         total_upgrades_missing = 0
         @character.data['empty_sockets'] = 0
@@ -58,11 +58,12 @@ module Audit
               }
             end
 
-            if (equipped_item[:bonus_list] & ((10490..10503).to_a + (10407..10418).to_a + (10951..10964).to_a)).any?
-              bulion_items += 1
+            bonus_list = equipped_item[:bonus_list] || []
+            if (bonus_list & ((10490..10503).to_a + (10407..10418).to_a + (10951..10964).to_a)).any?
+              bullion_items += 1
             end
 
-            upgrade_id = equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }
+            upgrade_id = bonus_list.find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }
             track = UPGRADE_BONUS_IDS_BY_DIFFICULTY.values.find { |ids| ids.include? upgrade_id.to_i }
             @character.data["upgrade_level_#{item}"] = track ? "#{track.index(upgrade_id) + 1} / #{track.size}" : '-'
             total_upgrades_missing += (track.size - (track.index(upgrade_id) + 1)) if track
@@ -70,7 +71,7 @@ module Audit
             @character.details['current_gear'][item] = {
               'ilvl' => equipped_item[:level][:value],
               'id' => equipped_item[:item][:id],
-              'bonus_ids' => equipped_item[:bonus_list],
+              'bonus_ids' => bonus_list,
               'name' => equipped_item[:name],
               'enchant' => check_enchant(item, equipped_item),
               'sockets' => check_sockets(item, equipped_item),
@@ -92,7 +93,7 @@ module Audit
               end
 
               if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s4', item, 'ilvl') || 0)
-                upgradeable_difficulty = UPGRADE_BONUS_IDS[equipped_item[:bonus_list].find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }]
+                upgradeable_difficulty = UPGRADE_BONUS_IDS[bonus_list.find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }]
                 @character.details['tier_items_s4'][item] = {
                   'ilvl' => equipped_item[:level][:value],
                   'difficulty' => upgradeable_difficulty || LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last || ''
@@ -127,7 +128,7 @@ module Audit
         @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
         @character.data['ingenuity_sparks_equipped'] = sparks_used
         @character.data['total_upgrades_missing'] = total_upgrades_missing
-        @character.data['bulion_items'] = bulion_items
+        @character.data['bullion_items'] = bullion_items
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']

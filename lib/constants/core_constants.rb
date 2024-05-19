@@ -461,7 +461,12 @@ HEADER = {
     'upgrade_level_main_hand',
     'upgrade_level_off_hand',
     'total_upgrades_missing',
-    'bulion_items',
+    'bullion_items',
+    'summary_visible',
+    'roster_visible',
+    'overview_visible',
+    'vault_visible',
+    'raids_visible',
   ],
   classic_era: [
     'name',
