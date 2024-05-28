@@ -4,7 +4,7 @@ module Audit
       ENCHANTMENTS_BY_PROFESSION = {
         jewelcrafting: [52265, 52263, 52262, 52261, 52266, 52264, 52268, 52260, 52267, 52269, 52259, 52258, 52257, 52255],
         enchanting: [4078, 4079, 4080, 4081],
-        engineering: [4188, 4750, 4180, 4179, 4181, 4183],
+        engineering: [4188, 4750, 4180, 4179, 4181, 4183, 4223],
         inscription: [4193, 4194, 4195, 4196],
         leatherworking: [4189, 4190, 4191, 4192],
         tailoring: [4115, 4116, 4118],
@@ -51,7 +51,7 @@ module Audit
 
             # Only require Nitro Boosts and gloves enchants for Engineering
             if ENCHANTMENTS_BY_PROFESSION[:engineering].include?(enchantment[:enchantment_id])
-              profession_data[:engineering][:found] += 1 if ['hands', 'feet'].include?(item)
+              profession_data[:engineering][:found] += 1 if ['hands', 'waist'].include?(item)
             end
           end
 
