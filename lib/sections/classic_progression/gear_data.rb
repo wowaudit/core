@@ -54,7 +54,7 @@ module Audit
                 end
 
                 tier_statuses[tier] += @character.details["tier_#{tier}_#{item}"] ? 1 : 0
-                @character.data["tier_#{tier}_#{item}"] = @character.details["tier_#{tier}_#{item}"] || ""
+                @character.data["tier_#{tier}_#{item}"] = @character.details["tier_#{tier}_#{item}"] ? 'yes' : 'no'
               end
             end
 
