@@ -124,9 +124,6 @@ module Audit
       def check_enchant(item, equipped_item)
         if CATA_ENCHANT_SLOTS.include? item
           begin
-            # Off-hand items that are not weapons or shields can't be enchanted
-            return if !equipped_item&.dig(:weapon) && !equipped_item&.dig(:shield_block) && equipped_item&.dig(:inventory_type, :type) != "SHIELD" && item == "off_hand"
-
             enchantment = equipped_item[:enchantments].find { |e| e.dig(:enchantment_slot, :id) == 0 }
             name = enchantment[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
             source = enchantment.dig(:source_item, :name)&.gsub("QA", "")
