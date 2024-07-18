@@ -7,7 +7,7 @@ module Audit
         @character.data['name'] = @temp_character.name
         @character.data['realm'] = (defined?(REALMS) ? REALMS : {})[@temp_character.realm_id]&.name
         @character.data['realm_slug'] = (defined?(@temp_character.realm_slug) ? @temp_character.realm_slug : @data['realm_slug'])
-        @character.data['rank'] = (defined?(@temp_character.rank) ? @temp_character.rank.capitalize : "")
+        @character.data['rank'] = (defined?( @character.team_rank) ? @character.team_rank&.name || "Unknown" : "Unknown")
         @character.data['note'] = (defined?(@temp_character.note) ? @temp_character.note : "") || ""
         @character.data['character_id'] = @temp_character.id
         @character.data['join_date'] = @temp_character.created_at
