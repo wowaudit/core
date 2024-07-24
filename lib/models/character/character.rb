@@ -4,6 +4,14 @@ module Audit
 
     attr_accessor :output, :data, :gems, :ilvl, :changed, :details, :realm_slug, :team_rank
 
+    dataset_module do
+      def main
+        filter(guest: false)
+      end
+    end
+
+    set_dataset(self.main)
+
     def tracking_since
       date = created_at || EXPANSION_START
       [EXPANSION_START, date.to_date].max
