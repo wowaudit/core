@@ -27,7 +27,16 @@ module Audit
         character.details = character_details(characters)[character.redis_id].to_h
         Audit.verify_details(character, character.details, REALMS[character.realm_id])
       end
-      characters.select(&:active)
+
+      characters.select do |character|
+        character.active && (
+          character.team_rank&.spreadsheet_summary_visibility ||
+          character.team_rank&.spreadsheet_roster_visibility ||
+          character.team_rank&.spreadsheet_overview_visibility ||
+          character.team_rank&.spreadsheet_vault_visibility ||
+          character.team_rank&.spreadsheet_raids_visibility
+        )
+      end
     end
 
     def character_details(characters)
