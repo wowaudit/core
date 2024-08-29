@@ -2,7 +2,7 @@ module Audit
   class Character < Sequel::Model
     many_to_one :realm
 
-    attr_accessor :output, :data, :gems, :ilvl, :changed, :details, :realm_slug, :team_rank
+    attr_accessor :output, :data, :gems, :ilvl, :changed, :details, :realm_slug, :team_rank, :delve_info
 
     dataset_module do
       def main

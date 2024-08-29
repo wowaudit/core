@@ -15,6 +15,7 @@ module Audit
       # Variables for gear data
       self.gems = []
       self.ilvl = 0.0
+      self.delve_info = { total: 0, tier_1: 0, tier_2: 0, tier_3: 0, tier_4: 0, tier_5: 0, tier_6: 0, tier_7: 0, tier_8: 0, tier_9: 0, tier_10: 0, tier_11: 0 }
     end
 
     def last_refresh
@@ -117,14 +118,21 @@ module Audit
 
     def update_snapshots(skipped)
       if REALMS[realm_id].kind == 'live'
-        current_week = details['snapshots'][Audit.period] || {}
+        current_week = details['snapshots'][Audit.period.to_s] || {}
 
-        details['snapshots'][Audit.period] = current_week.merge({ 'vault' => 9.times.map do |i|
+        details['snapshots'][Audit.period.to_s] = current_week.merge({ 'vault' => 9.times.map do |i|
           [(i + 1).to_s, self.last_refresh["great_vault_slot_#{i + 1}"] || self.data["great_vault_slot_#{i + 1}"]]
         end.to_h })
 
-        details['snapshots'][Audit.period]['wqs'] ||= self.data['wqs_done_total'] unless skipped
-        details['snapshots'][Audit.period]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
+        details['snapshots'][Audit.period.to_s]['wqs'] ||= self.data['wqs_done_total'] unless skipped
+
+        if Audit.period == FIRST_PERIOD_OF_EXPANSION
+          details['snapshots'][Audit.period.to_s]['heroic_dungeons'] = 0
+          details['snapshots'][Audit.period.to_s]['delve_info'] = { total: 0, tier_1: 0, tier_2: 0, tier_3: 0, tier_4: 0, tier_5: 0, tier_6: 0, tier_7: 0, tier_8: 0, tier_9: 0, tier_10: 0, tier_11: 0 }
+        else
+          details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
+          details['snapshots'][Audit.period.to_s]['delve_info'] ||= self.delve_info unless skipped
+        end
       end
 
       details['current_version'] = CURRENT_VERSION[REALMS[realm_id].kind.to_sym] unless skipped

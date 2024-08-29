@@ -143,11 +143,12 @@ module Audit
               @character.data["enchant_quality_#{item}"] = match[0]
               @character.data["#{item}_enchant"] = match[1] || ''
             else
-              name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
-              quality = (equipped_item[:enchantments].first[:display_string].split('Tier')[1])
+              # This will match Dragonflight enchants, so it can't be used... TODO: Think about a better way?
+              # name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
+              # quality = (equipped_item[:enchantments].first[:display_string].split('Tier')[1])
 
-              @character.data["#{item}_enchant"] = name
-              @character.data["enchant_quality_#{item}"] = quality
+              @character.data["#{item}_enchant"] = ""
+              @character.data["enchant_quality_#{item}"] = 0
             end
           rescue
             # Don't require the stamina belt clasp on casual or lenient modes

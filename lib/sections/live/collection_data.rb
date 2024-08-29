@@ -4,13 +4,27 @@ module Audit
       def add
         @character.data['achievement_points'] = @data[:achievement_points]
 
+        begin
+          crest_stats = @data[:achievement_statistics][:categories].find do |category|
+            category[:name] == "Character"
+          end[:statistics]
+
+          @character.data['valorstones'] = crest_stats.find { |stat| stat[:id] == 20488 }[:quantity] rescue 0
+          @character.data['weathered_crests'] = crest_stats.find { |stat| stat[:id] == 20489 }[:quantity] rescue 0
+          @character.data['carved_crests'] = crest_stats.find { |stat| stat[:id] == 20490 }[:quantity] rescue 0
+          @character.data['runed_crests'] = crest_stats.find { |stat| stat[:id] == 20491 }[:quantity] rescue 0
+          @character.data['gilded_crests'] = crest_stats.find { |stat| stat[:id] == 20492 }[:quantity] rescue 0
+        rescue
+          nil
+        end
+
         if @achievements
           @character.data['mounts'] = @achievements[2143][:criteria][:child_criteria].first[:amount] rescue 0
           @character.data['toys_owned'] = @achievements[9670][:criteria][:child_criteria].first[:amount] rescue 0
         end
 
         unless !@data[:titles]
-          @character.data[:titles] = @data[:titles].size
+          @character.data['titles'] = @data[:titles].size
         end
 
         unless !@data[:mounts]
