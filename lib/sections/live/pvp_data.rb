@@ -8,7 +8,7 @@ module Audit
 
           BRACKETS[:live].each do |bracket, endpoint|
             if !@data[endpoint.to_sym][:empty]
-              if @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON[:live]
+              if @data[endpoint.to_sym][:season][:id] == Season.current.data[:pvp_season]
                 @character.data["#{bracket}_rating"] = @data[endpoint.to_sym][:rating]
                 @character.data["#{bracket}_season_played"] = @data[endpoint.to_sym][:season_match_statistics][:played]
                 @character.data["#{bracket}_week_played"] = @data[endpoint.to_sym][:weekly_match_statistics][:played]
@@ -27,7 +27,7 @@ module Audit
           @data.keys.select { |key| key.to_s.include? 'shuffle' }.each do |key|
             next unless bracket = @data[key]
 
-            if bracket.dig(:season, :id) == CURRENT_PVP_SEASON[:live]
+            if bracket.dig(:season, :id) == Season.current.data[:pvp_season]
               @character.data["shuffle_rating"] = [@character.data["shuffle_rating"], bracket[:rating]].max
               @character.data["shuffle_season_played"] += bracket[:season_match_statistics][:played]
               @character.data["shuffle_week_played"] += bracket[:weekly_match_statistics][:played]

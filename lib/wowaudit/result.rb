@@ -33,19 +33,6 @@ module Wowaudit
       end
     end
 
-    # TODO: should only exist during the migration process
-    def historical_snapshots
-      @historical_snapshots ||= begin
-        snapshots = []
-        @details['snapshots'].keys.sort_by(&:to_i).each do |year|
-          @details['snapshots'][year].keys.sort_by(&:to_i).each do |week|
-            snapshots << details['snapshots'][year][week]
-          end
-        end
-        snapshots
-      end
-    end
-
     private
 
     def check_character_api_status

@@ -196,10 +196,6 @@ module Audit
           details['snapshots'] = {}
         end
 
-        if !details['snapshots'].include? Audit.year
-          details['snapshots'][Audit.year] = {}
-        end
-
         # Initialise Raider.io data if not present
         if !details['raiderio'].is_a? Hash
           details['raiderio'] = {
@@ -213,24 +209,20 @@ module Audit
         end
 
         # Initialise Warcraft Logs data if not present
-        if !details['warcraftlogs_awakened'].is_a? Hash
-          details['warcraftlogs_awakened'] = { '1' => {}, '3' => {}, '4' => {}, '5' => {} }
-        end
-
-        if !details['bullion_ids'].is_a? Array
-          details['bullion_ids'] = []
+        if !details['warcraftlogs'].is_a? Hash
+          details['warcraftlogs'] = { '1' => {}, '3' => {}, '4' => {}, '5' => {} }
         end
 
         if !details['best_gear'].is_a? Hash
           details['best_gear'] = ITEMS[:live].map { |item| [item, { ilvl: 0 }] }.to_h
         end
 
-        if !details['spark_gear_s4'].is_a? Hash
-          details['spark_gear_s4'] = ITEMS[:live].map { |item| [item, {}] }.to_h
+        if !details['spark_gear_s1'].is_a? Hash
+          details['spark_gear_s1'] = ITEMS[:live].map { |item| [item, {}] }.to_h
         end
 
-        if !details['tier_items_s4'].is_a? Hash
-          details['tier_items_s4'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
+        if !details['tier_items_s1'].is_a? Hash
+          details['tier_items_s1'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
         end
 
         if !details['keystones'].is_a? Hash

@@ -17,11 +17,11 @@ module Audit
         RBattlenet.set_options(region: realm.region, namespace: realm.namespace, locale: "en_GB", concurrency: 25, response_type: :hash)
         Audit.timestamp = realm.region
 
-        (refresh_type == 'historical_keystones' ? (FIRST_PERIOD_OF_SEASON..(Audit.period - 1)).to_a : [Audit.period]).each do |period|
-          leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(KEYSTONE_DUNGEONS.keys.map{ |dungeon|
+        (refresh_type == 'historical_keystones' ? (Season.current.data[:first_period]..(Audit.period - 1)).to_a : [Audit.period]).each do |period|
+          leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(Season.current.data[:keystone_dungeons].map{ |dungeon|
             {
               connected_realm_id: realm.connected_realm_id,
-              dungeon_id: dungeon,
+              dungeon_id: dungeon[:id],
               period: period
             }
           })
@@ -72,7 +72,7 @@ module Audit
 
     def redis_prefix
       {
-        live: 'dragonflight',
+        live: 'warwithin',
         classic_progression: 'wotlk',
         classic_era: 'vanilla',
         tournament: 'tournament',

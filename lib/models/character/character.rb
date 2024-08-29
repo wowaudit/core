@@ -12,29 +12,12 @@ module Audit
 
     set_dataset(self.main)
 
-    def tracking_since
-      date = created_at || EXPANSION_START
-      [EXPANSION_START, date.to_date].max
-    end
-
     def active
       super && key
     end
 
     def redis_id
       "#{REALMS[realm_id].redis_prefix}:#{key}_#{realm_id}" if key
-    end
-
-    def historical_snapshots
-      @historical_snapshots ||= begin
-        snapshots = []
-        details['snapshots'].keys.sort_by(&:to_i).each do |year|
-          details['snapshots'][year].keys.sort_by(&:to_i).each do |week|
-            snapshots << details['snapshots'][year][week]
-          end
-        end
-        snapshots
-      end
     end
 
     def last_modified(team)
@@ -62,13 +45,12 @@ module Audit
         current_gear: details['current_gear'],
       }.merge(REALMS[realm_id].kind == 'live' ? {
         best_gear: details['best_gear'],
-        spark_gear_s4: details['spark_gear_s4'],
+        spark_gear_s1: details['spark_gear_s1'],
         keystones: details['keystones'],
         snapshots: details["snapshots"],
-        bullion_ids: details["bullion_ids"],
-        warcraftlogs_awakened: details["warcraftlogs_awakened"],
+        warcraftlogs: details["warcraftlogs"],
         raiderio: details["raiderio"],
-        tier_items_s4: details["tier_items_s4"],
+        tier_items_s1: details["tier_items_s1"],
       } : {})
     end
   end

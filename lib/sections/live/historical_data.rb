@@ -8,8 +8,11 @@ module Audit
         mplus = []
         vault = { 1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [], 7 => [], 8 => [], 9 => [] }
 
-        @character.historical_snapshots.drop(1).each_with_index do |week, index|
-          wqs.insert(0, [(week['wqs'] || 0) - (@character.historical_snapshots[index]['wqs'] || 0), 0].max)
+        (FIRST_PERIOD_OF_EXPANSION..(Audit.period)).each_with_index do |period, index|
+          week = @character.details['snapshots'][period] || {}
+
+
+          wqs.insert(0, [(week['wqs'] || 0) - (@character.details['snapshots'][period - 1]['wqs'] || 0), 0].max) if index > 0
 
           vault.keys.each do |slot|
             # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
@@ -20,15 +23,13 @@ module Audit
               vault[slot].insert(0, value.to_s.empty? ? "-" : value)
             end
           end
-        end
 
-        # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
-        # TODO: this doesn't work when looking back at previous seasons, it will now always return the item level of the current season.
-        (FIRST_PERIOD_OF_EXPANSION..(Audit.period)).each do |period|
+          # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
+          # TODO: this doesn't work when looking back at previous seasons, it will now always return the item level of the current season.
           dungeon_data = (@character.details['keystones'][period.to_s]&.values || []).map { |run| run['level'] }.sort.reverse
-          vault[4].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[0] || 0, 10].min] || "-")
-          vault[5].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[3] || 0, 10].min] || "-")
-          vault[6].insert(0, GREAT_VAULT_TO_ILVL['dungeon'][[dungeon_data[7] || 0, 10].min] || "-")
+          vault[4].insert(0, Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[0] || 0, 10].min] || "-")
+          vault[5].insert(0, Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[3] || 0, 10].min] || "-")
+          vault[6].insert(0, Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[7] || 0, 10].min] || "-")
 
           mplus << dungeon_data.join(',')
         end
@@ -45,11 +46,14 @@ module Audit
         end
 
         @character.data['wqs_this_week'] =
-          [@character.data['wqs_done_total'] - @character.details['snapshots'][Audit.year][Audit.week]['wqs'], 0].max rescue 0
+          [@character.data['wqs_done_total'] - @character.details['snapshots'][Audit.period]['wqs'], 0].max rescue 0
+
+        @character.data['week_heroic_dungeons'] =
+          [@character.data['season_heroic_dungeons'] - @character.details['snapshots'][Audit.period]['heroic_dungeons'], 0].max rescue 0
 
         # Reset WQ data to 0 when a character changes their account wide sharing setting
         if @character.data['wqs_this_week'] < 0 || @character.data['wqs_this_week'] > 1000
-          @character.details['snapshots'][Audit.year][Audit.week]['wqs'] = @character.data['wqs_done_total']
+          @character.details['snapshots'][Audit.period]['wqs'] = @character.data['wqs_done_total']
           @character.data['wqs_this_week'] = 0
         end
       end

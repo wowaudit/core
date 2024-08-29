@@ -1,44 +1,75 @@
-FIRST_PERIOD_OF_EXPANSION = 885
+FIRST_PERIOD_OF_EXPANSION = 974
+CURRENT_SEASON = 13
 
-CURRENT_KEYSTONE_SEASON = 12
-FIRST_PERIOD_OF_SEASON = 956
-
-MYTHIC_DUNGEONS = {
-  16076 => "Brackenhide Hollow",
-  16079 => "Halls of Infusion",
-  16082 => "Neltharus",
-  16085 => "Ruby Life Pools",
-  16088 => "Algeth'ar Academy",
-  16091 => "The Azure Vault",
-  16094 => "The Nokhud Offensive",
-  16097 => "Uldaman: Legacy of Tyr",
+SEASON_DATA = {
+  13 => {
+    first_period: 974,
+    pvp_season: 38,
+    keystone_dungeons: [
+      { id: 503, name: "Ara-Kara, City of Echoes" },
+      { id: 502, name: "City of Threads" },
+      { id: 501, name: "The Stonevault" },
+      { id: 505, name: "The Dawnbreaker" },
+      { id: 507, name: "Grim Batol" },
+      { id: 376, name: "The Necrotic Wake" },
+      { id: 375, name: "Mists of Tirna Scithe" },
+      { id: 353, name: "Siege of Boralus" },
+    ],
+    vault_ilvl: {
+      raid: {
+        mythic: 623,
+        heroic: 610,
+        normal: 597,
+        raid_finder: 584,
+      },
+      dungeon: {
+        10 => 623,
+        9 => 619,
+        8 => 619,
+        7 => 616,
+        6 => 613,
+        5 => 613,
+        4 => 610,
+        3 => 610,
+        2 => 606,
+        0 => nil,
+      },
+      delve: {
+        11 => 616,
+        10 => 616,
+        9 => 616,
+        8 => 616,
+        7 => 610,
+        6 => 606,
+        5 => 603,
+        4 => 587,
+        3 => 587,
+        2 => 584,
+        1 => 584,
+      }
+    }
+  }
 }
 
-KEYSTONE_DUNGEONS = {
-  399 => "Ruby Life Pools",
-  400 => "The Nokhud Offensive",
-  401 => "The Azure Vault",
-  402 => "Algeth'ar Academy",
-  403 => "Uldaman: Legacy of Tyr",
-  404 => "Neltharus",
-  405 => "Brackenhide Hollow",
-  406 => "Halls of Infusion",
-}
-
-SLUGIFIED_DUNGEON_NAMES = KEYSTONE_DUNGEONS.transform_values do |dungeon_name|
-  dungeon_name.gsub("'", "").gsub(":", "").gsub(" -", "").gsub(" ", "_").downcase
-end
+EXPANSION_DUNGEONS = [
+  { mythic_id: 0, heroic_id: 20486, name: "Ara-Kara, City of Echoes" },
+  { mythic_id: 0, heroic_id: 40653, name: "Cinderbrew Meadery" },
+  { mythic_id: 0, heroic_id: 40709, name: "City of Threads" },
+  { mythic_id: 0, heroic_id: 20483, name: "Darkflame Cleft" },
+  { mythic_id: 0, heroic_id: 40658, name: "Priory of the Sacred Flame" },
+  { mythic_id: 0, heroic_id: 40714, name: "The Dawnbreaker" },
+  { mythic_id: 0, heroic_id: 40717, name: "The Rookery" },
+  { mythic_id: 0, heroic_id: 40721, name: "The Stonevault" },
+]
 
 WEEKLY_EVENT_QUESTS = [
-  72719, # A Fel Path Through Time
-  72720, # The Arena Calls
-  72722, # Emissary of War
-  72723, # A Calll to Battle
-  72724, # A Savage Path Through Time
-  72725, # A Shrouded Path Through Time
-  72727, # A Burning Path Through Time
-  72728, # The World Awaits
-  72810, # A Shattered Path Through Time
+  83347, # Emissary of War
+  83345, # A Call to Battle
+  83364, # A Savage Path Through Time
+  83362, # A Shrouded Path Through Time
+  83366, # The World Awaits
+  83359, # A Shattered Path Through Time
+  83365, # A Frozen Path Through Time
 ]
 
 RAID_DIFFICULTIES = {
@@ -54,39 +85,7 @@ GREAT_VAULT_RAID_KILLS_NEEDED = {
   3 => 6,
 }
 
-GREAT_VAULT_BLACKLISTED_PERIODS = [932]
-
-GREAT_VAULT_TO_ILVL = {
-  'raid' => {
-    mythic: 519,
-    heroic: 506,
-    normal: 493,
-    raid_finder: 480,
-  },
-  'dungeon' => {
-    10 => 522,
-    9 => 519,
-    8 => 519,
-    7 => 515,
-    6 => 515,
-    5 => 512,
-    4 => 512,
-    3 => 509,
-    2 => 509,
-    0 => nil, # 506
-  },
-  'pvp' => { # Estimates
-    2400 => 522,
-    2100 => 519,
-    1950 => 515,
-    1800 => 512,
-    1600 => 509,
-    1400 => 509,
-    1200 => 506,
-    1000 => 506,
-    0 => 506,
-  }
-}
+GREAT_VAULT_BLACKLISTED_PERIODS = [932, 974, 975]
 
 CUTTING_EDGE_ACHIEVEMENTS = [
   7485, # Will of the Emperor
@@ -115,6 +114,7 @@ CUTTING_EDGE_ACHIEVEMENTS = [
   17108, # Raszageth the Storm-Eater
   18254, # Scalecommander Sarkareth
   19351, # Fyrakk the Blazing
+  40254, # Queen Ansurek
 ]
 
 AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
@@ -144,13 +144,12 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
   17107, # Raszageth the Storm-Eater
   18253, # Scalecommander Sarkareth
   19350, # Fyrakk the Blazing
+  40253, # Queen Ansurek
 ]
 
 VALID_RAIDS = {
   live: [
-    {"name"=>"Vault of the Incarnates", "periods" => [956, 959], "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>31, "encounters"=>[{"id"=>2587, "name"=>"Eranog", "raid_ids"=>{"raid_finder"=>[16359], "normal"=>[16371], "heroic"=>[16379], "mythic"=>[16387]}}, {"id"=>2639, "name"=>"Terros", "raid_ids"=>{"raid_finder"=>[16361], "normal"=>[16372], "heroic"=>[16380], "mythic"=>[16388]}}, {"id"=>2590, "name"=>"The Primal Council", "raid_ids"=>{"raid_finder"=>[16362], "normal"=>[16373], "heroic"=>[16381], "mythic"=>[16389]}}, {"id"=>2592, "name"=>"Sennarth, the Cold Breath", "raid_ids"=>{"raid_finder"=>[16366], "normal"=>[16374], "heroic"=>[16382], "mythic"=>[16390]}}, {"id"=>2635, "name"=>"Dathea, Ascended", "raid_ids"=>{"raid_finder"=>[16367], "normal"=>[16375], "heroic"=>[16383], "mythic"=>[16391]}}, {"id"=>2605, "name"=>"Kurog Grimtotem", "raid_ids"=>{"raid_finder"=>[16368], "normal"=>[16376], "heroic"=>[16384], "mythic"=>[16392]}}, {"id"=>2614, "name"=>"Broodkeeper Diurna", "raid_ids"=>{"raid_finder"=>[16369], "normal"=>[16377], "heroic"=>[16385], "mythic"=>[16393]}}, {"id"=>2607, "name"=>"Raszageth the Storm-Eater", "raid_ids"=>{"raid_finder"=>[16370], "normal"=>[16378], "heroic"=>[16386], "mythic"=>[16394]}}]},
-    {"name"=>"Aberrus, the Shadowed Crucible", "periods" => [957, 960], "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>33, "encounters"=>[{"id"=>2688, "name"=>"Kazzara, the Hellforged", "raid_ids"=>{"raid_finder"=>[18180], "normal"=>[18189], "heroic"=>[18210], "mythic"=>[18219]}}, {"id"=>2687, "name"=>"The Amalgamation Chamber", "raid_ids"=>{"raid_finder"=>[18181], "normal"=>[18190], "heroic"=>[18211], "mythic"=>[18220]}}, {"id"=>2693, "name"=>"The Forgotten Experiments", "raid_ids"=>{"raid_finder"=>[18182], "normal"=>[18191], "heroic"=>[18212], "mythic"=>[18221]}}, {"id"=>2682, "name"=>"Assault of the Zaqali", "raid_ids"=>{"raid_finder"=>[18183], "normal"=>[18192], "heroic"=>[18213], "mythic"=>[18222]}}, {"id"=>2680, "name"=>"Rashok, the Elder", "raid_ids"=>{"raid_finder"=>[18184], "normal"=>[18194], "heroic"=>[18214], "mythic"=>[18223]}}, {"id"=>2689, "name"=>"Zskarn, the Vigilant Steward", "raid_ids"=>{"raid_finder"=>[18185], "normal"=>[18195], "heroic"=>[18215], "mythic"=>[18224]}}, {"id"=>2683, "name"=>"Magmorax", "raid_ids"=>{"raid_finder"=>[18186], "normal"=>[18196], "heroic"=>[18216], "mythic"=>[18225]}}, {"id"=>2684, "name"=>"Echo of Neltharion", "raid_ids"=>{"raid_finder"=>[18188], "normal"=>[18197], "heroic"=>[18217], "mythic"=>[18226]}}, {"id"=>2685, "name"=>"Scalecommander Sarkareth", "raid_ids"=>{"raid_finder"=>[18187], "normal"=>[18198], "heroic"=>[18218], "mythic"=>[18227]}}]},
-    {"name"=>"Amirdrassil, the Dream's Hope", "periods" => [958, 961], "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>35, "encounters"=>[{"id"=>2820, "name"=>"Gnarlroot", "raid_ids"=>{"raid_finder"=>[19348], "normal"=>[19360], "heroic"=>[19369], "mythic"=>[19378]}}, {"id"=>2709, "name"=>"Igira the Cruel", "raid_ids"=>{"raid_finder"=>[19352], "normal"=>[19361], "heroic"=>[19370], "mythic"=>[19379]}}, {"id"=>2737, "name"=>"Volcoross", "raid_ids"=>{"raid_finder"=>[19353], "normal"=>[19362], "heroic"=>[19371], "mythic"=>[19380]}}, {"id"=>2728, "name"=>"Council of Dreams", "raid_ids"=>{"raid_finder"=>[19354], "normal"=>[19363], "heroic"=>[19372], "mythic"=>[19381]}}, {"id"=>2731, "name"=>"Larodar", "raid_ids"=>{"raid_finder"=>[19355], "normal"=>[19364], "heroic"=>[19373], "mythic"=>[19382]}}, {"id"=>2708, "name"=>"Nymue", "raid_ids"=>{"raid_finder"=>[19356], "normal"=>[19365], "heroic"=>[19374], "mythic"=>[19383]}}, {"id"=>2824, "name"=>"Smolderon", "raid_ids"=>{"raid_finder"=>[19357], "normal"=>[19366], "heroic"=>[19375], "mythic"=>[19384]}}, {"id"=>2786, "name"=>"Tindral Sageswift", "raid_ids"=>{"raid_finder"=>[19358], "normal"=>[19367], "heroic"=>[19376], "mythic"=>[19385]}}, {"id"=>2677, "name"=>"Fyrakk", "raid_ids"=>{"raid_finder"=>[19359], "normal"=>[19368], "heroic"=>[19377], "mythic"=>[19386]}}]}
+    {"name"=>"Nerub-ar Palace", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Ulgrax", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"The Bloodbound Horror", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Sikran", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Rasha'nan", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Broodtwister Ovi'nax", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Nexus-Princess Ky'veza", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"The Silken Court", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Queen Ansurek", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}]},
   ],
   classic_era: [
   ],

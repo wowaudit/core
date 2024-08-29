@@ -18,7 +18,7 @@ module Wowaudit
             {
               name: ch.name.downcase,
               realm: ch.realm.slug,
-              season: CURRENT_KEYSTONE_SEASON,
+              season: Season.current.id,
               source: ch
             }
           end, fields: (Wowaudit.extended ? FIELDS[:live] : [:equipment]) + Wowaudit.extra_fields

@@ -9,7 +9,6 @@ module Audit
         }
         boss_ids = encounters_by_raid.flatten.map{ |encounter| encounter.values }.flatten
         raid_list = {}
-        great_vault_list = {}
         raid_output = {'raids_normal' => [],      'raids_normal_weekly' => [],
                        'raids_heroic' => [],      'raids_heroic_weekly' => []}
 

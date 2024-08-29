@@ -68,7 +68,7 @@ module Audit
       {
         name: character.name.downcase,
         realm: character.realm_slug,
-        season: CURRENT_KEYSTONE_SEASON,
+        season: Season.current.id,
         source: character,
         timestamp: character.last_modified(self)
       }

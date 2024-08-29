@@ -117,13 +117,14 @@ module Audit
 
     def update_snapshots(skipped)
       if REALMS[realm_id].kind == 'live'
-        current_week = details['snapshots'][Audit.year][Audit.week] || {}
+        current_week = details['snapshots'][Audit.period] || {}
 
-        details['snapshots'][Audit.year][Audit.week] = current_week.merge({ 'vault' => 9.times.map do |i|
+        details['snapshots'][Audit.period] = current_week.merge({ 'vault' => 9.times.map do |i|
           [(i + 1).to_s, self.last_refresh["great_vault_slot_#{i + 1}"] || self.data["great_vault_slot_#{i + 1}"]]
         end.to_h })
 
-        details['snapshots'][Audit.year][Audit.week]['wqs'] ||= self.data['wqs_done_total'] unless skipped
+        details['snapshots'][Audit.period]['wqs'] ||= self.data['wqs_done_total'] unless skipped
+        details['snapshots'][Audit.period]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
       end
 
       details['current_version'] = CURRENT_VERSION[REALMS[realm_id].kind.to_sym] unless skipped

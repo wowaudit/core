@@ -1,10 +1,8 @@
 REPUTATIONS = {
-  2503 => "maruuk_centaur",
-  2507 => "dragonscale_expedition",
-  2510 => 'valdrakken_accord',
-  2511 => "iskaara_tuskarr",
-  2564 => "loamm_niffen",
-  2574 => "dream_warden"
+  2590 => "council_of_dornogal",
+  2594 => "assembly_of_the_deeps",
+  2570 => 'hallowfall_arathi',
+  2600 => "severed_threads",
 }
 
 STANDINGS = {

@@ -7,9 +7,9 @@ module Audit
         sparks_used = 0
         embellished_found = 0
         total_upgrades_missing = 0
+        @character.data['jewelry_sockets'] = 0
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
-        @character.data["food_embellishment"] = 'no'
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
         @character.data["enchant_quality_off_hand"] = ''
@@ -19,15 +19,15 @@ module Audit
         # Wipe current gear (it will be repopulated)
         @character.details['current_gear'] = {}
 
+        bonus_id_options = BonusIds.difficulty_by_id
+
         ITEMS[:live].each do |item|
           @character.data["tier_#{item}_difficulty"] = ''
 
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
-            if !check_onyx_annulet(item, equipped_item)
-              @character.ilvl += equipped_item[:level][:value]
-              @character.data[item + '_ilvl'] = equipped_item[:level][:value]
-            end
+            @character.ilvl += equipped_item[:level][:value]
+            @character.data[item + '_ilvl'] = equipped_item[:level][:value]
             @character.data[item + '_id'] = equipped_item[:item][:id]
             @character.data[item + '_name'] = equipped_item[:name]
             @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
@@ -45,11 +45,11 @@ module Audit
             embellished_found += check_embellished(embellished_found, item, equipped_item)
             items_equipped += 1
 
-            if equipped_item.dig(:name_description, :display_string) == "Awakened Crafted"
+            if equipped_item.dig(:name_description, :display_string) == "Omen Crafted"
               # 2 handed weapons cost 2 sparks
               sparks_used += (equipped_item[:inventory_type][:type] == "TWOHWEAPON" || (equipped_item[:inventory_type][:name] == "Ranged" && equipped_item.dig(:weapon, :damage, :damage_class, :type) == "PHYSICAL") ? 2 : 1)
 
-              @character.details['spark_gear_s4'][item] = {
+              @character.details['spark_gear_s1'][item] = {
                 'ilvl' => equipped_item[:level][:value],
                 'id' => equipped_item[:item][:id],
                 'name' => equipped_item[:name],
@@ -58,12 +58,8 @@ module Audit
             end
 
             bonus_list = equipped_item[:bonus_list] || []
-            if (bonus_list & ((10490..10503).to_a + (10407..10418).to_a + (10951..10964).to_a)).any?
-              (@character.details['bullion_ids'] += [equipped_item[:item][:id]]).uniq!
-            end
-
-            upgrade_id = bonus_list.find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }
-            track = UPGRADE_BONUS_IDS_BY_DIFFICULTY.values.find { |ids| ids.include? upgrade_id.to_i }
+            upgrade_id = bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }
+            track = BonusIds.current.values.find { |ids| ids.include? upgrade_id.to_i }
             @character.data["upgrade_level_#{item}"] = track ? "#{track.index(upgrade_id) + 1} / #{track.size}" : '-'
             total_upgrades_missing += (track.size - (track.index(upgrade_id) + 1)) if track
 
@@ -84,23 +80,23 @@ module Audit
 
             if TIER_ITEMS_BY_SLOT.keys.include? item
               # Convert legacy format stored tier data
-              if @character.details['tier_items_s4'][item].is_a?(Integer)
-                @character.details['tier_items_s4'][item] = {
-                  'ilvl' => @character.details['tier_items_s4'][item],
-                  'difficulty' => LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items_s4'][item] }.compact.last || ''
+              if @character.details['tier_items_s1'][item].is_a?(Integer)
+                @character.details['tier_items_s1'][item] = {
+                  'ilvl' => @character.details['tier_items_s1'][item],
+                  'difficulty' => LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items_s1'][item] }.compact.last || ''
                 }
               end
 
-              if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s4', item, 'ilvl') || 0)
-                upgradeable_difficulty = UPGRADE_BONUS_IDS[bonus_list.find { |bonus_id| UPGRADE_BONUS_IDS.keys.include? bonus_id }]
-                @character.details['tier_items_s4'][item] = {
+              if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s1', item, 'ilvl') || 0)
+                upgradeable_difficulty = bonus_id_options[bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }]
+                @character.details['tier_items_s1'][item] = {
                   'ilvl' => equipped_item[:level][:value],
                   'difficulty' => upgradeable_difficulty || LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last || ''
                 }
               end
 
-              @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s4'][item]['ilvl']
-              @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s4'][item]['difficulty']
+              @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s1'][item]['ilvl']
+              @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s1'][item]['difficulty']
             end
           rescue => err
             puts err
@@ -112,10 +108,10 @@ module Audit
           @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
           @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
 
-          @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear_s4'][item]['ilvl'] || ''
-          @character.data["spark_#{item}_id"] = @character.details['spark_gear_s4'][item]['id'] || ''
-          @character.data["spark_#{item}_name"] = @character.details['spark_gear_s4'][item]['name'] || ''
-          @character.data["spark_#{item}_quality"] = @character.details['spark_gear_s4'][item]['quality'] || ''
+          @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear_s1'][item]['ilvl'] || ''
+          @character.data["spark_#{item}_id"] = @character.details['spark_gear_s1'][item]['id'] || ''
+          @character.data["spark_#{item}_name"] = @character.details['spark_gear_s1'][item]['name'] || ''
+          @character.data["spark_#{item}_quality"] = @character.details['spark_gear_s1'][item]['quality'] || ''
         end
 
         # For 2H weapons the item level is counted twice to normalise between weapon types
@@ -127,7 +123,6 @@ module Audit
         @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
         @character.data['ingenuity_sparks_equipped'] = sparks_used
         @character.data['total_upgrades_missing'] = total_upgrades_missing
-        @character.data['bullion_items'] = @character.details['bullion_ids'].size
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
@@ -137,6 +132,10 @@ module Audit
       def check_enchant(item, equipped_item)
         if ENCHANTS.include? item
           begin
+            if item == 'neck' || item.include?('finger')
+              @character.data['jewelry_sockets'] += equipped_item&.dig(:sockets)&.size || 0
+            end
+
             # Off-hand items that are not weapons can't be enchanted
             return if !equipped_item&.dig(:weapon) && item == "off_hand"
 
@@ -157,10 +156,6 @@ module Audit
           end
 
           { name: @character.data["#{item}_enchant"], quality: @character.data["enchant_quality_#{item}"], id: equipped_item[:enchantments]&.first&.dig(:enchantment_id) }
-        elsif item == 'neck'
-          @character.data["enchant_quality_#{item}"] = equipped_item&.dig(:sockets)&.size == 3 ? 4 : 0
-
-          nil
         end
       end
 
@@ -184,27 +179,7 @@ module Audit
         socket_info
       end
 
-      def check_onyx_annulet(item, equipped_item)
-        if equipped_item[:name] == 'Onyx Annulet'
-          equipped_item[:sockets].sort_by { |socket| socket.dig(:item, :name) || "" }.each_with_index do |socket, index|
-            @character.data["primordial_stone_#{index + 1}_id"] = socket.dig(:item, :id)
-            @character.data["primordial_stone_#{index + 1}_name"] = socket.dig(:item, :name)&.split(" ")&.first
-          end
-
-          # Item level is bugged at the moment on the Armory, correct it here
-          @character.data["onyx_annulet_ilvl"] = 405 + ((equipped_item.dig(:level, :value) - 405) / 2)
-          @character.ilvl += @character.data["onyx_annulet_ilvl"]
-          @character.data[item + '_ilvl'] = @character.data["onyx_annulet_ilvl"]
-
-          true
-        end
-      end
-
       def check_embellished(occurrence, item, equipped_item)
-        if (equipped_item[:spells] || []).any? { |spell| spell.dig(:spell, :id) == 372120 }
-          @character.data["food_embellishment"] = 'yes'
-        end
-
         # Scuffed, improve
         @character.data["embellished_item_id_#{occurrence + 1}"] = ''
         @character.data["embellished_item_level_#{occurrence + 1}"] = ''
