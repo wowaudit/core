@@ -11,7 +11,7 @@ module Audit
             @character.data["profession_#{index + 1}"] = "#{profession[:profession][:name]} (#{tier ? tier[:skill_points] : '0'})"
 
             if tier
-              spark_items += tier[:known_recipes].map do |recipe|
+              spark_items += (tier[:known_recipes] || []).map do |recipe|
                 SPARK_RECIPE_NAME_TO_ITEM_ID[recipe[:name]][:id] if SPARK_RECIPE_NAME_TO_ITEM_ID.keys.include?(recipe[:name])
               end.compact
             end
