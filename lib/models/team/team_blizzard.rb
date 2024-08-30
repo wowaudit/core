@@ -5,7 +5,7 @@ module Audit
       $errors = { :tracking => 0, :role => 0 }
 
       if characters.any?
-        output = process_request(characters)
+        output = process_request(characters.first(100))
         Logger.t(INFO_TEAM_REFRESHED, id)
 
         section = {
