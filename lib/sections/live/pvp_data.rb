@@ -34,13 +34,25 @@ module Audit
             end
           end
 
-          @character.data['max_2v2_rating'] = @data[:achievement_statistics][:categories][8][:sub_categories][0][:statistics].select do |stat|
-            stat[:name] == "Highest 2v2 personal rating"
-          end.first&.dig(:quantity)&.to_i rescue 0
+          begin
+            pvp_category = @data[:achievement_statistics][:categories].find do |category|
+              category[:name] == "Player vs. Player"
+            end
 
-          @character.data['max_3v3_rating'] = @data[:achievement_statistics][:categories][8][:sub_categories][0][:statistics].select do |stat|
-            stat[:name] == "Highest 3v3 personal rating"
-          end.first&.dig(:quantity)&.to_i rescue 0
+            arena_category = pvp_category[:sub_categories].find do |sub_category|
+              sub_category[:name] == "Rated Arenas"
+            end[:statistics]
+
+            @character.data['max_2v2_rating'] = arena_category.select do |stat|
+              stat[:name] == "Highest 2v2 personal rating"
+            end.first&.dig(:quantity)&.to_i rescue 0
+
+            @character.data['max_3v3_rating'] = arena_category.select do |stat|
+              stat[:name] == "Highest 3v3 personal rating"
+            end.first&.dig(:quantity)&.to_i rescue 0
+          rescue
+            nil
+          end
         end
       end
     end
