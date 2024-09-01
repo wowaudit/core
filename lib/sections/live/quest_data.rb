@@ -9,9 +9,15 @@ module Audit
           @character.data['worldsoul_memories'] = @achievements[40251][:criteria][:child_criteria].first[:amount] rescue 0
         end
 
-        @character.data['theater_troupe'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == 83240 } ? 'yes' : 'no'
-        @character.data['spreading_the_light'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == 76586 } ? 'yes' : 'no'
-        @character.data['awakening_the_machine'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| quest[:id] == 83333 } ? 'yes' : 'no'
+        @character.data['worldsoul_weekly'] = 'no'
+        @character.data['theater_troupe'] = 'no'
+        @character.data['awakening_the_machine'] = 'no'
+
+        @data.dig(:completed_quests, :quests)&.lazy&.each do |quest|
+          @character.data['worldsoul_weekly'] = 'yes' if WORLDSOUL_WEEKLY_QUESTS.include? quest[:id]
+          @character.data['theater_troupe'] = 'yes' if quest[:id] == 83240
+          @character.data['awakening_the_machine'] = 'yes' if quest[:id] == 83333
+        end
 
         unless !@data[:completed_quests]
           @character.data['weekly_event_completed'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest[:id] } ? 'yes' : 'no'

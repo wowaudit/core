@@ -241,7 +241,7 @@ HEADER = {
     'season_highest_m+',
     'profession_1',
     'profession_2',
-    'spreading_the_light',
+    'worldsoul_weekly',
     'weekly_event_completed',
     'titles',
     'cutting_edge',
