@@ -85,8 +85,8 @@ module Audit
             end
 
             encounter.each do |difficulty, ids|
-              raid_output["raids_#{difficulty}"] << ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max
-              raid_output["raids_#{difficulty}_weekly"] << ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
+              raid_output["raids_#{difficulty}"] << (ids.map{ |id| raid_list[id] && raid_list[id][0] || 0 }.max || 0)
+              raid_output["raids_#{difficulty}_weekly"] << (ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max || 0)
 
               if (boss_ids & ids).any? && for_vault
                 great_vault_list[vault_index][difficulty.to_sym] = ids.map{ |id| raid_list[id] && raid_list[id][1] || 0 }.max
