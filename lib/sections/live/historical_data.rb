@@ -12,7 +12,7 @@ module Audit
           week = @character.details['snapshots'][period] || {}
 
 
-          wqs.insert(0, [(week['wqs'] || 0) - (@character.details['snapshots'][period - 1]['wqs'] || 0), 0].max) if index > 0
+          wqs.insert(0, [(week['wqs'] || 0) - (@character.details['snapshots'][period - 1]&.dig('wqs') || 0), 0].max) if index > 0
 
           vault.keys.each do |slot|
             # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
