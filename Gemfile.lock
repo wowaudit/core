@@ -1,5 +1,5 @@
 GIT
-  remote: https://github.com/Sheday/rbattlenet.git
+  remote: https://github.com/wowaudit/rbattlenet.git
   revision: 12be9c78710680899a9cd7488f47b39eb65e860a
   branch: master
   specs:
