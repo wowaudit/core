@@ -5,7 +5,7 @@ metadata:
   labels:
     app: blizzard
 spec:
-  replicas: 6
+  replicas: 9
   selector:
     matchLabels:
       app: blizzard
@@ -15,19 +15,19 @@ spec:
         app: blizzard
     spec:
       containers:
-      - name: blizzard
-        image: shedi/wowaudit:latest
-        command: ["/srv/bin/refresh"]
-        args: ["blizzard"]
+        - name: blizzard
+          image: shedi/wowaudit:latest
+          command: ["/srv/bin/refresh"]
+          args: ["blizzard"]
 
-        resources:
-          requests:
-            cpu: 250m
-            memory: 350Mi
+          resources:
+            requests:
+              cpu: 250m
+              memory: 350Mi
 
-          limits:
-            cpu: 250m
-            memory: 600Mi
+            limits:
+              cpu: 250m
+              memory: 600Mi
 
       imagePullSecrets:
         - name: regcred
