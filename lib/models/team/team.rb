@@ -34,6 +34,7 @@ module Audit
           character.team_rank&.spreadsheet_roster_visibility ||
           character.team_rank&.spreadsheet_overview_visibility ||
           character.team_rank&.spreadsheet_vault_visibility ||
+          character.team_rank&.spreadsheet_profession_visibility ||
           character.team_rank&.spreadsheet_raids_visibility
         )
       end

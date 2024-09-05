@@ -23,6 +23,7 @@ module Audit
         @character.data['overview_visible'] = @character.team_rank&.spreadsheet_overview_visibility ? 'yes' : 'no'
         @character.data['vault_visible'] = @character.team_rank&.spreadsheet_vault_visibility ? 'yes' : 'no'
         @character.data['raids_visible'] = @character.team_rank&.spreadsheet_raids_visibility ? 'yes' : 'no'
+        @character.data['professions_visible'] = @character.team_rank&.spreadsheet_profession_visibility ? 'yes' : 'no'
 
         # Parse the role if it's valid, otherwise set the default role
         if type != :live

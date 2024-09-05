@@ -430,7 +430,7 @@ HEADER = {
     'shuffle_season_played',
     'shuffle_week_played',
     'epic_gem',
-    '',
+    'professions_visible',
     '',
     'primordial_stone_1_name',
     'primordial_stone_2_name',
