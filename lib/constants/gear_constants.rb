@@ -73,6 +73,18 @@ weapon_enchants = {
 }
 
 ring_enchants = {
+  7329 => [2, "Glimmering Critical Strike (1)"],
+  7330 => [2, "Glimmering Critical Strike (2)"],
+  7331 => [2, "Glimmering Critical Strike (3)"],
+  7335 => [2, "Glimmering Haste (1)"],
+  7336 => [2, "Glimmering Haste (2)"],
+  7337 => [2, "Glimmering Haste (3)"],
+  7341 => [2, "Glimmering Mastery (1)"],
+  7342 => [2, "Glimmering Mastery (2)"],
+  7343 => [2, "Glimmering Mastery (3)"],
+  7347 => [2, "Glimmering Versatility (1)"],
+  7348 => [2, "Glimmering Versatility (2)"],
+  7349 => [2, "Glimmering Versatility (3)"],
   7468 => [2, "Cursed Critical Strike (1)"],
   7469 => [2, "Cursed Critical Strike (2)"],
   7470 => [4, "Cursed Critical Strike (3)"],
