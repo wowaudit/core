@@ -2,6 +2,8 @@ module Audit
   module Live
     class DelveData < Data
       def add
+        delves_this_week = []
+
         begin
           delve_category = @data[:achievement_statistics][:categories].find do |category|
             category[:name] == "Delves"
@@ -9,7 +11,6 @@ module Audit
 
           delve_meta = delve_category[:sub_categories].first[:statistics]
           delve_info = delve_category[:statistics]
-          delves_this_week = []
 
           @character.delve_info[:total] = delve_info.find { |stat| stat[:id] == 40734 }[:quantity] rescue 0
           (1..11).each do |tier|
@@ -33,6 +34,10 @@ module Audit
           @character.data['great_vault_slot_8'] = ""
           @character.data['great_vault_slot_9'] = ""
         else
+          ['worldsoul_weekly', 'theater_troupe', 'awakening_the_machine'].each do |quest|
+            delves_this_week << 1 if @character.data[quest] == 'yes'
+          end
+
           @character.data['great_vault_slot_7'] = Season.current.data[:vault_ilvl][:delve][[delves_this_week[0] || 0, 11].min] || ""
           @character.data['great_vault_slot_8'] = Season.current.data[:vault_ilvl][:delve][[delves_this_week[3] || 0, 11].min] || ""
           @character.data['great_vault_slot_9'] = Season.current.data[:vault_ilvl][:delve][[delves_this_week[7] || 0, 11].min] || ""
