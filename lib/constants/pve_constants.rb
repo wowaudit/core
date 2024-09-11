@@ -6,14 +6,14 @@ SEASON_DATA = {
     first_period: 974,
     pvp_season: 38,
     keystone_dungeons: [
-      { id: 503, name: "Ara-Kara, City of Echoes" },
-      { id: 502, name: "City of Threads" },
-      { id: 501, name: "The Stonevault" },
-      { id: 505, name: "The Dawnbreaker" },
-      { id: 507, name: "Grim Batol" },
-      { id: 376, name: "The Necrotic Wake" },
-      { id: 375, name: "Mists of Tirna Scithe" },
-      { id: 353, name: "Siege of Boralus" },
+      { id: 503, name: "Ara-Kara, City of Echoes", mythic_id: 20487, legacy: false },
+      { id: 502, name: "City of Threads", mythic_id: 40708, legacy: false },
+      { id: 501, name: "The Stonevault", mythic_id: 40720, legacy: false },
+      { id: 505, name: "The Dawnbreaker", mythic_id: 40713, legacy: false },
+      { id: 507, name: "Grim Batol", mythic_id: 0, legacy: true },
+      { id: 376, name: "The Necrotic Wake", mythic_id: 14404, legacy: true },
+      { id: 375, name: "Mists of Tirna Scithe", mythic_id: 14395, legacy: true },
+      { id: 353, name: "Siege of Boralus", mythic_id: 12773, legacy: true },
     ],
     vault_ilvl: {
       raid: {
@@ -32,7 +32,9 @@ SEASON_DATA = {
         4 => 610,
         3 => 610,
         2 => 606,
-        0 => nil,
+        1 => 603, # Regular Mythic
+        0 => 593, # Heroic
+        -1 => nil,
       },
       delve: {
         11 => 616,
@@ -52,14 +54,14 @@ SEASON_DATA = {
 }
 
 EXPANSION_DUNGEONS = [
-  { mythic_id: 0, heroic_id: 20486, name: "Ara-Kara, City of Echoes" },
-  { mythic_id: 0, heroic_id: 40653, name: "Cinderbrew Meadery" },
-  { mythic_id: 0, heroic_id: 40709, name: "City of Threads" },
-  { mythic_id: 0, heroic_id: 20483, name: "Darkflame Cleft" },
-  { mythic_id: 0, heroic_id: 40658, name: "Priory of the Sacred Flame" },
-  { mythic_id: 0, heroic_id: 40714, name: "The Dawnbreaker" },
-  { mythic_id: 0, heroic_id: 40717, name: "The Rookery" },
-  { mythic_id: 0, heroic_id: 40721, name: "The Stonevault" },
+  { heroic_id: 20486, name: "Ara-Kara, City of Echoes" },
+  { heroic_id: 40653, name: "Cinderbrew Meadery" },
+  { heroic_id: 40709, name: "City of Threads" },
+  { heroic_id: 20483, name: "Darkflame Cleft" },
+  { heroic_id: 40658, name: "Priory of the Sacred Flame" },
+  { heroic_id: 40714, name: "The Dawnbreaker" },
+  { heroic_id: 40717, name: "The Rookery" },
+  { heroic_id: 40721, name: "The Stonevault" },
 ]
 
 WEEKLY_EVENT_QUESTS = [
@@ -152,7 +154,7 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
 
 VALID_RAIDS = {
   live: [
-    {"name"=>"Nerub-ar Palace", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Ulgrax", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"The Bloodbound Horror", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Sikran", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Rasha'nan", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Broodtwister Ovi'nax", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Nexus-Princess Ky'veza", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"The Silken Court", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}, {"id"=>nil, "name"=>"Queen Ansurek", "raid_ids"=>{"raid_finder"=>[], "normal"=>[], "heroic"=>[], "mythic"=>[]}}]},
+    {"name"=>"Nerub-ar Palace", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>38, "encounters"=>[{"id"=>2902, "name"=>"Ulgrax", "raid_ids"=>{"raid_finder"=>[40267], "normal"=>[40268], "heroic"=>[40269], "mythic"=>[40270]}}, {"id"=>2917, "name"=>"The Bloodbound Horror", "raid_ids"=>{"raid_finder"=>[40271], "normal"=>[40272], "heroic"=>[40273], "mythic"=>[40274]}}, {"id"=>2898, "name"=>"Sikran", "raid_ids"=>{"raid_finder"=>[40275], "normal"=>[40276], "heroic"=>[40277], "mythic"=>[40278]}}, {"id"=>2918, "name"=>"Rasha'nan", "raid_ids"=>{"raid_finder"=>[40279], "normal"=>[40280], "heroic"=>[40281], "mythic"=>[40282]}}, {"id"=>2919, "name"=>"Broodtwister Ovi'nax", "raid_ids"=>{"raid_finder"=>[40283], "normal"=>[40284], "heroic"=>[40285], "mythic"=>[40286]}}, {"id"=>2920, "name"=>"Nexus-Princess Ky'veza", "raid_ids"=>{"raid_finder"=>[40287], "normal"=>[40288], "heroic"=>[40289], "mythic"=>[40290]}}, {"id"=>2921, "name"=>"The Silken Court", "raid_ids"=>{"raid_finder"=>[40291], "normal"=>[40292], "heroic"=>[40293], "mythic"=>[40294]}}, {"id"=>2922, "name"=>"Queen Ansurek", "raid_ids"=>{"raid_finder"=>[40295], "normal"=>[40296], "heroic"=>[40297], "mythic"=>[40298]}}]},
   ],
   classic_era: [
   ],

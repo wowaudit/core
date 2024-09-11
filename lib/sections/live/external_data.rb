@@ -32,8 +32,11 @@ module Audit
       end
 
       def add_leaderboard_data
-        @character.data['dungeons_this_week'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
+        @character.data['week_mythic_dungeons'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
         dungeons_per_week_in_season = (Season.current.data[:first_period]..(Audit.period - 1)).to_a.reverse.map do |period|
+          snapshot = @character.details.dig('snapshots', Audit.period.to_s, 'mythic_dungeons') || 0
+          week_after = @character.details.dig('snapshots', (Audit.period + 1).to_s, 'mythic_dungeons') || 0
+          regular_dungeons = [week_after - snapshot, 0].max
 
           # If for any reason there's a duplicate run stored with a slightly different timestamp, delete it.
           (@character.details['keystones'][period.to_s] || {}).keys.map(&:to_i).each do |timestamp|
@@ -42,21 +45,24 @@ module Audit
             end
           end
 
-          @character.details['keystones'][period.to_s]&.size || 0
+          (@character.details['keystones'][period.to_s]&.size || 0) + regular_dungeons
         end
-        @character.data['dungeons_done_total'] = dungeons_per_week_in_season.sum + @character.data['dungeons_this_week']
+        # This overwrites the more accurate (only base level Mythic) value from InstanceData. TODO: refactor
+        @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum + @character.data['week_mythic_dungeons']
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
         dungeon_data = (@character.details['keystones'][Audit.period.to_s]&.values&.map { |dungeon| dungeon['level'] } || []).sort.reverse
+        dungeon_data += (@character.data['week_mythic_dungeons'] || 0).times.map { 1 }
+        dungeon_data += (@character.data['week_heroic_dungeons'] || 0).times.map { 0 }
 
         if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)
           @character.data['great_vault_slot_4'] = ""
           @character.data['great_vault_slot_5'] = ""
           @character.data['great_vault_slot_6'] = ""
         else
-          @character.data['great_vault_slot_4'] = Season.current.data[:vault_ilvl][:dungeon]["level_#{[dungeon_data[0] || 0, 10].min}".to_sym] || ""
-          @character.data['great_vault_slot_5'] = Season.current.data[:vault_ilvl][:dungeon]["level_#{[dungeon_data[3] || 0, 10].min}".to_sym] || ""
-          @character.data['great_vault_slot_6'] = Season.current.data[:vault_ilvl][:dungeon]["level_#{[dungeon_data[7] || 0, 10].min}".to_sym] || ""
+          @character.data['great_vault_slot_4'] = Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[0] || -1, 10].min] || ""
+          @character.data['great_vault_slot_5'] = Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[3] || -1, 10].min] || ""
+          @character.data['great_vault_slot_6'] = Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[7] || -1, 10].min] || ""
         end
       end
     end

@@ -8,7 +8,7 @@ class Season
 
     def slugified_dungeon_names
       @slugified_dungeon_names ||= self.current.data[:keystone_dungeons].map do |dungeon|
-        { id: dungeon[:id], name: dungeon[:name].gsub("'", "").gsub(":", "").gsub(" -", "").gsub("-", "").gsub(" ", "_").gsub(",", "").downcase }
+        dungeon.merge({ name: dungeon[:name].gsub("'", "").gsub(":", "").gsub(" -", "").gsub("-", "").gsub(" ", "_").gsub(",", "").downcase })
       end
     end
   end

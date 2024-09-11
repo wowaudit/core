@@ -51,6 +51,10 @@ module Audit
         @character.data['week_heroic_dungeons'] =
           [@character.data['season_heroic_dungeons'] - @character.details['snapshots'][Audit.period.to_s]['heroic_dungeons'], 0].max rescue 0
 
+        @character.data['week_mythic_dungeons'] =
+          [@character.data['season_mythic_dungeons'] - @character.details['snapshots'][Audit.period.to_s]['mythic_dungeons'], 0].max rescue 0
+
+
         # Reset WQ data to 0 when a character changes their account wide sharing setting
         if @character.data['wqs_this_week'] < 0 || @character.data['wqs_this_week'] > 1000
           @character.details['snapshots'][Audit.period.to_s]['wqs'] = @character.data['wqs_done_total']

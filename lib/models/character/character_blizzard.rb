@@ -126,12 +126,13 @@ module Audit
 
         details['snapshots'][Audit.period.to_s]['wqs'] ||= self.data['wqs_done_total'] unless skipped
 
-        if Audit.period == FIRST_PERIOD_OF_EXPANSION
-          details['snapshots'][Audit.period.to_s]['heroic_dungeons'] = 0
-          details['snapshots'][Audit.period.to_s]['delve_info'] = { total: 0, tier_1: 0, tier_2: 0, tier_3: 0, tier_4: 0, tier_5: 0, tier_6: 0, tier_7: 0, tier_8: 0, tier_9: 0, tier_10: 0, tier_11: 0 }
+        details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
+        details['snapshots'][Audit.period.to_s]['delve_info'] ||= self.delve_info unless skipped
+
+        if Audit.period == 976
+          details['snapshots'][Audit.period.to_s]['mythic_dungeons'] = 0
         else
-          details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
-          details['snapshots'][Audit.period.to_s]['delve_info'] ||= self.delve_info unless skipped
+          details['snapshots'][Audit.period.to_s]['mythic_dungeons'] ||= self.data['season_mythic_dungeons'] unless skipped
         end
       end
 
