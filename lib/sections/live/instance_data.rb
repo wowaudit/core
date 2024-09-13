@@ -29,8 +29,9 @@ module Audit
 
             if mythic_match = Season.slugified_dungeon_names.find { |dungeon| dungeon[:mythic_id] == instance[:id] }
               if mythic_match[:legacy]
-                @character.details['mythic_dungeon_baseline'][mythic_match[:id].to_s] ||= instance[:quantity].to_i
-                total_mythic_dungeons += instance[:quantity].to_i - @character.details['mythic_dungeon_baseline'][mythic_match[:id].to_s]
+                offset = (instance[:last_updated_timestamp] / 1000) > Audit.timestamp ? 1 : 0
+                @character.details['legacy_dungeon_baseline'][mythic_match[:id].to_s] ||= instance[:quantity].to_i - offset
+                total_mythic_dungeons += instance[:quantity].to_i - @character.details['legacy_dungeon_baseline'][mythic_match[:id].to_s]
               else
                 total_mythic_dungeons += instance[:quantity].to_i
               end
