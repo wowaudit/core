@@ -6,11 +6,10 @@ module Audit
       def process(character, data, skipped, realm, temp_character)
         {
           live: [
-            Audit::Live::BasicData, Audit::Live::CollectionData,
-            Audit::Live::GearData, Audit::Live::HistoricalData,
+            Audit::Live::BasicData, Audit::Live::CollectionData, Audit::Live::GearData,
             Audit::Live::InstanceData, Audit::Live::ProfessionData, Audit::Live::PvPData,
             Audit::Live::QuestData, Audit::Live::ReputationData, Audit::Live::DelveData,
-            Audit::Live::ExternalData,
+            Audit::Live::HistoricalData, Audit::Live::ExternalData,
           ],
           classic_era: [
             Audit::ClassicEra::BasicData,

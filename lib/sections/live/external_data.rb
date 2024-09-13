@@ -32,7 +32,7 @@ module Audit
       end
 
       def add_leaderboard_data
-        @character.data['week_mythic_dungeons'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
+        @character.data['week_mythic_dungeons'] += @character.details['keystones'][Audit.period.to_s]&.size || 0
         dungeons_per_week_in_season = (Season.current.data[:first_period]..(Audit.period - 1)).to_a.reverse.map do |period|
           snapshot = @character.details.dig('snapshots', Audit.period.to_s, 'mythic_dungeons') || 0
           week_after = @character.details.dig('snapshots', (Audit.period + 1).to_s, 'mythic_dungeons') || 0

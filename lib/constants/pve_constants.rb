@@ -7,9 +7,9 @@ SEASON_DATA = {
     pvp_season: 38,
     keystone_dungeons: [
       { id: 503, name: "Ara-Kara, City of Echoes", mythic_id: 20487, legacy: false },
-      { id: 502, name: "City of Threads", mythic_id: 40708, legacy: false },
-      { id: 501, name: "The Stonevault", mythic_id: 40720, legacy: false },
-      { id: 505, name: "The Dawnbreaker", mythic_id: 40713, legacy: false },
+      { id: 502, name: "City of Threads", mythic_id: 40710, legacy: false },
+      { id: 501, name: "The Stonevault", mythic_id: 40722, legacy: false },
+      { id: 505, name: "The Dawnbreaker", mythic_id: 40715, legacy: false },
       { id: 507, name: "Grim Batol", mythic_id: 0, legacy: true },
       { id: 376, name: "The Necrotic Wake", mythic_id: 14404, legacy: true },
       { id: 375, name: "Mists of Tirna Scithe", mythic_id: 14395, legacy: true },
