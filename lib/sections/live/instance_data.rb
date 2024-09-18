@@ -79,7 +79,7 @@ module Audit
         end
 
         @character.data['season_heroic_dungeons'] = total_heroic_dungeons
-        @character.data['season_mythic_dungeons'] = total_mythic_dungeons
+        # @character.data['season_mythic_dungeons'] = total_mythic_dungeons
 
         @character.data['m+_score'] = (@data.dig(:season_keystones, :mythic_rating, :rating) || 0).to_i
 
