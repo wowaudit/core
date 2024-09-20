@@ -180,7 +180,6 @@ module Audit
       details['max_ilvl'] = 0 if !details['max_ilvl']
       details['current_version'] = 0 if !details['current_version']
       details['current_period'] = 0 if !details['current_period']
-      details['legacy_dungeon_baseline'] = {} if !details['legacy_dungeon_baseline']
 
       # Disable last refresh if not present
       if !details['last_refresh'].is_a? Hash

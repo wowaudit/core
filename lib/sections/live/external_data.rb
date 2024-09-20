@@ -34,10 +34,6 @@ module Audit
       def add_leaderboard_data
         @character.data['week_mythic_dungeons'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
         dungeons_per_week_in_season = (Season.current.data[:first_period]..(Audit.period - 1)).to_a.reverse.map do |period|
-          snapshot = @character.details.dig('snapshots', Audit.period.to_s, 'mythic_dungeons') || 0
-          week_after = @character.details.dig('snapshots', (Audit.period + 1).to_s, 'mythic_dungeons') || 0
-          regular_dungeons = [week_after - snapshot, 0].max
-
           # If for any reason there's a duplicate run stored with a slightly different timestamp, delete it.
           (@character.details['keystones'][period.to_s] || {}).keys.map(&:to_i).each do |timestamp|
             if @character.details['keystones'][period.to_s].keys.map(&:to_i).any? { |other| other != timestamp && other - 60 < timestamp && other + 60 > timestamp }
@@ -45,14 +41,13 @@ module Audit
             end
           end
 
-          (@character.details['keystones'][period.to_s]&.size || 0) + regular_dungeons
+          (@character.details['keystones'][period.to_s]&.size || 0)
         end
-        # This overwrites the more accurate (only base level Mythic) value from InstanceData. TODO: refactor
-        @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum #+ @character.data['week_mythic_dungeons']
+
+        @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
         dungeon_data = (@character.details['keystones'][Audit.period.to_s]&.values&.map { |dungeon| dungeon['level'] } || []).sort.reverse
-        # dungeon_data += (@character.data['week_mythic_dungeons'] || 0).times.map { 1 }
         dungeon_data += (@character.data['week_heroic_dungeons'] || 0).times.map { 0 }
 
         if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)

@@ -15,7 +15,6 @@ module Audit
                       'raids_heroic' => [],      'raids_heroic_weekly' => [],
                       'raids_mythic' => [],      'raids_mythic_weekly' => []}
         total_heroic_dungeons = 0
-        total_mythic_dungeons = 0
 
         begin
           dungeons_and_raids =  @data[:achievement_statistics][:categories].find do |category|
@@ -25,16 +24,6 @@ module Audit
           dungeons_and_raids[:sub_categories].map{ |cat| cat[:statistics] }.flatten.lazy.each do |instance|
             if EXPANSION_DUNGEONS.any?{ |dungeon| dungeon[:heroic_id] == instance[:id] }
               total_heroic_dungeons += instance[:quantity].to_i
-            end
-
-            if mythic_match = Season.slugified_dungeon_names.find { |dungeon| dungeon[:mythic_id] == instance[:id] }
-              if mythic_match[:legacy]
-                offset = (instance[:last_updated_timestamp] / 1000) > Audit.timestamp ? 1 : 0
-                @character.details['legacy_dungeon_baseline'][mythic_match[:id].to_s] ||= instance[:quantity].to_i - offset
-                total_mythic_dungeons += instance[:quantity].to_i - @character.details['legacy_dungeon_baseline'][mythic_match[:id].to_s]
-              else
-                total_mythic_dungeons += instance[:quantity].to_i
-              end
             end
 
             # Track weekly Raid kills through the statistics
@@ -79,7 +68,6 @@ module Audit
         end
 
         @character.data['season_heroic_dungeons'] = total_heroic_dungeons
-        # @character.data['season_mythic_dungeons'] = total_mythic_dungeons
 
         @character.data['m+_score'] = (@data.dig(:season_keystones, :mythic_rating, :rating) || 0).to_i
 

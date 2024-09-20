@@ -128,12 +128,6 @@ module Audit
 
         details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
         details['snapshots'][Audit.period.to_s]['delve_info'] ||= self.delve_info unless skipped
-
-        if Audit.period == 976
-          details['snapshots'][Audit.period.to_s]['mythic_dungeons'] = 0
-        else
-          details['snapshots'][Audit.period.to_s]['mythic_dungeons'] ||= self.data['season_mythic_dungeons'] unless skipped
-        end
       end
 
       details['current_version'] = CURRENT_VERSION[REALMS[realm_id].kind.to_sym] unless skipped
