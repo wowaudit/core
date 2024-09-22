@@ -131,12 +131,12 @@ module Audit
       end
 
       def check_enchant(item, equipped_item)
+        if item == 'neck' || item.include?('finger')
+          @character.data['jewelry_sockets'] += equipped_item&.dig(:sockets)&.size || 0
+        end
+
         if ENCHANTS.include? item
           begin
-            if item == 'neck' || item.include?('finger')
-              @character.data['jewelry_sockets'] += equipped_item&.dig(:sockets)&.size || 0
-            end
-
             # Off-hand items that are not weapons can't be enchanted
             return if !equipped_item&.dig(:weapon) && item == "off_hand"
 
