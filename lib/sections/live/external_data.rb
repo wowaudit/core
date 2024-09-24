@@ -44,7 +44,7 @@ module Audit
           (@character.details['keystones'][period.to_s]&.size || 0)
         end
 
-        @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum
+        @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum + @character.data['week_mythic_dungeons']
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
         dungeon_data = (@character.details['keystones'][Audit.period.to_s]&.values&.map { |dungeon| dungeon['level'] } || []).sort.reverse
