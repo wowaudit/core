@@ -187,6 +187,9 @@ ENCHANTS = {
     7595 => [4, "Defender's Armor Kit (3)"],
   },
   'feet' => {
+    6605 => [2, "Plainsrunner's Breeze (1)"],
+    6606 => [2, "Plainsrunner's Breeze (2)"],
+    6607 => [4, "Plainsrunner's Breeze (3)"],
     7416 => [2, "Scout's March (1)"],
     7417 => [2, "Scout's March (2)"],
     7418 => [4, "Scout's March (3)"],
