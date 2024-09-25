@@ -9,7 +9,7 @@ module Audit
         vault = { 1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [], 7 => [], 8 => [], 9 => [] }
 
         (FIRST_PERIOD_OF_EXPANSION..(Audit.period)).each_with_index do |period, index|
-          week = @character.details['snapshots'][period] || {}
+          week = @character.details['snapshots'][period.to_s] || {}
 
 
           wqs.insert(0, [(week['wqs'] || 0) - (@character.details['snapshots'][period - 1]&.dig('wqs') || 0), 0].max) if index > 0
