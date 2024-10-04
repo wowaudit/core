@@ -38,9 +38,9 @@ module Audit
             delves_this_week << 1 if @character.data[quest] == 'yes'
           end
 
-          @character.data['great_vault_slot_7'] = Season.current.data[:vault_ilvl][:delve][[delves_this_week[0] || 0, 11].min] || ""
-          @character.data['great_vault_slot_8'] = Season.current.data[:vault_ilvl][:delve][[delves_this_week[3] || 0, 11].min] || ""
-          @character.data['great_vault_slot_9'] = Season.current.data[:vault_ilvl][:delve][[delves_this_week[7] || 0, 11].min] || ""
+          @character.data['great_vault_slot_7'] = Season.current.data[:great_vault][:delve][[delves_this_week[0] || 0, 11].min]&.dig(:ilvl) || ""
+          @character.data['great_vault_slot_8'] = Season.current.data[:great_vault][:delve][[delves_this_week[3] || 0, 11].min]&.dig(:ilvl) || ""
+          @character.data['great_vault_slot_9'] = Season.current.data[:great_vault][:delve][[delves_this_week[7] || 0, 11].min]&.dig(:ilvl) || ""
         end
       end
     end

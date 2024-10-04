@@ -138,7 +138,7 @@ module Audit
             @character.data["great_vault_slot_#{slot}"] = ""
           else
             @character.data["great_vault_slot_#{slot}"] = if raid_bosses_killed >= kills_needed
-              Season.current.data[:vault_ilvl][:raid][slot_info[kills_needed - 1]]
+              Season.current.data[:great_vault][:raid][slot_info[kills_needed - 1]][:ilvl]
             end || ''
           end
         end

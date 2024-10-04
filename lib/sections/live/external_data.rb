@@ -55,9 +55,9 @@ module Audit
           @character.data['great_vault_slot_5'] = ""
           @character.data['great_vault_slot_6'] = ""
         else
-          @character.data['great_vault_slot_4'] = Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[0] || -1, 10].min] || ""
-          @character.data['great_vault_slot_5'] = Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[3] || -1, 10].min] || ""
-          @character.data['great_vault_slot_6'] = Season.current.data[:vault_ilvl][:dungeon][[dungeon_data[7] || -1, 10].min] || ""
+          @character.data['great_vault_slot_4'] = Season.current.data[:great_vault][:dungeon][[dungeon_data[0] || -1, 10].min]&.dig(:ilvl) || ""
+          @character.data['great_vault_slot_5'] = Season.current.data[:great_vault][:dungeon][[dungeon_data[3] || -1, 10].min]&.dig(:ilvl) || ""
+          @character.data['great_vault_slot_6'] = Season.current.data[:great_vault][:dungeon][[dungeon_data[7] || -1, 10].min]&.dig(:ilvl) || ""
         end
       end
     end

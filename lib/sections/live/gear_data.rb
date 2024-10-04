@@ -31,6 +31,12 @@ module Audit
             @character.data[item + '_id'] = equipped_item[:item][:id]
             @character.data[item + '_name'] = equipped_item[:name]
             @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
+
+            equipped_item[:stats].each do |stat|
+              next unless stat_type = TRACKED_STATS[stat[:type][:type].to_sym]
+
+              @character.stat_info[stat_type][:gear] += stat[:value]
+            end
           rescue => err
             @character.data[item + '_ilvl'] = ''
             @character.data[item + '_id'] = ''
@@ -128,6 +134,13 @@ module Audit
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
         @character.data['gem_list'] = @character.gems.join('|')
+
+        total_gear = @character.stat_info.values.map { |info| info[:gear] }.sum.to_f
+        total_enchants = @character.stat_info.values.map { |info| info[:enchantments] }.sum.to_f
+        @character.stat_info.each do |stat, info|
+          @character.data["#{stat}_gear_percentage"] = [[((info[:gear] / total_gear) * 100).round(0), 100].min, 0].max if total_gear > 0
+          @character.data["#{stat}_enchant_percentage"] = [[((info[:enchantments] / total_enchants) * 100).round(0), 100].min, 0].max if total_enchants > 0
+        end
       end
 
       def check_enchant(item, equipped_item)
@@ -141,8 +154,13 @@ module Audit
             return if !equipped_item&.dig(:weapon) && item == "off_hand"
 
             if (match = equipped_item[:enchantments].map { |e| ENCHANTS[item][e[:enchantment_id]] }.compact.first)
-              @character.data["enchant_quality_#{item}"] = match[0]
-              @character.data["#{item}_enchant"] = match[1] || ''
+              quality, name, stats = match
+
+              @character.data["enchant_quality_#{item}"] = quality
+              @character.data["#{item}_enchant"] = name
+              (stats || {}).each do |stat, value|
+                @character.stat_info[stat][:enchantments] += value
+              end
             else
               # This will match Dragonflight enchants, so it can't be used... TODO: Think about a better way?
               # name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
@@ -165,8 +183,12 @@ module Audit
         socket_info = []
 
         (equipped_item[:sockets] || []).each do |socket|
-          if has_gem = GEMS[socket.dig(:item, :id)]
-            @character.gems << has_gem
+          if gem = GEMS[socket.dig(:item, :id)]
+            @character.gems << gem[:quality]
+
+            (gem[:stats]).each do |stat, value|
+              @character.stat_info[stat][:enchantments] += value
+            end
 
             if epic_gem = EPIC_GEMS[socket.dig(:item, :id)]
               @character.data['epic_gem'] = epic_gem

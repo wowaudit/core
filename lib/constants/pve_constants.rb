@@ -15,39 +15,40 @@ SEASON_DATA = {
       { id: 375, name: "Mists of Tirna Scithe", mythic_id: 14395, legacy: true },
       { id: 353, name: "Siege of Boralus", mythic_id: 12773, legacy: true },
     ],
-    vault_ilvl: {
+    track_cutoffs: [623, 610, 597, 584],
+    great_vault: {
       raid: {
-        mythic: 623,
-        heroic: 610,
-        normal: 597,
-        raid_finder: 584,
+        mythic: { ilvl: 623, track: 'Myth' },
+        heroic: { ilvl: 610, track: 'Hero' },
+        normal: { ilvl: 597, track: 'Champion' },
+        raid_finder: { ilvl: 584, track: 'Veteran' },
       },
       dungeon: {
-        10 => 623,
-        9 => 619,
-        8 => 619,
-        7 => 616,
-        6 => 613,
-        5 => 613,
-        4 => 610,
-        3 => 610,
-        2 => 606,
-        1 => 603, # Regular Mythic
-        0 => 593, # Heroic
-        -1 => nil,
+        10 => { ilvl: 623, track: 'Myth' },
+        9 => { ilvl: 619, track: 'Hero' },
+        8 => { ilvl: 619, track: 'Hero' },
+        7 => { ilvl: 616, track: 'Hero' },
+        6 => { ilvl: 613, track: 'Hero' },
+        5 => { ilvl: 613, track: 'Hero' },
+        4 => { ilvl: 610, track: 'Hero' },
+        3 => { ilvl: 610, track: 'Hero' },
+        2 => { ilvl: 606, track: 'Champion' },
+        1 => { ilvl: 603, track: 'Champion' }, # Regular Mythic
+        0 => { ilvl: 593, track: 'Veteran' }, # Heroic
+        -1 => { ilvl: nil, track: nil },
       },
       delve: {
-        11 => 616,
-        10 => 616,
-        9 => 616,
-        8 => 616,
-        7 => 610,
-        6 => 606,
-        5 => 603,
-        4 => 587,
-        3 => 587,
-        2 => 584,
-        1 => 584,
+        11 => { ilvl: 616, track: 'Hero' },
+        10 => { ilvl: 616, track: 'Hero' },
+        9 => { ilvl: 616, track: 'Hero' },
+        8 => { ilvl: 616, track: 'Hero' },
+        7 => { ilvl: 610, track: 'Hero' },
+        6 => { ilvl: 606, track: 'Champion' },
+        5 => { ilvl: 603, track: 'Champion' },
+        4 => { ilvl: 587, track: 'Champion' },
+        3 => { ilvl: 587, track: 'Veteran' },
+        2 => { ilvl: 584, track: 'Veteran' },
+        1 => { ilvl: 584, track: 'Veteran' },
       }
     }
   }

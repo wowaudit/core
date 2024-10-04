@@ -33,6 +33,10 @@ module Audit
           "#{details[:profession]}_#{details[:id]}_#{name}"
         end.join('|')
 
+        Season.current.data[:track_cutoffs].each_with_index do |cutoff, index|
+          new_header[284 + index] = cutoff
+        end
+
         new_header
       end
     end

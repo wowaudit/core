@@ -15,6 +15,7 @@ module Audit
       # Variables for gear data
       self.gems = []
       self.ilvl = 0.0
+      self.stat_info = TRACKED_STATS.values.map { |stat| [stat, { gear: 0, enchantments: 0 }] }.to_h
       self.delve_info = { total: 0, tier_1: 0, tier_2: 0, tier_3: 0, tier_4: 0, tier_5: 0, tier_6: 0, tier_7: 0, tier_8: 0, tier_9: 0, tier_10: 0, tier_11: 0 }
     end
 
