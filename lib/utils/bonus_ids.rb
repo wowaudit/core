@@ -11,8 +11,8 @@ class BonusIds
     heroic: "Hero",
     normal: "Champion",
     raid_finder: "Veteran",
-    world_advanced: "Explorer",
-    world_basic: "Adventurer",
+    world_advanced: "Adventurer",
+    world_basic: "Explorer",
   }
 
   class << self

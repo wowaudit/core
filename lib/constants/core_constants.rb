@@ -472,6 +472,12 @@ HEADER = {
     'haste_enchant_percentage',
     'mastery_enchant_percentage',
     'vers_enchant_percentage',
+    'mythic_track_items',
+    'heroic_track_items',
+    'normal_track_items',
+    'raid_finder_track_items',
+    'world_advanced_track_items',
+    'world_basic_track_items',
   ],
   classic_era: [
     'name',

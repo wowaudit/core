@@ -10,6 +10,7 @@ module Audit
         @character.data['jewelry_sockets'] = 0
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
+        BonusIds::DIFFICULTY_LABELS.keys.each { |track| @character.data["#{track}_track_items"] = 0 }
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
         @character.data["enchant_quality_off_hand"] = ''
@@ -65,9 +66,17 @@ module Audit
 
             bonus_list = equipped_item[:bonus_list] || []
             upgrade_id = bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }
-            track = BonusIds.current.values.find { |ids| ids.include? upgrade_id.to_i }
-            @character.data["upgrade_level_#{item}"] = track ? "#{track.index(upgrade_id) + 1} / #{track.size}" : '-'
-            total_upgrades_missing += (track.size - (track.index(upgrade_id) + 1)) if track
+            track, track_ids = BonusIds.current.find { |track, ids| ids.include? upgrade_id.to_i }
+            @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.index(upgrade_id) + 1} / #{track_ids.size}" : '-'
+            total_upgrades_missing += (track_ids.size - (track_ids.index(upgrade_id) + 1)) if track_ids
+
+            # For crafted items we need to check the track (crests used) based on the item level
+            unless track
+              cutoff_index = Season.current.data[:track_cutoffs].find_index { |cutoff| equipped_item[:level][:value] >= cutoff }
+              track = BonusIds.current.keys[cutoff_index] if cutoff_index
+            end
+
+            @character.data["#{track}_track_items"] += 1 if track
 
             @character.details['current_gear'][item] = {
               'ilvl' => equipped_item[:level][:value],
