@@ -145,10 +145,10 @@ module Audit
         @character.data['gem_list'] = @character.gems.join('|')
 
         total_gear = @character.stat_info.values.map { |info| info[:gear] }.sum.to_f
-        total_enchants = @character.stat_info.values.map { |info| info[:enchantments] }.sum.to_f
+        total_enchants = @character.stat_info.values.map { |info| [info[:enchantments], 0].max }.sum.to_f
         @character.stat_info.each do |stat, info|
-          @character.data["#{stat}_gear_percentage"] = [[((info[:gear] / total_gear) * 100).round(0), 100].min, 0].max if total_gear > 0
-          @character.data["#{stat}_enchant_percentage"] = [[((info[:enchantments] / total_enchants) * 100).round(0), 100].min, 0].max if total_enchants > 0
+          @character.data["#{stat}_gear_percentage"] = ((info[:gear] / total_gear) * 100).round(0) if total_gear > 0
+          @character.data["#{stat}_enchant_percentage"] = [(info[:enchantments] / total_enchants) * 100, 0].max.round(0) if total_enchants > 0
         end
 
         BonusIds::DIFFICULTY_LABELS.keys.each do |track|
