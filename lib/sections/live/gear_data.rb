@@ -150,6 +150,10 @@ module Audit
           @character.data["#{stat}_gear_percentage"] = [[((info[:gear] / total_gear) * 100).round(0), 100].min, 0].max if total_gear > 0
           @character.data["#{stat}_enchant_percentage"] = [[((info[:enchantments] / total_enchants) * 100).round(0), 100].min, 0].max if total_enchants > 0
         end
+
+        BonusIds::DIFFICULTY_LABELS.keys.each do |track|
+          @character.data["#{track}_track_items"] = "-" if @character.data["#{track}_track_items"] == 0
+        end
       end
 
       def check_enchant(item, equipped_item)
