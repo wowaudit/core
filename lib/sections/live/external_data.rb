@@ -32,8 +32,7 @@ module Audit
       end
 
       def add_leaderboard_data
-        @character.data['week_mythic_dungeons'] = @character.details['keystones'][Audit.period.to_s]&.size || 0
-        dungeons_per_week_in_season = (Season.current.data[:first_period]..(Audit.period - 1)).to_a.reverse.map do |period|
+        dungeons_per_week_in_season = (Season.current.data[:first_period]..Audit.period).to_a.reverse.map do |period|
           # If for any reason there's a duplicate run stored with a slightly different timestamp, delete it.
           (@character.details['keystones'][period.to_s] || {}).keys.map(&:to_i).each do |timestamp|
             if @character.details['keystones'][period.to_s].keys.map(&:to_i).any? { |other| other != timestamp && other - 60 < timestamp && other + 60 > timestamp }
@@ -41,8 +40,13 @@ module Audit
             end
           end
 
-          (@character.details['keystones'][period.to_s]&.size || 0)
-        end
+          if period == Audit.period
+            @character.data['week_mythic_dungeons'] = @character.details['keystones'][period]&.size || 0
+            nil
+          else
+            (@character.details['keystones'][period.to_s]&.size || 0)
+          end
+        end.compact
 
         @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum + @character.data['week_mythic_dungeons']
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
