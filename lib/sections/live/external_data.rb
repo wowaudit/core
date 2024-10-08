@@ -41,7 +41,7 @@ module Audit
           end
 
           if period == Audit.period
-            @character.data['week_mythic_dungeons'] = @character.details['keystones'][period]&.size || 0
+            @character.data['week_mythic_dungeons'] = @character.details['keystones'][period.to_s]&.size || 0
             nil
           else
             (@character.details['keystones'][period.to_s]&.size || 0)
