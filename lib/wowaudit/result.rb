@@ -52,8 +52,8 @@ module Wowaudit
       return true if @response[:status_codes][:status][:code] == 404
       return true unless @response[:status][:is_valid]
 
-      if @character.uid.to_s != @response[:status][:id].to_s
-        Wowaudit.update_field(@character, :uid, @response[:status][:id].to_i)
+      if @character.profile_id.to_s != @response[:status][:id].to_s
+        Wowaudit.update_field(@character, :profile_id, @response[:status][:id].to_i)
       end
 
       false
@@ -74,7 +74,7 @@ module Wowaudit
     end
 
     def store_metadata
-      Wowaudit.update_field(@character, :guild_uid, @response.dig(:guild, :id))
+      Wowaudit.update_field(@character, :guild_profile_id, @response.dig(:guild, :id))
       Wowaudit.update_field(@character, :race_id, @response.dig(:race, :id))
 
       Wowaudit.update_field(@character, :level, @response[:level])
