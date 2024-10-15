@@ -1,5 +1,5 @@
 CURRENT_VERSION = {
-  live: 1025,
+  live: 1026,
   classic_era: 104,
   classic_progression: 305,
 }
@@ -436,9 +436,9 @@ HEADER = {
     'primordial_stone_2_name',
     'primordial_stone_3_name',
     'waist_enchant',
-    'enchant_quality_waist',
+    '',
     'head_enchant',
-    'enchant_quality_head',
+    '',
     'ansurek_mount',
     'gilded_crests',
     'upgrade_level_head',
