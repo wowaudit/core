@@ -57,6 +57,13 @@ module Audit
           @character.details['snapshots'][Audit.period.to_s]['wqs'] = @character.data['wqs_done_total']
           @character.data['wqs_this_week'] = 0
         end
+
+        # Weekly quests and delve data doesn't reset until each character logs out again after the reset
+        if Time.at(@character.data['blizzard_last_modified'] / 1000.0) < Time.at(Audit.timestamp)
+          @character.data['great_vault_slot_7'] = ""
+          @character.data['great_vault_slot_8'] = ""
+          @character.data['great_vault_slot_9'] = ""
+        end
       end
     end
   end

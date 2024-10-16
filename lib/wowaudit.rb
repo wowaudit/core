@@ -14,7 +14,7 @@ require_rel './constants'
 require_rel './wowaudit'
 
 ALL_UPDATABLE_FIELDS = [
-  :guild_profile_id, :race_id, :faction_id, :media_zone, :transfer_id,
+  :guild_profile_id, :race_id, :faction_id, :media_zone, :achievement_uid,
   :level, :marked_for_deletion_at, :status, :refreshed_at, :profile_id,
 ]
 

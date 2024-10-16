@@ -33,6 +33,35 @@ module Wowaudit
       end
     end
 
+    def redis_id
+      @character.redis_id
+    end
+
+    def last_refresh_data
+      [HEADER[@character.realm.game_version.to_sym], @output].transpose.to_h rescue false
+    end
+
+    def metadata
+      {
+        _key: @character.id.to_s,
+        character_id: @character.id,
+        timestamp: (last_refresh_data || {})['blizzard_last_modified'],
+        max_ilvl: @details['max_ilvl'],
+        current_period: @details['current_period'],
+        current_version: @details['current_version'],
+        last_refresh: last_refresh_data,
+        current_gear: @details['current_gear'],
+      }.merge(@character.realm.game_version == 'live' ? {
+        best_gear: @details['best_gear'],
+        spark_gear_s1: @details['spark_gear_s1'],
+        keystones: @details['keystones'],
+        snapshots: @details["snapshots"],
+        warcraftlogs: @details["warcraftlogs"],
+        raiderio: @details["raiderio"],
+        tier_items_s1: @details["tier_items_s1"],
+      } : {})
+    end
+
     private
 
     def check_character_api_status
@@ -83,10 +112,12 @@ module Wowaudit
       end
 
       @achievements = @response[:achievements].group_by{ |ach| ach[:id] }.transform_values(&:first)
-      transfer_id = CHARACTER_IDENTIFICATION_IDS.sum do |achievement_id|
+      achievement_uid = CHARACTER_IDENTIFICATION_IDS.sum do |achievement_id|
         @achievements[achievement_id]&.dig(:completed_timestamp) || 0
       end + @response.dig(:character_class, :id)
-      Wowaudit.update_field(@character, :transfer_id, transfer_id)
+      Wowaudit.update_field(@character, :achievement_uid, achievement_uid)
+
+      Redis.update([self])
     end
   end
 end
