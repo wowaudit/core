@@ -76,7 +76,7 @@ module Audit
         end
 
         CLASSIC_ERA_LEGENDARIES.values.uniq.each do |legendary|
-          meant_for_character = CLASSIC_CLASSES_FOR_LEGENDARY[legendary].include?(@character.class_id || @data.dig(:character_class, :id))
+          meant_for_character = CLASSIC_CLASSES_FOR_LEGENDARY[legendary].include?(@temp_character.class_id || @data.dig(:character_class, :id))
           @character.data["legendary_#{legendary}"] = @character.details["legendary_#{legendary}"] ? 'yes' : meant_for_character ? 'no' : 'n/a'
         end
 
