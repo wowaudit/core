@@ -1,6 +1,6 @@
 module Wowaudit
   class Result
-    attr_accessor :output, :data, :gems, :ilvl, :character, :changed, :details
+    attr_accessor :output, :data, :gems, :ilvl, :character, :changed, :details, :stat_info, :delve_info
 
     def initialize(character, response)
       Audit.verify_details(character, character.details, character.realm)
@@ -12,6 +12,8 @@ module Wowaudit
       @data = {}
       @gems = []
       @ilvl = 0.0
+      @stat_info = TRACKED_STATS.values.map { |stat| [stat, { gear: 0, enchantments: 0 }] }.to_h
+      @delve_info = { total: 0, tier_1: 0, tier_2: 0, tier_3: 0, tier_4: 0, tier_5: 0, tier_6: 0, tier_7: 0, tier_8: 0, tier_9: 0, tier_10: 0, tier_11: 0 }
 
       # Populate identifying data regardless of response
       @data['realm_slug'] = character.realm.slug
@@ -21,24 +23,27 @@ module Wowaudit
         Wowaudit.update_field(@character, :status, 'tracking')
         Wowaudit.update_field(@character, :refreshed_at, DateTime.now)
         Audit::Data.process(self, @response, false, @character.realm, @character)
+        HEADER[@character.realm.game_version.to_sym].each { |value| @output << (@data[value] || 0) }
         store_metadata
 
         # Ensure that the two different database records play well with each other for now...
         @character.role = @character.role.downcase
       else
         # TODO: Set status in database? What do we want to do with tiemouts?
-        timeouts = @response[:status_codes].values.select { |status| status[:timeout] }.size
+        # timeouts = @response[:status_codes].values.select { |status| status[:timeout] }.size
         code = @response[:status_codes].values.map { |status| status[:code] }.max
         raise Wowaudit::Exception::CharacterUnavailable.new(code)
       end
     end
 
-    def redis_id
-      @character.redis_id
+    # Tab visibility should be handled at a later moment, when generating the JSON.
+    # Since we now refresh from the character's perspective, not the team membership.
+    def team_rank
+      nil
     end
 
     def last_refresh_data
-      [HEADER[@character.realm.game_version.to_sym], @output].transpose.to_h rescue false
+      [HEADER[@character.realm.game_version.to_sym], @output].transpose.to_h
     end
 
     def metadata
@@ -60,6 +65,23 @@ module Wowaudit
         raiderio: @details["raiderio"],
         tier_items_s1: @details["tier_items_s1"],
       } : {})
+    end
+
+    def update_snapshots
+      if @character.realm.game_version == 'live'
+        current_week = @character.details['snapshots'][Audit.period.to_s] || {}
+
+        @character.details['snapshots'][Audit.period.to_s] = current_week.merge({ 'vault' => 9.times.map do |i|
+          [(i + 1).to_s, last_refresh_data["great_vault_slot_#{i + 1}"] || @data["great_vault_slot_#{i + 1}"]]
+        end.to_h })
+
+        @character.details['snapshots'][Audit.period.to_s]['wqs'] ||= @data['wqs_done_total']
+        @character.details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= @data['season_heroic_dungeons']
+        @character.details['snapshots'][Audit.period.to_s]['delve_info'] ||= @delve_info
+      end
+
+      @character.details['current_version'] = CURRENT_VERSION[@character.realm.game_version.to_sym]
+      @character.details['current_period'] = Audit.period
     end
 
     private
@@ -117,7 +139,8 @@ module Wowaudit
       end + @response.dig(:character_class, :id)
       Wowaudit.update_field(@character, :achievement_uid, achievement_uid)
 
-      Redis.update([self])
+      update_snapshots
+      Wowaudit::Metadata.store(self)
     end
   end
 end
