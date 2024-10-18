@@ -34,7 +34,7 @@ module Audit
         end.join('|')
 
         Season.current.data[:track_cutoffs].each_with_index do |cutoff, index|
-          new_header[284 + index] = cutoff
+          new_header[284 + index] = cutoff[:ilvl]
         end
 
         new_header

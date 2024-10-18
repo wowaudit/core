@@ -72,7 +72,7 @@ module Audit
 
             # For crafted items we need to check the track (crests used) based on the item level
             unless track
-              cutoff_index = Season.current.data[:track_cutoffs].find_index { |cutoff| equipped_item[:level][:value] >= cutoff }
+              cutoff_index = Season.current.data[:track_cutoffs].find_index { |cutoff| equipped_item[:level][:value] >= cutoff[:ilvl] }
               track = BonusIds.current.keys[cutoff_index] if cutoff_index
             end
 
@@ -86,7 +86,10 @@ module Audit
               'enchant' => check_enchant(item, equipped_item),
               'sockets' => check_sockets(item, equipped_item),
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
-              'upgrade_level' => @character.data["upgrade_level_#{item}"],
+              'upgrade_level' => {
+                step: track_ids ? track_ids.index(upgrade_id) + 1 : 0,
+                total: track_ids&.size || 0,
+                track: (track ? Season.current.data[:track_cutoffs][BonusIds.current.keys.find_index(track)]&.dig(:track) : nil) || 'None' },
             }
 
             if equipped_item[:level][:value] >= @character.details['best_gear'][item]['ilvl'].to_f
@@ -169,26 +172,26 @@ module Audit
             if (match = equipped_item[:enchantments].map { |e| ENCHANTS[item][e[:enchantment_id]] }.compact.first)
               quality, name, stats = match
 
-              @character.data["enchant_quality_#{item}"] = quality
-              @character.data["#{item}_enchant"] = name
+              @character.data["enchant_quality_#{item}"] = quality_to_store = quality
+              @character.data["#{item}_enchant"] = name_to_store = name
               (stats || {}).each do |stat, value|
                 @character.stat_info[stat][:enchantments] += value
               end
             else
-              # This will match Dragonflight enchants, so it can't be used... TODO: Think about a better way?
-              # name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
-              # quality = (equipped_item[:enchantments].first[:display_string].split('Tier')[1])
+              # This will match Dragonflight enchants, so it can't be used for the enchant audit (but it can for the character dashboard on the website)
+              name_to_store = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
+              quality_to_store = (equipped_item[:enchantments].first[:display_string].split('Tier')[1])
 
               @character.data["#{item}_enchant"] = ""
               @character.data["enchant_quality_#{item}"] = 0
             end
           rescue
             # Don't require the stamina belt clasp on casual or lenient modes
-            @character.data["enchant_quality_#{item}"] = item == 'waist' ? 3 : 0
-            @character.data["#{item}_enchant"] = ''
+            @character.data["enchant_quality_#{item}"] = quality_to_store = item == 'waist' ? 3 : 0
+            @character.data["#{item}_enchant"] = name_to_store = ''
           end
 
-          { name: @character.data["#{item}_enchant"], quality: @character.data["enchant_quality_#{item}"], id: equipped_item[:enchantments]&.first&.dig(:enchantment_id) }
+          { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
         end
       end
 

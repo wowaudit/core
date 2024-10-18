@@ -2,7 +2,7 @@ module Wowaudit
   class Client
     def initialize(client_id, client_secret)
       authenticate(client_id, client_secret)
-      RBattlenet.set_options(concurrency: 25, timeout: 5, retries: 5, response_type: :hash)
+      RBattlenet.set_options(concurrency: 10, timeout: 5, retries: 5, response_type: :hash)
     end
 
     def retrieve(characters, output = {})

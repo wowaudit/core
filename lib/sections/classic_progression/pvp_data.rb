@@ -6,7 +6,7 @@ module Audit
           @character.data['honorable_kills'] = @data[:pvp_summary][:honorable_kills]
 
           BRACKETS[:classic_progression].each do |bracket, endpoint|
-            if !@data[endpoint.to_sym][:empty]
+            if @data[endpoint.to_sym] && !@data[endpoint.to_sym][:empty]
               if @data[endpoint.to_sym][:season][:id] == CURRENT_PVP_SEASON[:classic_progression]
                 @character.data["#{bracket}_rating"] = @data[endpoint.to_sym][:rating]
                 @character.data["#{bracket}_season_played"] = @data[endpoint.to_sym][:season_match_statistics][:played]

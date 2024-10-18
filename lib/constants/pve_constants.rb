@@ -15,7 +15,14 @@ SEASON_DATA = {
       { id: 375, name: "Mists of Tirna Scithe", mythic_id: 14395, legacy: true },
       { id: 353, name: "Siege of Boralus", mythic_id: 12773, legacy: true },
     ],
-    track_cutoffs: [623, 610, 597, 584, 571, 558],
+    track_cutoffs: [
+      { ilvl: 623, track: 'Myth' },
+      { ilvl: 610, track: 'Hero' },
+      { ilvl: 597, track: 'Champion' },
+      { ilvl: 584, track: 'Veteran' },
+      { ilvl: 571, track: 'Adventurer' },
+      { ilvl: 558, track: 'Explorer' }
+    ],
     great_vault: {
       raid: {
         mythic: { ilvl: 623, track: 'Myth' },
