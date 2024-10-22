@@ -3,7 +3,6 @@ module Audit
     class GearData < Data
       def add
         # Check equipped gear
-        items_equipped = 0
         sparks_used = 0
         embellished_found = 0
         total_upgrades_missing = 0
@@ -50,7 +49,6 @@ module Audit
             next unless equipped_item
 
             embellished_found += check_embellished(embellished_found, item, equipped_item)
-            items_equipped += 1
 
             if equipped_item.dig(:name_description, :display_string) == "Omen Crafted"
               # 2 handed weapons cost 2 sparks
@@ -135,11 +133,10 @@ module Audit
 
         # For 2H weapons the item level is counted twice to normalise between weapon types
         if @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
-          items_equipped += 1
           @character.ilvl += @data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:level][:value] rescue 0
         end
 
-        @character.data['ilvl'] = (@character.ilvl / ([items_equipped, 1].max)).round(2) rescue 0
+        @character.data['ilvl'] = (@character.ilvl / 16.0).round(2) rescue 0
         @character.data['ingenuity_sparks_equipped'] = sparks_used
         @character.data['total_upgrades_missing'] = total_upgrades_missing
 
