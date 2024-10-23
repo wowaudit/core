@@ -19,7 +19,7 @@ SEASON_DATA = {
       { name: 'Gilded', ilvl_cap: 639, weekly_increase: 90, first_period: 975, icon_item_id: 220789 },
       { name: 'Runed', ilvl_cap: 619, weekly_increase: 90, first_period: 975, icon_item_id: 220790 },
       { name: 'Carved', ilvl_cap: 606, weekly_increase: 90, first_period: 972, icon_item_id: 221373 },
-      { name: 'Weathered', ilvl_cap: 593, weekly_increase: 90, first_period: 972, icon_item_id: 220785 },
+      { name: 'Weathered', ilvl_cap: 593, weekly_increase: 90, first_period: 972, icon_item_id: 220788 },
     ],
     track_cutoffs: [
       { ilvl: 623, track: 'Myth' },
