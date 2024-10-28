@@ -19,9 +19,13 @@ module Wowaudit
               name: ch.name.downcase,
               realm: ch.realm.slug,
               season: Season.current.id,
-              source: ch
+              source: ch,
+              # TODO: make it more efficient by adding a timestamp for skipping?
+              # However, this doesn't work when the initial_field is not :itself.
             }
-          end, fields: (Wowaudit.extended ? FIELDS[:live] : [:equipment]) + Wowaudit.extra_fields
+          end,
+          fields: (Wowaudit.extended ? FIELDS[:live] : [:equipment]) + Wowaudit.extra_fields,
+          initial_field: :status,
         ) do |character, response|
           begin
             output[character[:source]] = Wowaudit::Result.new(character[:source], response)
