@@ -88,7 +88,7 @@ module Wowaudit
 
     def check_character_api_status
       if gdpr_deletion? && !@character.marked_for_deletion_at
-        Wowaudit.update_field(@character, :exists, @response[:status_codes][:status][:code] != 404)
+        Wowaudit.update_field(@character, :exists, false)
         Wowaudit.update_field(@character, :marked_for_deletion_at, DateTime.now)
         return false
       elsif !gdpr_deletion? && @character.marked_for_deletion_at
