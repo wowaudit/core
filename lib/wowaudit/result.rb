@@ -21,6 +21,7 @@ module Wowaudit
       raise Wowaudit::Exception::ApiLimitReached if check_api_limit_reached
       if check_character_api_status && !@character.marked_for_deletion_at && check_data_completeness
         Wowaudit.update_field(@character, :status, 'tracking')
+        Wowaudit.update_field(@character, :last_status_code, 200)
         Wowaudit.update_field(@character, :refreshed_at, DateTime.now)
         Audit::Data.process(self, @response, false, @character.realm, @character)
         HEADER[@character.realm.game_version.to_sym].each { |value| @output << (@data[value] || 0) }
@@ -29,9 +30,13 @@ module Wowaudit
         # Ensure that the two different database records play well with each other for now...
         @character.role = @character.role.downcase
       else
-        # TODO: Set status in database? What do we want to do with tiemouts?
-        # timeouts = @response[:status_codes].values.select { |status| status[:timeout] }.size
-        code = @response[:status_codes].values.map { |status| status[:code] }.max
+        timeouts = @response[:status_codes].values.select { |status| status[:timeout] }.size
+        http_code = @response[:status_codes].values.map { |status| status[:code] }.max
+
+        code = http_code >= 400 ? http_code : timeouts.zero? ? 0 : 408
+        Wowaudit.update_field(@character, :status, code >= 500 ? 'temporarily_unavailable' : 'unavailable')
+        Wowaudit.update_field(@character, :last_status_code, code)
+        Wowaudit.update_field(@character, :refresh_failed_at, DateTime.now)
         raise Wowaudit::Exception::CharacterUnavailable.new(code)
       end
     end
@@ -87,17 +92,18 @@ module Wowaudit
     private
 
     def check_character_api_status
-      if gdpr_deletion? && !@character.marked_for_deletion_at
+      if gdpr_deletion? && @character.gdpr_status == 'exists'
         Wowaudit.update_field(@character, :gdpr_status, 'does_not_exist')
         Wowaudit.update_field(@character, :marked_for_deletion_at, DateTime.now)
         return false
-      elsif !gdpr_deletion? && @character.marked_for_deletion_at
+      elsif !gdpr_deletion? && @character.gdpr_status == 'does_not_exist'
         Wowaudit.update_field(@character, :gdpr_status, 'exists')
         Wowaudit.update_field(@character, :marked_for_deletion_at, nil)
         return true
       end
 
-      @response[:status_codes][:itself][:code] == 200 && @response.class == RBattlenet::HashResult
+      initial_request = @response[:status_codes][:itself] || @response[:status_codes][:status]
+      initial_request[:code] == 200 && @response.class == RBattlenet::HashResult
     end
 
     def gdpr_deletion?
