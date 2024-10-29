@@ -88,11 +88,11 @@ module Wowaudit
 
     def check_character_api_status
       if gdpr_deletion? && !@character.marked_for_deletion_at
-        Wowaudit.update_field(@character, :exists, false)
+        Wowaudit.update_field(@character, :gdpr_status, 'does_not_exist')
         Wowaudit.update_field(@character, :marked_for_deletion_at, DateTime.now)
         return false
       elsif !gdpr_deletion? && @character.marked_for_deletion_at
-        Wowaudit.update_field(@character, :exists, true)
+        Wowaudit.update_field(@character, :gdpr_status, 'exists')
         Wowaudit.update_field(@character, :marked_for_deletion_at, nil)
         return true
       end
@@ -105,12 +105,25 @@ module Wowaudit
       return true if @response[:status_codes][:status][:code] == 404
       return true unless @response[:status][:is_valid]
 
-      # TODO: Allow this, but only after comparing the achievement_uid of the new data with the old
-      # if @character.profile_id.to_s != @response[:status][:id].to_s
-      #   Wowaudit.update_field(@character, :profile_id, @response[:status][:id].to_i)
-      # end
+      profile_id = "#{@response[:realm][:id]}-#{@response[:status][:id]}"
+      if @character.profile_id != profile_id
+        create_newly_found_character(profile_id)
+        return true
+      end
 
       false
+    end
+
+    def create_newly_found_character(profile_id)
+      @character.class.find_or_initialize_by(profile_id: profile_id).tap do |new_character|
+        new_character.game_version = @character.realm.game_version
+
+        data = JSON.parse(@response.to_json, object_class: OpenStruct)
+        new_character.set_details_from_api(data)
+
+        store_metadata(new_character)
+        new_character.save!
+      end
     end
 
     def check_data_completeness
@@ -127,23 +140,26 @@ module Wowaudit
       @response[:status_codes].values.any? { |status| status[:code] == 429 }
     end
 
-    def store_metadata
-      Wowaudit.update_field(@character, :guild_profile_id, "#{@response.dig(:guild, :realm, :id)}-#{@response.dig(:guild, :id)}")
-      Wowaudit.update_field(@character, :race_id, @response.dig(:race, :id))
+    def store_metadata(target = @character)
+      Wowaudit.update_field(target, :guild_profile_id, "#{@response.dig(:guild, :realm, :id)}-#{@response.dig(:guild, :id)}")
+      Wowaudit.update_field(target, :race_id, @response.dig(:race, :id))
+      Wowaudit.update_field(target, :name, @response.dig(:name))
 
-      Wowaudit.update_field(@character, :level, @response[:level])
+      Wowaudit.update_field(target, :level, @response[:level])
       if (media_zone = (@response[:media] && @response[:media][:assets].first[:value].split('/')[-2] rescue nil))
-        Wowaudit.update_field(@character, :media_zone, media_zone)
+        Wowaudit.update_field(target, :media_zone, media_zone)
       end
 
       @achievements = @response[:achievements].group_by{ |ach| ach[:id] }.transform_values(&:first)
       achievement_uid = CHARACTER_IDENTIFICATION_IDS.sum do |achievement_id|
         @achievements[achievement_id]&.dig(:completed_timestamp) || 0
       end + @response.dig(:character_class, :id)
-      Wowaudit.update_field(@character, :achievement_uid, achievement_uid)
+      Wowaudit.update_field(target, :achievement_uid, achievement_uid)
 
-      update_snapshots
-      Wowaudit::Metadata.store(self)
+      if target == @character
+        update_snapshots
+        Wowaudit::Metadata.store(self)
+      end
     end
   end
 end
