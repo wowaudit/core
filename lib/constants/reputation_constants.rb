@@ -1,3 +1,9 @@
+FACTIONS = {
+  0 => 'Alliance',
+  1 => 'Horde',
+  2 => 'Neutral'
+}
+
 REPUTATIONS = {
   2590 => "council_of_dornogal",
   2594 => "assembly_of_the_deeps",

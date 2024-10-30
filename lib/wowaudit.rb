@@ -22,6 +22,7 @@ ALL_UPDATABLE_FIELDS = [
 module Wowaudit
   cattr_accessor(:updatable_fields) { ALL_UPDATABLE_FIELDS }
   cattr_accessor(:extra_fields) { [] }
+  cattr_accessor(:failure_status) { :does_not_exist }
   cattr_accessor(:extended) { true }
   cattr_accessor(:retry_on_api_limit) { true }
   cattr_accessor(:ignore_unavailable) { true }

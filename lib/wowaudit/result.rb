@@ -93,10 +93,10 @@ module Wowaudit
 
     def check_character_api_status
       if gdpr_deletion? && @character.gdpr_status == 'exists'
-        Wowaudit.update_field(@character, :gdpr_status, 'does_not_exist')
+        Wowaudit.update_field(@character, :gdpr_status, Wowaudit.failure_status)
         Wowaudit.update_field(@character, :marked_for_deletion_at, DateTime.now)
         return false
-      elsif !gdpr_deletion? && @character.gdpr_status == 'does_not_exist'
+      elsif !gdpr_deletion? && @character.gdpr_status != 'exists'
         Wowaudit.update_field(@character, :gdpr_status, 'exists')
         Wowaudit.update_field(@character, :marked_for_deletion_at, nil)
         return true
@@ -113,8 +113,15 @@ module Wowaudit
 
       profile_id = "#{@response[:realm][:id]}-#{@response[:status][:id]}"
       if @character.profile_id != profile_id
-        create_newly_found_character(profile_id)
-        return true
+        if @character.realm.kind == 'classic_era' || @character.achievement_uid != new_achievement_uid
+          create_newly_found_character(profile_id)
+          return true
+        else
+          # In practice this only happens when a character performs a faction change. The profile ID also
+          # changes with a realm transfer, but in that case the API will not return the new character
+          # (since it's on a different realm).
+          Wowaudit.update_field(@character, :profile_id, profile_id)
+        end
       end
 
       false
@@ -142,13 +149,25 @@ module Wowaudit
       true
     end
 
+    def new_achievement_uid
+      return unless @response[:achievements]&.is_a? Array
+
+      @achievements = @response[:achievements].group_by{ |ach| ach[:id] }.transform_values(&:first)
+      uid = CHARACTER_IDENTIFICATION_IDS.sum do |achievement_id|
+        @achievements[achievement_id]&.dig(:completed_timestamp) || 0
+      end + @response.dig(:character_class, :id)
+
+      uid.to_s
+    end
+
     def check_api_limit_reached
       @response[:status_codes].values.any? { |status| status[:code] == 429 }
     end
 
     def store_metadata(target = @character)
-      Wowaudit.update_field(target, :guild_profile_id, "#{@response.dig(:guild, :realm, :id)}-#{@response.dig(:guild, :id)}")
+      Wowaudit.update_field(target, :guild_profile_id, ("#{@response.dig(:guild, :realm, :id)}-#{@response.dig(:guild, :id)}" if @response.dig(:guild)))
       Wowaudit.update_field(target, :race_id, @response.dig(:race, :id))
+      Wowaudit.update_field(target, :faction_id, FACTIONS.invert[@response.dig(:faction, :name)])
       Wowaudit.update_field(target, :name, @response.dig(:name))
 
       Wowaudit.update_field(target, :level, @response[:level])
@@ -156,11 +175,7 @@ module Wowaudit
         Wowaudit.update_field(target, :media_zone, media_zone)
       end
 
-      @achievements = @response[:achievements].group_by{ |ach| ach[:id] }.transform_values(&:first)
-      achievement_uid = CHARACTER_IDENTIFICATION_IDS.sum do |achievement_id|
-        @achievements[achievement_id]&.dig(:completed_timestamp) || 0
-      end + @response.dig(:character_class, :id)
-      Wowaudit.update_field(target, :achievement_uid, achievement_uid)
+      Wowaudit.update_field(target, :achievement_uid, new_achievement_uid) if new_achievement_uid
 
       if target == @character
         update_snapshots
