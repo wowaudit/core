@@ -103,13 +103,16 @@ module Audit
                 }
               end
 
-              if TIER_ITEMS.include?(equipped_item[:item][:id].to_i) && equipped_item[:level][:value] >= (@character.details.dig('tier_items_s1', item, 'ilvl') || 0)
+              if TIER_ITEMS.include?(equipped_item[:item][:id].to_i)
                 upgradeable_difficulty = bonus_id_options[bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }]
-                difficulty_label = upgradeable_difficulty ? ['M', 'H', 'N', 'R'][upgradeable_difficulty] : LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last
-                @character.details['tier_items_s1'][item] = {
-                  'ilvl' => equipped_item[:level][:value],
-                  'difficulty' => difficulty_label || ""
-                }
+                difficulty_label = upgradeable_difficulty ? DIFFICULTY_LETTERS[upgradeable_difficulty] : LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last
+
+                if DIFFICULTY_LETTERS.index(difficulty_label) <= (DIFFICULTY_LETTERS.index(@character.details.dig('tier_items_s1', item, 'difficulty')) || 5)
+                  @character.details['tier_items_s1'][item] = {
+                    'ilvl' => equipped_item[:level][:value],
+                    'difficulty' => difficulty_label || ""
+                  }
+                end
               end
 
               @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s1'][item]['ilvl']

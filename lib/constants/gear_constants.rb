@@ -220,6 +220,8 @@ TRACKED_STATS = {
   CRIT_RATING: :crit,
 }
 
+DIFFICULTY_LETTERS = ['M', 'H', 'N', 'R']
+
 GEMS = {
   192900=>{:quality=>1, :name=>"Crafty Queen's Ruby (1)", :stats=>{:crit=>18, :haste=>18}},
   192901=>{:quality=>1, :name=>"Crafty Queen's Ruby (2)", :stats=>{:haste=>22, :crit=>22}},
