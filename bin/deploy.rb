@@ -13,7 +13,7 @@ system("kubectl delete deployments raiderio-deployment")
 sleep 5
 Audit::Schedule.all.each(&:destroy)
 
-system("docker build . -t shedi/wowaudit")
+system("docker build . --platform linux/amd64 -t shedi/wowaudit")
 system("docker push shedi/wowaudit:latest")
 
 Audit::Schedule.all.each(&:destroy)
