@@ -199,7 +199,10 @@ module Audit
         socket_info = []
 
         (equipped_item[:sockets] || []).each do |socket|
-          if gem = GEMS[socket.dig(:item, :id)]
+          if socket.dig(:socket_type, :type).include?("SINGING")
+            @character.data["circlet_#{socket.dig(:socket_type, :type).downcase}_name"] = CIRCLET_GEMS[socket.dig(:item, :id)]
+            @character.data["circlet_ilvl"] = equipped_item[:level][:value]
+          elsif gem = GEMS[socket.dig(:item, :id)]
             @character.gems << gem[:quality]
 
             (gem[:stats]).each do |stat, value|
