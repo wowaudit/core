@@ -436,7 +436,7 @@ HEADER = {
     'circlet_singing_sea_name',
     'circlet_singing_wind_name',
     'waist_enchant',
-    '',
+    'raid_buff_percentage',
     'head_enchant',
     'gallywix_mount',
     'ansurek_mount',

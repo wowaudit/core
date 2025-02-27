@@ -13,6 +13,8 @@ REPUTATIONS = {
   2685 => 'gallagio_loyalty_rewards_club',
 }
 
+RAID_BUFF_LEVELS = [0, 4, 7, 10, 13, 16, 19, 999]
+
 STANDINGS = {
   0 => 'Hated',
   1 => 'Hostile',
