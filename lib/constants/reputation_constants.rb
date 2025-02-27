@@ -9,6 +9,8 @@ REPUTATIONS = {
   2594 => "assembly_of_the_deeps",
   2570 => 'hallowfall_arathi',
   2600 => "severed_threads",
+  2653 => 'cartels_of_undermine',
+  2685 => 'gallagio_loyalty_rewards_club',
 }
 
 STANDINGS = {

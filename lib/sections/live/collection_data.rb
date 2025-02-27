@@ -10,10 +10,10 @@ module Audit
           end[:statistics]
 
           @character.data['valorstones'] = crest_stats.find { |stat| stat[:id] == 20488 }[:quantity] rescue 0
-          @character.data['weathered_crests'] = crest_stats.find { |stat| stat[:id] == 20489 }[:quantity] rescue 0
-          @character.data['carved_crests'] = crest_stats.find { |stat| stat[:id] == 20490 }[:quantity] rescue 0
-          @character.data['runed_crests'] = crest_stats.find { |stat| stat[:id] == 20491 }[:quantity] rescue 0
-          @character.data['gilded_crests'] = crest_stats.find { |stat| stat[:id] == 20492 }[:quantity] rescue 0
+          @character.data['weathered_crests'] = crest_stats.find { |stat| stat[:id] == 41786 }[:quantity] rescue 0
+          @character.data['carved_crests'] = crest_stats.find { |stat| stat[:id] == 41787 }[:quantity] rescue 0
+          @character.data['runed_crests'] = crest_stats.find { |stat| stat[:id] == 41788 }[:quantity] rescue 0
+          @character.data['gilded_crests'] = crest_stats.find { |stat| stat[:id] == 41789 }[:quantity] rescue 0
         rescue
           nil
         end
@@ -23,19 +23,23 @@ module Audit
           @character.data['toys_owned'] = @achievements[9670][:criteria][:child_criteria].first[:amount] rescue 0
         end
 
-        unless !@data[:titles]
+        if @data[:titles]
           @character.data['titles'] = @data[:titles].size
         end
 
-        unless !@data[:mounts]
-          @character.data['ansurek_mount'] = @data[:mounts].lazy.find do |entry|
+        if @data[:mounts]
+          @character.data['ansurek_mount'] = 'no'
+          @character.data['gallywix_mount'] = 'no'
+
+          @data[:mounts].lazy.each do |entry|
             next unless entry.is_a? Hash
 
-            entry.dig(:mount, :id) == 2223
-          end ? 'yes' : 'no'
+            @character.data['ansurek_mount'] = 'yes' if entry.dig(:mount, :id) == 2223
+            @character.data['gallywix_mount'] = 'yes' if entry.dig(:mount, :id) == 2487
+          end
         end
 
-        unless !@data[:pets]
+        if @data[:pets]
           pets_owned = []
           level_25_pets = 0
 
