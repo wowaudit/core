@@ -1,10 +1,10 @@
 CURRENT_VERSION = {
-  live: 1027,
+  live: 1028,
   classic_era: 105,
   classic_progression: 305,
 }
 
-PREVENT_SKIP_TIMESTAMP = Time.parse("2024-09-18 19:50:00 +0200").to_i
+PREVENT_SKIP_TIMESTAMP = Time.parse("2025-02-28 22:30:00 +0200").to_i
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -435,7 +435,7 @@ HEADER = {
     'circlet_singing_thunder_name',
     'circlet_singing_sea_name',
     'circlet_singing_wind_name',
-    'waist_enchant',
+    '',
     'raid_buff_percentage',
     'head_enchant',
     'gallywix_mount',

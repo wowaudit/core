@@ -69,7 +69,7 @@ module Audit
             total_upgrades_missing += (track_ids.size - (track_ids.index(upgrade_id) + 1)) if track_ids
 
             # For crafted items we need to check the track (crests used) based on the item level
-            unless track
+            if !track && equipped_item.dig(:name_description, :display_string) == Season.current.data[:spark_label]
               cutoff_index = Season.current.data[:track_cutoffs].find_index { |cutoff| equipped_item[:level][:value] >= cutoff[:ilvl] }
               track = BonusIds.current.keys[cutoff_index] if cutoff_index
             end

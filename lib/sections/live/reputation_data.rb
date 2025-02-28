@@ -3,6 +3,7 @@ module Audit
     class ReputationData < Data
       def add
         total_renown = 0
+        @character.data['raid_buff_percentage'] = "0%"
 
         unless !@data[:reputations]
           REPUTATIONS.each do |reputation, name|
@@ -14,7 +15,7 @@ module Audit
 
               if reputation == 2685
                 percentage = RAID_BUFF_LEVELS.find_index { |level| level >= match.dig(:standing, :renown_level) || 0 } * 3
-                @character.data['raid_buff_percentage'] = [percentage, 18].max
+                @character.data['raid_buff_percentage'] = "#{[percentage, 18].min}%"
               end
             else
               @character.data["#{name}_renown"] = 0
