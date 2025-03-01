@@ -1,5 +1,5 @@
 CURRENT_VERSION = {
-  live: 1028,
+  live: 1029,
   classic_era: 105,
   classic_progression: 305,
 }
