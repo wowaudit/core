@@ -65,8 +65,8 @@ module Audit
             bonus_list = equipped_item[:bonus_list] || []
             upgrade_id = bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }
             track, track_ids = BonusIds.current.find { |track, ids| ids.include? upgrade_id.to_i }
-            @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.index(upgrade_id) + 1} / #{track_ids.size}" : '-'
-            total_upgrades_missing += (track_ids.size - (track_ids.index(upgrade_id) + 1)) if track_ids
+            @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.to_a.index(upgrade_id) + 1} / #{track_ids.to_a.size}" : '-'
+            total_upgrades_missing += (track_ids.to_a.size - (track_ids.to_a.index(upgrade_id) + 1)) if track_ids
 
             # For crafted items we need to check the track (crests used) based on the item level
             if !track && equipped_item.dig(:name_description, :display_string) == Season.current.data[:spark_label]
@@ -85,7 +85,7 @@ module Audit
               'sockets' => check_sockets(item, equipped_item),
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
               'upgrade_level' => {
-                step: track_ids ? track_ids.index(upgrade_id) + 1 : 0,
+                step: track_ids ? track_ids.to_a.index(upgrade_id) + 1 : 0,
                 total: track_ids&.size || 0,
                 track: (track ? Season.current.data[:track_cutoffs][BonusIds.current.keys.find_index(track)]&.dig(:track) : nil) || 'None' },
             }
