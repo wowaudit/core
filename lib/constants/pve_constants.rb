@@ -67,7 +67,7 @@ SEASON_DATA = {
     }
   },
   14 => {
-    first_period: 1000,
+    first_period: 1001,
     pvp_season: 39,
     spark_label: "Fortune Crafted",
     keystone_dungeons: [
