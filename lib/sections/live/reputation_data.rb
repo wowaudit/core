@@ -13,9 +13,9 @@ module Audit
               total_renown += (match.dig(:standing, :raw) || 0)
               @character.data["#{name}_renown"] = match.dig(:standing, :renown_level)
 
-              if reputation == 2685
-                percentage = RAID_BUFF_LEVELS.find_index { |level| level >= match.dig(:standing, :renown_level) || 0 } * 3
-                @character.data['raid_buff_percentage'] = "#{[percentage, 18].min}%"
+              if reputation == 2685 && match.dig(:standing, :renown_level)
+                percentage = RAID_BUFF_LEVELS.find_index { |level| level >= match.dig(:standing, :renown_level) } * 3
+                @character.data['raid_buff_percentage'] = " #{[percentage, 18].min} %"
               end
             else
               @character.data["#{name}_renown"] = 0
