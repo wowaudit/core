@@ -96,8 +96,10 @@ module Audit
             # Off-hand items that are not weapons or shields can't be enchanted
             return if !equipped_item&.dig(:weapon) && !equipped_item&.dig(:shield_block) && item == "off_hand"
 
-            name = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
-            source = equipped_item[:enchantments].first.dig(:source_item, :name)&.gsub("QA", "")
+            match = equipped_item[:enchantments].reject { |e| e.dig(:enchantment_slot, :type) == 'TEMPORARY' }.first
+
+            name = (match.dig(:display_string) || "").split('Enchanted: ').reject(&:empty?).first.split(' |').first
+            source = match.dig(:source_item, :name)&.gsub("QA", "")
 
             display_name = if !source || name.split(" ").all? { |word| source.include? word }
               name
