@@ -102,7 +102,7 @@ module Audit
             source = match.dig(:source_item, :name)&.gsub("QA", "")
 
             display_name = if !source || name.split(" ").all? { |word| source.include? word }
-              name
+              name.start_with?("+") ? " #{name}" : name
             else
               "#{source} (#{name})"
             end
