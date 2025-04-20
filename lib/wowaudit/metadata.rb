@@ -3,7 +3,7 @@ module Wowaudit
     class << self
       def client
         @@client ||= Redis.new(
-          url: ENV['REDIS_HOST'],
+          url: "#{ENV['REDIS_HOST']}/#{Wowaudit.redis_suffix}",
           password: ENV['REDIS_PASSWORD']
         )
       end

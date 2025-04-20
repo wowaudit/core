@@ -26,6 +26,7 @@ module Wowaudit
   cattr_accessor(:extended) { true }
   cattr_accessor(:retry_on_api_limit) { true }
   cattr_accessor(:ignore_unavailable) { true }
+  cattr_accessor(:redis_suffix) { 0 }
 
   def self.updatable_fields=(fields)
     @@updatable_fields = fields.map(&:to_sym) & ALL_UPDATABLE_FIELDS
