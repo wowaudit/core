@@ -200,7 +200,7 @@ CUTTING_EDGE_ACHIEVEMENTS = [
   18254, # Scalecommander Sarkareth
   19351, # Fyrakk the Blazing
   40254, # Queen Ansurek
-  41298, # Chrome King Gallywix
+  41297, # Chrome King Gallywix
 ]
 
 AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
@@ -231,7 +231,7 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
   18253, # Scalecommander Sarkareth
   19350, # Fyrakk the Blazing
   40253, # Queen Ansurek
-  41297, # Chrome King Gallywix
+  41298, # Chrome King Gallywix
 ]
 
 VALID_RAIDS = {
