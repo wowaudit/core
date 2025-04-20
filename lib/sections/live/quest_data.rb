@@ -13,11 +13,15 @@ module Audit
         @character.data['theater_troupe'] = 'no'
         @character.data['awakening_the_machine'] = 'no'
 
+        raid_buff_amount = 0
         @data.dig(:completed_quests, :quests)&.lazy&.each do |quest|
           @character.data['worldsoul_weekly'] = 'yes' if WORLDSOUL_WEEKLY_QUESTS.include? quest[:id]
           @character.data['theater_troupe'] = 'yes' if quest[:id] == 83240
           @character.data['awakening_the_machine'] = 'yes' if quest[:id] == 83333
+          raid_buff_amount += 1 if RAID_BUFF_IDS.include? quest[:id]
         end
+
+        @character.data['raid_buff_percentage'] = " #{raid_buff_amount * 3} %"
 
         unless !@data[:completed_quests]
           @character.data['weekly_event_completed'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest[:id] } ? 'yes' : 'no'
