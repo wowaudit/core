@@ -209,6 +209,21 @@ ENCHANTS = {
   'off_hand' => weapon_enchants,
 }
 
+CORRUPTION_HELM_ENCHANTS = {
+  7912 => { level: 'Lesser', name: "Twilight Devastation" },
+  7914 => { level: 'Greater', name: "Twilight Devastation" },
+  7915 => { level: 'Lesser', name: "Echoing Void" },
+  7917 => { level: 'Greater', name: "Echoing Void" },
+  7922 => { level: 'Lesser', name: "Infinite Stars" },
+  7924 => { level: 'Greater', name: "Infinite Stars" },
+  7925 => { level: 'Lesser', name: "Gushing Wound" },
+  7927 => { level: 'Greater', name: "Gushing Wound" },
+  7928 => { level: 'Lesser', name: "Twisted Appendage" },
+  7930 => { level: 'Greater', name: "Twisted Appendage" },
+  7931 => { level: 'Lesser', name: "Void Ritual" },
+  7933 => { level: 'Greater', name: "Void Ritual" },
+}
+
 GEM_QUALITY_MAPPING = {
   legacy: 1,
   uncommon: 2,

@@ -189,6 +189,12 @@ module Audit
 
           { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
         end
+
+        if item == 'head'
+          match = (equipped_item[:enchantments] || []).map { |e| CORRUPTION_HELM_ENCHANTS[e[:enchantment_id]] }.compact.first
+          @character.data["head_enchant_level"] = match&.dig(:level) || ''
+          @character.data["head_enchant"] = match&.dig(:name) || ''
+        end
       end
 
       def check_sockets(item, equipped_item)

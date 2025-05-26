@@ -435,7 +435,7 @@ HEADER = {
     'circlet_singing_thunder_name',
     'circlet_singing_sea_name',
     'circlet_singing_wind_name',
-    '',
+    'head_enchant_level',
     'raid_buff_percentage',
     'head_enchant',
     'gallywix_mount',
