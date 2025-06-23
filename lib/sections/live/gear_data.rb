@@ -195,6 +195,10 @@ module Audit
           @character.data["head_enchant_level"] = match&.dig(:level) || ''
           @character.data["head_enchant"] = match&.dig(:name) || ''
         end
+
+        if item == 'waist' && equipped_item[:name] == "Durable Information Securing Container"
+          @character.data["waist_spell"] = BELT_SPELLS.find { |spell| equipped_item[:spells].any? { |s| s[:description].start_with? spell[:match_string] } }&.dig(:name)
+        end
       end
 
       def check_sockets(item, equipped_item)

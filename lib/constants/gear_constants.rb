@@ -224,6 +224,45 @@ CORRUPTION_HELM_ENCHANTS = {
   7933 => { level: 'Greater', name: "Void Ritual" },
 }
 
+BELT_SPELLS = [
+  {
+    match_string: "Equip: Your spells and abilities have a chance to turn you into a Lightning Rod striking a random enemy target within 40 yds for",
+    name: "Charged Bolts",
+  },
+  {
+    match_string: "Equip: Your spells and attacks have a chance to send a Charged Bolt at your target that deals",
+    name: "Charged Crystal",
+  },
+  {
+    match_string: "Equip: When you take damage, you have a chance to gain a Titan Energy Shield preventing up to",
+    name: "Energy Shield",
+  },
+  {
+    match_string: "Your heals have a chance to Spark jumping to the lowest health target within 40 yds, healing them for",
+    name: "Charged Touch",
+  },
+  {
+    match_string: "Equip: You gain Electric Current upon entering combat, increasing your Mastery by",
+    name: "Electric Current",
+  },
+  {
+    match_string: "Equip: Your spells and abilities have a chance to turn you into a Lightning Rod causing strikes that heal the lowest health friendly target within 40 yds for",
+    name: "Cauterizing Bolts",
+  },
+  {
+    match_string: "Equip: Your spells and abilities have a chance to trigger Critical Overload, increasing your Critical Strike by",
+    name: "Critical Chain",
+  },
+  {
+    match_string: "Equip: Your spells and abilities have a chance to grant you Static Charge, increasing your Versatility by",
+    name: "Static Charge",
+  },
+  {
+    match_string: "Equip: Your spells and abilities have a chance to trigger a Spark Burst granting you",
+    name: "Spark Burst",
+  }
+]
+
 GEM_QUALITY_MAPPING = {
   legacy: 1,
   uncommon: 2,

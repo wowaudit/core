@@ -480,6 +480,7 @@ HEADER = {
     'world_basic_track_items',
     'cartels_of_undermine_renown',
     'gallagio_loyalty_rewards_club_renown',
+    'waist_spell',
   ],
   classic_era: [
     'name',
