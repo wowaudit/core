@@ -3,7 +3,7 @@ module Audit
     class ProfessionData < Data
       ENCHANTMENTS_BY_PROFESSION = {
         jewelcrafting: [52265, 52263, 52262, 52261, 52266, 52264, 52268, 52260, 52267, 52269, 52259, 52258, 52257, 52255],
-        enchanting: [4078, 4079, 4080, 4081],
+        enchanting: [4360, 4359, 4807, 4361],
         engineering: [4188, 4750, 4180, 4179, 4181, 4183, 4223],
         inscription: [4193, 4194, 4195, 4196],
         leatherworking: [4189, 4190, 4191, 4192],
@@ -57,7 +57,7 @@ module Audit
 
           if ['wrist', 'hands'].include?(item)
             gems_found = [2, 3, 4].count { |enchantment_slot| equipped_item[:enchantments]&.find { |e| e.dig(:enchantment_slot, :id) == enchantment_slot } }
-            base_sockets = CATA_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0
+            base_sockets = MOP_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0
             profession_data[:blacksmithing][:found] += 1 if gems_found > base_sockets
           end
         end

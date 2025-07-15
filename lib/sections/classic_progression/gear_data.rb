@@ -14,9 +14,9 @@ module Audit
         @character.data["off_hand_enchant_quality"] = ''
         @character.data["off_hand_enchant_name"] = ''
         tier_statuses = {
-          '11' => 0,
-          '12' => 0,
-          '13' => 0,
+          '14' => 0,
+          '15' => 0,
+          '16' => 0,
         }
 
         ITEMS[:classic_progression].each do |item|
@@ -24,13 +24,8 @@ module Audit
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             items_equipped += 1 if equipped_item
 
-            if CATA_LEGENDARIES.keys.include?(equipped_item[:item][:id].to_i)
-              key = "legendary_#{CATA_LEGENDARIES[equipped_item[:item][:id].to_i]}"
-              @character.details[key] = true
-            end
-
             @character.details['current_gear'][item] = {
-              'ilvl' => CATA_ITEM_LEVELS[equipped_item[:item][:id]] || 0,
+              'ilvl' => MOP_ITEM_LEVELS[equipped_item[:item][:id]] || 0,
               'id' => equipped_item[:item][:id],
               'name' => equipped_item[:name],
               'bonus_ids' => [],
@@ -43,13 +38,13 @@ module Audit
               @character.details['current_gear'][item]['ilvl'] = 187
               @character.ilvl += 187
             else
-              @character.ilvl += CATA_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+              @character.ilvl += MOP_ITEM_LEVELS[equipped_item[:item][:id]] || 0
             end
 
 
-            CATA_TIER_ITEMS_BY_SLOT.each do |tier, slots|
+            MOP_TIER_ITEMS_BY_SLOT.each do |tier, slots|
               if slots.keys.include? item
-                if CATA_TIER_ITEMS[tier].include?(equipped_item[:item][:id].to_i)
+                if MOP_TIER_ITEMS[tier].include?(equipped_item[:item][:id].to_i)
                   @character.details["tier_#{tier}_#{item}"] = @character.details['current_gear'][item]['ilvl']
                 end
 
@@ -76,11 +71,6 @@ module Audit
           @character.ilvl += (@character.details.dig('current_gear', 'main_hand', 'ilvl') || 0)
         end
 
-        CATA_LEGENDARIES.values.uniq.each do |legendary|
-          meant_for_character = CATA_CLASSES_FOR_LEGENDARY[legendary].include?(@temp_character.class_id || @data.dig(:character_class, :id))
-          @character.data["legendary_#{legendary}"] = @character.details["legendary_#{legendary}"] ? 'yes' : meant_for_character ? 'no' : 'n/a'
-        end
-
         tier_statuses.each do |tier, amount|
           @character.data["tier_#{tier}_status"] = amount
         end
@@ -98,13 +88,13 @@ module Audit
 
         socket_info = []
 
-        sockets_expected = (item == 'waist' ? 1 : 0) + (CATA_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0)
+        sockets_expected = (item == 'waist' ? 1 : 0) + (MOP_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0)
         if sockets_expected > 0
           [2, 3, 4].first(sockets_expected).each do |enchantment_slot|
             if enchantment = equipped_item[:enchantments]&.find { |e| e.dig(:enchantment_slot, :id) == enchantment_slot }
-              if meta_gem_type = CATA_META_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
+              if meta_gem_type = MOP_META_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
                 @character.data['meta_gem_quality'] = GEM_QUALITY_MAPPING[meta_gem_type]
-              elsif gem_type = CATA_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
+              elsif gem_type = MOP_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
                 @character.gems << GEM_QUALITY_MAPPING[gem_type]
               else
                 @character.gems << 1 # unknown?
@@ -122,7 +112,7 @@ module Audit
       end
 
       def check_enchant(item, equipped_item)
-        if CATA_ENCHANT_SLOTS.include? item
+        if MOP_ENCHANT_SLOTS.include? item
           begin
             enchantment = equipped_item[:enchantments].find { |e| e.dig(:enchantment_slot, :id) == 0 }
             name = enchantment[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first

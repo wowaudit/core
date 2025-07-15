@@ -14,19 +14,13 @@ module Audit
           @character.data[key.to_s] = @achievements[id][:criteria][:child_criteria].first[:amount] rescue 0
         end
 
-        @character.data['emblems_obtained'] = @achievements[4316][:criteria][:amount] rescue 0
-
-        {
-          undying: [2187],
-          immortal: [2186],
-          champion_of_ulduar: [2903],
-          conqueror_of_ulduar: [2904],
-          mimirons_head: [4626],
-          tribute_to_immortality: [4079, 4156],
-          invincible: [4625],
-        }.each do |key, ids|
-          @character.data["achievement_#{key}"] = ids.any? { |id| @achievements[id]&.dig(:criteria, :is_completed) } ? 'yes' : 'no'
-        end
+        @character.data['wrathion_questline'] = [
+          7533,
+          7534,
+          7535,
+          7536,
+          8325
+        ].count { |id| @achievements.dig(id, :completed) }
       end
     end
   end
