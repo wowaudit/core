@@ -57,7 +57,7 @@ weapon_enchants = {
   4434 => [4, "Major Intellect"],
 }
 
-ENCHANTS = {
+MOP_ENCHANTS = {
   'shoulder' => {
     4907 => [2, "Tiger Fang Inscription"],
     4908 => [2, "Tiger Claw Inscription"],
@@ -113,6 +113,7 @@ ENCHANTS = {
     4412 => [4, "Major Dodge"],
   },
   "hands": {
+    4698 => [2, "Incendiary Fireworks Launcher"],
     4898 => [4, "Synapse Springs"],
     4697 => [4, "Phase Fingers"],
     4433 => [4, "Superior Mastery"],
@@ -149,6 +150,10 @@ ENCHANTS = {
     4428 => [4, "Blurred Speed"],
     4426 => [4, "Greater Haste"],
     4427 => [4, "Greater Precision"],
+  },
+  'ranged' => {
+    4700 => [2, "Mirror Scope"],
+    4699 => [4, "Lord Blastington's Scope of Doom"],
   },
   'main_hand' => weapon_enchants,
   'off_hand' => weapon_enchants,
