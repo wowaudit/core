@@ -17,9 +17,9 @@ module Audit
 
       def add
         # Wipe data...
-        @character.data["profession_1"] = ""
+        @character.data["profession_1"] = "?"
         @character.data["profession_1_benefits"] = ""
-        @character.data["profession_2"] = ""
+        @character.data["profession_2"] = "?"
         @character.data["profession_2_benefits"] = ""
 
         professions_found = 0

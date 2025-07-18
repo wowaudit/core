@@ -14,13 +14,16 @@ module Audit
           @character.data[key.to_s] = @achievements[id][:criteria][:child_criteria].first[:amount] rescue 0
         end
 
-        @character.data['wrathion_questline'] = [
+        chapters_completed = [
           7533,
           7534,
           7535,
           7536,
           8325
         ].count { |id| @achievements.dig(id, :completed) }
+
+        roman_numerals = {1 => 'I', 2 => 'II', 3 => 'III', 4 => 'IV', 5 => 'V'}
+        @character.data['wrathion_questline'] = chapters_completed > 0 ? "Chapter #{roman_numerals[chapters_completed]}" : "-"
       end
     end
   end

@@ -13,6 +13,8 @@ module Audit
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
         @character.data["off_hand_enchant_quality"] = ''
         @character.data["off_hand_enchant_name"] = ''
+        @character.data["ranged_enchant_quality"] = ''
+        @character.data["ranged_enchant_name"] = ''
         tier_statuses = {
           '14' => 0,
           '15' => 0,
@@ -114,31 +116,30 @@ module Audit
       def check_enchant(item, equipped_item)
         if MOP_ENCHANT_SLOTS.include? item
           begin
-            # Off-hand items that are not weapons can't be enchanted
-            return if !equipped_item&.dig(:weapon) && item == "off_hand"
+            # Only Hunters need ranged enchants
+            return if item == 'ranged' && @character.class_id != 3
 
             if (match = equipped_item[:enchantments].map { |e| MOP_ENCHANTS[item][e[:enchantment_id]] }.compact.first)
               quality, name, stats = match
 
-              @character.data["enchant_quality_#{item}"] = quality_to_store = quality
-              @character.data["#{item}_enchant"] = name_to_store = name
+              @character.data["#{item}_enchant_quality"] = quality_to_store = quality
+              @character.data["#{item}_enchant_name"] = name_to_store = name
               (stats || {}).each do |stat, value|
                 @character.stat_info[stat][:enchantments] += value
               end
             else
               # This will match legacy enchants, so it can't be used for the enchant audit (but it can for the character dashboard on the website)
               name_to_store = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
-              quality_to_store = (equipped_item[:enchantments].first[:display_string].split('Tier')[1])
 
-              @character.data["#{item}_enchant"] = ""
-              @character.data["enchant_quality_#{item}"] = 0
+              @character.data["#{item}_enchant_name"] = name_to_store
+              @character.data["#{item}_enchant_quality"] = 0
             end
           rescue
-            @character.data["enchant_quality_#{item}"] = 0
-            @character.data["#{item}_enchant"] = name_to_store = ''
+            @character.data["#{item}_enchant_quality"] = 0
+            @character.data["#{item}_enchant_name"] = name_to_store = ''
           end
 
-          { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
+          { name: name_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
         end
       end
     end

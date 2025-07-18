@@ -9,8 +9,14 @@ module Audit
         }
         boss_ids = encounters_by_raid.flatten.map{ |encounter| encounter.values }.flatten
         raid_list = {}
-        raid_output = {'raids_normal' => [],      'raids_normal_weekly' => [],
-                       'raids_heroic' => [],      'raids_heroic_weekly' => []}
+        raid_output = {
+          'raids_raid_finder' => [],
+          'raids_raid_finder_weekly' => [],
+          'raids_normal' => [],
+          'raids_normal_weekly' => [],
+          'raids_heroic' => [],
+          'raids_heroic_weekly' => [],
+        }
 
         begin
           dungeons_and_raids =  @data[:achievement_statistics][:categories].find do |category|
