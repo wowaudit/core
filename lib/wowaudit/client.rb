@@ -11,7 +11,7 @@ module Wowaudit
       characters.group_by(&:namespace).each do |namespace, characters|
         region = characters.first.region
         Audit.timestamp = region
-        RBattlenet.set_options(namespace: namespace, region: region, locale: (region == "US" ? "en_US" : "en_GB"))
+        RBattlenet.set_options(namespace: namespace, region: region, locale: (region == "US" ? "en_US" : "en_GB"), response_type: :hash)
 
         RBattlenet::Wow::Character.find(
           characters.map do |ch|
