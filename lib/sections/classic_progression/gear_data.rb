@@ -133,7 +133,7 @@ module Audit
                 enchant.dig(:enchantment_slot, :type) == 'PERMANENT'
               end.first&.dig(:display_string)&.split('Enchanted: ')&.reject(&:empty?)&.first&.split(' |')&.first
 
-              @character.data["#{item}_enchant_name"] = name_to_store
+              @character.data["#{item}_enchant_name"] = name_to_store = ''
               @character.data["#{item}_enchant_quality"] = 0
             end
           rescue
