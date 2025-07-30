@@ -112,7 +112,7 @@ MOP_ENCHANTS = {
     4415 => [4, "Exceptional Strength"],
     4412 => [4, "Major Dodge"],
   },
-  "hands": {
+  'hands' => {
     4698 => [3, "Incendiary Fireworks Launcher"],
     4898 => [4, "Synapse Springs"],
     4697 => [4, "Phase Fingers"],

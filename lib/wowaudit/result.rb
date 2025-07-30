@@ -109,9 +109,9 @@ module Wowaudit
     def gdpr_deletion?
       return false if !@response[:status]
       return true if @response[:status_codes][:status][:code] == 404
-      return true unless @response[:status][:is_valid]
+      return true if @response[:status][:is_valid] == false
 
-      profile_id = "#{@response[:realm][:id]}-#{@response[:status][:id]}"
+      profile_id = "#{@response.dig(:realm, :id)}-#{@response.dig(:status, :id)}"
       if @character.profile_id != profile_id
         if @character.realm.kind == 'classic_era' || @character.achievement_uid != new_achievement_uid
           create_newly_found_character(profile_id)
