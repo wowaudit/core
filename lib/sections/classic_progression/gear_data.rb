@@ -129,7 +129,9 @@ module Audit
               end
             else
               # This will match legacy enchants, so it can't be used for the enchant audit (but it can for the character dashboard on the website)
-              name_to_store = equipped_item[:enchantments].first[:display_string].split('Enchanted: ').reject(&:empty?).first.split(' |').first
+              name_to_store = equipped_item[:enchantments].select do |enchant|
+                enchant.dig(:enchantment_slot, :type) == 'PERMANENT'
+              end.first&.dig(:display_string)&.split('Enchanted: ')&.reject(&:empty?)&.first&.split(' |')&.first
 
               @character.data["#{item}_enchant_name"] = name_to_store
               @character.data["#{item}_enchant_quality"] = 0
