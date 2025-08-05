@@ -20,7 +20,7 @@ base_items = [
 ITEMS = {
   live: base_items,
   classic_era: base_items + ['ranged'],
-  classic_progression: base_items + ['ranged'],
+  classic_progression: base_items,
 }
 
 QUALITIES = {

@@ -34,7 +34,6 @@ MOP_ENCHANT_SLOTS = [
   'feet',
   'main_hand',
   'off_hand',
-  'ranged',
 ]
 
 weapon_enchants = {
@@ -55,6 +54,9 @@ weapon_enchants = {
   5124 => [4, "Spirit of Conquest"],
   4446 => [4, "River's Song"],
   4434 => [4, "Major Intellect"],
+  4700 => [3, "Mirror Scope"],
+  4699 => [4, "Lord Blastington's Scope of Doom"],
+  4993 => [4, "Greater Parry"],
 }
 
 MOP_ENCHANTS = {
@@ -150,10 +152,6 @@ MOP_ENCHANTS = {
     4428 => [4, "Blurred Speed"],
     4426 => [4, "Greater Haste"],
     4427 => [4, "Greater Precision"],
-  },
-  'ranged' => {
-    4700 => [3, "Mirror Scope"],
-    4699 => [4, "Lord Blastington's Scope of Doom"],
   },
   'main_hand' => weapon_enchants,
   'off_hand' => weapon_enchants,
