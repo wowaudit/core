@@ -15,18 +15,17 @@ spec:
         app: scheduler
     spec:
       containers:
-      - name: scheduler
-        image: shedi/wowaudit:latest
-        command: ["/srv/bin/schedule"]
+        - name: scheduler
+          image: shedi/wowaudit:latest
+          command: ["/srv/bin/schedule"]
 
-        resources:
-          requests:
-            cpu: 100m
-            memory: 250Mi
+          resources:
+            requests:
+              cpu: 50m
+              memory: 250Mi
 
-          limits:
-            cpu: 150m
-            memory: 500Mi
+            limits:
+              memory: 500Mi
 
       imagePullSecrets:
         - name: regcred

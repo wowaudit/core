@@ -11,9 +11,11 @@ REPUTATIONS = {
   2600 => "severed_threads",
   2653 => 'cartels_of_undermine',
   2685 => 'gallagio_loyalty_rewards_club',
+  2658 => 'the_karesh_trust',
+  2736 => 'manaforge_vandals'
 }
 
-RAID_BUFF_IDS = (89018..89023).to_a
+RAID_BUFF_IDS = []
 
 STANDINGS = {
   0 => 'Hated',

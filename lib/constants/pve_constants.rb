@@ -1,5 +1,5 @@
 FIRST_PERIOD_OF_EXPANSION = 974
-CURRENT_SEASON = 14
+CURRENT_SEASON = 15
 
 SEASON_DATA = {
   13 => {
@@ -129,12 +129,76 @@ SEASON_DATA = {
         1 => { ilvl: 623, track: 'Veteran' },
       }
     }
+  },
+  15 => {
+    first_period: 1023,
+    pvp_season: 40,
+    spark_label: "Starlight Crafted",
+    keystone_dungeons: [
+      { id: 499, name: "Priory of the Sacred Flame", mythic_id: 40659, legacy: false },
+      { id: 503, name: "Ara-Kara, City of Echoes", mythic_id: 20487, legacy: false },
+      { id: 505, name: "The Dawnbreaker", mythic_id: 40715, legacy: false },
+      { id: 525, name: "Operation: Floodgate", mythic_id: 41344, legacy: false },
+      { id: 542, name: "Eco-Dome Al'dani", mythic_id: 42785, legacy: false },
+      { id: 378, name: "Halls of Atonement", mythic_id: 14392, legacy: true },
+      { id: 391, name: "Tazavesh: Streets of Wonder", mythic_id: 0, legacy: true },
+      { id: 370, name: "Tazavesh: So'leah's Gambit", mythic_id: 15168, legacy: true },
+    ],
+    crests: [
+      { name: 'Gilded', ilvl_cap: 723, weekly_increase: 90, first_period: 1023, icon_item_id: 240929 },
+      { name: 'Runed', ilvl_cap: 704, weekly_increase: 90, first_period: 1023, icon_item_id: 240930 },
+      { name: 'Carved', ilvl_cap: 691, weekly_increase: 90, first_period: 1023, icon_item_id: 240931 },
+      { name: 'Weathered', ilvl_cap: 678, weekly_increase: 90, first_period: 1023, icon_item_id: 240928 },
+    ],
+    track_cutoffs: [
+      { ilvl: 707, track: 'Myth' },
+      { ilvl: 694, track: 'Hero' },
+      { ilvl: 681, track: 'Champion' },
+      { ilvl: 668, track: 'Veteran' },
+      { ilvl: 655, track: 'Adventurer' },
+      { ilvl: 642, track: 'Explorer' }
+    ],
+    great_vault: {
+      raid: {
+        mythic: { ilvl: 707, track: 'Myth' },
+        heroic: { ilvl: 694, track: 'Hero' },
+        normal: { ilvl: 681, track: 'Champion' },
+        raid_finder: { ilvl: 668, track: 'Veteran' },
+      },
+      dungeon: {
+        10 => { ilvl: 707, track: 'Myth' },
+        9 => { ilvl: 704, track: 'Hero' },
+        8 => { ilvl: 704, track: 'Hero' },
+        7 => { ilvl: 704, track: 'Hero' },
+        6 => { ilvl: 701, track: 'Hero' },
+        5 => { ilvl: 697, track: 'Hero' },
+        4 => { ilvl: 697, track: 'Hero' },
+        3 => { ilvl: 694, track: 'Hero' },
+        2 => { ilvl: 694, track: 'Hero' },
+        1 => { ilvl: 691, track: 'Champion' }, # Regular Mythic
+        0 => { ilvl: 678, track: 'Veteran' }, # Heroic
+        -1 => { ilvl: nil, track: nil },
+      },
+      delve: {
+        11 => { ilvl: 694, track: 'Hero' },
+        10 => { ilvl: 694, track: 'Hero' },
+        9 => { ilvl: 694, track: 'Hero' },
+        8 => { ilvl: 694, track: 'Hero' },
+        7 => { ilvl: 694, track: 'Hero' },
+        6 => { ilvl: 687, track: 'Champion' },
+        5 => { ilvl: 684, track: 'Champion' },
+        4 => { ilvl: 678, track: 'Veteran' },
+        3 => { ilvl: 675, track: 'Veteran' },
+        2 => { ilvl: 671, track: 'Veteran' },
+        1 => { ilvl: 668, track: 'Veteran' },
+      }
+    }
   }
 }
 
 EXPANSION_DUNGEONS = [
-  { heroic_id: 20486, name: "Ara-Kara, City of Echoes" },
-  { heroic_id: 40653, name: "Cinderbrew Meadery" },
+  { heroic_id: 20486, mythic_id: 20487, name: "Ara-Kara, City of Echoes" },
+  { heroic_id: 40653, mythic_id: ???, name: "Cinderbrew Meadery" },
   { heroic_id: 40709, name: "City of Threads" },
   { heroic_id: 20483, name: "Darkflame Cleft" },
   { heroic_id: 40658, name: "Priory of the Sacred Flame" },
@@ -201,6 +265,7 @@ CUTTING_EDGE_ACHIEVEMENTS = [
   19351, # Fyrakk the Blazing
   40254, # Queen Ansurek
   41297, # Chrome King Gallywix
+  41625, # Dimensius, the All-Devouring
 ]
 
 AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
@@ -232,12 +297,14 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
   19350, # Fyrakk the Blazing
   40253, # Queen Ansurek
   41298, # Chrome King Gallywix
+  41624, # Dimensius, the All-Devouring
 ]
 
 VALID_RAIDS = {
   live: [
     {"name"=>"Nerub-ar Palace", "days"=>[], "id"=>38, "encounters"=>[{"id"=>2902, "name"=>"Ulgrax", "raid_ids"=>{"raid_finder"=>[40267], "normal"=>[40268], "heroic"=>[40269], "mythic"=>[40270]}}, {"id"=>2917, "name"=>"The Bloodbound Horror", "raid_ids"=>{"raid_finder"=>[40271], "normal"=>[40272], "heroic"=>[40273], "mythic"=>[40274]}}, {"id"=>2898, "name"=>"Sikran", "raid_ids"=>{"raid_finder"=>[40275], "normal"=>[40276], "heroic"=>[40277], "mythic"=>[40278]}}, {"id"=>2918, "name"=>"Rasha'nan", "raid_ids"=>{"raid_finder"=>[40279], "normal"=>[40280], "heroic"=>[40281], "mythic"=>[40282]}}, {"id"=>2919, "name"=>"Broodtwister Ovi'nax", "raid_ids"=>{"raid_finder"=>[40283], "normal"=>[40284], "heroic"=>[40285], "mythic"=>[40286]}}, {"id"=>2920, "name"=>"Nexus-Princess Ky'veza", "raid_ids"=>{"raid_finder"=>[40287], "normal"=>[40288], "heroic"=>[40289], "mythic"=>[40290]}}, {"id"=>2921, "name"=>"The Silken Court", "raid_ids"=>{"raid_finder"=>[40291], "normal"=>[40292], "heroic"=>[40293], "mythic"=>[40294]}}, {"id"=>2922, "name"=>"Queen Ansurek", "raid_ids"=>{"raid_finder"=>[40295], "normal"=>[40296], "heroic"=>[40297], "mythic"=>[40298]}}]},
-    {"name"=>"Liberation of Undermine", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>42, "encounters"=>[{"id"=>3009, "name"=>"Vexie and the Geargrinders", "raid_ids"=>{"raid_finder"=>[41299], "normal"=>[41300], "heroic"=>[41301], "mythic"=>[41302]}}, {"id"=>3010, "name"=>"Cauldron of Carnage", "raid_ids"=>{"raid_finder"=>[41303], "normal"=>[41304], "heroic"=>[41305], "mythic"=>[41306]}}, {"id"=>3011, "name"=>"Rik Reverb", "raid_ids"=>{"raid_finder"=>[41307], "normal"=>[41308], "heroic"=>[41309], "mythic"=>[41310]}}, {"id"=>3012, "name"=>"Stix Bunkjunker", "raid_ids"=>{"raid_finder"=>[41311], "normal"=>[41312], "heroic"=>[41313], "mythic"=>[41314]}}, {"id"=>3013, "name"=>"Sprocketmonger Lockenstock", "raid_ids"=>{"raid_finder"=>[41315], "normal"=>[41316], "heroic"=>[41317], "mythic"=>[41318]}}, {"id"=>3014, "name"=>"The One-Armed Bandit", "raid_ids"=>{"raid_finder"=>[41319], "normal"=>[41320], "heroic"=>[41321], "mythic"=>[41322]}}, {"id"=>3015, "name"=>"Mug'Zee, Heads of Security", "raid_ids"=>{"raid_finder"=>[41323], "normal"=>[41324], "heroic"=>[41325], "mythic"=>[41326]}}, {"id"=>3016, "name"=>"Chrome King Gallywix", "raid_ids"=>{"raid_finder"=>[41327], "normal"=>[41328], "heroic"=>[41329], "mythic"=>[41330]}}]}
+    {"name"=>"Liberation of Undermine", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>42, "encounters"=>[{"id"=>3009, "name"=>"Vexie and the Geargrinders", "raid_ids"=>{"raid_finder"=>[41299], "normal"=>[41300], "heroic"=>[41301], "mythic"=>[41302]}}, {"id"=>3010, "name"=>"Cauldron of Carnage", "raid_ids"=>{"raid_finder"=>[41303], "normal"=>[41304], "heroic"=>[41305], "mythic"=>[41306]}}, {"id"=>3011, "name"=>"Rik Reverb", "raid_ids"=>{"raid_finder"=>[41307], "normal"=>[41308], "heroic"=>[41309], "mythic"=>[41310]}}, {"id"=>3012, "name"=>"Stix Bunkjunker", "raid_ids"=>{"raid_finder"=>[41311], "normal"=>[41312], "heroic"=>[41313], "mythic"=>[41314]}}, {"id"=>3013, "name"=>"Sprocketmonger Lockenstock", "raid_ids"=>{"raid_finder"=>[41315], "normal"=>[41316], "heroic"=>[41317], "mythic"=>[41318]}}, {"id"=>3014, "name"=>"The One-Armed Bandit", "raid_ids"=>{"raid_finder"=>[41319], "normal"=>[41320], "heroic"=>[41321], "mythic"=>[41322]}}, {"id"=>3015, "name"=>"Mug'Zee, Heads of Security", "raid_ids"=>{"raid_finder"=>[41323], "normal"=>[41324], "heroic"=>[41325], "mythic"=>[41326]}}, {"id"=>3016, "name"=>"Chrome King Gallywix", "raid_ids"=>{"raid_finder"=>[41327], "normal"=>[41328], "heroic"=>[41329], "mythic"=>[41330]}}]},
+    {"name"=>"Manaforge Omega", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Plexus Sentinel", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Loom'ithar", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Soulbinder Naazindhri", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Forgeweaver Araz", "raid_ids"=>{}}, {"id"=>nil, "name"=>"The Soul Hunters", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Fractillus", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Nexus-King Salhadaar", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Dimensius, the All-Devouring", "raid_ids"=>{}}]}
   ],
   classic_era: [
   ],

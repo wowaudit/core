@@ -217,12 +217,12 @@ module Audit
           details['best_gear'] = ITEMS[:live].map { |item| [item, { ilvl: 0 }] }.to_h
         end
 
-        if !details['spark_gear_s2'].is_a? Hash
-          details['spark_gear_s2'] = ITEMS[:live].map { |item| [item, {}] }.to_h
+        if !details['spark_gear_s3'].is_a? Hash
+          details['spark_gear_s3'] = ITEMS[:live].map { |item| [item, {}] }.to_h
         end
 
-        if !details['tier_items_s2'].is_a? Hash
-          details['tier_items_s2'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
+        if !details['tier_items_s3'].is_a? Hash
+          details['tier_items_s3'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
         end
 
         if !details['keystones'].is_a? Hash

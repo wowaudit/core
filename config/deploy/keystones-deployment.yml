@@ -15,19 +15,18 @@ spec:
         app: keystones
     spec:
       containers:
-      - name: keystones
-        image: shedi/wowaudit:latest
-        command: ["/srv/bin/refresh"]
-        args: ["keystones"]
+        - name: keystones
+          image: shedi/wowaudit:latest
+          command: ["/srv/bin/refresh"]
+          args: ["keystones"]
 
-        resources:
-          requests:
-            cpu: 500m
-            memory: 2000Mi
+          resources:
+            requests:
+              cpu: 750m
+              memory: 2000Mi
 
-          limits:
-            cpu: 500m
-            memory: 3000Mi
+            limits:
+              memory: 3000Mi
 
       imagePullSecrets:
         - name: regcred

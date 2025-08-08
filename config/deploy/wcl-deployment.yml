@@ -15,19 +15,18 @@ spec:
         app: wcl
     spec:
       containers:
-      - name: wcl
-        image: shedi/wowaudit:latest
-        command: ["/srv/bin/refresh"]
-        args: ["wcl"]
+        - name: wcl
+          image: shedi/wowaudit:latest
+          command: ["/srv/bin/refresh"]
+          args: ["wcl"]
 
-        resources:
-          requests:
-            cpu: 100m
-            memory: 250Mi
+          resources:
+            requests:
+              cpu: 50m
+              memory: 250Mi
 
-          limits:
-            cpu: 150m
-            memory: 500Mi
+            limits:
+              memory: 500Mi
 
       imagePullSecrets:
         - name: regcred

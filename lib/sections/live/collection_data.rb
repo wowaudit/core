@@ -36,6 +36,7 @@ module Audit
 
             @character.data['ansurek_mount'] = 'yes' if entry.dig(:mount, :id) == 2223
             @character.data['gallywix_mount'] = 'yes' if entry.dig(:mount, :id) == 2487
+            @character.data['dimensius_mount'] = 'yes' if entry.dig(:mount, :id) == 2569
           end
         end
 

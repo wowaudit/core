@@ -5,7 +5,7 @@ metadata:
   labels:
     app: blizzard
 spec:
-  replicas: 9
+  replicas: 5
   selector:
     matchLabels:
       app: blizzard
@@ -22,12 +22,11 @@ spec:
 
           resources:
             requests:
-              cpu: 250m
+              cpu: 750m
               memory: 350Mi
 
             limits:
-              cpu: 250m
-              memory: 600Mi
+              memory: 750Mi
 
       imagePullSecrets:
         - name: regcred

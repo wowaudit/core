@@ -15,19 +15,18 @@ spec:
         app: historical-keystones
     spec:
       containers:
-      - name: historical-keystones
-        image: shedi/wowaudit:latest
-        command: ["/srv/bin/refresh"]
-        args: ["historical_keystones"]
+        - name: historical-keystones
+          image: shedi/wowaudit:latest
+          command: ["/srv/bin/refresh"]
+          args: ["historical_keystones"]
 
-        resources:
-          requests:
-            cpu: 250m
-            memory: 1000Mi
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1000Mi
 
-          limits:
-            cpu: 250m
-            memory: 1500Mi
+            limits:
+              memory: 1500Mi
 
       imagePullSecrets:
         - name: regcred
