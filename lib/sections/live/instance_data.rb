@@ -69,7 +69,7 @@ module Audit
 
         Season.slugified_dungeon_names.lazy.each do |dungeon|
           @character.data["#{dungeon[:name]}_score"] = best_runs[dungeon[:id].to_i].to_i
-          @character.data["#{dungeon[:name]}_total"] = (@character.details['keystones'].values.reduce(:merge) || {}).sum do |run_id, run|
+          @character.data["#{dungeon[:name]}_total"] = (@character.details['keystones'].select { |period, _| period.to_i >= Season.current.data[:first_period] }.values.reduce(:merge) || {}).sum do |run_id, run|
             run['dungeon'].to_i == dungeon[:id].to_i ? 1 : 0
           end
         end
