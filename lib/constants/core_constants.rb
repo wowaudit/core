@@ -484,6 +484,8 @@ HEADER = {
     'dimensius_mount',
     'the_karesh_trust_renown',
     'manaforge_vandals_renown',
+    'reshii_wraps_rank',
+    'reshii_wraps_epic_fiber',
   ],
   classic_era: [
     'name',

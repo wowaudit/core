@@ -9,6 +9,8 @@ module Audit
         @character.data['jewelry_sockets'] = 0
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
+        @character.data['reshii_wraps_rank'] = '-'
+        @character.data['reshii_wraps_epic_fiber'] = 'no'
         BonusIds::DIFFICULTY_LABELS.keys.each { |track| @character.data["#{track}_track_items"] = 0 }
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -60,6 +62,12 @@ module Audit
                 'name' => equipped_item[:name],
                 'quality' => QUALITIES[equipped_item[:quality][:type].to_sym]
               }
+            end
+
+            if equipped_item[:item][:id] == 235499
+              rank = RESHII_WRAPS_RANKS.index((RESHII_WRAPS_RANKS & equipped_item[:bonus_list]).first)
+              @character.data['reshii_wraps_rank'] = rank ? "Rank #{rank + 1}" : '-'
+              @character.data['reshii_wraps_epic_fiber'] = [238042, 238044, 238045, 238046].include?(equipped_item[:sockets].first&.dig(:item, :id)) ? 'yes' : 'no'
             end
 
             bonus_list = equipped_item[:bonus_list] || []

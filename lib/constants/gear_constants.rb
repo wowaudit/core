@@ -23,6 +23,8 @@ ITEMS = {
   classic_progression: base_items,
 }
 
+RESHII_WRAPS_RANKS = (12396..12402).to_a
+
 QUALITIES = {
   POOR: 0,
   COMMON: 1,
