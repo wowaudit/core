@@ -10,10 +10,10 @@ module Audit
           end[:statistics]
 
           @character.data['valorstones'] = crest_stats.find { |stat| stat[:id] == 20488 }[:quantity] rescue 0
-          @character.data['weathered_crests'] = crest_stats.find { |stat| stat[:id] == 41786 }[:quantity] rescue 0
-          @character.data['carved_crests'] = crest_stats.find { |stat| stat[:id] == 41789 }[:quantity] rescue 0
-          @character.data['runed_crests'] = crest_stats.find { |stat| stat[:id] == 41790 }[:quantity] rescue 0
-          @character.data['gilded_crests'] = crest_stats.find { |stat| stat[:id] == 41791 }[:quantity] rescue 0
+          @character.data['weathered_crests'] = crest_stats.find { |stat| stat[:id] == 60975 }[:quantity] rescue 0
+          @character.data['carved_crests'] = crest_stats.find { |stat| stat[:id] == 60976 }[:quantity] rescue 0
+          @character.data['runed_crests'] = crest_stats.find { |stat| stat[:id] == 60977 }[:quantity] rescue 0
+          @character.data['gilded_crests'] = crest_stats.find { |stat| stat[:id] == 60978 }[:quantity] rescue 0
         rescue
           nil
         end

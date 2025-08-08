@@ -52,6 +52,7 @@ module Audit
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
         dungeon_data = (@character.details['keystones'][Audit.period.to_s]&.values&.map { |dungeon| dungeon['level'] } || []).sort.reverse
+        dungeon_data += (@character.data['week_regular_mythic_dungeons'] || 0).times.map { 1 }
         dungeon_data += (@character.data['week_heroic_dungeons'] || 0).times.map { 0 }
 
         if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)

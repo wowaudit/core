@@ -198,14 +198,14 @@ SEASON_DATA = {
 
 EXPANSION_DUNGEONS = [
   { heroic_id: 20486, mythic_id: 20487, name: "Ara-Kara, City of Echoes" },
-  { heroic_id: 40653, mythic_id: ???, name: "Cinderbrew Meadery" },
-  { heroic_id: 40709, name: "City of Threads" },
-  { heroic_id: 20483, name: "Darkflame Cleft" },
-  { heroic_id: 40658, name: "Priory of the Sacred Flame" },
-  { heroic_id: 40714, name: "The Dawnbreaker" },
-  { heroic_id: 40717, name: "The Rookery" },
-  { heroic_id: 40721, name: "The Stonevault" },
-  { heroic_id: 41343, name: "Operation: Floodgate" },
+  { heroic_id: 40653, mythic_id: 40654, name: "Cinderbrew Meadery" },
+  { heroic_id: 40709, mythic_id: 40710, name: "City of Threads" },
+  { heroic_id: 20483, mythic_id: 20484, name: "Darkflame Cleft" },
+  { heroic_id: 40658, mythic_id: 40659, name: "Priory of the Sacred Flame" },
+  { heroic_id: 40714, mythic_id: 40715, name: "The Dawnbreaker" },
+  { heroic_id: 40717, mythic_id: 40718, name: "The Rookery" },
+  { heroic_id: 40721, mythic_id: 40722, name: "The Stonevault" },
+  { heroic_id: 41343, mythic_id: 41344, name: "Operation: Floodgate" },
 ]
 
 WEEKLY_EVENT_QUESTS = [
@@ -303,8 +303,8 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
 VALID_RAIDS = {
   live: [
     {"name"=>"Nerub-ar Palace", "days"=>[], "id"=>38, "encounters"=>[{"id"=>2902, "name"=>"Ulgrax", "raid_ids"=>{"raid_finder"=>[40267], "normal"=>[40268], "heroic"=>[40269], "mythic"=>[40270]}}, {"id"=>2917, "name"=>"The Bloodbound Horror", "raid_ids"=>{"raid_finder"=>[40271], "normal"=>[40272], "heroic"=>[40273], "mythic"=>[40274]}}, {"id"=>2898, "name"=>"Sikran", "raid_ids"=>{"raid_finder"=>[40275], "normal"=>[40276], "heroic"=>[40277], "mythic"=>[40278]}}, {"id"=>2918, "name"=>"Rasha'nan", "raid_ids"=>{"raid_finder"=>[40279], "normal"=>[40280], "heroic"=>[40281], "mythic"=>[40282]}}, {"id"=>2919, "name"=>"Broodtwister Ovi'nax", "raid_ids"=>{"raid_finder"=>[40283], "normal"=>[40284], "heroic"=>[40285], "mythic"=>[40286]}}, {"id"=>2920, "name"=>"Nexus-Princess Ky'veza", "raid_ids"=>{"raid_finder"=>[40287], "normal"=>[40288], "heroic"=>[40289], "mythic"=>[40290]}}, {"id"=>2921, "name"=>"The Silken Court", "raid_ids"=>{"raid_finder"=>[40291], "normal"=>[40292], "heroic"=>[40293], "mythic"=>[40294]}}, {"id"=>2922, "name"=>"Queen Ansurek", "raid_ids"=>{"raid_finder"=>[40295], "normal"=>[40296], "heroic"=>[40297], "mythic"=>[40298]}}]},
-    {"name"=>"Liberation of Undermine", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>42, "encounters"=>[{"id"=>3009, "name"=>"Vexie and the Geargrinders", "raid_ids"=>{"raid_finder"=>[41299], "normal"=>[41300], "heroic"=>[41301], "mythic"=>[41302]}}, {"id"=>3010, "name"=>"Cauldron of Carnage", "raid_ids"=>{"raid_finder"=>[41303], "normal"=>[41304], "heroic"=>[41305], "mythic"=>[41306]}}, {"id"=>3011, "name"=>"Rik Reverb", "raid_ids"=>{"raid_finder"=>[41307], "normal"=>[41308], "heroic"=>[41309], "mythic"=>[41310]}}, {"id"=>3012, "name"=>"Stix Bunkjunker", "raid_ids"=>{"raid_finder"=>[41311], "normal"=>[41312], "heroic"=>[41313], "mythic"=>[41314]}}, {"id"=>3013, "name"=>"Sprocketmonger Lockenstock", "raid_ids"=>{"raid_finder"=>[41315], "normal"=>[41316], "heroic"=>[41317], "mythic"=>[41318]}}, {"id"=>3014, "name"=>"The One-Armed Bandit", "raid_ids"=>{"raid_finder"=>[41319], "normal"=>[41320], "heroic"=>[41321], "mythic"=>[41322]}}, {"id"=>3015, "name"=>"Mug'Zee, Heads of Security", "raid_ids"=>{"raid_finder"=>[41323], "normal"=>[41324], "heroic"=>[41325], "mythic"=>[41326]}}, {"id"=>3016, "name"=>"Chrome King Gallywix", "raid_ids"=>{"raid_finder"=>[41327], "normal"=>[41328], "heroic"=>[41329], "mythic"=>[41330]}}]},
-    {"name"=>"Manaforge Omega", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Plexus Sentinel", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Loom'ithar", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Soulbinder Naazindhri", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Forgeweaver Araz", "raid_ids"=>{}}, {"id"=>nil, "name"=>"The Soul Hunters", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Fractillus", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Nexus-King Salhadaar", "raid_ids"=>{}}, {"id"=>nil, "name"=>"Dimensius, the All-Devouring", "raid_ids"=>{}}]}
+    {"name"=>"Liberation of Undermine", "days"=>[], "id"=>42, "encounters"=>[{"id"=>3009, "name"=>"Vexie and the Geargrinders", "raid_ids"=>{"raid_finder"=>[41299], "normal"=>[41300], "heroic"=>[41301], "mythic"=>[41302]}}, {"id"=>3010, "name"=>"Cauldron of Carnage", "raid_ids"=>{"raid_finder"=>[41303], "normal"=>[41304], "heroic"=>[41305], "mythic"=>[41306]}}, {"id"=>3011, "name"=>"Rik Reverb", "raid_ids"=>{"raid_finder"=>[41307], "normal"=>[41308], "heroic"=>[41309], "mythic"=>[41310]}}, {"id"=>3012, "name"=>"Stix Bunkjunker", "raid_ids"=>{"raid_finder"=>[41311], "normal"=>[41312], "heroic"=>[41313], "mythic"=>[41314]}}, {"id"=>3013, "name"=>"Sprocketmonger Lockenstock", "raid_ids"=>{"raid_finder"=>[41315], "normal"=>[41316], "heroic"=>[41317], "mythic"=>[41318]}}, {"id"=>3014, "name"=>"The One-Armed Bandit", "raid_ids"=>{"raid_finder"=>[41319], "normal"=>[41320], "heroic"=>[41321], "mythic"=>[41322]}}, {"id"=>3015, "name"=>"Mug'Zee, Heads of Security", "raid_ids"=>{"raid_finder"=>[41323], "normal"=>[41324], "heroic"=>[41325], "mythic"=>[41326]}}, {"id"=>3016, "name"=>"Chrome King Gallywix", "raid_ids"=>{"raid_finder"=>[41327], "normal"=>[41328], "heroic"=>[41329], "mythic"=>[41330]}}]},
+    {"name"=>"Manaforge Omega", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>44, "encounters"=>[{"id"=>3129, "name"=>"Plexus Sentinel", "raid_ids"=>{"raid_finder"=>[41633], "normal"=>[41634], "heroic"=>[41635], "mythic"=>[41636]}}, {"id"=>3131, "name"=>"Loom'ithar", "raid_ids"=>{"raid_finder"=>[41637], "normal"=>[41638], "heroic"=>[41639], "mythic"=>[41640]}}, {"id"=>3130, "name"=>"Soulbinder Naazindhri", "raid_ids"=>{"raid_finder"=>[41641], "normal"=>[41642], "heroic"=>[41643], "mythic"=>[41644]}}, {"id"=>3132, "name"=>"Forgeweaver Araz", "raid_ids"=>{"raid_finder"=>[41645], "normal"=>[41646], "heroic"=>[41647], "mythic"=>[41648]}}, {"id"=>3122, "name"=>"The Soul Hunters", "raid_ids"=>{"raid_finder"=>[41649], "normal"=>[41650], "heroic"=>[41651], "mythic"=>[41652]}}, {"id"=>3133, "name"=>"Fractillus", "raid_ids"=>{"raid_finder"=>[41653], "normal"=>[41654], "heroic"=>[41655], "mythic"=>[41656]}}, {"id"=>3134, "name"=>"Nexus-King Salhadaar", "raid_ids"=>{"raid_finder"=>[41657], "normal"=>[41658], "heroic"=>[41659], "mythic"=>[41660]}}, {"id"=>3135, "name"=>"Dimensius, the All-Devouring", "raid_ids"=>{"raid_finder"=>[41661], "normal"=>[41662], "heroic"=>[41663], "mythic"=>[41664]}}]}
   ],
   classic_era: [
   ],

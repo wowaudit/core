@@ -15,6 +15,7 @@ module Audit
                       'raids_heroic' => [],      'raids_heroic_weekly' => [],
                       'raids_mythic' => [],      'raids_mythic_weekly' => []}
         total_heroic_dungeons = 0
+        week_regular_mythic_dungeons = 0
 
         begin
           dungeons_and_raids =  @data[:achievement_statistics][:categories].find do |category|
@@ -24,6 +25,12 @@ module Audit
           dungeons_and_raids[:sub_categories].map{ |cat| cat[:statistics] }.flatten.lazy.each do |instance|
             if EXPANSION_DUNGEONS.any?{ |dungeon| dungeon[:heroic_id] == instance[:id] }
               total_heroic_dungeons += instance[:quantity].to_i
+            end
+
+            if Season.current.data[:keystone_dungeons].any?{ |dungeon| dungeon[:mythic_id] == instance[:id] }
+              if instance[:last_updated_timestamp] / 1000 > Audit.timestamp
+                week_regular_mythic_dungeons += 1
+              end
             end
 
             # Track weekly Raid kills through the statistics
@@ -68,6 +75,7 @@ module Audit
         end
 
         @character.data['season_heroic_dungeons'] = total_heroic_dungeons
+        @character.data['week_regular_mythic_dungeons'] = week_regular_mythic_dungeons
 
         # From the new endpoint, we don't pass the season parameter (old way in character_query),
         # so the season_keystones field doesn't work. Instead, we are using the keystones field
