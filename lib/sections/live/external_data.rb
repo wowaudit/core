@@ -55,8 +55,6 @@ module Audit
         dungeon_data += (@character.data['week_regular_mythic_dungeons'] || 0).times.map { 1 }
         dungeon_data += (@character.data['week_heroic_dungeons'] || 0).times.map { 0 }
 
-        Logger.c("Fetching week regular mythic dungeons: #{@character.data['week_regular_mythic_dungeons']}", @character.id)
-
         if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)
           @character.data['great_vault_slot_4'] = ""
           @character.data['great_vault_slot_5'] = ""
