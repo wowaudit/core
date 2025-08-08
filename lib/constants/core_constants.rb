@@ -482,6 +482,8 @@ HEADER = {
     'gallagio_loyalty_rewards_club_renown',
     'waist_spell',
     'dimensius_mount',
+    'the_karesh_trust_renown',
+    'manaforge_vandals_renown',
   ],
   classic_era: [
     'name',
