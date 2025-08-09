@@ -75,6 +75,7 @@ module Audit
         end
 
         @character.data['season_heroic_dungeons'] = total_heroic_dungeons
+        Logger.c("Storing week regular mythic dungeons: #{week_regular_mythic_dungeons}", @character.id)
         @character.data['week_regular_mythic_dungeons'] = week_regular_mythic_dungeons
 
         # From the new endpoint, we don't pass the season parameter (old way in character_query),
