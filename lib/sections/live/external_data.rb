@@ -51,11 +51,10 @@ module Audit
         @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum + @character.data['week_mythic_dungeons']
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
+        current_period = @character.details['snapshots'][Audit.period.to_s]
         dungeon_data = (@character.details['keystones'][Audit.period.to_s]&.values&.map { |dungeon| dungeon['level'] } || []).sort.reverse
-        dungeon_data += (@character.data['week_regular_mythic_dungeons'] || 0).times.map { 1 }
+        dungeon_data += (@character.data['week_regular_mythic_dungeons'] || current_period&.dig('regular_mythic_dungeons') || 0).times.map { 1 }
         dungeon_data += (@character.data['week_heroic_dungeons'] || 0).times.map { 0 }
-
-        Logger.c("Fetching week regular mythic dungeons: #{@character.data['week_regular_mythic_dungeons']}", @character.id)
 
         if GREAT_VAULT_BLACKLISTED_PERIODS.include?(Audit.period)
           @character.data['great_vault_slot_4'] = ""

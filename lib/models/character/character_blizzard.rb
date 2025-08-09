@@ -128,6 +128,7 @@ module Audit
         details['snapshots'][Audit.period.to_s]['wqs'] ||= self.data['wqs_done_total'] unless skipped
 
         details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
+        details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'] = self.data['week_regular_mythic_dungeons'] unless skipped
         details['snapshots'][Audit.period.to_s]['delve_info'] ||= self.delve_info unless skipped
       end
 

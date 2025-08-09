@@ -82,6 +82,7 @@ module Wowaudit
 
         @character.details['snapshots'][Audit.period.to_s]['wqs'] ||= @data['wqs_done_total']
         @character.details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= @data['season_heroic_dungeons']
+        @character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'] = [@character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'], @data['week_regular_mythic_dungeons']].compact.max
         @character.details['snapshots'][Audit.period.to_s]['delve_info'] ||= @delve_info
       end
 
