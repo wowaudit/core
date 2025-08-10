@@ -240,7 +240,7 @@ BELT_SPELLS = [
     name: "Energy Shield",
   },
   {
-    match_string: "Your heals have a chance to Spark jumping to the lowest health target within 40 yds, healing them for",
+    match_string: "Equip: Your heals have a chance to Spark jumping to the lowest health target within 40 yds, healing them for",
     name: "Charged Touch",
   },
   {
