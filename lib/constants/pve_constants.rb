@@ -142,7 +142,7 @@ SEASON_DATA = {
       { id: 542, name: "Eco-Dome Al'dani", mythic_id: 42785, legacy: false },
       { id: 378, name: "Halls of Atonement", mythic_id: 14392, legacy: true },
       { id: 391, name: "Tazavesh: Streets of Wonder", mythic_id: 0, legacy: true },
-      { id: 370, name: "Tazavesh: So'leah's Gambit", mythic_id: 15168, legacy: true },
+      { id: 392, name: "Tazavesh: So'leah's Gambit", mythic_id: 15168, legacy: true },
     ],
     crests: [
       { name: 'Gilded', ilvl_cap: 723, weekly_increase: 90, first_period: 1023, icon_item_id: 240929 },

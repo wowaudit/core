@@ -27,8 +27,7 @@ module Wowaudit
         HEADER[@character.realm.game_version.to_sym].each { |value| @output << (@data[value] || 0) }
         store_metadata
 
-        # Ensure that the two different database records play well with each other for now...
-        @character.role = @character.role.downcase
+        @character.current_spec_id = @response.dig(:active_spec, :id) || @character.current_spec_id
       else
         timeouts = @response[:status_codes].values.select { |status| status[:timeout] }.size
         http_code = @response[:status_codes].values.map { |status| status[:code] }.max
