@@ -10,6 +10,7 @@ module Audit
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
         @character.data['reshii_wraps_rank'] = '-'
+        @character.data['reshii_wraps_boots_track'] = '-'
         @character.data['reshii_wraps_epic_fiber'] = 'no'
         BonusIds::DIFFICULTY_LABELS.keys.each { |track| @character.data["#{track}_track_items"] = 0 }
 
@@ -75,6 +76,10 @@ module Audit
             track, track_ids = BonusIds.current.find { |track, ids| ids.include? upgrade_id.to_i }
             @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.to_a.index(upgrade_id) + 1} / #{track_ids.to_a.size}" : '-'
             total_upgrades_missing += (track_ids.to_a.size - (track_ids.to_a.index(upgrade_id) + 1)) if track_ids
+
+            if RESHII_WRAPS_BOOTS.include?(equipped_item[:item][:id])
+              @character.data['reshii_wraps_boots_track'] = BonusIds::DIFFICULTY_LABELS[track] || '-'
+            end
 
             # For crafted items we need to check the track (crests used) based on the item level
             if !track && equipped_item.dig(:name_description, :display_string) == Season.current.data[:spark_label]

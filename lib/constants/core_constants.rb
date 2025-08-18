@@ -1,7 +1,7 @@
 CURRENT_VERSION = {
-  live: 1032,
+  live: 1033,
   classic_era: 105,
-  classic_progression: 308,
+  classic_progression: 309,
 }
 
 PREVENT_SKIP_TIMESTAMP = Time.parse("2025-08-09 10:11:00 +0200").to_i
@@ -486,6 +486,7 @@ HEADER = {
     'manaforge_vandals_renown',
     'reshii_wraps_rank',
     'reshii_wraps_epic_fiber',
+    'reshii_wraps_boots_track',
   ],
   classic_era: [
     'name',
