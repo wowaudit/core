@@ -24,7 +24,7 @@ module Audit
 
         professions_found = 0
         profession_data = {
-          jewelcrafting: { found: 0, wanted: 3 },
+          jewelcrafting: { found: 0, wanted: 2 },
           enchanting: { found: 0, wanted: 2 },
           engineering: { found: 0, wanted: 2, identified: false },
           inscription: { found: 0, wanted: 1 },
