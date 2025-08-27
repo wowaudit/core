@@ -15,7 +15,7 @@ REPUTATIONS = {
   2736 => 'manaforge_vandals'
 }
 
-RAID_BUFF_IDS = []
+RAID_BUFF_IDS = [91476]
 
 STANDINGS = {
   0 => 'Hated',
