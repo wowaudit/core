@@ -35,7 +35,7 @@ module Audit
             @character.data[item + '_name'] = equipped_item[:name]
             @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
 
-            equipped_item[:stats].each do |stat|
+            equipped_item[:stats]&.each do |stat|
               next unless stat_type = TRACKED_STATS[stat[:type][:type].to_sym]
 
               @character.stat_info[stat_type][:gear] += stat[:value]
