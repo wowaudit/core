@@ -756,7 +756,7 @@ HEADER = {
     "level",
     'race',
     'role',
-    "",
+    "upgrade_steps_missing",
     "main_hand_enchant_name",
     "off_hand_enchant_name",
     "ranged_enchant_name",

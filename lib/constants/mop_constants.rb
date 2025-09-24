@@ -36,6 +36,16 @@ MOP_ENCHANT_SLOTS = [
   'off_hand',
 ]
 
+MOP_UPGRADE_IDS_TO_OFFSET = {
+  445 => { offset: 0, steps_missing: 2 }, # Epic 0/2
+  446 => { offset: 4, steps_missing: 1 }, # Epic 1/2 ?
+  447 => { offset: 8, steps_missing: 0 }, # Epic 2/2
+  451 => { offset: 0, steps_missing: 1 }, # Rare 0/1
+  452 => { offset: 8, steps_missing: 0 }, # Rare 1/1
+  456 => { offset: 0, steps_missing: 1 }, # PvP Rare 0/1
+  457 => { offset: 8, steps_missing: 0 }, # PvP Rare 1/1 ?
+}
+
 weapon_enchants = {
   3370 => [4, "Rune of Razorice"],
   3847 => [4, "Rune of the Stoneskin Gargoyle"],

@@ -20,14 +20,22 @@ module Audit
           '15' => 0,
           '16' => 0,
         }
+        upgrade_steps_missing = 0
 
         ITEMS[:classic_progression].each do |item|
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             items_equipped += 1 if equipped_item
 
+            ilvl = MOP_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+
+            if equipped_item[:upgrade_id] && upgrade_info = MOP_UPGRADE_IDS_TO_OFFSET[equipped_item[:upgrade_id]]
+              upgrade_steps_missing += upgrade_info[:steps_missing]
+              ilvl += upgrade_info[:offset]
+            end
+
             @character.details['current_gear'][item] = {
-              'ilvl' => MOP_ITEM_LEVELS[equipped_item[:item][:id]] || 0,
+              'ilvl' => ilvl,
               'id' => equipped_item[:item][:id],
               'name' => equipped_item[:name],
               'bonus_ids' => [],
@@ -40,7 +48,7 @@ module Audit
               @character.details['current_gear'][item]['ilvl'] = 187
               @character.ilvl += 187
             else
-              @character.ilvl += MOP_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+              @character.ilvl += ilvl
             end
 
 
@@ -83,6 +91,7 @@ module Audit
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
         @character.data['gem_list'] = @character.gems.join('|')
         @character.data['meta_gem'] = @character.data['meta_gem_quality'] == 3 ? 'yes' : 'no'
+        @character.data['upgrade_steps_missing'] = upgrade_steps_missing
       end
 
       def check_sockets(item, equipped_item)
