@@ -107,8 +107,8 @@ MOP_ENCHANTS = {
   },
   'wrist' => {
     4873 => [3, "Fur Lining - Agility (1)"],
-    4875 => [3, "Fur Lining - Agility (2)"],
-    4190 => [4, "Fur Lining - Agility (3)"],
+    4190 => [3, "Fur Lining - Agility (2)"],
+    4875 => [4, "Fur Lining - Agility (3)"],
     4874 => [3, "Fur Lining - Strength (1)"],
     4191 => [3, "Fur Lining - Strength (2)"],
     4879 => [4, "Fur Lining - Strength (3)"],
