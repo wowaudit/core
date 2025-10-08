@@ -134,7 +134,7 @@ SEASON_DATA = {
     first_period: 1023,
     pvp_season: 40,
     spark_label: "Starlight Crafted",
-    spark_ilvl_bump_bonus_id: 13468,
+    spark_ilvl_bump_bonus_id: [13469, 13468],
     keystone_dungeons: [
       { id: 499, name: "Priory of the Sacred Flame", mythic_id: 40659, legacy: false },
       { id: 503, name: "Ara-Kara, City of Echoes", mythic_id: 20487, legacy: false },
