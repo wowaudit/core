@@ -134,6 +134,7 @@ SEASON_DATA = {
     first_period: 1023,
     pvp_season: 40,
     spark_label: "Starlight Crafted",
+    spark_ilvl_bump_bonus_id: 13468,
     keystone_dungeons: [
       { id: 499, name: "Priory of the Sacred Flame", mythic_id: 40659, legacy: false },
       { id: 503, name: "Ara-Kara, City of Echoes", mythic_id: 20487, legacy: false },
@@ -151,9 +152,9 @@ SEASON_DATA = {
       { name: 'Weathered', ilvl_cap: 678, weekly_increase: 90, first_period: 1023, icon_item_id: 240928 },
     ],
     track_cutoffs: [
-      { ilvl: 707, track: 'Myth' },
-      { ilvl: 694, track: 'Hero' },
-      { ilvl: 681, track: 'Champion' },
+      { ilvl: 707, track: 'Myth', bonus_id: 12053, difficulty: :mythic },
+      { ilvl: 694, track: 'Hero', bonus_id: 12052, difficulty: :heroic },
+      { ilvl: 681, track: 'Champion', bonus_id: 12051, difficulty: :normal },
       { ilvl: 668, track: 'Veteran' },
       { ilvl: 655, track: 'Adventurer' },
       { ilvl: 642, track: 'Explorer' }
