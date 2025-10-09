@@ -40,6 +40,13 @@ module Audit
 
           Data.process(self, response, false, REALMS[realm_id], self)
           update_snapshots(skipped)
+
+          achievement_uid = new_achievement_uid(response)
+          if achievement_uid && achievement_uid != self.achievement_uid
+            self.achievement_uid = achievement_uid
+            self.changed = true
+          end
+
           to_output
         else
           return_error(response, depth)
@@ -81,6 +88,17 @@ module Audit
       end
       self.changed = new_status != self.status
       self.status = new_status
+    end
+
+    def new_achievement_uid(response)
+      return unless response[:achievements]&.is_a? Array
+
+      achievements = response[:achievements].group_by{ |ach| ach[:id] }.transform_values(&:first)
+      uid = CHARACTER_IDENTIFICATION_IDS.sum do |achievement_id|
+        achievements[achievement_id]&.dig(:completed_timestamp) || 0
+      end + response.dig(:character_class, :id)
+
+      uid.to_s
     end
 
     def check_api_limit_reached(response)
