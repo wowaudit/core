@@ -228,6 +228,10 @@ module Audit
         if !details['keystones'].is_a? Hash
           details['keystones'] = {}
         end
+
+        if !details['timeline'].is_a? Hash
+          details['timeline'] = {}
+        end
       end
     end
   end

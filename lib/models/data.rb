@@ -9,7 +9,7 @@ module Audit
             Audit::Live::BasicData, Audit::Live::CollectionData, Audit::Live::GearData,
             Audit::Live::InstanceData, Audit::Live::ProfessionData, Audit::Live::PvPData,
             Audit::Live::QuestData, Audit::Live::ReputationData, Audit::Live::DelveData,
-            Audit::Live::HistoricalData, Audit::Live::ExternalData,
+            Audit::Live::TimelineData, Audit::Live::HistoricalData, Audit::Live::ExternalData
           ],
           classic_era: [
             Audit::ClassicEra::BasicData,

@@ -68,6 +68,7 @@ module Wowaudit
         warcraftlogs: @details["warcraftlogs"],
         raiderio: @details["raiderio"],
         tier_items_s3: @details["tier_items_s3"],
+        timeline: @details["timeline"],
       } : {})
     end
 
