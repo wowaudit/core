@@ -1,7 +1,7 @@
 TIMELINE_EVENTS = {
   1 => {
     from: Date.new(2005, 2, 11), # In US it was 2004-11-23
-    to: Date.new(2006, 12, 4),
+    to: Date.new(2007, 1, 15),
     title: 'Vanilla',
     criteria: [
       { achievement_id: 433, quality: :legendary, name: 'Grand Marshal', icon: 'achievement_pvp_a_14' },
@@ -50,9 +50,9 @@ TIMELINE_EVENTS = {
     ]
   },
   2 => {
-    from: Date.new(2006, 12, 5),
+    from: Date.new(2007, 1, 16),
     to: Date.new(2007, 9, 14),
-    title: 'The Burning Crusade', # Actually released 2007-01-16
+    title: 'The Burning Crusade',
     criteria: [
       { achievement_id: 696, quality: :epic, name: "Tempest Keep", icon: 'achievement_character_bloodelf_male', time_sensitive: Date.new(2008, 10, 31) },
       { achievement_id: 694, quality: :epic, name: 'Serpentshrine Cavern', icon: 'achievement_boss_ladyvashj', time_sensitive: Date.new(2008, 10, 31) },
@@ -68,7 +68,7 @@ TIMELINE_EVENTS = {
     title: 'Mount Hyjal & The Black Temple', # Actually released 2007-05-15
     criteria: [
       { achievement_id: 697, quality: :epic, name: "The Black Temple", icon: 'achievement_boss_illidan', time_sensitive: Date.new(2008, 10, 31) },
-      { achievement_id: 695, quality: :epic, name: "Battle for Mount Hyjal", icon: 'achievement_boss_archimonde-', time_sensitive: Date.new(2008, 10, 31) },
+      { achievement_id: 695, quality: :epic, name: "Battle for Mount Hyjal", icon: 'achievement_boss_archimonde', time_sensitive: Date.new(2008, 10, 31) },
       { achievement_id: 431, quality: :rare, name: "Hand of A'dal", icon: 'inv_mace_25' },
     ],
   },
@@ -140,11 +140,11 @@ TIMELINE_EVENTS = {
     to: Date.new(2010, 6, 29),
     title: 'Icecrown Citadel',
     criteria: [
-      { achievement_id: 4576, quality: :legendary, name: "Realm First! Fall of the Lich King", icon: 'inv_helmet_96', time_sensitive: Date.new(2010, 11, 22) },
-      { achievement_id: 4637, quality: :epic, name: "Heroic: Fall of the Lich King (25 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 11, 22) },
-      { achievement_id: 4636, quality: :epic, name: "Heroic: Fall of the Lich King (10 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 11, 22) },
-      { achievement_id: 4532, quality: :rare, name: "Fall of the Lich King (25 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 11, 22) },
-      { achievement_id: 4532, quality: :rare, name: "Fall of the Lich King (10 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 11, 22) },
+      { achievement_id: 4576, quality: :legendary, name: "Realm First! Fall of the Lich King", icon: 'inv_helmet_96', time_sensitive: Date.new(2010, 12, 6), overlapping_to: Date.new(2010, 12, 6) },
+      { achievement_id: 4637, quality: :epic, name: "Heroic: Fall of the Lich King (25 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 12, 6), overlapping_to: Date.new(2010, 12, 6) },
+      { achievement_id: 4636, quality: :epic, name: "Heroic: Fall of the Lich King (10 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 12, 6), overlapping_to: Date.new(2010, 12, 6) },
+      { achievement_id: 4532, quality: :rare, name: "Fall of the Lich King (25 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 12, 6), overlapping_to: Date.new(2010, 12, 6) },
+      { achievement_id: 4532, quality: :rare, name: "Fall of the Lich King (10 player)", icon: 'achievement_dungeon_icecrown_frostmourne', time_sensitive: Date.new(2010, 12, 6), overlapping_to: Date.new(2010, 12, 6) },
     ],
   },
   9 => {
@@ -152,10 +152,10 @@ TIMELINE_EVENTS = {
     to: Date.new(2010, 12, 6),
     title: 'Ruby Sanctum',
     criteria: [
-      { achievement_id: 4637, quality: :epic, name: "Heroic: The Twilight Destroyer (25 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 11, 22) },
-      { achievement_id: 4636, quality: :epic, name: "Heroic: The Twilight Destroyer (10 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 11, 22) },
-      { achievement_id: 4532, quality: :rare, name: "The Twilight Destroyer (25 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 11, 22) },
-      { achievement_id: 4532, quality: :rare, name: "The Twilight Destroyer (10 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 11, 22) },
+      { achievement_id: 4816, quality: :epic, name: "Heroic: The Twilight Destroyer (25 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 12, 6) },
+      { achievement_id: 4818, quality: :epic, name: "Heroic: The Twilight Destroyer (10 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 12, 6) },
+      { achievement_id: 4815, quality: :rare, name: "The Twilight Destroyer (25 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 12, 6) },
+      { achievement_id: 4817, quality: :rare, name: "The Twilight Destroyer (10 player)", icon: 'spell_shadow_twilight', time_sensitive: Date.new(2010, 12, 6) },
     ],
   },
   10 => {
@@ -231,8 +231,8 @@ TIMELINE_EVENTS = {
     to: Date.new(2015, 2, 2),
     title: 'Highmaul',
     criteria: [
-      { achievement_id: 9442, quality: :epic, name: "Cutting Edge: Imperator Mar'gok", icon: 'achievement_boss_highmaul_king' },
-      { achievement_id: 9441, quality: :rare, name: "Ahead of the Curve: Imperator Mar'gok", icon: 'achievement_boss_highmaul_king' },
+      { achievement_id: 9442, quality: :epic, name: "Cutting Edge: Imperator Mar'gok", icon: 'achievement_boss_highmaul_king', overlapping_to: Date.new(2015, 6, 22) },
+      { achievement_id: 9441, quality: :rare, name: "Ahead of the Curve: Imperator Mar'gok", icon: 'achievement_boss_highmaul_king', overlapping_to: Date.new(2015, 6, 22) },
     ],
   },
   17 => {
@@ -259,9 +259,9 @@ TIMELINE_EVENTS = {
     title: 'Emerald Nightmare & Trial of Valor',
     criteria: [
       { achievement_id: 11387, quality: :legendary, name: "The Chosen", icon: "achievement_raid_trialofvalor", time_sensitive: Date.new(2017, 1, 16) },
-      { achievement_id: 11580, quality: :epic, name: "Cutting Edge: Helya", icon: 'achievement_boss_helyra', time_sensitive: Date.new(2017, 1, 16) },
+      { achievement_id: 11580, quality: :epic, name: "Cutting Edge: Helya", icon: 'achievement_boss_helyra', time_sensitive: Date.new(2017, 1, 16), overlapping_to: Date.new(2017, 6, 19) },
       { achievement_id: 11191, quality: :epic, name: "Cutting Edge: Xavius", icon: 'achievement_emeraldnightmare_xavius' },
-      { achievement_id: 11581, quality: :rare, name: "Ahead of the Curve: Helya", icon: 'achievement_boss_helyra', time_sensitive: Date.new(2017, 1, 16) },
+      { achievement_id: 11581, quality: :rare, name: "Ahead of the Curve: Helya", icon: 'achievement_boss_helyra', time_sensitive: Date.new(2017, 1, 16), overlapping_to: Date.new(2017, 6, 19) },
       { achievement_id: 11194, quality: :rare, name: "Ahead of the Curve: Xavius", icon: 'achievement_emeraldnightmare_xavius' },
     ],
   },
@@ -308,8 +308,8 @@ TIMELINE_EVENTS = {
     title: "Battle of Dazar'alor",
     criteria: [
       { achievement_id: 13323, quality: :legendary, name: "Hall of Fame: Lady Jaina Proudmoore (Horde)", icon: 'achievement_boss_zuldazar_jaina', time_sensitive: Date.new(2019, 3, 12) },
-      { achievement_id: 13323, quality: :epic, name: "Cutting Edge: Lady Jaina Proudmoore", icon: 'achievement_boss_zuldazar_jaina' },
-      { achievement_id: 13322, quality: :rare, name: "Ahead of the Curve: Lady Jaina Proudmoore", icon: 'achievement_boss_zuldazar_jaina' },
+      { achievement_id: 13323, quality: :epic, name: "Cutting Edge: Lady Jaina Proudmoore", icon: 'achievement_boss_zuldazar_jaina', overlapping_to: Date.new(2019, 7, 8) },
+      { achievement_id: 13322, quality: :rare, name: "Ahead of the Curve: Lady Jaina Proudmoore", icon: 'achievement_boss_zuldazar_jaina', overlapping_to: Date.new(2019, 7, 8) },
     ],
   },
   25 => {
