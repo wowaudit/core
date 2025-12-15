@@ -307,7 +307,7 @@ TIMELINE_EVENTS = {
     to: Date.new(2019, 4, 15),
     title: "Battle of Dazar'alor",
     criteria: [
-      { achievement_id: 13323, quality: :legendary, name: "Hall of Fame: Lady Jaina Proudmoore (Horde)", icon: 'achievement_boss_zuldazar_jaina', time_sensitive: Date.new(2019, 3, 12) },
+      { achievement_id: 13323, quality: :legendary, name: "Hall of Fame: Lady Jaina Proudmoore (Horde)", icon: 'achievement_boss_zuldazar_jaina', time_sensitive: Date.new(2019, 3, 12), overlapping_to: Date.new(2019, 7, 8) },
       { achievement_id: 13323, quality: :epic, name: "Cutting Edge: Lady Jaina Proudmoore", icon: 'achievement_boss_zuldazar_jaina', overlapping_to: Date.new(2019, 7, 8) },
       { achievement_id: 13322, quality: :rare, name: "Ahead of the Curve: Lady Jaina Proudmoore", icon: 'achievement_boss_zuldazar_jaina', overlapping_to: Date.new(2019, 7, 8) },
     ],
@@ -405,7 +405,7 @@ TIMELINE_EVENTS = {
   },
   34 => {
     from: Date.new(2024, 8, 26),
-    to: Date.new(2025, 2, 24),
+    to: Date.new(2025, 3, 4),
     title: 'Nerub-ar Palace',
     criteria: [
       { achievement_id: 40254, quality: :legendary, name: "Hall of Fame: Queen Ansurek", icon: 'inv_achievement_raidnerubian_queenansurek', time_sensitive: Date.new(2024, 11, 19) },
@@ -414,7 +414,7 @@ TIMELINE_EVENTS = {
     ],
   },
   35 => {
-    from: Date.new(2025, 2, 25),
+    from: Date.new(2025, 3, 5),
     to: Date.new(2025, 8, 11),
     title: 'Liberation of Undermine',
     criteria: [

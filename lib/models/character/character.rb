@@ -49,6 +49,7 @@ module Audit
         keystones: details['keystones'],
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
+        recent_reports: details["recent_reports"],
         raiderio: details["raiderio"],
         tier_items_s3: details["tier_items_s3"],
         timeline: details["timeline"],
