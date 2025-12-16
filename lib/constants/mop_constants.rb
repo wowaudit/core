@@ -44,6 +44,9 @@ MOP_UPGRADE_IDS_TO_OFFSET = {
   452 => { offset: 8, steps_missing: 0 }, # Rare 1/1
   456 => { offset: 0, steps_missing: 1 }, # PvP Rare 0/1
   457 => { offset: 8, steps_missing: 0 }, # PvP Rare 1/1 ?
+  645 => { offset: 0, steps_missing: 2 }, # Reforged 0/2 (ToT)
+  646 => { offset: 3, steps_missing: 1 }, # Reforged 1/2 (ToT)
+  647 => { offset: 6, steps_missing: 0 }, # Reforged 2/2 (ToT)
 }
 
 weapon_enchants = {
