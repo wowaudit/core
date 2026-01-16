@@ -271,6 +271,7 @@ GEM_QUALITY_MAPPING = {
   uncommon: 2,
   rare: 3,
   epic: 4,
+  legendary: 4,
 }
 
 TRACKED_STATS = {
