@@ -90,7 +90,7 @@ module Audit
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
         @character.data['gem_list'] = @character.gems.join('|')
-        @character.data['meta_gem'] = @character.data['meta_gem_quality'] == 3 ? 'yes' : 'no'
+        @character.data['meta_gem'] = @character.data['meta_gem_quality'] == 4 ? 'yes' : 'no'
         @character.data['upgrade_steps_missing'] = upgrade_steps_missing
       end
 
