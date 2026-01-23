@@ -41,7 +41,7 @@ module Audit
       @skipped = skipped
       @realm = realm
 
-      if !@skipped && @realm.kind != 'classic_era'
+      if !@skipped && @realm.kind != 'classic_era' && @realm.category != 'Anniversary'
         @achievements = @data[:achievements]
                           .group_by{ |ach| ach[:id] }
                           .transform_values(&:first)

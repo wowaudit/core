@@ -32,8 +32,10 @@ module Audit
     def process_request(characters, output = [], depth = 0)
       api_limited = []
 
+      kind = REALMS[guild.realm_id].category == 'Anniversary' ? :classic_era : REALMS[guild.realm_id].kind.to_sym
+
       RBattlenet::Wow::Character.find(
-        characters.map{ |ch| character_query(ch) }, fields: FIELDS[REALMS[guild.realm_id].kind.to_sym]
+        characters.map{ |ch| character_query(ch) }, fields: FIELDS[kind]
       ) do |character, result|
         begin
           if character[:source].process_result(result, character[:skipped], depth)
