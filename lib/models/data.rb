@@ -4,6 +4,8 @@ module Audit
 
     class << self
       def process(character, data, skipped, realm, temp_character)
+        kind = realm.category == 'Anniversary' ? :classic_era : realm.kind.to_sym
+
         {
           live: [
             Audit::Live::BasicData, Audit::Live::CollectionData, Audit::Live::GearData,
@@ -24,7 +26,7 @@ module Audit
             Audit::ClassicProgression::ProfessionData,
             Audit::ClassicProgression::PvPData,
           ]
-        }[realm.kind.to_sym].each do |type|
+        }[kind].each do |type|
           next if skipped && type::SKIPPABLE
 
           type.new(character, data, skipped, realm, temp_character).add

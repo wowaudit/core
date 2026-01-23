@@ -8,12 +8,14 @@ module Audit
         output = process_request(characters.first(100))
         Logger.t(INFO_TEAM_REFRESHED, id)
 
+        kind = REALMS[guild.realm_id].category == 'Anniversary' ? :classic_era : REALMS[guild.realm_id].kind.to_sym
+
         section = {
           live: Live,
           classic_progression: ClassicProgression,
           classic_era: ClassicEra,
           tournament: ClassicEra,
-        }[REALMS[guild.realm_id].kind.to_sym]
+        }[kind]
 
         # Writer.write(self, output.reject(&:marked_for_deletion_at), HeaderData.altered_header(self))
         Writer.write(self, output, section::HeaderData.altered_header(self))
