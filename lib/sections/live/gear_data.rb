@@ -162,6 +162,11 @@ module Audit
         @character.data['total_upgrades_missing'] = total_upgrades_missing
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
+
+        if @character.details['max_ilvl'] > 300
+          @character.details['max_ilvl'] = @character.data['ilvl']
+        end
+
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
         @character.data['gem_list'] = @character.gems.join('|')
 
