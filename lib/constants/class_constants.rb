@@ -56,6 +56,7 @@ DPS_SPECS = [
   'Elemental',
   'Devastation',
   'Augmentation',
+  'Devourer',
 ]
 
 ROLES_TO_SPEC = {

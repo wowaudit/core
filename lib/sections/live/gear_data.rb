@@ -133,6 +133,10 @@ module Audit
                 end
               end
 
+              if @character.details['tier_items_s3'][item]['ilvl'] > 300
+                @character.details['tier_items_s3'][item]['ilvl'] = equipped_item[:level][:value]
+              end
+
               @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s3'][item]['ilvl']
               @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s3'][item]['difficulty']
             end
