@@ -21,6 +21,7 @@ ITEMS = {
   live: base_items,
   classic_era: base_items + ['ranged'],
   classic_progression: base_items,
+  classic_anniversary: base_items + ['ranged'],
 }
 
 RESHII_WRAPS_RANKS = (12396..12402).to_a

@@ -40,6 +40,7 @@ STORAGE = {
   live: Aws::S3::Resource.new(endpoint: storage_data["endpoint"]["live"]),
   classic_era: Aws::S3::Resource.new(endpoint: storage_data["endpoint"]["classic_era"]),
   classic_progression: Aws::S3::Resource.new(endpoint: storage_data["endpoint"]["classic_progression"]),
+  classic_anniversary: Aws::S3::Resource.new(endpoint: storage_data["endpoint"]["classic_anniversary"]),
 }
 BUCKET = storage_data["bucket"]
 

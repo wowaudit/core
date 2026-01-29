@@ -12,6 +12,7 @@ module Audit
           live: Live,
           classic_progression: ClassicProgression,
           classic_era: ClassicEra,
+          classic_anniversary: ClassicAnniversary,
           tournament: ClassicEra,
         }[REALMS[guild.realm_id].kind.to_sym]
 

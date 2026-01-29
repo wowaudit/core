@@ -58,7 +58,7 @@ module Audit
     end
 
     def name_for_path
-      "#{blizzard_name}#{kind.to_s == 'live' ? '' : kind.to_s == 'classic_era' ? "-classic-era" : kind.to_s == 'tournament' ? '-tournament' : "-classic"}"
+      "#{blizzard_name}#{kind.to_s == 'live' ? '' : kind.to_s == 'classic_era' ? "-classic-era" : kind.to_s == 'classic_anniversary' ? "-anniversary" : kind.to_s == 'tournament' ? '-tournament' : "-classic"}"
     end
 
     def namespace
@@ -66,6 +66,7 @@ module Audit
         live: '',
         classic_progression: 'classic-',
         classic_era: 'classic1x-',
+        classic_anniversary: 'classicann-',
         tournament: '',
       }[kind.to_sym] + region.downcase
     end
@@ -75,6 +76,7 @@ module Audit
         live: 'warwithin',
         classic_progression: 'wotlk',
         classic_era: 'vanilla',
+        classic_anniversary: 'anniversary',
         tournament: 'tournament',
       }[kind.to_sym]
     end
