@@ -15,6 +15,10 @@ module Audit
         @character.data["off_hand_enchant_name"] = ''
         @character.data["ranged_enchant_quality"] = ''
         @character.data["ranged_enchant_name"] = ''
+        @character.data["finger_1_enchant_quality"] = ''
+        @character.data["finger_1_enchant_name"] = ''
+        @character.data["finger_2_enchant_quality"] = ''
+        @character.data["finger_2_enchant_name"] = ''
         tier_statuses = {
           '4' => 0,
           '5' => 0,
@@ -81,6 +85,9 @@ module Audit
         @character.data['gem_list'] = @character.gems.join('|')
         @character.data['meta_gem'] = @character.data['meta_gem_quality'] == 4 ? 'yes' : 'no'
         @character.data['upgrade_steps_missing'] = upgrade_steps_missing
+
+        worst_finger_enchant = [@character.data['finger_2_enchant_quality'].to_i, @character.data['finger_1_enchant_quality'].to_i].min
+        @character.data['finger_worst_enchant_quality'] = worst_finger_enchant > 0 ? worst_finger_enchant : ""
       end
 
       def check_sockets(item, equipped_item)
@@ -88,7 +95,7 @@ module Audit
 
         socket_info = []
 
-        sockets_expected = (item == 'waist' ? 1 : 0) + (TBC_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0)
+        sockets_expected = TBC_SOCKETS_BY_ITEM[equipped_item[:item][:id]] || 0
         if sockets_expected > 0
           [2, 3, 4].first(sockets_expected).each do |enchantment_slot|
             if enchantment = equipped_item[:enchantments]&.find { |e| e.dig(:enchantment_slot, :id) == enchantment_slot }

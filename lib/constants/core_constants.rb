@@ -995,7 +995,7 @@ HEADER = {
     '2v2_rating',
     '2v2_season_played',
     '2v2_week_played',
-    '',
+    'finger_worst_enchant_quality',
     'honorable_kills',
     "tier_5_head",
     "tier_5_shoulder",
