@@ -96,6 +96,7 @@ ROLES = {
     'Evoker' => [2]
   },
   'Ranged'=> {
+    'Demon Hunter' => [3],
     'Druid' => [4],
     'Hunter' => [1,2],
     'Mage' => [1,2,3],

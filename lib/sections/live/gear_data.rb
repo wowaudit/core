@@ -187,6 +187,16 @@ module Audit
       end
 
       def check_enchant(item, equipped_item)
+        if item == 'head'
+          match = (equipped_item[:enchantments] || []).map { |e| CORRUPTION_HELM_ENCHANTS[e[:enchantment_id]] }.compact.first
+          @character.data["head_enchant_level"] = match&.dig(:level) || ''
+          @character.data["head_enchant"] = match&.dig(:name) || ''
+        end
+
+        if item == 'waist'
+          @character.data["waist_spell"] = BELT_SPELLS.find { |spell| equipped_item[:spells]&.any? { |s| s[:description].start_with? spell[:match_string] } }&.dig(:name) || ""
+        end
+
         if ENCHANTS.include? item
           begin
             # Off-hand items that are not weapons can't be enchanted
@@ -215,16 +225,6 @@ module Audit
           end
 
           { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
-        end
-
-        if item == 'head'
-          match = (equipped_item[:enchantments] || []).map { |e| CORRUPTION_HELM_ENCHANTS[e[:enchantment_id]] }.compact.first
-          @character.data["head_enchant_level"] = match&.dig(:level) || ''
-          @character.data["head_enchant"] = match&.dig(:name) || ''
-        end
-
-        if item == 'waist'
-          @character.data["waist_spell"] = BELT_SPELLS.find { |spell| equipped_item[:spells]&.any? { |s| s[:description].start_with? spell[:match_string] } }&.dig(:name) || ""
         end
       end
 
