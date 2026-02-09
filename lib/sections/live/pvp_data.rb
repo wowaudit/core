@@ -4,7 +4,7 @@ module Audit
       def add
         if @data[:pvp_summary]
           @character.data['honor_level'] = @data[:pvp_summary][:honor_level]
-          @character.data['honorable_kills'] = @data[:pvp_summary][:honorable_kills]
+          @character.data['honorable_kills'] = @achievements[513][:criteria][:child_criteria].first[:amount] rescue @data[:pvp_summary][:honorable_kills]
 
           BRACKETS[:live].each do |bracket, endpoint|
             if !@data[endpoint.to_sym][:empty]
