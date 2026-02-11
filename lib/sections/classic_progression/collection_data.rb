@@ -11,7 +11,8 @@ module Audit
           quests_done_total: 508,
           dailies_done_total: 977,
         }.each do |key, id|
-          @character.data[key.to_s] = @achievements[id][:criteria][:child_criteria].first[:amount] rescue 0
+          achievement = @achievements.dig(id, :criteria)
+          @character.data[key.to_s] = achievement&.dig(:amount) || achievement[:child_criteria].first[:amount] rescue 0
         end
 
         chapters_completed = [
