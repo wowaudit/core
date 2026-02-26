@@ -2,6 +2,7 @@ module Audit
   module Live
     class GearData < Data
       def add
+        byebug
         # Check equipped gear
         sparks_used = 0
         embellished_found = 0
@@ -113,14 +114,6 @@ module Audit
             end
 
             if TIER_ITEMS_BY_SLOT.keys.include? item
-              # Convert legacy format stored tier data
-              if @character.details['tier_items_s3'][item].is_a?(Integer)
-                @character.details['tier_items_s3'][item] = {
-                  'ilvl' => @character.details['tier_items_s3'][item],
-                  'difficulty' => LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= @character.details['tier_items_s3'][item] }.compact.last || ''
-                }
-              end
-
               if TIER_ITEMS.include?(equipped_item[:item][:id].to_i)
                 upgradeable_difficulty = bonus_id_options[bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }]
                 difficulty_label = upgradeable_difficulty ? DIFFICULTY_LETTERS[upgradeable_difficulty] : LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last

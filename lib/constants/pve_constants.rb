@@ -1,5 +1,5 @@
-FIRST_PERIOD_OF_EXPANSION = 974
-CURRENT_SEASON = 15
+FIRST_PERIOD_OF_EXPANSION = 1052
+CURRENT_SEASON = 16
 
 SEASON_DATA = {
   13 => {
@@ -194,19 +194,83 @@ SEASON_DATA = {
         1 => { ilvl: 108, track: 'Veteran' },
       }
     }
+  },
+  16 => {
+    first_period: 1052,
+    pvp_season: 41,
+    spark_label: "Radiance Crafted",
+    spark_ilvl_bump_bonus_id: [],
+    keystone_dungeons: [
+      { id: 499, name: "Magister's Terrace", mythic_id: 61217, legacy: false },
+      { id: 503, name: "Maisara Caverns", mythic_id: 61655, legacy: false },
+      { id: 505, name: "Nexus-Point Xenas", mythic_id: 61658, legacy: false },
+      { id: 525, name: "Windrunner Spire", mythic_id: 41295, legacy: false },
+      { id: 542, name: "Algeth'ar Academy", mythic_id: 16088, legacy: true },
+      { id: 378, name: "Pit of Saron", mythic_id: 0, legacy: true },
+      { id: 391, name: "Seat of the Triumvirate", mythic_id: 12613, legacy: true },
+      { id: 392, name: "Skyreach", mythic_id: 10195, legacy: true },
+    ],
+    crests: [
+      { name: 'Gilded', ilvl_cap: 289, weekly_increase: 90, first_period: 1055, icon_item_id: 240929 },
+      { name: 'Runed', ilvl_cap: 276, weekly_increase: 90, first_period: 1055, icon_item_id: 240930 },
+      { name: 'Carved', ilvl_cap: 263, weekly_increase: 90, first_period: 1052, icon_item_id: 240931 },
+      { name: 'Weathered', ilvl_cap: 250, weekly_increase: 90, first_period: 1052, icon_item_id: 240928 },
+    ],
+    track_cutoffs: [
+      { ilvl: 272, track: 'Myth', bonus_id: 12053, difficulty: :mythic },
+      { ilvl: 259, track: 'Hero', bonus_id: 12052, difficulty: :heroic },
+      { ilvl: 246, track: 'Champion', bonus_id: 12051, difficulty: :normal },
+      { ilvl: 233, track: 'Veteran' },
+      { ilvl: 220, track: 'Adventurer' },
+      { ilvl: 207, track: 'Explorer' }
+    ],
+    great_vault: {
+      raid: {
+        mythic: { ilvl: 272, track: 'Myth' },
+        heroic: { ilvl: 259, track: 'Hero' },
+        normal: { ilvl: 246, track: 'Champion' },
+        raid_finder: { ilvl: 233, track: 'Veteran' },
+      },
+      dungeon: {
+        10 => { ilvl: 272, track: 'Myth' },
+        9 => { ilvl: 269, track: 'Hero' },
+        8 => { ilvl: 269, track: 'Hero' },
+        7 => { ilvl: 269, track: 'Hero' },
+        6 => { ilvl: 266, track: 'Hero' },
+        5 => { ilvl: 263, track: 'Hero' },
+        4 => { ilvl: 263, track: 'Hero' },
+        3 => { ilvl: 259, track: 'Hero' },
+        2 => { ilvl: 259, track: 'Hero' },
+        1 => { ilvl: 256, track: 'Champion' }, # Regular Mythic
+        0 => { ilvl: 243, track: 'Veteran' }, # Heroic
+        -1 => { ilvl: nil, track: nil },
+      },
+      delve: {
+        11 => { ilvl: 259, track: 'Hero' },
+        10 => { ilvl: 259, track: 'Hero' },
+        9 => { ilvl: 259, track: 'Hero' },
+        8 => { ilvl: 259, track: 'Hero' },
+        7 => { ilvl: 259, track: 'Hero' },
+        6 => { ilvl: 256, track: 'Champion' },
+        5 => { ilvl: 253, track: 'Champion' },
+        4 => { ilvl: 246, track: 'Veteran' },
+        3 => { ilvl: 243, track: 'Veteran' },
+        2 => { ilvl: 240, track: 'Veteran' },
+        1 => { ilvl: 237, track: 'Veteran' },
+      }
+    }
   }
 }
 
 EXPANSION_DUNGEONS = [
-  { heroic_id: 20486, mythic_id: 20487, name: "Ara-Kara, City of Echoes" },
-  { heroic_id: 40653, mythic_id: 40654, name: "Cinderbrew Meadery" },
-  { heroic_id: 40709, mythic_id: 40710, name: "City of Threads" },
-  { heroic_id: 20483, mythic_id: 20484, name: "Darkflame Cleft" },
-  { heroic_id: 40658, mythic_id: 40659, name: "Priory of the Sacred Flame" },
-  { heroic_id: 40714, mythic_id: 40715, name: "The Dawnbreaker" },
-  { heroic_id: 40717, mythic_id: 40718, name: "The Rookery" },
-  { heroic_id: 40721, mythic_id: 40722, name: "The Stonevault" },
-  { heroic_id: 41343, mythic_id: 41344, name: "Operation: Floodgate" },
+  { heroic_id: 61651, mythic_id: 61652, name: "Den of Nalorakk" },
+  { heroic_id: 61216, mythic_id: 61217, name: "Magister's Terrace" },
+  { heroic_id: 61274, mythic_id: 61275, name: "Murder Row" },
+  { heroic_id: 41294, mythic_id: 41295, name: "Windrunner Spire" },
+  { heroic_id: 61654, mythic_id: 61655, name: "Maisara Caverns" },
+  { heroic_id: 61657, mythic_id: 61658, name: "Nexus-Point Xenas" },
+  { heroic_id: 61660, mythic_id: 61661, name: "The Blinding Vale" },
+  { heroic_id: 61512, mythic_id: 61513, name: "Voidscar Arena" },
 ]
 
 WEEKLY_EVENT_QUESTS = [
@@ -219,8 +283,13 @@ WEEKLY_EVENT_QUESTS = [
   83365, # A Frozen Path Through Time
 ]
 
-# https://www.wowhead.com/quest=82449/the-call-of-the-worldsoul
-WORLDSOUL_WEEKLY_QUESTS = [82449, 82458, 82482, 82516, 82483, 82453, 82489, 82659, 82678, 82679, 82490, 82491, 82492, 82493, 82494, 82496, 82497, 82498, 82499, 82500, 82501, 82502, 82503, 82504, 82505, 82506, 82507, 82508, 82509, 82510, 82512, 82488, 82487, 82486, 82485, 82452, 82495, 82706, 82707, 82709, 82711, 82712, 82746]
+# https://www.wowhead.com/quest=89268/lost-legends
+HARANIR_WEEKLY_QUESTS = [88993, 88994, 88996, 88997, 88995]
+
+SALTHERIL_WEEKLY_QUESTS = [90573, 90574, 90575, 90576]
+
+# https://www.wowhead.com/quest=93744/unity-against-the-void
+UNITY_WEEKLY_QUESTS = [93890, 93889, 93891, 93910, 93769, 93909, 93911, 93767, 93912, 93913, 93892, 93766, 94457]
 
 RAID_DIFFICULTIES = {
   1 => 'raid_finder',
@@ -235,7 +304,7 @@ GREAT_VAULT_RAID_KILLS_NEEDED = {
   3 => 6,
 }
 
-GREAT_VAULT_BLACKLISTED_PERIODS = [932, 974, 975, 1000]
+GREAT_VAULT_BLACKLISTED_PERIODS = [932, 974, 975, 1000, 1052, 1053, 1054]
 
 CUTTING_EDGE_ACHIEVEMENTS = [
   7485, # Will of the Emperor
@@ -267,6 +336,9 @@ CUTTING_EDGE_ACHIEVEMENTS = [
   40254, # Queen Ansurek
   41297, # Chrome King Gallywix
   41625, # Dimensius, the All-Devouring
+  61625, # Crown of the Cosmos
+  61492, # Chimearus, the Undreamt God
+  61627, # Midnight Falls
 ]
 
 AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
@@ -299,13 +371,16 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
   40253, # Queen Ansurek
   41298, # Chrome King Gallywix
   41624, # Dimensius, the All-Devouring
+  61624, # Crown of the Cosmos
+  61491, # Chimearus, the Undreamt God
+  61626, # Midnight Falls
 ]
 
 VALID_RAIDS = {
   live: [
-    {"name"=>"Nerub-ar Palace", "days"=>[], "id"=>38, "encounters"=>[{"id"=>2902, "name"=>"Ulgrax", "raid_ids"=>{"raid_finder"=>[40267], "normal"=>[40268], "heroic"=>[40269], "mythic"=>[40270]}}, {"id"=>2917, "name"=>"The Bloodbound Horror", "raid_ids"=>{"raid_finder"=>[40271], "normal"=>[40272], "heroic"=>[40273], "mythic"=>[40274]}}, {"id"=>2898, "name"=>"Sikran", "raid_ids"=>{"raid_finder"=>[40275], "normal"=>[40276], "heroic"=>[40277], "mythic"=>[40278]}}, {"id"=>2918, "name"=>"Rasha'nan", "raid_ids"=>{"raid_finder"=>[40279], "normal"=>[40280], "heroic"=>[40281], "mythic"=>[40282]}}, {"id"=>2919, "name"=>"Broodtwister Ovi'nax", "raid_ids"=>{"raid_finder"=>[40283], "normal"=>[40284], "heroic"=>[40285], "mythic"=>[40286]}}, {"id"=>2920, "name"=>"Nexus-Princess Ky'veza", "raid_ids"=>{"raid_finder"=>[40287], "normal"=>[40288], "heroic"=>[40289], "mythic"=>[40290]}}, {"id"=>2921, "name"=>"The Silken Court", "raid_ids"=>{"raid_finder"=>[40291], "normal"=>[40292], "heroic"=>[40293], "mythic"=>[40294]}}, {"id"=>2922, "name"=>"Queen Ansurek", "raid_ids"=>{"raid_finder"=>[40295], "normal"=>[40296], "heroic"=>[40297], "mythic"=>[40298]}}]},
-    {"name"=>"Liberation of Undermine", "days"=>[], "id"=>42, "encounters"=>[{"id"=>3009, "name"=>"Vexie and the Geargrinders", "raid_ids"=>{"raid_finder"=>[41299], "normal"=>[41300], "heroic"=>[41301], "mythic"=>[41302]}}, {"id"=>3010, "name"=>"Cauldron of Carnage", "raid_ids"=>{"raid_finder"=>[41303], "normal"=>[41304], "heroic"=>[41305], "mythic"=>[41306]}}, {"id"=>3011, "name"=>"Rik Reverb", "raid_ids"=>{"raid_finder"=>[41307], "normal"=>[41308], "heroic"=>[41309], "mythic"=>[41310]}}, {"id"=>3012, "name"=>"Stix Bunkjunker", "raid_ids"=>{"raid_finder"=>[41311], "normal"=>[41312], "heroic"=>[41313], "mythic"=>[41314]}}, {"id"=>3013, "name"=>"Sprocketmonger Lockenstock", "raid_ids"=>{"raid_finder"=>[41315], "normal"=>[41316], "heroic"=>[41317], "mythic"=>[41318]}}, {"id"=>3014, "name"=>"The One-Armed Bandit", "raid_ids"=>{"raid_finder"=>[41319], "normal"=>[41320], "heroic"=>[41321], "mythic"=>[41322]}}, {"id"=>3015, "name"=>"Mug'Zee, Heads of Security", "raid_ids"=>{"raid_finder"=>[41323], "normal"=>[41324], "heroic"=>[41325], "mythic"=>[41326]}}, {"id"=>3016, "name"=>"Chrome King Gallywix", "raid_ids"=>{"raid_finder"=>[41327], "normal"=>[41328], "heroic"=>[41329], "mythic"=>[41330]}}]},
-    {"name"=>"Manaforge Omega", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>44, "encounters"=>[{"id"=>3129, "name"=>"Plexus Sentinel", "raid_ids"=>{"raid_finder"=>[41633], "normal"=>[41634], "heroic"=>[41635], "mythic"=>[41636]}}, {"id"=>3131, "name"=>"Loom'ithar", "raid_ids"=>{"raid_finder"=>[41637], "normal"=>[41638], "heroic"=>[41639], "mythic"=>[41640]}}, {"id"=>3130, "name"=>"Soulbinder Naazindhri", "raid_ids"=>{"raid_finder"=>[41641], "normal"=>[41642], "heroic"=>[41643], "mythic"=>[41644]}}, {"id"=>3132, "name"=>"Forgeweaver Araz", "raid_ids"=>{"raid_finder"=>[41645], "normal"=>[41646], "heroic"=>[41647], "mythic"=>[41648]}}, {"id"=>3122, "name"=>"The Soul Hunters", "raid_ids"=>{"raid_finder"=>[41649], "normal"=>[41650], "heroic"=>[41651], "mythic"=>[41652]}}, {"id"=>3133, "name"=>"Fractillus", "raid_ids"=>{"raid_finder"=>[41653], "normal"=>[41654], "heroic"=>[41655], "mythic"=>[41656]}}, {"id"=>3134, "name"=>"Nexus-King Salhadaar", "raid_ids"=>{"raid_finder"=>[41657], "normal"=>[41658], "heroic"=>[41659], "mythic"=>[41660]}}, {"id"=>3135, "name"=>"Dimensius, the All-Devouring", "raid_ids"=>{"raid_finder"=>[41661], "normal"=>[41662], "heroic"=>[41663], "mythic"=>[41664]}}]}
+    {"name"=>"The Voidspire", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Imperator Averzian", "raid_ids"=>{"raid_finder"=>[61276], "normal"=>[61277], "heroic"=>[61278], "mythic"=>[61279]}}, {"id"=>nil, "name"=>"Vorasius", "raid_ids"=>{"raid_finder"=>[61280], "normal"=>[61281], "heroic"=>[61282], "mythic"=>[61283]}}, {"id"=>nil, "name"=>"Fallen-King Salhadaar", "raid_ids"=>{"raid_finder"=>[61284], "normal"=>[61285], "heroic"=>[61286], "mythic"=>[61287]}}, {"id"=>nil, "name"=>"Vaelgor & Ezzorak", "raid_ids"=>{"raid_finder"=>[61288], "normal"=>[61289], "heroic"=>[61290], "mythic"=>[61291]}}, {"id"=>nil, "name"=>"Lightblinded Vanguard", "raid_ids"=>{"raid_finder"=>[61292], "normal"=>[61293], "heroic"=>[61294], "mythic"=>[61295]}}, {"id"=>nil, "name"=>"Crown of the Cosmos", "raid_ids"=>{"raid_finder"=>[61296], "normal"=>[61297], "heroic"=>[61298], "mythic"=>[61299]}}]},
+    {"name"=>"The Dreamrift", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Chimaerus", "raid_ids"=>{"raid_finder"=>[61474], "normal"=>[61475], "heroic"=>[61476], "mythic"=>[61477]}}]},
+    {"name"=>"March on Quel'Danas", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Belo'ren, Child of Al'ar", "raid_ids"=>{"raid_finder"=>[61300], "normal"=>[61301], "heroic"=>[61302], "mythic"=>[61303]}}, {"id"=>nil, "name"=>"Midnight Falls", "raid_ids"=>{"raid_finder"=>[61304], "normal"=>[61305], "heroic"=>[61306], "mythic"=>[61307]}}]}
   ],
   classic_era: [
   ],
