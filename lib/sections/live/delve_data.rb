@@ -34,7 +34,7 @@ module Audit
           @character.data['great_vault_slot_8'] = ""
           @character.data['great_vault_slot_9'] = ""
         else
-          ['worldsoul_weekly', 'theater_troupe', 'awakening_the_machine'].each do |quest|
+          ['legends_of_the_haranir_weekly', 'weekly_abundance', 'saltherils_soiree', 'stormarion_assault', 'unity_against_the_void_weekly'].each do |quest|
             delves_this_week << 1 if @character.data[quest] == 'yes'
           end
 

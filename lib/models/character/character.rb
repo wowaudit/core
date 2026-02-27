@@ -45,13 +45,13 @@ module Audit
         current_gear: details['current_gear'],
       }.merge(REALMS[realm_id].kind == 'live' ? {
         best_gear: details['best_gear'],
-        spark_gear_s3: details['spark_gear_s3'],
+        spark_gear_s1: details['spark_gear_s1'],
         keystones: details['keystones'],
         snapshots: details["snapshots"],
         warcraftlogs: details["warcraftlogs"],
         recent_reports: details["recent_reports"],
         raiderio: details["raiderio"],
-        tier_items_s3: details["tier_items_s3"],
+        tier_items_s1: details["tier_items_s1"],
         timeline: details["timeline"],
       } : {})
     end
