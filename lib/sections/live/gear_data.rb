@@ -2,17 +2,12 @@ module Audit
   module Live
     class GearData < Data
       def add
-        byebug
         # Check equipped gear
         sparks_used = 0
         embellished_found = 0
         total_upgrades_missing = 0
-        @character.data['jewelry_sockets'] = 0
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
-        @character.data['reshii_wraps_rank'] = '-'
-        @character.data['reshii_wraps_boots_track'] = '-'
-        @character.data['reshii_wraps_epic_fiber'] = 'no'
         BonusIds::DIFFICULTY_LABELS.keys.each { |track| @character.data["#{track}_track_items"] = 0 }
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -66,21 +61,11 @@ module Audit
               }
             end
 
-            if equipped_item[:item][:id] == 235499
-              rank = RESHII_WRAPS_RANKS.index((RESHII_WRAPS_RANKS & equipped_item[:bonus_list]).first)
-              @character.data['reshii_wraps_rank'] = rank ? "Rank #{rank + 1}" : '-'
-              @character.data['reshii_wraps_epic_fiber'] = [238042, 238044, 238045, 238046].include?(equipped_item[:sockets].first&.dig(:item, :id)) ? 'yes' : 'no'
-            end
-
             bonus_list = equipped_item[:bonus_list] || []
             upgrade_id = bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }
             track, track_ids = BonusIds.current.find { |track, ids| ids.include? upgrade_id.to_i }
             @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.to_a.index(upgrade_id) + 1} / #{track_ids.to_a.size}" : '-'
             total_upgrades_missing += (track_ids.to_a.size - (track_ids.to_a.index(upgrade_id) + 1)) if track_ids
-
-            if RESHII_WRAPS_BOOTS.include?(equipped_item[:item][:id])
-              @character.data['reshii_wraps_boots_track'] = BonusIds::DIFFICULTY_LABELS[track] || '-'
-            end
 
             # For crafted items we need to check the track (crests used) based on the item level
             if !track && equipped_item.dig(:name_description, :display_string) == Season.current.data[:spark_label]
@@ -226,10 +211,6 @@ module Audit
           end
 
           socket_info << { type: socket.dig(:socket_type, :type), gem: socket.dig(:item, :id) }
-        end
-
-        if item == 'neck' || item.include?('finger')
-          @character.data['jewelry_sockets'] += [equipped_item&.dig(:sockets)&.size || 0, 2].min
         end
 
         socket_info
