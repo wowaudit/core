@@ -126,10 +126,6 @@ module Audit
                 end
               end
 
-              if @character.details['tier_items_s1'][item]['ilvl'] > 300
-                @character.details['tier_items_s1'][item]['ilvl'] = equipped_item[:level][:value]
-              end
-
               @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s1'][item]['ilvl']
               @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s1'][item]['difficulty']
             end
@@ -180,16 +176,6 @@ module Audit
       end
 
       def check_enchant(item, equipped_item)
-        if item == 'head'
-          match = (equipped_item[:enchantments] || []).map { |e| CORRUPTION_HELM_ENCHANTS[e[:enchantment_id]] }.compact.first
-          @character.data["head_enchant_level"] = match&.dig(:level) || ''
-          @character.data["head_enchant"] = match&.dig(:name) || ''
-        end
-
-        if item == 'waist'
-          @character.data["waist_spell"] = BELT_SPELLS.find { |spell| equipped_item[:spells]&.any? { |s| s[:description].start_with? spell[:match_string] } }&.dig(:name) || ""
-        end
-
         if ENCHANTS.include? item
           begin
             # Off-hand items that are not weapons can't be enchanted
@@ -225,10 +211,7 @@ module Audit
         socket_info = []
 
         (equipped_item[:sockets] || []).each do |socket|
-          if socket.dig(:socket_type, :type).include?("SINGING")
-            @character.data["circlet_#{socket.dig(:socket_type, :type).downcase}_name"] = CIRCLET_GEMS[socket.dig(:item, :id)]
-            @character.data["circlet_ilvl"] = equipped_item[:level][:value]
-          elsif gem = GEMS[socket.dig(:item, :id)]
+          if gem = GEMS[socket.dig(:item, :id)]
             @character.gems << gem[:quality]
 
             (gem[:stats]).each do |stat, value|
