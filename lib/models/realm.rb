@@ -73,7 +73,7 @@ module Audit
 
     def redis_prefix
       {
-        live: 'warwithin',
+        live: 'midnight',
         classic_progression: 'wotlk',
         classic_era: 'vanilla',
         classic_anniversary: 'anniversary',

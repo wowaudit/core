@@ -9,11 +9,11 @@ module Audit
             category[:name] == "Character"
           end[:statistics]
 
-          @character.data['valorstones'] = crest_stats.find { |stat| stat[:id] == 20488 }[:quantity] rescue 0
-          @character.data['weathered_crests'] = crest_stats.find { |stat| stat[:id] == 60975 }[:quantity] rescue 0
-          @character.data['carved_crests'] = crest_stats.find { |stat| stat[:id] == 60976 }[:quantity] rescue 0
-          @character.data['runed_crests'] = crest_stats.find { |stat| stat[:id] == 60977 }[:quantity] rescue 0
-          @character.data['gilded_crests'] = crest_stats.find { |stat| stat[:id] == 60978 }[:quantity] rescue 0
+          @character.data['adventurer_crests'] = crest_stats.find { |stat| stat[:id] == 62292 }[:quantity] rescue 0
+          @character.data['veteran_crests'] = crest_stats.find { |stat| stat[:id] == 62293 }[:quantity] rescue 0
+          @character.data['champion_crests'] = crest_stats.find { |stat| stat[:id] == 62294 }[:quantity] rescue 0
+          @character.data['hero_crests'] = crest_stats.find { |stat| stat[:id] == 62295 }[:quantity] rescue 0
+          @character.data['myth_crests'] = crest_stats.find { |stat| stat[:id] == 62296 }[:quantity] rescue 0
         rescue
           nil
         end
@@ -28,15 +28,12 @@ module Audit
         end
 
         if @data[:mounts]
-          @character.data['ansurek_mount'] = 'no'
-          @character.data['gallywix_mount'] = 'no'
+          @character.data['midnight_falls_mount'] = 'no'
 
           @data[:mounts].lazy.each do |entry|
             next unless entry.is_a? Hash
 
-            @character.data['ansurek_mount'] = 'yes' if entry.dig(:mount, :id) == 2223
-            @character.data['gallywix_mount'] = 'yes' if entry.dig(:mount, :id) == 2487
-            @character.data['dimensius_mount'] = 'yes' if entry.dig(:mount, :id) == 2569
+            @character.data['midnight_falls_mount'] = 'yes' if entry.dig(:mount, :id) == 2607
           end
         end
 

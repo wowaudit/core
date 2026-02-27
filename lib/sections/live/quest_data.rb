@@ -6,12 +6,13 @@ module Audit
           @character.data['quests_done_total'] = @achievements[508][:criteria][:child_criteria].first[:amount] rescue 0
           @character.data['wqs_done_total'] = @achievements[11132][:criteria][:child_criteria].first[:amount] rescue 0
           @character.data['dailies_done_total'] = @achievements[977][:criteria][:child_criteria].first[:amount] rescue 0
-          @character.data['worldsoul_memories'] = @achievements[40251][:criteria][:amount] rescue 0
         end
 
+        @character.data['unity_against_the_void_weekly'] = 'no'
         @character.data['legends_of_the_haranir_weekly'] = 'no'
         @character.data['weekly_abundance'] = 'no'
         @character.data['saltherils_soiree'] = 'no'
+        @character.data['stormarion_assault'] = 'no'
 
         raid_buff_amount = 0
         @data.dig(:completed_quests, :quests)&.lazy&.each do |quest|

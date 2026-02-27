@@ -5,17 +5,13 @@ FACTIONS = {
 }
 
 REPUTATIONS = {
-  2590 => "council_of_dornogal",
-  2594 => "assembly_of_the_deeps",
-  2570 => 'hallowfall_arathi',
-  2600 => "severed_threads",
-  2653 => 'cartels_of_undermine',
-  2685 => 'gallagio_loyalty_rewards_club',
-  2658 => 'the_karesh_trust',
-  2736 => 'manaforge_vandals'
+  2710 => "silvermoon_court",
+  2696 => "amani_tribe",
+  2704 => 'harati',
+  2699 => "the_singularity",
 }
 
-RAID_BUFF_IDS = [91476, 91477, 91478, 91479, 91480]
+RAID_BUFF_IDS = []
 
 STANDINGS = {
   0 => 'Hated',
