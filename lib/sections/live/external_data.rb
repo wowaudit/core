@@ -41,7 +41,7 @@ module Audit
           end
 
           if period == Audit.period
-            @character.data['week_mythic_dungeons'] = (@character.details['keystones'][period.to_s]&.size || 0) + (@character.data['week_regular_mythic_dungeons'] || 0)
+            @character.data['week_mythic_dungeons'] = (@character.details['keystones'][period.to_s]&.size || 0) + (@character.details.dig('snapshots', period.to_s, 'regular_mythic_dungeons') || 0)
             nil
           else
             (@character.details['keystones'][period.to_s]&.size || 0) + (@character.details.dig('snapshots', period.to_s, 'regular_mythic_dungeons') || 0)
