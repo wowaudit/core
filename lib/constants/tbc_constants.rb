@@ -131,7 +131,9 @@ TBC_ENCHANTS = {
     2322 => [4, "Major Healing"],
     2935 => [4, "Spell Strike"],
     2934 => [4, "Blasting"],
+    2613 => [4, "Threat"],
     1594 => [4, "Assault"],
+    2564 => [4, "15 Agility"],
   },
   'legs' => {
     3011 => [3, "Clefthide Leg Armor"],
