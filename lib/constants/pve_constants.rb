@@ -211,10 +211,10 @@ SEASON_DATA = {
       { id: 392, name: "Skyreach", mythic_id: 10195, legacy: true },
     ],
     crests: [
-      { name: 'Gilded', ilvl_cap: 289, weekly_increase: 90, first_period: 1055, icon_item_id: 240929 },
-      { name: 'Runed', ilvl_cap: 276, weekly_increase: 90, first_period: 1055, icon_item_id: 240930 },
-      { name: 'Carved', ilvl_cap: 263, weekly_increase: 90, first_period: 1052, icon_item_id: 240931 },
-      { name: 'Weathered', ilvl_cap: 250, weekly_increase: 90, first_period: 1052, icon_item_id: 240928 },
+      { name: 'Myth', ilvl_cap: 289, weekly_increase: 90, first_period: 1055, icon_item_id: 240929 },
+      { name: 'Hero', ilvl_cap: 276, weekly_increase: 90, first_period: 1055, icon_item_id: 240930 },
+      { name: 'Champion', ilvl_cap: 263, weekly_increase: 90, first_period: 1052, icon_item_id: 240931 },
+      { name: 'Veteran', ilvl_cap: 250, weekly_increase: 90, first_period: 1052, icon_item_id: 240928 },
     ],
     track_cutoffs: [
       { ilvl: 272, track: 'Myth', bonus_id: 12053, difficulty: :mythic },
