@@ -68,9 +68,10 @@ end
 
 begin
   # Connections
-  DB = Sequel.connect(db_config['mysql'], servers: { read_only: db_config['mysql_replica'] })
-  DB2 = Mysql2::Client.new(db_config['mysql'])
-  REDIS = Redis.new(url: db_config['redis']['host'], password: db_config['redis']['password'])
+  Wowaudit.redis_suffix = 1 # acceptance
+
+  DB = Sequel.connect(db_config['postgres'])
+  REDIS = Redis.new(url: "#{db_config['redis']['host']}/#{Wowaudit.redis_suffix}", password: db_config['redis']['password'])
 
   # Modules
   require_rel 'constants'

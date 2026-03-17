@@ -8,7 +8,6 @@ module Audit
     }
 
     def initialize
-      stats = {}
       loop do
         schedule = Schedule.all
 
@@ -34,13 +33,15 @@ module Audit
         teams = Writer.query("SELECT id, last_refreshed_#{worker.type} FROM realms WHERE kind = 'live' " +
                              "ORDER BY last_refreshed_#{worker.type} ASC LIMIT 10", false).to_a
       else
-        table = "teams"
-        teams = Writer.query("SELECT t.id, ((#{Audit.now.to_i} - IFNULL(t.last_refreshed_#{worker.base_type}, 0)) " +
-                            "* t.refresh_factor) + t.refresh_factor AS priority, " +
-                            "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM `teams` t " +
-                            "INNER JOIN guilds g ON g.id = t.guild_id " +
-                            (worker.type.include?("dedicated") ? "INNER JOIN api_keys a ON a.guild_id = t.guild_id WHERE a.active = 1 AND " : "WHERE ") +
-                            "g.active = 1 ORDER BY priority DESC LIMIT 5", false).to_a
+        table = 'teams'
+        teams = Writer.query(
+          "SELECT t.id, ((#{Audit.now.to_i} - COALESCE(t.last_refreshed_#{worker.base_type}, 0)) " \
+          "* t.refresh_factor) + t.refresh_factor AS priority, " \
+          "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM teams t " \
+          "INNER JOIN guilds g ON g.id = t.owner_id " \
+          "WHERE g.active = TRUE ORDER BY priority DESC LIMIT 5",
+          false
+        ).to_a
       end
       team_ids = teams.map{ |team| team["id"] }
 

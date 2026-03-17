@@ -1,21 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: historical-keystones-deployment
+  name: historical-keystones-deployment-acc
   labels:
-    app: historical-keystones
+    app: historical-keystones-acc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: historical-keystones
+      app: historical-keystones-acc
   template:
     metadata:
       labels:
-        app: historical-keystones
+        app: historical-keystones-acc
     spec:
+      tolerations:
+        - key: migrate-data
+          operator: Exists
+          effect: NoSchedule
       containers:
-        - name: historical-keystones
+        - name: historical-keystones-acc
           image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
           args: ["historical_keystones"]

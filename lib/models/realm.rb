@@ -1,17 +1,8 @@
 module Audit
-  class Realm < Sequel::Model
-    class << self
-      def to_slug(to_be_slugged = realm)
-        slug = to_be_slugged.name.gsub("'","")
-        slug = slug.gsub("-","")
-        slug = slug.gsub(" ","-")
-        slug = slug.gsub("(","")
-        slug = slug.gsub(")","")
-        slug = slug.gsub("ê","e")
-        slug = slug.gsub("à","a")
-        slug.downcase
-      end
+  class Realm < FrozenRecord::Base
+    include FrozenModel
 
+    class << self
       def refresh(id, refresh_type)
         realm = Realm.where(id: id).first
         RBattlenet.set_options(region: realm.region, namespace: realm.namespace, locale: "en_GB", concurrency: 25, response_type: :hash)
@@ -55,10 +46,6 @@ module Audit
           Writer.update_db(characters) if characters.any?
         end
       end
-    end
-
-    def name_for_path
-      "#{blizzard_name}#{kind.to_s == 'live' ? '' : kind.to_s == 'classic_era' ? "-classic-era" : kind.to_s == 'classic_anniversary' ? "-anniversary" : kind.to_s == 'tournament' ? '-tournament' : "-classic"}"
     end
 
     def namespace

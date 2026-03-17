@@ -1,32 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: keystones-deployment
+  name: wcl-deployment-acc
   labels:
-    app: keystones
+    app: wcl-acc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: keystones
+      app: wcl-acc
   template:
     metadata:
       labels:
-        app: keystones
+        app: wcl-acc
     spec:
+      tolerations:
+        - key: migrate-data
+          operator: Exists
+          effect: NoSchedule
       containers:
-        - name: keystones
+        - name: wcl-acc
           image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
-          args: ["keystones"]
+          args: ["wcl"]
 
           resources:
             requests:
-              cpu: 750m
-              memory: 2000Mi
+              cpu: 50m
+              memory: 250Mi
 
             limits:
-              memory: 5000Mi
+              memory: 500Mi
 
       imagePullSecrets:
         - name: regcred

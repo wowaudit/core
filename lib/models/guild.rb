@@ -2,10 +2,13 @@ module Audit
   class Guild < Sequel::Model
     one_to_many :api_keys
     one_to_many :teams
-    many_to_one :realm
+
+    def realm
+      @realm ||= Realm.find_by(id: realm_id)
+    end
 
     def path
-      "#{REALMS[realm_id].region.downcase}/#{REALMS[realm_id].name_for_path}/#{slugged_name}"
+      "#{region.downcase}/#{realm.slug}/#{slugged_name}"
     end
 
     def slugged_name

@@ -1,24 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: raiderio-deployment
+  name: scheduler-deployment-acc
   labels:
-    app: raiderio
+    app: scheduler-acc
 spec:
-  replicas: 6
+  replicas: 1
   selector:
     matchLabels:
-      app: raiderio
+      app: scheduler-acc
   template:
     metadata:
       labels:
-        app: raiderio
+        app: scheduler-acc
     spec:
+      tolerations:
+        - key: migrate-data
+          operator: Exists
+          effect: NoSchedule
       containers:
-        - name: raiderio
+        - name: scheduler-acc
           image: shedi/wowaudit:latest
-          command: ["/srv/bin/refresh"]
-          args: ["raiderio"]
+          command: ["/srv/bin/schedule"]
 
           resources:
             requests:

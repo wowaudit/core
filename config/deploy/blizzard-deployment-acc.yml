@@ -1,21 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blizzard-deployment
+  name: blizzard-deployment-acc
   labels:
-    app: blizzard
+    app: blizzard-acc
 spec:
-  replicas: 9
+  replicas: 1
   selector:
     matchLabels:
-      app: blizzard
+      app: blizzard-acc
   template:
     metadata:
       labels:
-        app: blizzard
+        app: blizzard-acc
     spec:
+      tolerations:
+        - key: migrate-data
+          operator: Exists
+          effect: NoSchedule
       containers:
-        - name: blizzard
+        - name: blizzard-acc
           image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
           args: ["blizzard"]

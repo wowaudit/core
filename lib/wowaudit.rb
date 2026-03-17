@@ -23,7 +23,6 @@ module Wowaudit
   cattr_accessor(:updatable_fields) { ALL_UPDATABLE_FIELDS }
   cattr_accessor(:extra_fields) { [] }
   cattr_accessor(:failure_status) { :does_not_exist }
-  cattr_accessor(:extended) { true }
   cattr_accessor(:retry_on_api_limit) { true }
   cattr_accessor(:ignore_unavailable) { true }
   cattr_accessor(:redis_suffix) { 0 }
@@ -46,8 +45,8 @@ module Wowaudit
     result
   end
 
-  def self.update_field(entity, field, value)
-    return if @@updatable_fields.exclude? field.to_sym
-    entity.send("#{field}=", value)
+  def self.can_update_field?(entity, field)
+    return false if @@updatable_fields.exclude? field.to_sym
+    true
   end
 end

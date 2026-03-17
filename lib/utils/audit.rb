@@ -3,11 +3,10 @@ module Audit
 
   class << self
     def refresh(entities, type)
-      query = []
       entities.each do |team|
         begin
           Logger.t(INFO_TEAM_STARTING, team.to_i)
-          (type.include?("keystones") ? Realm : Team).refresh(team.to_i, type)
+          Wowaudit::Client::RETRIEVERS[type.to_sym].retrieve_group(team)
         rescue ApiLimitReachedException
           Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
           sleep 60
@@ -204,7 +203,6 @@ module Audit
             'weekly_highest' => 0,
             'period' => 0,
             'top_ten_highest' => [],
-            'leaderboard_runs' => [],
           }
         end
 
