@@ -91,7 +91,7 @@ module Wowaudit
 
         profile_id = "#{@response.dig(:realm, :id)}-#{@response.dig(:status, :id)}"
         if @character.profile_id != profile_id
-          if @character.realm.kind == 'classic_era' || @character.realm.kind == 'classic_anniversary' || @character.achievement_uid != new_achievement_uid
+          if @character.realm.game_version == 'classic_era' || @character.realm.game_version == 'classic_anniversary' || @character.achievement_uid != new_achievement_uid
             create_newly_found_character(profile_id)
             return true
           else
@@ -116,7 +116,7 @@ module Wowaudit
       def check_data_completeness
         return false unless @response[:equipment] && @response[:equipment][:equipped_items]
 
-        if @character.realm.kind != 'classic_era' && @character.realm.kind != 'classic_anniversary'
+        if @character.realm.game_version != 'classic_era' && @character.realm.game_version != 'classic_anniversary'
           return false unless @response[:achievements]&.is_a? Array
         end
 

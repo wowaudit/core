@@ -1,16 +1,12 @@
 module FrozenModel
-  extend ActiveSupport::Concern
-
-
-  included do
-    self.backend = FrozenRecord::Backends::Json
-
-    self.base_path = File.join(File.dirname(__FILE__), '..', '..', 'config', 'data')
-
-    add_index :id, unique: true
+  def self.included(base)
+    base.backend = FrozenRecord::Backends::Json
+    base.base_path = File.join(File.dirname(__FILE__), '..', '..', 'config', 'data')
+    base.add_index :id, unique: true
+    base.extend(ClassMethods)
   end
 
-  class_methods do
+  module ClassMethods
     def find(id)
       super(id.to_i)
     end

@@ -11,7 +11,7 @@ module Audit
           Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
           sleep 60
           redo
-        rescue Net::ReadTimeout, Mysql2::Error => e
+        rescue Net::ReadTimeout, PG::ConnectionBad => e
           Rollbar.error(e, team_id: team.to_i, type: type)
           Logger.t(ERROR_DATABASE_CONNECTION, team.to_i)
           sleep 180
@@ -20,7 +20,7 @@ module Audit
           Logger.t(ERROR_NO_API_KEY, team.to_i)
         rescue => e
           Rollbar.error(e, team_id: team.to_i, type: type)
-          sleep(180) if e.class == Mysql2::Error
+          sleep(180) if e.class == PG::ConnectionBad
           Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
         end
       end
@@ -186,10 +186,10 @@ module Audit
       end
 
       if !details['current_gear'].is_a? Hash
-        details['current_gear'] = ITEMS[realm.kind.to_sym].map { |item| [item, { ilvl: 0 }] }.to_h
+        details['current_gear'] = ITEMS[realm.game_version.to_sym].map { |item| [item, { ilvl: 0 }] }.to_h
       end
 
-      if realm.kind == 'live'
+      if realm.game_version == 'live'
         # Initialise snapshots if not present
         if !details['snapshots'].is_a? Hash
           details['snapshots'] = {}

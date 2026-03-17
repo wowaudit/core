@@ -3,8 +3,12 @@ module Audit
     include FrozenModel
 
     class << self
+      def file_path
+        File.join(base_path, 'realms.json')
+      end
+
       def refresh(id, refresh_type)
-        realm = Realm.where(id: id).first
+        realm = Realm.where(id: id.to_i).first
         RBattlenet.set_options(region: realm.region, namespace: realm.namespace, locale: "en_GB", concurrency: 25, response_type: :hash)
         Audit.timestamp = realm.region
 
@@ -55,7 +59,7 @@ module Audit
         classic_era: 'classic1x-',
         classic_anniversary: 'classicann-',
         tournament: '',
-      }[kind.to_sym] + region.downcase
+      }[game_version.to_sym] + region.downcase
     end
 
     def redis_prefix
@@ -65,7 +69,7 @@ module Audit
         classic_era: 'vanilla',
         classic_anniversary: 'anniversary',
         tournament: 'tournament',
-      }[kind.to_sym]
+      }[game_version.to_sym]
     end
 
     # The new website database table doesn't have the `blizzard_name` attribute. Temporary workaround.

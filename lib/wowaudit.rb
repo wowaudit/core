@@ -5,13 +5,16 @@ require 'typhoeus'
 require 'json'
 
 require 'require_all'
+require_rel './wowaudit/retrievers'
+require_rel './wowaudit/results'
+require_rel './wowaudit'
 require_rel './models/data.rb'
+require_rel './models/frozen_model.rb'
 require_rel './utils/audit.rb'
 require_rel './utils/season.rb'
 require_rel './utils/bonus_ids.rb'
 require_rel './sections'
 require_rel './constants'
-require_rel './wowaudit'
 
 ALL_UPDATABLE_FIELDS = [
   :guild_profile_id, :race_id, :faction_id, :media_zone, :achievement_uid, :name,
@@ -20,15 +23,19 @@ ALL_UPDATABLE_FIELDS = [
 ]
 
 module Wowaudit
-  cattr_accessor(:updatable_fields) { ALL_UPDATABLE_FIELDS }
-  cattr_accessor(:extra_fields) { [] }
-  cattr_accessor(:failure_status) { :does_not_exist }
-  cattr_accessor(:retry_on_api_limit) { true }
-  cattr_accessor(:ignore_unavailable) { true }
-  cattr_accessor(:redis_suffix) { 0 }
+  class << self
+    attr_accessor :updatable_fields, :extra_fields, :failure_status, :retry_on_api_limit, :ignore_unavailable, :redis_suffix
+  end
+
+  self.updatable_fields = ALL_UPDATABLE_FIELDS.dup
+  self.extra_fields = []
+  self.failure_status = :does_not_exist
+  self.retry_on_api_limit = true
+  self.ignore_unavailable = true
+  self.redis_suffix = 0
 
   def self.updatable_fields=(fields)
-    @@updatable_fields = fields.map(&:to_sym) & ALL_UPDATABLE_FIELDS
+    @updatable_fields = fields.map(&:to_sym) & ALL_UPDATABLE_FIELDS
   end
 
   def self.client
@@ -46,7 +53,7 @@ module Wowaudit
   end
 
   def self.can_update_field?(entity, field)
-    return false if @@updatable_fields.exclude? field.to_sym
+    return false if updatable_fields.exclude? field.to_sym
     true
   end
 end

@@ -6,12 +6,15 @@ require 'rbattlenet'
 require 'typhoeus'
 require 'aws-sdk-s3'
 require 'date'
-require 'mysql2'
+require 'pg'
+require 'frozen_record'
 require 'yaml'
 require 'tzinfo'
 require 'csv'
 require 'rollbar'
 require 'oj'
+
+require_rel './wowaudit.rb'
 
 MAX_OCCURRENCES = {
   blizzard: 2,
@@ -71,6 +74,7 @@ begin
   Wowaudit.redis_suffix = 1 # acceptance
 
   DB = Sequel.connect(db_config['postgres'])
+  Sequel::Model.db = DB
   REDIS = Redis.new(url: "#{db_config['redis']['host']}/#{Wowaudit.redis_suffix}", password: db_config['redis']['password'])
 
   # Modules
@@ -89,7 +93,7 @@ begin
     schedule = register
   end
 
-rescue Mysql2::Error => e
+rescue PG::ConnectionBad => e
   # The SQL proxy isn't always instantly available on server reboot
   # Therefore, retry connection after 5 seconds have passed
   Rollbar.error(e)
