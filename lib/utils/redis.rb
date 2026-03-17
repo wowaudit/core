@@ -7,10 +7,16 @@ module Audit
       end.to_h
     end
 
-    def self.update(characters)
-      if characters.any?
-        REDIS.mset characters.map{ |character| [character.redis_id, character.metadata.to_json] }.flatten
+    def self.update(entries)
+      return if entries.empty?
+
+      payload = if entries.is_a?(Hash)
+        entries.map { |key, value| [key, value.is_a?(String) ? value : value.to_json] }.flatten
+      else
+        entries.map { |character| [character.redis_id, character.metadata.to_json] }.flatten
       end
+
+      REDIS.mset(payload)
     end
   end
 end

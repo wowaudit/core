@@ -1,12 +1,22 @@
 module Wowaudit
   module Retrievers
     class Keystones
+      BATCH_SIZE = 2000
+      DEFAULT_RAIDERIO = {
+        'score' => 0,
+        'season_highest' => 0,
+        'weekly_highest' => 0,
+        'period' => 0,
+        'top_ten_highest' => [],
+        'leaderboard_runs' => [],
+      }.freeze
+
       def self.retrieve(realm, period)
         leaderboards = RBattlenet::Wow::MythicKeystoneLeaderboard.find(Audit::Season.current.data[:keystone_dungeons].map{ |dungeon|
           {
             connected_realm_id: realm.connected_realm_id,
             dungeon_id: dungeon[:id],
-            period: period - 15
+            period: period
           }
         })
 
@@ -21,22 +31,83 @@ module Wowaudit
               end
             end
           else
-            Audit::Logger.g("Got a 404 response for realm #{realm.connected_realm_id}, dungeon #{dungeon[:map_challenge_mode_id]}")
+            Audit::Logger.g("Got a 404 response for realm #{realm.id}, dungeon #{dungeon.dig(:map, :name)}")
           end
         end
 
-        characters = Character.where(realm_id: realm.id)
-        metadata = Redis.get_characters(characters.map(&:redis_id).compact)
-        characters = characters.to_a.map! do |character|
-          next unless character.redis_id
-          character.details = metadata[character.redis_id] || {}
-          Audit.verify_details(character, character.details, REALMS[character.realm_id])
-          changed = character.process_leaderboard_result((runs_by_character[character.key.to_i] || []), Audit.period == period)
-          character if changed
-        end.compact
+        updates = runs_by_character.each_with_object({}) do |(profile_id, runs), output|
+          output["#{realm.redis_prefix}:#{profile_id}"] = {
+            runs: runs.map do |run|
+              next unless run[:completed_timestamp]
+              run_id = run[:completed_timestamp] / 1000
+              {
+                id: run_id.to_s,
+                period: Audit.period_from_timestamp(run_id).to_s,
+                level: run[:keystone_level],
+                dungeon: run[:dungeon_id],
+              }
+            end.compact.uniq { |run| run[:id] },
+          }
+        end
 
-        Audit::Logger.t(INFO_REALM_REFRESHED + "#{characters.size} characters updated.", id)
-        Writer.update_db(characters) if characters.any?
+        current_week = Audit.period == period
+        changed = 0
+
+        updates.keys.each_slice(BATCH_SIZE) do |batch_ids|
+          metadata = Audit::Redis.get_characters(batch_ids)
+          changed_docs = {}
+
+          batch_ids.each do |redis_id|
+            details = metadata[redis_id] || {}
+            payload = updates[redis_id]
+            next unless payload
+
+            details_changed = false
+            if !details['keystones'].is_a?(Hash)
+              details['keystones'] = {}
+              details_changed = true
+            end
+
+            if !details['raiderio'].is_a?(Hash)
+              details['raiderio'] = DEFAULT_RAIDERIO.dup
+              details_changed = true
+            end
+
+            payload[:runs].each do |run|
+              if !details['keystones'][run[:period]].is_a?(Hash)
+                details['keystones'][run[:period]] = {}
+                details_changed = true
+              end
+
+              unless details['keystones'][run[:period]].include?(run[:id])
+                details['keystones'][run[:period]][run[:id]] = {
+                  "level" => run[:level],
+                  "dungeon" => run[:dungeon],
+                }
+                details_changed = true
+              end
+            end
+
+            if current_week
+              levels = payload[:runs].map { |run| run[:level] }.sort.reverse
+              if details['raiderio']['period'] != Audit.period || details['raiderio']['leaderboard_runs'] != levels
+                details['raiderio']['weekly_highest'] = levels.max
+                details['raiderio']['leaderboard_runs'] = levels
+                details['raiderio']['period'] = Audit.period
+                details_changed = true
+              end
+            end
+
+            next unless details_changed
+
+            changed_docs[redis_id] = details
+          end
+
+          changed += changed_docs.size
+          Audit::Redis.update(changed_docs) if changed_docs.any?
+        end
+
+        Audit::Logger.t(INFO_REALM_REFRESHED + "#{changed} characters updated for period #{period}.", realm.id)
       end
 
       def self.retrieve_group(realm_id)
