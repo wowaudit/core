@@ -1,5 +1,7 @@
 module Audit
   class Character < Sequel::Model
+    attr_accessor :team_rank, :details, :role
+
     def realm
       @realm ||= Realm.find_by(id: realm_id)
     end

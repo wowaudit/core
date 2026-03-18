@@ -9,13 +9,18 @@ module Audit
 
     def characters
       @characters ||= begin
-        members = team_memberships_dataset.eager(:character).all.map(&:character)
-        members.each_with_index do |character, index|
-          character.team_rank = ranks_by_id[character.team_rank_id]
+        members = team_memberships_dataset.eager(:character).all
+        characters = members.map(&:character)
+
+        members.each_with_index do |member, index|
+          character = characters[index]
+          character.team_rank = ranks_by_id[member.team_rank_id]
           character.details = character_details(characters)[character.redis_id].to_h
+          character.role = member.role.capitalize
+          Audit.verify_details(character, character.details, character.realm)
         end
 
-        members.select do |character|
+        characters.select do |character|
           (
             character.team_rank&.spreadsheet_summary_visibility ||
             character.team_rank&.spreadsheet_roster_visibility ||

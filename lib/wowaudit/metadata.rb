@@ -2,7 +2,7 @@ module Wowaudit
   class Metadata
     class << self
       def client
-        @@client ||= Redis.new(
+        @@client ||= REDIS || Redis.new(
           url: "#{ENV['REDIS_HOST']}/#{Wowaudit.redis_suffix}",
           password: ENV['REDIS_PASSWORD']
         )

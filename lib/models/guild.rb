@@ -8,7 +8,7 @@ module Audit
     end
 
     def path
-      "#{region.downcase}/#{realm.slug}/#{slugged_name}"
+      "#{realm.region.downcase}/#{realm.slug}/#{slugged_name}"
     end
 
     def slugged_name

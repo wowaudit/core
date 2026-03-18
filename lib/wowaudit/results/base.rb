@@ -4,8 +4,6 @@ module Wowaudit
       attr_accessor :output, :character, :details, :response
 
       def initialize(character, response, commit_changes = true)
-        Audit.verify_details(character, character.details, character.realm)
-
         @output = []
         @commit_changes = commit_changes
         @character = character

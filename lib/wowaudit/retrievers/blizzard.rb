@@ -14,7 +14,7 @@ module Wowaudit
               {
                 name: ch.name.downcase,
                 realm: ch.realm.slug,
-                season: Season.current.id,
+                season: Audit::Season.current.id,
                 source: ch,
                 timestamp: self.last_modified_for_character(ch),
               }
@@ -40,25 +40,25 @@ module Wowaudit
       end
 
       def self.retrieve_group(team_id)
-        team = Team.where(id: team_id).first
+        team = Audit::Team.where(id: team_id).first
 
         if team.characters.any?
           output = retrieve(team.characters.first(100), {}, false)
-          Logger.t(INFO_TEAM_REFRESHED, team.id)
+          Audit::Logger.t(INFO_TEAM_REFRESHED, team.id)
 
           section = {
-            live: Live,
-            classic_progression: ClassicProgression,
-            classic_era: ClassicEra,
-            classic_anniversary: ClassicAnniversary,
-            tournament: ClassicEra,
-          }[team.owner.realm.game_version.to_sym]
+            live: Audit::Live,
+            classic_progression: Audit::ClassicProgression,
+            classic_era: Audit::ClassicEra,
+            classic_anniversary: Audit::ClassicAnniversary,
+            tournament: Audit::ClassicEra,
+          }[team.guild.realm.game_version.to_sym]
 
-          Writer.write(team, output, section::HeaderData.altered_header(team))
-          Writer.update_db(output, true)
-          Wowaudit::Metadata.store_all(output)
+          Audit::Writer.write(team, output.values.sort_by{|c| c.character.name}, section::HeaderData.altered_header(team))
+          Audit::Writer.update_db(output.values)
+          Wowaudit::Metadata.store_all(output.values)
         else
-          Logger.t(INFO_TEAM_EMPTY, team.id)
+          Audit::Logger.t(INFO_TEAM_EMPTY, team.id)
         end
       end
 

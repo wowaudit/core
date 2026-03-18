@@ -5,10 +5,10 @@ module Wowaudit
         all_characters.map do |character|
           responses = VALID_RAIDS[:live].select{ |r| r['days'].include? Time.now.wday }.map do |zone|
             begin
-              { zone: zone, response: Typhoeus.get(self.uri(character, zone)) }
               sleep 0.1
+              { zone: zone, response: Typhoeus.get(self.uri(character, zone)) }
             rescue Wowaudit::Exception::ApiLimitReached
-              Logger.t(ERROR_API_LIMIT_REACHED, id)
+              Audit::Logger.t(ERROR_API_LIMIT_REACHED, id)
               sleep 10
               retry
             end
@@ -19,19 +19,19 @@ module Wowaudit
       end
 
       def self.retrieve_group(team_id)
-        team = Team.where(id: team_id).first
+        team = Audit::Team.where(id: team_id).first
 
-        return unless team.owner.realm.game_version == 'live'
+        return unless team.guild.realm.game_version == 'live'
 
         # Requests are not made in parallel, otherwise
         # load on the Warcraft Logs API would be too high
-        output = self.retrieve(team.characters, {}, false)
+        output = self.retrieve(team.characters)
 
-        Logger.t(INFO_TEAM_REFRESHED, id)
+        Audit::Logger.t(INFO_TEAM_REFRESHED, id)
         Wowaudit::Metadata.store_all(output) if output.any?
       end
 
-      def uri(character, zone)
+      def self.uri(character, zone)
         uri = WCL_URL[0 .. WCL_URL.length]
         uri["{region}"] = character.realm.region
         uri["{realm}"] = character.realm.slug

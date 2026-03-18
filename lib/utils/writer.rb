@@ -2,28 +2,20 @@ module Audit
   module Writer
 
     def self.write(team, result, header)
-      json = ([header] + result.sort_by{|c| c.name}.map(&:output).compact.reject(&:empty?)).to_json
-      file = STORAGE[team.guild.realm.game_version.to_sym].bucket(BUCKET).object("acc-#{team.key}.json")
+      json = ([header] + result.map(&:output).compact.reject(&:empty?)).to_json
+      file = STORAGE[team.guild.realm.game_version.to_sym].bucket(BUCKET).object("acc-#{team.readonly_key}.json")
       file.put(body: json)
 
       Logger.t(INFO_TEAM_WRITTEN, team.id)
     end
 
-    def self.update_db(result)
-      if result.select{ |c| c.changed }.any?
-        result.select{ |c| c.changed }.each do |character|
-          character.save
-        end
+    def self.update_db(results)
+      results.select{ |c| c.changed }.each do |result|
+        result.character.save
       end
 
-      tracking_users = result.select { |r| r.character.status == 'tracking' }
-      self.query("UPDATE characters SET refreshed_at = NOW() WHERE id IN (#{tracking_users.map{ |c| c.id }.join(',')})")
-    end
-
-    def self.query(query, async = true)
-      # Await completion of the previous async query
-      DB.async_result
-      DB.query(query, :async => async)
+      tracking_characters = results.select { |r| r.character.status == 'tracking' }
+      DB.run("UPDATE characters SET refreshed_at = NOW() WHERE id IN (#{tracking_characters.map{ |c| c.character.id }.join(',')})")
     end
   end
 end

@@ -21,7 +21,7 @@ module Wowaudit
       def self.retrieve_group(team_id)
         team = Team.where(id: team_id).first
 
-        return unless team.owner.realm.game_version == 'live'
+        return unless team.guild.realm.game_version == 'live'
 
         # Requests are not made in parallel, otherwise
         # load on the Warcraft Logs API would be too high

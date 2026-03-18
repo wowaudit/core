@@ -30,24 +30,23 @@ module Audit
     def self.schedule_work(worker)
       if worker.type.include?("keystones")
         table = "realms"
-        teams = Writer.query("SELECT id, last_refreshed_#{worker.type} FROM realms WHERE kind = 'live' " +
-                             "ORDER BY last_refreshed_#{worker.type} ASC LIMIT 10", false).to_a
+        teams = DB.fetch("SELECT id, last_refreshed_#{worker.type} FROM realms WHERE kind = 'live' " +
+                             "ORDER BY last_refreshed_#{worker.type} ASC LIMIT 10").to_a
       else
         table = 'teams'
-        teams = Writer.query(
+        teams = DB.fetch(
           "SELECT t.id, ((#{Audit.now.to_i} - COALESCE(t.last_refreshed_#{worker.base_type}, 0)) " \
           "* t.refresh_factor) + t.refresh_factor AS priority, " \
           "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM teams t " \
           "INNER JOIN guilds g ON g.id = t.owner_id " \
-          "WHERE g.active = TRUE ORDER BY priority DESC LIMIT 5",
-          false
+          "WHERE g.active = TRUE ORDER BY priority DESC LIMIT 5"
         ).to_a
       end
       team_ids = teams.map{ |team| team["id"] }
 
       # Manual query since Sequel does not support
       # single update queries for multiple objects
-      Writer.query("UPDATE #{table} SET last_refreshed_#{worker.base_type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})", false)
+      DB.run("UPDATE #{table} SET last_refreshed_#{worker.base_type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})")
       Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.base_type} #{worker.name} | Entities: #{team_ids.join(', ')}")
       team_ids
     end
