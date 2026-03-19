@@ -9,6 +9,8 @@ module Wowaudit
           Audit.timestamp = region
           RBattlenet.set_options(namespace: namespace, region: region, locale: (region == "US" ? "en_US" : "en_GB"), response_type: :hash)
 
+          media_field = characters.any? { |ch| ch.media_zone.nil? } ? [:media] : []
+
           RBattlenet::Wow::Character.find(
             characters.map do |ch|
               Audit.verify_details(ch, ch.details, ch.realm)
@@ -21,7 +23,7 @@ module Wowaudit
                 timestamp: self.last_modified_for_character(ch),
               }
             end,
-            fields: FIELDS[characters.first.realm.game_version.to_sym] + Wowaudit.extra_fields,
+            fields: FIELDS[characters.first.realm.game_version.to_sym] + Wowaudit.extra_fields + media_field,
           ) do |character, response|
             begin
               output[character[:source]] = Wowaudit::Results::Blizzard.new(character[:source], response, commit_changes)
