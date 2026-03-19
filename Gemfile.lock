@@ -104,7 +104,7 @@ DEPENDENCIES
   tzinfo
 
 RUBY VERSION
-   ruby 3.1.3p185
+   ruby 3.3.6p108
 
 BUNDLED WITH
    2.4.1

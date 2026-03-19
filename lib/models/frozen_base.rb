@@ -1,4 +1,4 @@
-module FrozenModel
+module FrozenBase
   def self.included(base)
     base.backend = FrozenRecord::Backends::Json
     base.base_path = File.join(File.dirname(__FILE__), '..', '..', 'config', 'data')

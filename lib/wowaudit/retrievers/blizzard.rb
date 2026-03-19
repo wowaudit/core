@@ -11,6 +11,8 @@ module Wowaudit
 
           RBattlenet::Wow::Character.find(
             characters.map do |ch|
+              Audit.verify_details(ch, ch.details, ch.realm)
+
               {
                 name: ch.name.downcase,
                 realm: ch.realm.slug,

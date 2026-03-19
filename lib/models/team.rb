@@ -17,7 +17,6 @@ module Audit
           character.team_rank = ranks_by_id[member.team_rank_id]
           character.details = character_details(characters)[character.redis_id].to_h
           character.role = member.role.capitalize
-          Audit.verify_details(character, character.details, character.realm)
         end
 
         characters.select do |character|

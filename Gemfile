@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby ">= 3.0"
+ruby ">= 3.2"
 
 gem 'rbattlenet', git: "https://github.com/wowaudit/rbattlenet.git", branch: 'master'
 gem 'pg'

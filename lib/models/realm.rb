@@ -1,6 +1,6 @@
 module Audit
   class Realm < FrozenRecord::Base
-    include FrozenModel
+    include FrozenBase
 
     class << self
       def file_path
