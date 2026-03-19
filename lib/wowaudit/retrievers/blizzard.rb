@@ -73,7 +73,7 @@ module Wowaudit
         return 0 if character.details['current_version'] < CURRENT_VERSION[character.realm.game_version.to_sym]
         return 0 if character.details['current_period'] < Audit.period
         return 0 if character.status != "tracking"
-        return 0 unless REGISTER # Don't skip in development
+        return 0 unless defined?(REGISTER) && REGISTER # Don't skip in development
         return 0 if PREVENT_SKIP_TIMESTAMP.to_i > character.refreshed_at.to_i
 
         character.details.dig('last_refresh', 'blizzard_last_modified')
