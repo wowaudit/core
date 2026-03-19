@@ -30,7 +30,7 @@ module Audit
       current_api_key = nil
       waiting_since = Time.now
       loop do
-        worker = Schedule.where(name: `hostname`.strip).first || register_worker(type, 1)
+        worker = Schedule.where(name: "#{`hostname`.strip}-#{type}").first || register_worker(type, 1)
 
         if ['wcl', 'raiderio'].include?(type) || (worker.api_key && !worker.api_key.expired?)
           waiting_since = nil
