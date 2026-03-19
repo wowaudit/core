@@ -1,5 +1,5 @@
 FIRST_PERIOD_OF_EXPANSION = 1052
-CURRENT_SEASON = 15
+CURRENT_SEASON = 16
 
 SEASON_DATA = {
   13 => {
@@ -196,7 +196,7 @@ SEASON_DATA = {
     }
   },
   16 => {
-    first_period: 1062,
+    first_period: 1056,
     pvp_season: 41,
     spark_label: "Radiance Crafted",
     spark_ilvl_bump_bonus_id: [],
