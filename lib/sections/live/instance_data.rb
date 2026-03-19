@@ -27,7 +27,7 @@ module Audit
               total_heroic_dungeons += instance[:quantity].to_i
             end
 
-            if EXPANSION_DUNGEONS.any?{ |dungeon| dungeon[:mythic_id] == instance[:id] }
+            if EXPANSION_DUNGEONS.any?{ |dungeon| dungeon[:mythic_id] == instance[:id] } || Season.current.data[:keystone_dungeons].any?{ |dungeon| dungeon[:mythic_id] == instance[:id] }
               if instance[:last_updated_timestamp] / 1000 > Audit.timestamp
                 week_regular_mythic_dungeons += 1
               end
