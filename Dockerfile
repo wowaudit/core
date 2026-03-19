@@ -10,7 +10,7 @@ RUN \
   make \
   curl \
   libjemalloc2 \
-  libmariadb-dev \
+  libpq-dev \
   git
 
 RUN rm -rf /var/lib/apt/lists/*

@@ -56,7 +56,7 @@ module Audit
             worker.update(updated_at: DateTime.now)
           end
 
-          self.refresh(schedule, worker.base_type)
+          self.refresh(schedule, worker.type)
           Logger.g(INFO_FINISHED_SCHEDULE)
         else
           puts Logger.g(INFO_NO_TOKEN_AVAILABLE)
