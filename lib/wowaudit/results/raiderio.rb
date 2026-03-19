@@ -42,7 +42,7 @@ module Wowaudit
           # load on RaiderIO's API (it's a sign of too many requests)
           raise Wowaudit::Exception::ApiLimitReached
         else
-          Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", @character.id)
+         Audit::Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", @character.id)
         end
       end
 

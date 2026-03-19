@@ -17,7 +17,7 @@ module Wowaudit
         elsif response.code == 403 or response.code == 429
           raise Wowaudit::Exception::ApiLimitReached
         else
-          Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", @character.id)
+          Audit::Logger.c(ERROR_CHARACTER + "Response code: #{response.code}", @character.id)
         end
       end
 
@@ -36,7 +36,7 @@ module Wowaudit
           data.each do |parse|
             next unless (ROLES_TO_SPEC['Melee'].include?(parse['spec'] || ROLES_TO_SPEC['Ranged'].include?(parse['spec'])) rescue false)
             percentiles[parse['difficulty']][parse['encounterID'].to_s] =
-              [percentiles[parse['difficulty']][parse['encounterID'].to_s], parse['percentile']].compact.max
+              [percentiles[parse['difficulty']][parse['encounterID'].to_s], parse['percentile'].to_f].compact.max
           end
 
           percentiles.each do |difficulty, encounters|

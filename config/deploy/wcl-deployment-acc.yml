@@ -5,7 +5,7 @@ metadata:
   labels:
     app: wcl-acc
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: wcl-acc
