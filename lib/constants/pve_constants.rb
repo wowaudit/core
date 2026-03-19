@@ -196,7 +196,7 @@ SEASON_DATA = {
     }
   },
   16 => {
-    first_period: 1056,
+    first_period: 1052,
     pvp_season: 41,
     spark_label: "Radiance Crafted",
     spark_ilvl_bump_bonus_id: [],
