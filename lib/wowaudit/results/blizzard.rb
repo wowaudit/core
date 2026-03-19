@@ -106,7 +106,7 @@ module Wowaudit
       end
 
       def create_newly_found_character(profile_id)
-        Audit::Character.find_or_initialize_by(profile_id: profile_id).tap do |new_character|
+        (Audit::Character.first(profile_id: profile_id) || Audit::Character.new(profile_id: profile_id)).tap do |new_character|
           new_character.game_version = @character.realm.game_version
           store_metadata(new_character)
           new_character.save

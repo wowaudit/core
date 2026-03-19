@@ -3,6 +3,8 @@ module Wowaudit
     class Raiderio
       def self.retrieve(all_characters, team_id)
         all_characters.map do |character|
+          Audit.verify_details(character, character.details, character.realm)
+
           uri = RAIDER_IO_URL[0 .. RAIDER_IO_URL.length]
           uri["{realm}"] = CGI.escape(character.realm.slug)
           uri["{region}"] = character.realm.region

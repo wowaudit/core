@@ -5,6 +5,7 @@ module Audit
       raiderio: 60,
       wcl: 15,
       keystones: 5,
+      historical_keystones: 5,
     }
 
     def initialize

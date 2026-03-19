@@ -3,6 +3,8 @@ module Wowaudit
     class Wcl
       def self.retrieve(all_characters, team_id)
         all_characters.map do |character|
+          Audit.verify_details(character, character.details, character.realm)
+
           responses = VALID_RAIDS[:live].select{ |r| r['days'].include? Time.now.wday }.map do |zone|
             begin
               sleep 0.1

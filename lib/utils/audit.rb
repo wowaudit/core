@@ -92,7 +92,7 @@ module Audit
     def register_worker(type, zone)
       Logger.g(INFO_REGISTERED_WORKER)
       Schedule.find_or_create(
-        name: `hostname`.strip,
+        name: "#{`hostname`.strip}-#{type}",
       ) do |schedule|
         schedule.type = type
         schedule.active = true
