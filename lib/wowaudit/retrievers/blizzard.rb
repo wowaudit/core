@@ -57,8 +57,11 @@ module Wowaudit
           }[team.guild.realm.game_version.to_sym]
 
           Audit::Writer.write(team, output.values.sort_by{|c| c.character.name}, section::HeaderData.altered_header(team))
-          Audit::Writer.update_db(output.values)
-          Wowaudit::Metadata.store_all(output.values)
+
+          if output.values.any?
+            Audit::Writer.update_db(output.values)
+            Wowaudit::Metadata.store_all(output.values)
+          end
         else
           Audit::Logger.t(INFO_TEAM_EMPTY, team.id)
         end
