@@ -42,7 +42,7 @@ module Audit
           "WHERE g.active = TRUE ORDER BY priority DESC LIMIT 5"
         ).to_a
       end
-      team_ids = teams.map{ |team| team["id"] }
+      team_ids = teams.map{ |team| team[:id] }
 
       # Manual query since Sequel does not support
       # single update queries for multiple objects
