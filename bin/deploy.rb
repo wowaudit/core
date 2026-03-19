@@ -14,7 +14,7 @@ sleep 5
 Audit::Schedule.all.each(&:destroy)
 
 system("docker build . --platform linux/amd64 -t shedi/wowaudit")
-system("docker push shedi/wowaudit:latest")
+system("docker push shedi/wowaudit-acc:latest")
 
 Audit::Schedule.all.each(&:destroy)
 

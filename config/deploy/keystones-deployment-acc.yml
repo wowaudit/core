@@ -20,7 +20,7 @@ spec:
           effect: NoSchedule
       containers:
         - name: keystones-acc
-          image: shedi/wowaudit:latest
+          image: shedi/wowaudit-acc:latest
           command: ["/srv/bin/refresh"]
           args: ["keystones"]
 
