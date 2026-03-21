@@ -45,6 +45,9 @@ module Audit
           nil
         end
 
+        # We can't track Pit of Saron, if the user completed all other dungeons we assume they did that one too.
+        week_regular_mythic_dungeons = 8 if week_regular_mythic_dungeons == 7
+
         (@data.dig(:season_keystones, :best_runs) || []).lazy.each do |run|
           run_id = run[:completed_timestamp] / 1000
           run_period = Audit.period_from_timestamp(run_id).to_s

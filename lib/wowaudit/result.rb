@@ -1,6 +1,6 @@
 module Wowaudit
   class Result
-    attr_accessor :output, :data, :gems, :ilvl, :character, :changed, :details, :stat_info, :delve_info
+    attr_accessor :output, :data, :gems, :ilvl, :character, :changed, :details, :stat_info, :delve_info, :prey_info
 
     def initialize(character, response)
       Audit.verify_details(character, character.details, character.realm)
@@ -14,6 +14,7 @@ module Wowaudit
       @ilvl = 0.0
       @stat_info = TRACKED_STATS.values.map { |stat| [stat, { gear: 0, enchantments: 0 }] }.to_h
       @delve_info = { total: 0, tier_1: 0, tier_2: 0, tier_3: 0, tier_4: 0, tier_5: 0, tier_6: 0, tier_7: 0, tier_8: 0, tier_9: 0, tier_10: 0, tier_11: 0 }
+      @prey_info = { normal: 0, hard: 0, nightmare: 0 }
 
       # Populate identifying data regardless of response
       @data['realm_slug'] = character.realm.slug
@@ -85,6 +86,7 @@ module Wowaudit
         @character.details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= @data['season_heroic_dungeons']
         @character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'] = [@character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'], @data['week_regular_mythic_dungeons']].compact.max
         @character.details['snapshots'][Audit.period.to_s]['delve_info'] ||= @delve_info
+        @character.details['snapshots'][Audit.period.to_s]['prey_info'] ||= @prey_info
       end
 
       @character.details['current_version'] = CURRENT_VERSION[@character.realm.game_version.to_sym]

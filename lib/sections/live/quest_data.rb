@@ -22,7 +22,15 @@ module Audit
           @character.data['stormarion_assault'] = 'yes' if STORMARION_WEEKLY_QUESTS.include? quest[:id]
           @character.data['saltherils_soiree'] = 'yes' if SALTHERIL_WEEKLY_QUESTS.include? quest[:id]
           raid_buff_amount += 1 if RAID_BUFF_IDS.include? quest[:id]
+
+          if (prey_difficulty = PREY_QUEST_DIFFICULTY_BY_ID[quest[:id]])
+            @character.prey_info[prey_difficulty] += 1
+          end
         end
+
+        @character.data['normal_preys_weekly'] = @character.prey_info[:normal]
+        @character.data['hard_preys_weekly'] = @character.prey_info[:hard]
+        @character.data['nightmare_preys_weekly'] = @character.prey_info[:nightmare]
 
         @character.data['raid_buff_percentage'] = " #{raid_buff_amount * 3} %"
 

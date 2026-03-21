@@ -17,6 +17,7 @@ module Audit
       self.ilvl = 0.0
       self.stat_info = TRACKED_STATS.values.map { |stat| [stat, { gear: 0, enchantments: 0 }] }.to_h
       self.delve_info = { total: 0, tier_1: 0, tier_2: 0, tier_3: 0, tier_4: 0, tier_5: 0, tier_6: 0, tier_7: 0, tier_8: 0, tier_9: 0, tier_10: 0, tier_11: 0 }
+      self.prey_info = { normal: 0, hard: 0, nightmare: 0 }
     end
 
     def last_refresh
@@ -148,6 +149,7 @@ module Audit
         details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= self.data['season_heroic_dungeons'] unless skipped
         details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'] = self.data['week_regular_mythic_dungeons'] unless skipped
         details['snapshots'][Audit.period.to_s]['delve_info'] ||= self.delve_info unless skipped
+        details['snapshots'][Audit.period.to_s]['prey_info'] ||= self.prey_info unless skipped
       end
 
       details['current_version'] = CURRENT_VERSION[REALMS[realm_id].kind.to_sym] unless skipped
