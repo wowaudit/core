@@ -22,6 +22,7 @@ module Wowaudit
 
       def self.retrieve_group(team_id)
         team = Audit::Team.where(id: team_id).first
+        Audit.timestamp = team.guild.realm.region
 
         return unless team.guild.realm.game_version == 'live'
 
