@@ -5,7 +5,7 @@ CURRENT_VERSION = {
   classic_anniversary: 202,
 }
 
-PREVENT_SKIP_TIMESTAMP = Time.parse("2026-03-19 20:39:00 +0200").to_i
+PREVENT_SKIP_TIMESTAMP = Time.parse("2026-03-25 22:15:00 +0200").to_i
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -56,6 +56,7 @@ FIELDS = {
     :pvp_bracket_rbg,
     :pvp_summary,
     :season_keystones,
+    :keystones,
     :reputations,
     :status,
     :titles,
