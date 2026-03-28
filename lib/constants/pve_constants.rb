@@ -1,5 +1,5 @@
 FIRST_PERIOD_OF_EXPANSION = 1052
-CURRENT_SEASON = 16
+CURRENT_SEASON = 17
 
 SEASON_DATA = {
   13 => {
@@ -195,20 +195,20 @@ SEASON_DATA = {
       }
     }
   },
-  16 => {
+  17 => {
     first_period: 1052,
     pvp_season: 41,
     spark_label: "Radiance Crafted",
     spark_ilvl_bump_bonus_id: [],
     keystone_dungeons: [
-      { id: 499, name: "Magister's Terrace", mythic_id: 61217, legacy: false },
-      { id: 503, name: "Maisara Caverns", mythic_id: 61655, legacy: false },
-      { id: 505, name: "Nexus-Point Xenas", mythic_id: 61658, legacy: false },
-      { id: 525, name: "Windrunner Spire", mythic_id: 41295, legacy: false },
-      { id: 542, name: "Algeth'ar Academy", mythic_id: 16088, legacy: true },
-      { id: 378, name: "Pit of Saron", mythic_id: 0, legacy: true },
-      { id: 391, name: "Seat of the Triumvirate", mythic_id: 12613, legacy: true },
-      { id: 392, name: "Skyreach", mythic_id: 10195, legacy: true },
+      { id: 558, name: "Magister's Terrace", mythic_id: 61217, legacy: false },
+      { id: 560, name: "Maisara Caverns", mythic_id: 61655, legacy: false },
+      { id: 559, name: "Nexus-Point Xenas", mythic_id: 61658, legacy: false },
+      { id: 557, name: "Windrunner Spire", mythic_id: 41295, legacy: false },
+      { id: 402, name: "Algeth'ar Academy", mythic_id: 16088, legacy: true },
+      { id: 556, name: "Pit of Saron", mythic_id: 0, legacy: true },
+      { id: 239, name: "Seat of the Triumvirate", mythic_id: 12613, legacy: true },
+      { id: 161, name: "Skyreach", mythic_id: 10195, legacy: true },
     ],
     crests: [
       { name: 'Myth', ilvl_cap: 289, weekly_increase: 90, first_period: 1055, icon_item_id: 240929 },
