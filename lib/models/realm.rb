@@ -37,7 +37,7 @@ module Audit
                 end
               end
             else
-              Logger.g("Got a 404 response for realm #{realm.connected_realm_id}, dungeon #{dungeon[:map_challenge_mode_id]}")
+              Logger.g("Got a #{dungeon.dig(:status_code, :code)} response for realm #{realm.connected_realm_id}, dungeon #{dungeon[:map_challenge_mode_id]}")
             end
           end
 
