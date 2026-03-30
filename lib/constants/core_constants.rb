@@ -2,7 +2,7 @@ CURRENT_VERSION = {
   live: 1039,
   classic_era: 105,
   classic_progression: 312,
-  classic_anniversary: 202,
+  classic_anniversary: 203,
 }
 
 PREVENT_SKIP_TIMESTAMP = Time.parse("2026-03-25 22:15:00 +0200").to_i
