@@ -5,7 +5,7 @@ CURRENT_VERSION = {
   classic_anniversary: 203,
 }
 
-PREVENT_SKIP_TIMESTAMP = Time.parse("2026-03-25 22:15:00 +0200").to_i
+PREVENT_SKIP_TIMESTAMP = Time.parse("2026-03-31 21:15:00 +0200").to_i
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
