@@ -274,23 +274,24 @@ EXPANSION_DUNGEONS = [
 ]
 
 WEEKLY_EVENT_QUESTS = [
-  83347, # Emissary of War
-  83345, # A Call to Battle
-  83364, # A Savage Path Through Time
-  83362, # A Shrouded Path Through Time
-  83366, # The World Awaits
-  83359, # A Shattered Path Through Time
-  83365, # A Frozen Path Through Time
+  93598, # Emissary of War
+  93593, # A Call to Battle
+  # 83364, # A Savage Path Through Time
+  # 83362, # A Shrouded Path Through Time
+  # 83366, # The World Awaits
+  93611, # A Shattered Path Through Time
+  # 83365, # A Frozen Path Through Time
+  93595, # A Call to Delves
+  93599, # The Very Best
 ]
 
-# https://www.wowhead.com/quest=89268/lost-legends
-HARANIR_WEEKLY_QUESTS = [88993, 88994, 88996, 88997, 88995, 93891]
+HARANIR_WEEKLY_QUESTS = [89268] # Can only track whether someone started
 
-SALTHERIL_WEEKLY_QUESTS = [90573, 90574, 90575, 90576, 93889]
+SALTHERIL_WEEKLY_QUESTS = [90573, 90574, 90575, 90576]
 
-ABUNDANCE_WEEKLY_QUESTS = [89507, 93890]
+ABUNDANCE_WEEKLY_QUESTS = [89507]
 
-STORMARION_WEEKLY_QUESTS = [93892, 94581]
+STORMARION_WEEKLY_QUESTS = [94581]
 
 # https://www.wowhead.com/quest=93744/unity-against-the-void
 UNITY_WEEKLY_QUESTS = [93890, 93889, 93891, 93910, 93769, 93909, 93911, 93767, 93912, 93913, 93892, 93766, 94457]
