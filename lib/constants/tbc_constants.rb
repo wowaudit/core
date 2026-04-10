@@ -42,6 +42,7 @@ TBC_ENCHANT_SLOTS = [
 
 weapon_enchants = {
   963 => [3, "Major Striking"],
+  1071 => [4, "Major Stamina"],
   1900 => [3, "Crusader"],
   3222 => [4, "Greater Agility"],
   2666 => [4, "Major Intellect"],
@@ -57,6 +58,7 @@ weapon_enchants = {
   3223 => [4, "Adamantite Weapon Chain"],
   2667 => [4, "Savagery"],
   2670 => [4, "Major Agility"],
+
 }
 
 ring_enchants = {
@@ -107,6 +109,7 @@ TBC_ENCHANTS = {
     1441 => [4, "Greater Shadow Resistance"],
     2648 => [4, "Steelweave"],
     2621 => [4, "Subtlety"],
+    2622 => [4, "Dodge"],
   },
   'chest' => {
     1950 => [4, "Defense"],
