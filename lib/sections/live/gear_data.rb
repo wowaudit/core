@@ -69,9 +69,13 @@ module Audit
 
             # For crafted items we need to check the track (crests used) based on the item level
             if !track && equipped_item.dig(:name_description, :display_string) == Season.current.data[:spark_label]
-              crafted_upgrade = (Season.current.data[:spark_ilvl_bump_bonus_id].find_index { |id| bonus_list.include?(id) } || -1) + 1
-              @character.data["upgrade_level_#{item}"] = "#{crafted_upgrade} / 2"
-              total_upgrades_missing += (2 - crafted_upgrade)
+              if Season.current.data[:spark_ilvl_bump_bonus_id].any?
+                crafted_upgrade = (Season.current.data[:spark_ilvl_bump_bonus_id].find_index { |id| bonus_list.include?(id) } || -1) + 1
+                @character.data["upgrade_level_#{item}"] = "#{crafted_upgrade} / 2"
+                total_upgrades_missing += (2 - crafted_upgrade)
+              else
+                @character.data["upgrade_level_#{item}"] = '-'
+              end
 
               bonus_id_matched_track = Season.current.data[:track_cutoffs].find { |cutoff| bonus_list.include?(cutoff[:bonus_id]) }&.dig(:difficulty)
               cutoff_index = Season.current.data[:track_cutoffs].find_index { |cutoff| equipped_item[:level][:value] >= cutoff[:ilvl] }
