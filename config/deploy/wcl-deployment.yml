@@ -14,6 +14,10 @@ spec:
       labels:
         app: wcl
     spec:
+      tolerations:
+        - key: low-performance-node
+          operator: Exists
+          effect: NoSchedule
       containers:
         - name: wcl
           image: shedi/wowaudit:latest

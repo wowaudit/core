@@ -14,6 +14,10 @@ spec:
       labels:
         app: raiderio
     spec:
+      tolerations:
+        - key: low-performance-node
+          operator: Exists
+          effect: NoSchedule
       containers:
         - name: raiderio
           image: shedi/wowaudit:latest

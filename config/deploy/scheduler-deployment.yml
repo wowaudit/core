@@ -14,6 +14,10 @@ spec:
       labels:
         app: scheduler
     spec:
+      tolerations:
+        - key: low-performance-node
+          operator: Exists
+          effect: NoSchedule
       containers:
         - name: scheduler
           image: shedi/wowaudit:latest
