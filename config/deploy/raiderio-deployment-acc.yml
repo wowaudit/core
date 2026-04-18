@@ -15,7 +15,7 @@ spec:
         app: raiderio-acc
     spec:
       tolerations:
-        - key: migrate-data
+        - key: low-performance-node
           operator: Exists
           effect: NoSchedule
       containers:
