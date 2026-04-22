@@ -278,7 +278,7 @@ HEADER = {
     'total_renown_score',
     'pit_of_saron_total',
     'pit_of_saron_score',
-    '',
+    'voidforge_quest',
     'ingenuity_sparks_equipped',
     'best_head_ilvl',
     'best_head_id',
