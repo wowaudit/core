@@ -31,7 +31,7 @@ module Audit
     def self.schedule_work(worker)
       if worker.type.include?("keystones")
         table = "realms"
-        teams = Writer.query("SELECT id, last_refreshed_#{worker.type} FROM realms WHERE kind = 'live' " +
+        teams = Writer.query("SELECT id, last_refreshed_#{worker.type} FROM realms WHERE kind = 'live' AND obsolete = FALSE " +
                              "ORDER BY last_refreshed_#{worker.type} ASC LIMIT 10", false).to_a
       else
         table = "teams"
