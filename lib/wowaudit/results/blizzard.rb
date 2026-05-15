@@ -50,7 +50,7 @@ module Wowaudit
       end
 
       def update_snapshots
-        if @character.realm.game_version == 'live'
+        if @character.realm.game_version == 'live' && @output.any?
           current_week = @character.details['snapshots'][Audit.period.to_s] || {}
 
           @character.details['snapshots'][Audit.period.to_s] = current_week.merge({ 'vault' => 9.times.map do |i|
@@ -106,7 +106,10 @@ module Wowaudit
 
       def create_newly_found_character(profile_id)
         (Audit::Character.first(profile_id: profile_id) || Audit::Character.new(profile_id: profile_id)).tap do |new_character|
+          now = DateTime.now
           new_character.game_version = @character.realm.game_version
+          new_character.created_at ||= now
+          new_character.updated_at = now
           store_metadata(new_character)
           new_character.save
         end
