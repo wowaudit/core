@@ -85,9 +85,8 @@ module Wowaudit
       end
 
       def gdpr_deletion?
-        return false if !@response[:status]
-        return true if @response[:status_codes][:status][:code] == 404
-        return true if @response[:status][:is_valid] == false
+        return true if @response.dig(:status_codes, :itself, :code) == 404
+        return true if @response.dig(:status, :is_valid) == false
 
         profile_id = "#{@response.dig(:realm, :id)}-#{@response.dig(:status, :id)}"
         if @character.profile_id != profile_id
