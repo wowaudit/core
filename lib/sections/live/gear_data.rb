@@ -63,9 +63,15 @@ module Audit
 
             bonus_list = equipped_item[:bonus_list] || []
             upgrade_id = bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }
+
             track, track_ids = BonusIds.current.find { |track, ids| ids.include? upgrade_id.to_i }
             @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.to_a.index(upgrade_id) + 1} / #{track_ids.to_a.size}" : '-'
             total_upgrades_missing += (track_ids.to_a.size - (track_ids.to_a.index(upgrade_id) + 1)) if track_ids
+
+            voidforged_track = { 13653 => :heroic, 13654 => :mythic }
+            if !track && voidforged_bonus_id = bonus_list.find { |bonus_id| voidforged_track[bonus_id] }
+              track = voidforged_track[voidforged_bonus_id]
+            end
 
             # For crafted items we need to check the track (crests used) based on the item level
             if !track && equipped_item.dig(:name_description, :display_string) == Season.current.data[:spark_label]
