@@ -447,7 +447,7 @@ HEADER = {
     'hard_preys_weekly',
     'nightmare_preys_weekly',
     'raid_buff_percentage',
-    '',
+    'voidforged_items',
     '',
     'midnight_falls_mount',
     'myth_crests',

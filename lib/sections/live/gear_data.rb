@@ -8,6 +8,7 @@ module Audit
         total_upgrades_missing = 0
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
+        @character.data['voidforged_items'] = 0
         BonusIds::DIFFICULTY_LABELS.keys.each { |track| @character.data["#{track}_track_items"] = 0 }
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -71,6 +72,7 @@ module Audit
             voidforged_track = { 13653 => :heroic, 13654 => :mythic }
             if !track && voidforged_bonus_id = bonus_list.find { |bonus_id| voidforged_track[bonus_id] }
               track = voidforged_track[voidforged_bonus_id]
+              @character.data['voidforged_items'] += 1
             end
 
             # For crafted items we need to check the track (crests used) based on the item level
