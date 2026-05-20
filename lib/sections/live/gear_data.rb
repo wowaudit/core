@@ -72,7 +72,7 @@ module Audit
             voidforged_track = { 13653 => :heroic, 13654 => :mythic }
             if !track && voidforged_bonus_id = bonus_list.find { |bonus_id| voidforged_track[bonus_id] }
               track = voidforged_track[voidforged_bonus_id]
-              @character.data['voidforged_items'] += 1
+              @character.data['voidforged_items'] += two_handed_item?(item) ? 2 : 1
             end
 
             # For crafted items we need to check the track (crests used) based on the item level
@@ -143,7 +143,7 @@ module Audit
         end
 
         # For 2H weapons the item level is counted twice to normalise between weapon types
-        if @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
+        if two_handed_item?("main_hand")
           @character.ilvl += @data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:level][:value] rescue 0
         end
 
@@ -202,6 +202,10 @@ module Audit
 
           { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
         end
+      end
+
+      def two_handed_item?(item)
+        item == "main_hand" && @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
       end
 
       def check_sockets(item, equipped_item)
