@@ -88,8 +88,8 @@ module Wowaudit
         return true if @response.dig(:status_codes, :itself, :code) == 404
         return true if @response.dig(:status, :is_valid) == false
 
-        profile_id = "#{@response.dig(:realm, :id)}-#{@response.dig(:status, :id)}"
-        if @character.profile_id != profile_id
+        profile_id = "#{@response.dig(:realm, :id)}-#{@response[:id]}"
+        if @character.profile_id != profile_id && @response[:id].present?
           if @character.realm.game_version == 'classic_era' || @character.realm.game_version == 'classic_anniversary' || @character.achievement_uid != new_achievement_uid
             create_newly_found_character(profile_id)
             return true
