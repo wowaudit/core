@@ -8,6 +8,7 @@ module Audit
         total_upgrades_missing = 0
         @character.data['empty_sockets'] = 0
         @character.data['epic_gem'] = 0
+        @character.data['voidforged_items'] = 0
         BonusIds::DIFFICULTY_LABELS.keys.each { |track| @character.data["#{track}_track_items"] = 0 }
 
         # Quickfix to not have a 0 returned, which messes up the spreadsheet
@@ -63,15 +64,30 @@ module Audit
 
             bonus_list = equipped_item[:bonus_list] || []
             upgrade_id = bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }
+
             track, track_ids = BonusIds.current.find { |track, ids| ids.include? upgrade_id.to_i }
             @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.to_a.index(upgrade_id) + 1} / #{track_ids.to_a.size}" : '-'
             total_upgrades_missing += (track_ids.to_a.size - (track_ids.to_a.index(upgrade_id) + 1)) if track_ids
 
+            voidforged_track = { 13653 => :heroic, 13654 => :mythic }
+            if !track && voidforged_bonus_id = bonus_list.find { |bonus_id| voidforged_track[bonus_id] }
+              track = voidforged_track[voidforged_bonus_id]
+              @character.data['voidforged_items'] += two_handed_item?(item) ? 2 : 1
+            end
+
             # For crafted items we need to check the track (crests used) based on the item level
-            if !track && equipped_item.dig(:name_description, :display_string) == Season.current.data[:spark_label]
-              crafted_upgrade = (Season.current.data[:spark_ilvl_bump_bonus_id].find_index { |id| bonus_list.include?(id) } || -1) + 1
-              @character.data["upgrade_level_#{item}"] = "#{crafted_upgrade} / 2"
-              total_upgrades_missing += (2 - crafted_upgrade)
+            if !track && equipped_item.dig(:name_description, :display_string)&.start_with?(Season.current.data[:spark_label])
+              if Season.current.data[:spark_ilvl_bump_bonus_id].any?
+                crafted_upgrade = (Season.current.data[:spark_ilvl_bump_bonus_id].find_index { |id| bonus_list.include?(id) } || -1) + 1
+                @character.data["upgrade_level_#{item}"] = "#{crafted_upgrade} / 2"
+                total_upgrades_missing += (2 - crafted_upgrade)
+              else
+                @character.data["upgrade_level_#{item}"] = '-'
+              end
+
+              if bonus_list.include?(13655)
+                @character.data['voidforged_items'] += two_handed_item?(item) ? 2 : 1
+              end
 
               bonus_id_matched_track = Season.current.data[:track_cutoffs].find { |cutoff| bonus_list.include?(cutoff[:bonus_id]) }&.dig(:difficulty)
               cutoff_index = Season.current.data[:track_cutoffs].find_index { |cutoff| equipped_item[:level][:value] >= cutoff[:ilvl] }
@@ -131,7 +147,7 @@ module Audit
         end
 
         # For 2H weapons the item level is counted twice to normalise between weapon types
-        if @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
+        if two_handed_item?("main_hand")
           @character.ilvl += @data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:level][:value] rescue 0
         end
 
@@ -190,6 +206,10 @@ module Audit
 
           { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
         end
+      end
+
+      def two_handed_item?(item)
+        item == "main_hand" && @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
       end
 
       def check_sockets(item, equipped_item)

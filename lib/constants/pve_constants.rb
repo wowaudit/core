@@ -274,23 +274,24 @@ EXPANSION_DUNGEONS = [
 ]
 
 WEEKLY_EVENT_QUESTS = [
-  83347, # Emissary of War
-  83345, # A Call to Battle
-  83364, # A Savage Path Through Time
-  83362, # A Shrouded Path Through Time
-  83366, # The World Awaits
-  83359, # A Shattered Path Through Time
-  83365, # A Frozen Path Through Time
+  93598, # Emissary of War
+  93593, # A Call to Battle
+  # 83364, # A Savage Path Through Time
+  # 83362, # A Shrouded Path Through Time
+  # 83366, # The World Awaits
+  93611, # A Shattered Path Through Time
+  # 83365, # A Frozen Path Through Time
+  93595, # A Call to Delves
+  93599, # The Very Best
 ]
 
-# https://www.wowhead.com/quest=89268/lost-legends
-HARANIR_WEEKLY_QUESTS = [88993, 88994, 88996, 88997, 88995, 93891]
+HARANIR_WEEKLY_QUESTS = [89268] # Can only track whether someone started
 
-SALTHERIL_WEEKLY_QUESTS = [90573, 90574, 90575, 90576, 93889]
+SALTHERIL_WEEKLY_QUESTS = [90573, 90574, 90575, 90576]
 
-ABUNDANCE_WEEKLY_QUESTS = [89507, 93890]
+ABUNDANCE_WEEKLY_QUESTS = [89507]
 
-STORMARION_WEEKLY_QUESTS = [93892, 94581]
+STORMARION_WEEKLY_QUESTS = [94581]
 
 # https://www.wowhead.com/quest=93744/unity-against-the-void
 UNITY_WEEKLY_QUESTS = [93890, 93889, 93891, 93910, 93769, 93909, 93911, 93767, 93912, 93913, 93892, 93766, 94457]
@@ -301,6 +302,16 @@ RAID_DIFFICULTIES = {
   4 => 'heroic',
   5 => 'mythic'
 }
+
+PREY_QUESTS = {
+  normal: [91124, 91110, 91100, 91105, 91115, 91114, 91113, 91121, 91107, 91117, 91101, 91095, 91102, 91106, 91111, 91116, 91098, 91099, 91122, 91123, 91103, 91097, 91112, 91096, 91118, 91109, 91119, 91108, 91120, 91104],
+  hard: [91240, 91255, 91245, 91230, 91222, 91220, 91242, 91232, 91252, 91247, 91246, 91253, 91224, 91251, 91234, 91244, 91218, 91212, 91250, 91238, 91243, 91249, 91236, 91216, 91214, 91210, 91248, 91254, 91226, 91228],
+  nightmare: [91241, 91256, 91261, 91269, 91259, 91233, 91231, 91221, 91265, 91225, 91260, 91258, 91264, 91219, 91235, 91237, 91223, 91239, 91213, 91268, 91266, 91211, 91267, 91227, 91263, 91217, 91257, 91215, 91229, 91262],
+}
+
+PREY_QUEST_DIFFICULTY_BY_ID = PREY_QUESTS.each_with_object({}) do |(difficulty, quest_ids), result|
+  quest_ids.each { |quest_id| result[quest_id] = difficulty }
+end.freeze
 
 GREAT_VAULT_RAID_KILLS_NEEDED = {
   1 => 2,
@@ -390,7 +401,8 @@ VALID_RAIDS = {
     {"name"=>"Mogu'shan Vaults", "days"=>[], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"The Stone Guard", "raid_ids"=>{"raid_finder"=>[6983], "normal"=>[6789, 7914], "heroic"=>[6790, 7915]}}, {"id"=>nil, "name"=>"Feng the Accursed", "raid_ids"=>{"raid_finder"=>[6984], "normal"=>[6791, 7917], "heroic"=>[6792, 7918]}}, {"id"=>nil, "name"=>"Gara'jal the Spiritbinder", "raid_ids"=>{"raid_finder"=>[6985], "normal"=>[6793, 7919], "heroic"=>[6794, 7920]}}, {"id"=>nil, "name"=>"The Spirit Kings", "raid_ids"=>{"raid_finder"=>[6986], "normal"=>[6795, 7921], "heroic"=>[6796, 7922]}}, {"id"=>nil, "name"=>"Elegon", "raid_ids"=>{"raid_finder"=>[6987], "normal"=>[6797, 7923], "heroic"=>[6798, 7924]}}, {"id"=>nil, "name"=>"Will of the Emperor", "raid_ids"=>{"raid_finder"=>[6988], "normal"=>[6799, 7926], "heroic"=>[6800, 7927]}}]},
     {"name"=>"Heart of Fear", "days"=>[], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Imperial Vizier Zor'lok", "raid_ids"=>{"raid_finder"=>[6991], "normal"=>[6801, 7951], "heroic"=>[6802, 7953]}}, {"id"=>nil, "name"=>"Blade Lord Ta'yak", "raid_ids"=>{"raid_finder"=>[6992], "normal"=>[6803, 7954], "heroic"=>[6804, 7955]}}, {"id"=>nil, "name"=>"Garalon", "raid_ids"=>{"raid_finder"=>[6993], "normal"=>[6805, 7956], "heroic"=>[6806, 7957]}}, {"id"=>nil, "name"=>"Wind Lord Mel'jarak", "raid_ids"=>{"raid_finder"=>[6994], "normal"=>[6807, 7958], "heroic"=>[6808, 7960]}}, {"id"=>nil, "name"=>"Amber-Shaper Un'sok", "raid_ids"=>{"raid_finder"=>[6995], "normal"=>[6809, 7961], "heroic"=>[6810, 7962]}}, {"id"=>nil, "name"=>"Grand Empress Shek'zeer", "raid_ids"=>{"raid_finder"=>[6996], "normal"=>[6811, 7963], "heroic"=>[6812, 7964]}}]},
     {"name"=>"Terrace of Endless Spring", "days"=>[], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Protectors of the Endless", "raid_ids"=>{"raid_finder"=>[6997], "normal"=>[6813, 7965], "heroic"=>[6814, 7966]}}, {"id"=>nil, "name"=>"Tsulong", "raid_ids"=>{"raid_finder"=>[6998], "normal"=>[6815, 7967], "heroic"=>[6816, 7968]}}, {"id"=>nil, "name"=>"Lei Shi", "raid_ids"=>{"raid_finder"=>[6999], "normal"=>[6817, 7969], "heroic"=>[6818, 7970]}}, {"id"=>nil, "name"=>"Sha of Fear", "raid_ids"=>{"raid_finder"=>[7000], "normal"=>[6819, 7971], "heroic"=>[6820, 7972]}}]},
-    {"name"=>"Throne of Thunder", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Jin'rokh the Breaker", "raid_ids"=>{"raid_finder"=>[8141], "normal"=>[8142, 8143], "heroic"=>[8144, 8145]}}, {"id"=>nil, "name"=>"Horridon", "raid_ids"=>{"raid_finder"=>[8148], "normal"=>[8149, 8150], "heroic"=>[8151, 8152]}}, {"id"=>nil, "name"=>"Council of Elders", "raid_ids"=>{"raid_finder"=>[8153], "normal"=>[8154, 8155], "heroic"=>[8156, 8157]}}, {"id"=>nil, "name"=>"Tortos", "raid_ids"=>{"raid_finder"=>[8158], "normal"=>[8159, 8160], "heroic"=>[8161, 8162]}}, {"id"=>nil, "name"=>"Megaera", "raid_ids"=>{"raid_finder"=>[8163], "normal"=>[8164, 8165], "heroic"=>[8166, 8167]}}, {"id"=>nil, "name"=>"Ji-Kun", "raid_ids"=>{"raid_finder"=>[8168], "normal"=>[8169, 8170], "heroic"=>[8171, 8172]}}, {"id"=>nil, "name"=>"Durumu the Forgotten", "raid_ids"=>{"raid_finder"=>[8173], "normal"=>[8174, 8175], "heroic"=>[8176, 8177]}}, {"id"=>nil, "name"=>"Primordius", "raid_ids"=>{"raid_finder"=>[8178], "normal"=>[8179, 8182], "heroic"=>[8180, 8181]}}, {"id"=>nil, "name"=>"Dark Animus", "raid_ids"=>{"raid_finder"=>[8183], "normal"=>[8184, 8185], "heroic"=>[8186, 8187]}}, {"id"=>nil, "name"=>"Iron Qon", "raid_ids"=>{"raid_finder"=>[8188], "normal"=>[8189, 8190], "heroic"=>[8191, 8192]}}, {"id"=>nil, "name"=>"Twin Empyreans", "raid_ids"=>{"raid_finder"=>[8193], "normal"=>[8194, 8195], "heroic"=>[8196, 8197]}}, {"id"=>nil, "name"=>"Lei Shen", "raid_ids"=>{"raid_finder"=>[8198], "normal"=>[8199, 8200], "heroic"=>[8201, 8202]}}, {"id"=>nil, "name"=>"Ra-den", "raid_ids"=>{"heroic"=>[8203, 8256]}}]}
+    {"name"=>"Throne of Thunder", "days"=>[], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Jin'rokh the Breaker", "raid_ids"=>{"raid_finder"=>[8141], "normal"=>[8142, 8143], "heroic"=>[8144, 8145]}}, {"id"=>nil, "name"=>"Horridon", "raid_ids"=>{"raid_finder"=>[8148], "normal"=>[8149, 8150], "heroic"=>[8151, 8152]}}, {"id"=>nil, "name"=>"Council of Elders", "raid_ids"=>{"raid_finder"=>[8153], "normal"=>[8154, 8155], "heroic"=>[8156, 8157]}}, {"id"=>nil, "name"=>"Tortos", "raid_ids"=>{"raid_finder"=>[8158], "normal"=>[8159, 8160], "heroic"=>[8161, 8162]}}, {"id"=>nil, "name"=>"Megaera", "raid_ids"=>{"raid_finder"=>[8163], "normal"=>[8164, 8165], "heroic"=>[8166, 8167]}}, {"id"=>nil, "name"=>"Ji-Kun", "raid_ids"=>{"raid_finder"=>[8168], "normal"=>[8169, 8170], "heroic"=>[8171, 8172]}}, {"id"=>nil, "name"=>"Durumu the Forgotten", "raid_ids"=>{"raid_finder"=>[8173], "normal"=>[8174, 8175], "heroic"=>[8176, 8177]}}, {"id"=>nil, "name"=>"Primordius", "raid_ids"=>{"raid_finder"=>[8178], "normal"=>[8179, 8182], "heroic"=>[8180, 8181]}}, {"id"=>nil, "name"=>"Dark Animus", "raid_ids"=>{"raid_finder"=>[8183], "normal"=>[8184, 8185], "heroic"=>[8186, 8187]}}, {"id"=>nil, "name"=>"Iron Qon", "raid_ids"=>{"raid_finder"=>[8188], "normal"=>[8189, 8190], "heroic"=>[8191, 8192]}}, {"id"=>nil, "name"=>"Twin Empyreans", "raid_ids"=>{"raid_finder"=>[8193], "normal"=>[8194, 8195], "heroic"=>[8196, 8197]}}, {"id"=>nil, "name"=>"Lei Shen", "raid_ids"=>{"raid_finder"=>[8198], "normal"=>[8199, 8200], "heroic"=>[8201, 8202]}}, {"id"=>nil, "name"=>"Ra-den", "raid_ids"=>{"heroic"=>[8203, 8256]}}]},
+    {"name"=>"Siege of Orgrimmar", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>nil, "encounters"=>[{"id"=>nil, "name"=>"Immerseus", "raid_ids"=>{"raid_finder"=>[8549], "normal"=>[8551, 8552], "heroic"=>[8553, 8554]}}, {"id"=>nil, "name"=>"The Fallen Protectors", "raid_ids"=>{"raid_finder"=>[8555], "normal"=>[8557, 8558], "heroic"=>[8559, 8560]}}, {"id"=>nil, "name"=>"Norushen", "raid_ids"=>{"raid_finder"=>[8561], "normal"=>[8563, 8564], "heroic"=>[8565, 8566]}}, {"id"=>nil, "name"=>"Sha of Pride", "raid_ids"=>{"raid_finder"=>[8567], "normal"=>[8569, 8570], "heroic"=>[8571, 8572]}}, {"id"=>nil, "name"=>"Galakras", "raid_ids"=>{"raid_finder"=>[8574], "normal"=>[8576, 8577], "heroic"=>[8578, 8579]}}, {"id"=>nil, "name"=>"Iron Juggernaut", "raid_ids"=>{"raid_finder"=>[8580], "normal"=>[8582, 8583], "heroic"=>[8584, 8585]}}, {"id"=>nil, "name"=>"Kor'kron Dark Shaman", "raid_ids"=>{"raid_finder"=>[8586], "normal"=>[8588, 8589], "heroic"=>[8590, 8591]}}, {"id"=>nil, "name"=>"General Nazgrim", "raid_ids"=>{"raid_finder"=>[8593], "normal"=>[8595, 8596], "heroic"=>[8597, 8598]}}, {"id"=>nil, "name"=>"Malkorok", "raid_ids"=>{"raid_finder"=>[8599], "normal"=>[8601, 8602], "heroic"=>[8603, 8604]}}, {"id"=>nil, "name"=>"Spoils of Pandaria", "raid_ids"=>{"raid_finder"=>[8605], "normal"=>[8608, 8609], "heroic"=>[8610, 8612]}}, {"id"=>nil, "name"=>"Thok the Bloodthirsty", "raid_ids"=>{"raid_finder"=>[8614], "normal"=>[8616, 8617], "heroic"=>[8618, 8619]}}, {"id"=>nil, "name"=>"Siegecrafter Blackfuse", "raid_ids"=>{"raid_finder"=>[8620], "normal"=>[8622, 8623], "heroic"=>[8624, 8625]}}, {"id"=>nil, "name"=>"Paragons of the Klaxxi", "raid_ids"=>{"raid_finder"=>[8626], "normal"=>[8628, 8629], "heroic"=>[8630, 8631]}}, {"id"=>nil, "name"=>"Garrosh Hellscream", "raid_ids"=>{"raid_finder"=>[8632], "normal"=>[8635, 8636], "heroic"=>[8637, 8638]}}]}
   ],
   classic_anniversary: [
   ],

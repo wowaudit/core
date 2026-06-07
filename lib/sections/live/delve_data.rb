@@ -19,8 +19,6 @@ module Audit
             delves_this_week += week_amount.to_i.times.map { tier }
           end
 
-          delves_this_week.reverse!
-
           @character.data['coffer_keys'] = delve_meta.find { |stat| stat[:id] == 40749 }[:quantity] rescue 0
           @character.data['season_delves'] = @character.delve_info[:total]
           @character.data['week_delves'] =
@@ -37,6 +35,19 @@ module Audit
           ['legends_of_the_haranir_weekly', 'weekly_abundance', 'saltherils_soiree', 'stormarion_assault', 'unity_against_the_void_weekly'].each do |quest|
             delves_this_week << 1 if @character.data[quest] == 'yes'
           end
+
+          @character.prey_info[:normal].times do
+            delves_this_week << 1
+          end
+          @character.prey_info[:hard].times do
+            delves_this_week << 5
+          end
+          @character.prey_info[:nightmare].times do
+            delves_this_week << 8
+          end
+
+          delves_this_week.sort!
+          delves_this_week.reverse!
 
           @character.data['great_vault_slot_7'] = Season.current.data[:great_vault][:delve][[delves_this_week[1] || 0, 11].min]&.dig(:ilvl) || ""
           @character.data['great_vault_slot_8'] = Season.current.data[:great_vault][:delve][[delves_this_week[3] || 0, 11].min]&.dig(:ilvl) || ""
