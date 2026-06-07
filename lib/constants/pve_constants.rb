@@ -207,7 +207,7 @@ SEASON_DATA = {
       { id: 557, name: "Windrunner Spire", mythic_id: 41295, legacy: false },
       { id: 402, name: "Algeth'ar Academy", mythic_id: 16088, legacy: true },
       { id: 556, name: "Pit of Saron", mythic_id: 0, legacy: true },
-      { id: 583, name: "Seat of the Triumvirate", mythic_id: 12613, legacy: true },
+      { id: 239, name: "Seat of the Triumvirate", mythic_id: 12613, legacy: true },
       { id: 161, name: "Skyreach", mythic_id: 10195, legacy: true },
     ],
     crests: [
