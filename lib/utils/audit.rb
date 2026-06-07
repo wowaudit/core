@@ -12,14 +12,14 @@ module Audit
           sleep 60
           redo
         rescue Net::ReadTimeout, PG::ConnectionBad => e
-          Rollbar.error(e, team_id: team.to_i, type: type)
+          Sentry.capture_exception(e, extra: { team_id: team.to_i, type: type })
           Logger.t(ERROR_DATABASE_CONNECTION, team.to_i)
           sleep 180
           redo
         rescue RBattlenet::Errors::Unauthorized
           Logger.t(ERROR_NO_API_KEY, team.to_i)
         rescue => e
-          Rollbar.error(e, team_id: team.to_i, type: type)
+          Sentry.capture_exception(e, extra: { team_id: team.to_i, type: type })
           sleep(180) if e.class == PG::ConnectionBad
           Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
         end
@@ -63,7 +63,7 @@ module Audit
 
           waiting_since ||= Time.now
           if (Time.now - waiting_since) > 15 # seconds
-            Rollbar.error('Waiting too long for a token...')
+            Sentry.capture_message('Waiting too long for a token...')
             waiting_since = nil
           end
 

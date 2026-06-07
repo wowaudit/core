@@ -76,8 +76,11 @@ GEM
       connection_pool
     require_all (3.0.0)
     rexml (3.2.5)
-    rollbar (3.4.0)
     securerandom (0.4.1)
+    sentry-ruby (6.6.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      logger
     sequel (5.65.0)
     typhoeus (1.4.0)
       ethon (>= 0.9.0)
@@ -98,7 +101,7 @@ DEPENDENCIES
   redis
   require_all
   rexml
-  rollbar
+  sentry-ruby
   sequel
   typhoeus
   tzinfo

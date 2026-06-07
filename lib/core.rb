@@ -11,7 +11,7 @@ require 'frozen_record'
 require 'yaml'
 require 'tzinfo'
 require 'csv'
-require 'rollbar'
+require 'sentry-ruby'
 require 'oj'
 
 require_rel './wowaudit.rb'
@@ -50,24 +50,22 @@ BUCKET = storage_data["bucket"]
 
 # Load keys
 keys = YAML::load(File.open('config/keys.yml'))
-ROLLBAR_KEY = keys["rollbar_key"]
 WCL_CLIENT_ID = keys["wcl_client_id"]
 WCL_CLIENT_SECRET = keys["wcl_client_secret"]
 db_config = {}
 
-Rollbar.configure do |config|
-  config.access_token = ROLLBAR_KEY
+Sentry.init do |config|
+  config.dsn = File.exist?('config/external_database.yml') ? nil : keys["sentry_dsn"]
+end
 
-  if File.exist?('config/external_database.yml')
-    config.enabled = false
-    require 'byebug'
-    db_config = YAML::load(File.open('config/external_database.yml'))
+if File.exist?('config/external_database.yml')
+  require 'byebug'
+  db_config = YAML::load(File.open('config/external_database.yml'))
 
-    BLIZZARD_CLIENT_ID = keys["blizzard_client_id"]
-    BLIZZARD_CLIENT_SECRET = keys["blizzard_client_secret"]
-  else
-    db_config = YAML::load(File.open('config/database.yml'))
-  end
+  BLIZZARD_CLIENT_ID = keys["blizzard_client_id"]
+  BLIZZARD_CLIENT_SECRET = keys["blizzard_client_secret"]
+else
+  db_config = YAML::load(File.open('config/database.yml'))
 end
 
 begin
@@ -97,7 +95,7 @@ begin
 rescue PG::ConnectionBad => e
   # The SQL proxy isn't always instantly available on server reboot
   # Therefore, retry connection after 5 seconds have passed
-  Rollbar.error(e)
+  Sentry.capture_exception(e)
   puts "Connection to the database failed. Trying again in 5 seconds."
   sleep 5
   retry
