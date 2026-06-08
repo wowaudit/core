@@ -138,6 +138,16 @@ module Wowaudit
         uid.to_s
       end
 
+      def new_user_achievement_uid
+        return unless @achievements
+
+        uid = USER_IDENTIFICATION_IDS.sum do |achievement_id|
+          @achievements[achievement_id]&.dig(:completed_timestamp) || 0
+        end
+
+        uid.zero? ? nil : uid.to_s
+      end
+
       def check_api_limit_reached
         @response[:status_codes].values.any? { |status| status[:code] == 429 }
       end
@@ -156,6 +166,10 @@ module Wowaudit
         end
 
         update_field(target, :achievement_uid, new_achievement_uid) if new_achievement_uid
+
+        if target.user_achievement_uid.blank? && (user_uid = new_user_achievement_uid)
+          update_field(target, :user_achievement_uid, user_uid)
+        end
 
         update_snapshots
 

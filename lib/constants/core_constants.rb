@@ -1021,3 +1021,8 @@ CHARACTER_IDENTIFICATION_IDS = [
   973, # 5 Daily Quests Completed
   14271, # WoW's 16th Anniversary
 ]
+
+USER_IDENTIFICATION_IDS = [
+  19470, # One Warband Mentor: The War Within
+  61211, # Welcome Home
+]
