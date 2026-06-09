@@ -114,7 +114,7 @@ module Audit
             @character.data["#{item}_enchant_name"] = ''
           end
 
-          { name: @character.data["#{item}_enchant_name"], quality: @character.data["#{item}_enchant_quality"] }
+          { name: @character.data["#{item}_enchant_name"], quality: 4, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: @character.data["#{item}_enchant_name"] == '' }
         end
       end
     end

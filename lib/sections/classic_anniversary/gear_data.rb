@@ -139,14 +139,14 @@ module Audit
               end.first&.dig(:display_string)&.split('Enchanted: ')&.reject(&:empty?)&.first&.split(' |')&.first
 
               @character.data["#{item}_enchant_name"] = name_to_store = ''
-              @character.data["#{item}_enchant_quality"] = 0
+              @character.data["#{item}_enchant_quality"] = quality_to_store = 0
             end
           rescue
-            @character.data["#{item}_enchant_quality"] = 0
+            @character.data["#{item}_enchant_quality"] = quality_to_store = 0
             @character.data["#{item}_enchant_name"] = name_to_store = ''
           end
 
-          { name: name_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
+          { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
         end
       end
     end
