@@ -46,6 +46,9 @@ module Audit
               if slots.keys.include? generic_item
                 if CLASSIC_ERA_TIER_ITEMS[tier].include?(equipped_item[:item][:id].to_i)
                   @character.details["tier_#{tier}_#{generic_item}"] = true
+                  (@character.details["tier_items_t#{tier}"] ||= {})[generic_item] = {
+                    'ilvl' => @character.details['current_gear'][item]['ilvl']
+                  }
                 end
 
                 # Only count the tier 3 ring for one of the finger slots at most

@@ -31,7 +31,22 @@ module Wowaudit
           raiderio: @details["raiderio"],
           tier_items_s1: @details["tier_items_s1"],
           timeline: @details["timeline"],
-        } : {})
+        } : {}).merge(tier_items_metadata)
+      end
+
+      def tier_items_metadata
+        tiers_by_slot = case @character.realm.game_version
+        when 'classic_era' then CLASSIC_ERA_TIER_ITEMS_BY_SLOT
+        when 'classic_anniversary' then TBC_TIER_ITEMS_BY_SLOT
+        when 'classic_progression' then MOP_TIER_ITEMS_BY_SLOT
+        end
+
+        return {} unless tiers_by_slot
+
+        tiers_by_slot.keys.each_with_object({}) do |tier, result|
+          key = "tier_items_t#{tier}"
+          result[key.to_sym] = @details[key]
+        end
       end
     end
   end

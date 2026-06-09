@@ -189,6 +189,27 @@ module Audit
         details['current_gear'] = ITEMS[realm.game_version.to_sym].map { |item| [item, { ilvl: 0 }] }.to_h
       end
 
+      if realm.game_version == 'classic_era'
+        CLASSIC_ERA_TIER_ITEMS_BY_SLOT.each do |tier, slots|
+          key = "tier_items_t#{tier}"
+          details[key] = slots.keys.map { |slot| [slot, { 'ilvl' => 0 }] }.to_h unless details[key].is_a?(Hash)
+        end
+      end
+
+      if realm.game_version == 'classic_anniversary'
+        TBC_TIER_ITEMS_BY_SLOT.each do |tier, slots|
+          key = "tier_items_t#{tier}"
+          details[key] = slots.keys.map { |slot| [slot, { 'ilvl' => 0 }] }.to_h unless details[key].is_a?(Hash)
+        end
+      end
+
+      if realm.game_version == 'classic_progression'
+        MOP_TIER_ITEMS_BY_SLOT.each do |tier, slots|
+          key = "tier_items_t#{tier}"
+          details[key] = slots.keys.map { |slot| [slot, { 'ilvl' => 0 }] }.to_h unless details[key].is_a?(Hash)
+        end
+      end
+
       if realm.game_version == 'live'
         # Initialise snapshots if not present
         if !details['snapshots'].is_a? Hash

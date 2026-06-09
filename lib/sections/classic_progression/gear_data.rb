@@ -56,6 +56,9 @@ module Audit
               if slots.keys.include? item
                 if MOP_TIER_ITEMS[tier].include?(equipped_item[:item][:id].to_i)
                   @character.details["tier_#{tier}_#{item}"] = @character.details['current_gear'][item]['ilvl']
+                  (@character.details["tier_items_t#{tier}"] ||= {})[item] = {
+                    'ilvl' => @character.details['current_gear'][item]['ilvl']
+                  }
                 end
 
                 tier_statuses[tier] += @character.details["tier_#{tier}_#{item}"] ? 1 : 0
