@@ -96,6 +96,9 @@ module Audit
       def check_enchant(item, equipped_item)
         if CLASSIC_ERA_ENCHANT_SLOTS.include? item
           begin
+            # Only Hunters need ranged enchants
+            return if item == 'ranged' && @character.character.class_id != 3
+
             # Off-hand items that are not weapons or shields can't be enchanted
             return if !equipped_item&.dig(:weapon) && !equipped_item&.dig(:shield_block) && item == "off_hand"
 

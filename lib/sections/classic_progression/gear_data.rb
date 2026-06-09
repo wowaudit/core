@@ -129,7 +129,7 @@ module Audit
         if MOP_ENCHANT_SLOTS.include? item
           begin
             # Only Hunters need ranged enchants
-            return if item == 'ranged' && @character.class_id != 3
+            return if item == 'ranged' && @character.character.class_id != 3
 
             if (match = equipped_item[:enchantments].map { |e| MOP_ENCHANTS[item][e[:enchantment_id]] }.compact.first)
               quality, name, stats = match
