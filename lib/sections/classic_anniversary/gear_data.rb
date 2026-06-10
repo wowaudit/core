@@ -124,6 +124,8 @@ module Audit
       def check_enchant(item, equipped_item)
         if TBC_ENCHANT_SLOTS.include? item
           begin
+            return if equipped_item[:inventory_type][:name] == "Held In Off-hand" && item == "off_hand"
+
             # Only Hunters need ranged enchants
             return if item == 'ranged' && @character.character.class_id != 3
 

@@ -38,7 +38,7 @@ module Audit
               'ilvl' => ilvl,
               'id' => equipped_item[:item][:id],
               'name' => equipped_item[:name],
-              'bonus_ids' => [],
+              'bonus_ids' => equipped_item[:bonus_list] || [],
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
               'enchant' => check_enchant(item, equipped_item),
               'sockets' => check_sockets(item, equipped_item),
