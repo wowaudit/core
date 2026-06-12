@@ -15,6 +15,7 @@ module Audit
             Audit::ClassicEra::BasicData,
             Audit::ClassicEra::GearData,
             Audit::ClassicEra::PvPData,
+            Audit::ClassicEra::ExternalData,
           ],
           classic_progression: [
             Audit::ClassicProgression::BasicData,
@@ -23,11 +24,13 @@ module Audit
             Audit::ClassicProgression::InstanceData,
             Audit::ClassicProgression::ProfessionData,
             Audit::ClassicProgression::PvPData,
+            Audit::ClassicProgression::ExternalData,
           ],
           classic_anniversary: [
             Audit::ClassicAnniversary::BasicData,
             Audit::ClassicAnniversary::GearData,
             Audit::ClassicAnniversary::PvPData,
+            Audit::ClassicAnniversary::ExternalData,
           ],
 
         }[realm.game_version.to_sym].each do |type|
