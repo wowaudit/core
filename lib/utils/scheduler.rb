@@ -40,11 +40,13 @@ module Audit
         )
 
         table = "realm_refresh_statuses"
-        teams = DB.fetch("SELECT realm_id as id, last_refreshed_#{worker.type} FROM #{table} " +
+        id_column = "realm_id"
+        entities = DB.fetch("SELECT #{id_column} AS id, last_refreshed_#{worker.type} FROM #{table} " +
                              "ORDER BY last_refreshed_#{worker.type} ASC NULLS FIRST LIMIT 10").to_a
       else
         table = 'teams'
-        teams = DB.fetch(
+        id_column = "id"
+        entities = DB.fetch(
           "SELECT t.id, ((#{Audit.now.to_i} - COALESCE(t.last_refreshed_#{worker.base_type}, 0)) " \
           "* t.refresh_factor) + t.refresh_factor AS priority, " \
           "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM #{table} t " \
@@ -52,13 +54,13 @@ module Audit
           "WHERE g.active = TRUE ORDER BY priority DESC LIMIT 5"
         ).to_a
       end
-      team_ids = teams.map{ |team| team[:id] }
+      entity_ids = entities.map{ |entity| entity[:id] }
 
       # Manual query since Sequel does not support
       # single update queries for multiple objects
-      DB.run("UPDATE #{table} SET last_refreshed_#{worker.base_type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})")
-      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.base_type} #{worker.name} | Entities: #{team_ids.join(', ')}")
-      team_ids
+      DB.run("UPDATE #{table} SET last_refreshed_#{worker.base_type} = #{Audit.now.to_i} WHERE #{id_column} IN (#{entity_ids.join(',')})")
+      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.base_type} #{worker.name} | Entities: #{entity_ids.join(', ')}")
+      entity_ids
     end
   end
 end
