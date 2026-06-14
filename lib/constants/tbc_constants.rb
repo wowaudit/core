@@ -172,7 +172,7 @@ TBC_ENCHANTS = {
 TBC_GEM_QUALITY_MAPPING = {
   legacy: 1,
   uncommon: 2,
-  rare: 4,
+  rare: 3,
   epic: 4,
   legendary: 4,
 }
