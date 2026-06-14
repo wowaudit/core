@@ -103,9 +103,9 @@ module Audit
           [2, 3, 4].first(sockets_expected).each do |enchantment_slot|
             if enchantment = equipped_item[:enchantments]&.find { |e| e.dig(:enchantment_slot, :id) == enchantment_slot }
               if meta_gem_type = TBC_META_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
-                @character.data['meta_gem_quality'] = GEM_QUALITY_MAPPING[meta_gem_type]
+                @character.data['meta_gem_quality'] = TBC_GEM_QUALITY_MAPPING[meta_gem_type]
               elsif gem_type = TBC_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
-                @character.gems << GEM_QUALITY_MAPPING[gem_type]
+                @character.gems << TBC_GEM_QUALITY_MAPPING[gem_type]
               else
                 @character.gems << 1 # unknown?
               end
