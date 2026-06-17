@@ -296,6 +296,8 @@ STORMARION_WEEKLY_QUESTS = [94581]
 # https://www.wowhead.com/quest=93744/unity-against-the-void
 UNITY_WEEKLY_QUESTS = [93890, 93889, 93891, 93910, 93769, 93909, 93911, 93767, 93912, 93913, 93892, 93766, 94457]
 
+OMNIUM_FOLIO = [96410, 96441, 96442, 96443, 96444]
+
 RAID_DIFFICULTIES = {
   1 => 'raid_finder',
   3 => 'normal',
