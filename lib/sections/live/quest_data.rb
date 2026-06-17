@@ -15,7 +15,7 @@ module Audit
         @character.data['stormarion_assault'] = 'no'
         @character.data['voidforge_quest'] = 'no'
 
-        raid_buff_amount = 0
+        folio_amount = 0
         @data.dig(:completed_quests, :quests)&.lazy&.each do |quest|
           @character.data['unity_against_the_void_weekly'] = 'yes' if UNITY_WEEKLY_QUESTS.include? quest[:id]
           @character.data['legends_of_the_haranir_weekly'] = 'yes' if HARANIR_WEEKLY_QUESTS.include? quest[:id]
@@ -23,7 +23,7 @@ module Audit
           @character.data['stormarion_assault'] = 'yes' if STORMARION_WEEKLY_QUESTS.include? quest[:id]
           @character.data['saltherils_soiree'] = 'yes' if SALTHERIL_WEEKLY_QUESTS.include? quest[:id]
           @character.data['voidforge_quest'] = 'yes' if quest[:id] == 94625
-          raid_buff_amount += 1 if RAID_BUFF_IDS.include? quest[:id]
+          folio_amount += 1 if OMNIUM_FOLIO.include? quest[:id]
 
           if (prey_difficulty = PREY_QUEST_DIFFICULTY_BY_ID[quest[:id]])
             @character.prey_info[prey_difficulty] += 1
@@ -34,7 +34,7 @@ module Audit
         @character.data['hard_preys_weekly'] = @character.prey_info[:hard]
         @character.data['nightmare_preys_weekly'] = @character.prey_info[:nightmare]
 
-        @character.data['raid_buff_percentage'] = " #{raid_buff_amount * 3} %"
+        @character.data['folio_amount'] = "#{folio_amount} / 5"
 
         unless !@data[:completed_quests]
           @character.data['weekly_event_completed'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest[:id] } ? 'yes' : 'no'
