@@ -34,7 +34,7 @@ module Audit
         @character.data['hard_preys_weekly'] = @character.prey_info[:hard]
         @character.data['nightmare_preys_weekly'] = @character.prey_info[:nightmare]
 
-        @character.data['folio_amount'] = " #{folio_amount} / 5"
+        @character.data['folio_amount'] = "#{folio_amount} / 5"
 
         unless !@data[:completed_quests]
           @character.data['weekly_event_completed'] = @data.dig(:completed_quests, :quests)&.lazy&.any? { |quest| WEEKLY_EVENT_QUESTS.include? quest[:id] } ? 'yes' : 'no'
