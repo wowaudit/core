@@ -4,6 +4,8 @@ TIMELINE_EVENTS = {
     to: Date.new(2007, 1, 15),
     title: 'Vanilla',
     criteria: [
+      { achievement_id: 416, quality: :legendary, name: 'Scarab Lord', icon: 'achievement_zone_silithus_01' },
+
       { achievement_id: 433, quality: :legendary, name: 'Grand Marshal', icon: 'achievement_pvp_a_14' },
       { achievement_id: 443, quality: :legendary, name: 'High Warlord', icon: 'achievement_pvp_h_14' },
 
