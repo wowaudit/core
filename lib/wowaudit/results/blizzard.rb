@@ -107,7 +107,8 @@ module Wowaudit
       end
 
       def create_newly_found_character(profile_id)
-        (Audit::Character.first(profile_id: profile_id) || Audit::Character.new(profile_id: profile_id)).tap do |new_character|
+        klass = Wowaudit.character_class || Audit::Character
+        (klass.where(profile_id: profile_id).first || klass.new(profile_id: profile_id)).tap do |new_character|
           now = DateTime.now
           new_character.game_version = @character.realm.game_version
           new_character.created_at ||= now

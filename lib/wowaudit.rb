@@ -24,7 +24,7 @@ ALL_UPDATABLE_FIELDS = [
 
 module Wowaudit
   class << self
-    attr_accessor :updatable_fields, :extra_fields, :failure_status, :retry_on_api_limit, :ignore_unavailable, :redis_suffix
+    attr_accessor :updatable_fields, :extra_fields, :failure_status, :retry_on_api_limit, :ignore_unavailable, :redis_suffix, :character_class
   end
 
   self.updatable_fields = ALL_UPDATABLE_FIELDS.dup
@@ -33,6 +33,7 @@ module Wowaudit
   self.retry_on_api_limit = true
   self.ignore_unavailable = true
   self.redis_suffix = 0
+  self.character_class = nil
 
   def self.updatable_fields=(fields)
     @updatable_fields = fields.map(&:to_sym) & ALL_UPDATABLE_FIELDS
