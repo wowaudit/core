@@ -23,8 +23,8 @@ module Audit
         @character.data['class'] = CLASSES[@temp_character.class_id || @data.dig(:character_class, :id)]
         @character.data['faction'] = @data.dig(:faction, :name)
         @character.data['blizzard_last_modified'] = @data[:last_login_timestamp]
-        @character.data['gender'] = @data[:gender][:name]
-        @character.data['race'] = @data[:race][:name]
+        @character.data['gender'] = @data.dig(:gender, :name)
+        @character.data['race'] = @data.dig(:race, :name)
         @character.data['level'] = @data[:level]
         @character.data['role'] = @temp_character.role || DEFAULT_ROLES[CLASSES[@temp_character.class_id || @data.dig(:character_class, :id)]]
       end
