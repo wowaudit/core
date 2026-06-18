@@ -49,6 +49,8 @@ TIMELINE_EVENTS = {
 
       { achievement_id: 454, quality: :rare, name: 'Scout', icon: 'achievement_pvp_h_01' },
       { achievement_id: 442, quality: :rare, name: 'Private', icon: 'achievement_pvp_a_01' },
+
+      { achievement_id: 2079, quality: :rare, name: 'Tabard of the Protector', icon: 'inv_shirt_guildtabard_01' },
     ]
   },
   2 => {
