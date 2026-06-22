@@ -1,6 +1,6 @@
 module Audit
   module Writer
-    MAX_PENDING_WRITES = 100
+    MAX_PENDING_WRITES = 16
 
     class << self
       def write(team, result, header)
@@ -12,8 +12,12 @@ module Audit
       end
 
       def update_db(results)
+        changed = results.select(&:changed).map(&:character)
+        tracking_ids = results.select { |r| r.character.status == 'tracking' }.map { |r| r.character.id }
+        return if changed.empty? && tracking_ids.empty?
+
         ensure_writer_thread
-        queue << results
+        queue << [changed, tracking_ids]
       end
 
       private
@@ -29,21 +33,20 @@ module Audit
           return if @writer_thread&.alive?
 
           @writer_thread = Thread.new do
-            loop { flush(queue.pop) }
+            loop { flush(*queue.pop) }
           end
         end
       end
 
-      def flush(results)
-        results.select(&:changed).each do |result|
+      def flush(changed, tracking_ids)
+        changed.each do |character|
           begin
-            result.character.save_changes
+            character.save_changes
           rescue Sequel::DatabaseError => e
-            Sentry.capture_exception(e, extra: { character_id: result.character.id })
+            Sentry.capture_exception(e, extra: { character_id: character.id })
           end
         end
 
-        tracking_ids = results.select { |r| r.character.status == 'tracking' }.map { |r| r.character.id }
         if tracking_ids.any?
           DB.run("UPDATE characters SET refreshed_at = NOW() WHERE id IN (#{tracking_ids.join(',')})")
         end
