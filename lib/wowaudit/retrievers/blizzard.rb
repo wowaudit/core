@@ -7,7 +7,7 @@ module Wowaudit
         all_characters.group_by { |ch| ch.realm.namespace }.each do |namespace, characters|
           region = characters.first.realm.region
           Audit.timestamp = region
-          RBattlenet.set_options(namespace: namespace, region: region, locale: (region == "US" ? "en_US" : "en_GB"), response_type: :hash)
+          RBattlenet.set_options(namespace: namespace, region: region, locale: (region == "US" ? "en_US" : "en_GB"), response_type: :hash, concurrency: 25, timeout: 60, retries: 5, eager_children: true)
 
           media_field = characters.any? { |ch| ch.media_zone.nil? } ? [:media] : []
 
