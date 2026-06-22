@@ -31,8 +31,8 @@ spec:
               memory: 400Mi
 
             limits:
-              cpu: 250m
-              memory: 750Mi
+              cpu: 1000m
+              memory: 850Mi
 
       imagePullSecrets:
         - name: regcred
