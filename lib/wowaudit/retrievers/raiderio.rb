@@ -11,7 +11,9 @@ module Wowaudit
           uri["{name}"] = CGI.escape(character.name)
 
           begin
-            Wowaudit::Results::Raiderio.new(character, Typhoeus.get(uri))
+            response = Typhoeus.get(uri)
+            Wowaudit::Metrics.record(response.code)
+            Wowaudit::Results::Raiderio.new(character, response)
           rescue Wowaudit::Exception::ApiLimitReached
             Audit::Logger.t(ERROR_API_LIMIT_REACHED, team_id)
             sleep 5

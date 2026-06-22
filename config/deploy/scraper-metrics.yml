@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: scraper-metrics
+  labels:
+    app: wowaudit-scraper-metrics
+spec:
+  clusterIP: None
+  ports:
+    - name: metrics
+      port: 9394
+      targetPort: metrics
+  selector:
+    metrics: wowaudit-scraper
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: wowaudit-scraper-metrics
+  labels:
+    app: wowaudit-scraper-metrics
+spec:
+  selector:
+    matchLabels:
+      app: wowaudit-scraper-metrics
+  endpoints:
+    - port: metrics
+      path: /metrics
