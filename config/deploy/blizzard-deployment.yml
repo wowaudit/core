@@ -13,12 +13,17 @@ spec:
     metadata:
       labels:
         app: blizzard
+        metrics: wowaudit-legacy-scraper
     spec:
       containers:
         - name: blizzard
           image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
           args: ["blizzard"]
+
+          ports:
+            - name: metrics
+              containerPort: 9394
 
           resources:
             requests:

@@ -13,6 +13,8 @@ gem 'rollbar'
 gem 'oj'
 gem 'json'
 gem 'rexml'
+gem 'prometheus-client'
+gem 'webrick'
 
 group :development do
   gem 'byebug'

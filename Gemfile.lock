@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/wowaudit/rbattlenet.git
-  revision: 39739655c01c892b44333e5c43f61c4364caae3e
+  revision: 08aeec292094a8db48932a261028dc0eb6a2cf8a
   branch: master
   specs:
-    rbattlenet (2.0.0)
+    rbattlenet (2.1.0)
       addressable
       oj
       require_all
@@ -12,8 +12,8 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     aws-eventstream (1.2.0)
     aws-partitions (1.702.0)
     aws-sdk-core (3.170.0)
@@ -30,17 +30,26 @@ GEM
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.3.0)
+    bigdecimal (4.1.2)
     byebug (11.1.0)
     concurrent-ruby (1.2.0)
     connection_pool (2.3.0)
-    ethon (0.16.0)
+    ethon (0.18.0)
       ffi (>= 1.15.0)
-    ffi (1.15.5)
+      logger
+    ffi (1.17.4)
     jmespath (1.6.2)
     json (2.6.3)
+    logger (1.7.0)
     mysql2 (0.5.5)
-    oj (3.14.1)
-    public_suffix (6.0.1)
+    oj (3.17.3)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
+    ostruct (0.6.3)
+    prometheus-client (4.2.5)
+      base64
+    public_suffix (6.0.2)
     redis (5.0.6)
       redis-client (>= 0.9.0)
     redis-client (0.12.1)
@@ -49,10 +58,11 @@ GEM
     rexml (3.2.5)
     rollbar (3.4.0)
     sequel (5.65.0)
-    typhoeus (1.4.0)
-      ethon (>= 0.9.0)
+    typhoeus (1.6.0)
+      ethon (>= 0.18.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    webrick (1.9.2)
 
 PLATFORMS
   ruby
@@ -63,6 +73,7 @@ DEPENDENCIES
   json
   mysql2
   oj
+  prometheus-client
   rbattlenet!
   redis
   require_all
@@ -71,9 +82,10 @@ DEPENDENCIES
   sequel
   typhoeus
   tzinfo
+  webrick
 
 RUBY VERSION
    ruby 3.1.3p185
 
 BUNDLED WITH
-   2.4.1
+   2.3.26
