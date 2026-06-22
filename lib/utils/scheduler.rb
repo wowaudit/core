@@ -47,7 +47,7 @@ module Audit
         table = 'teams'
         id_column = "id"
         entities = DB.fetch(
-          "SELECT t.id, ((#{Audit.now.to_i} - COALESCE(t.last_refreshed_#{worker.base_type}, 0)) " \
+          "SELECT t.id, ((#{Audit.now.to_i}::bigint - COALESCE(t.last_refreshed_#{worker.base_type}, 0)) " \
           "* t.refresh_factor) + t.refresh_factor AS priority, " \
           "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM #{table} t " \
           "INNER JOIN guilds g ON g.id = t.owner_id " \
