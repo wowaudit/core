@@ -92,13 +92,21 @@ module Wowaudit
 
         profile_id = "#{@response.dig(:realm, :id)}-#{@response[:id]}"
         if @character.profile_id != profile_id && @response[:id].present?
-          if @character.realm.game_version == 'classic_era' || @character.realm.game_version == 'classic_anniversary' || @character.achievement_uid != new_achievement_uid
+          if @character.realm.game_version == 'classic_era' || @character.realm.game_version == 'classic_anniversary' || (new_achievement_uid && @character.achievement_uid != new_achievement_uid)
             create_newly_found_character(profile_id)
             return true
           else
             # In practice this only happens when a character performs a faction change. The profile ID also
             # changes with a realm transfer, but in that case the API will not return the new character
             # (since it's on a different realm).
+            klass = Wowaudit.character_class || Audit::Character
+            existing = klass.where(profile_id: profile_id).first
+            if existing && existing.id != @character.id
+              # Another record already owns the new profile ID, so reassigning would violate the
+              # unique constraint. Treat the current character as gone instead.
+              return true
+            end
+
             update_field(@character, :profile_id, profile_id)
           end
         end
@@ -111,6 +119,7 @@ module Wowaudit
         (klass.where(profile_id: profile_id).first || klass.new(profile_id: profile_id)).tap do |new_character|
           now = DateTime.now
           new_character.game_version = @character.realm.game_version
+          new_character.realm_id = @response.dig(:realm, :id)
           new_character.created_at ||= now
           new_character.updated_at = now
           store_metadata(new_character)
