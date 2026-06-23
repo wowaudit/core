@@ -46,6 +46,9 @@ module Audit
               if slots.keys.include? generic_item
                 if CLASSIC_ERA_TIER_ITEMS[tier].include?(equipped_item[:item][:id].to_i)
                   @character.details["tier_#{tier}_#{generic_item}"] = true
+                  (@character.details["tier_items_t#{tier}"] ||= {})[generic_item] = {
+                    'ilvl' => @character.details['current_gear'][item]['ilvl']
+                  }
                 end
 
                 # Only count the tier 3 ring for one of the finger slots at most
@@ -93,6 +96,9 @@ module Audit
       def check_enchant(item, equipped_item)
         if CLASSIC_ERA_ENCHANT_SLOTS.include? item
           begin
+            # Only Hunters need ranged enchants
+            return if item == 'ranged' && @character.character.class_id != 3
+
             # Off-hand items that are not weapons or shields can't be enchanted
             return if !equipped_item&.dig(:weapon) && !equipped_item&.dig(:shield_block) && item == "off_hand"
 
@@ -114,7 +120,7 @@ module Audit
             @character.data["#{item}_enchant_name"] = ''
           end
 
-          { name: @character.data["#{item}_enchant_name"], quality: @character.data["#{item}_enchant_quality"] }
+          { name: @character.data["#{item}_enchant_name"], quality: 4, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: @character.data["#{item}_enchant_name"] == '' }
         end
       end
     end

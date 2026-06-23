@@ -15,6 +15,7 @@ module Audit
             Audit::ClassicEra::BasicData,
             Audit::ClassicEra::GearData,
             Audit::ClassicEra::PvPData,
+            Audit::ClassicEra::ExternalData,
           ],
           classic_progression: [
             Audit::ClassicProgression::BasicData,
@@ -23,14 +24,16 @@ module Audit
             Audit::ClassicProgression::InstanceData,
             Audit::ClassicProgression::ProfessionData,
             Audit::ClassicProgression::PvPData,
+            Audit::ClassicProgression::ExternalData,
           ],
           classic_anniversary: [
             Audit::ClassicAnniversary::BasicData,
             Audit::ClassicAnniversary::GearData,
             Audit::ClassicAnniversary::PvPData,
+            Audit::ClassicAnniversary::ExternalData,
           ],
 
-        }[realm.kind.to_sym].each do |type|
+        }[realm.game_version.to_sym].each do |type|
           next if skipped && type::SKIPPABLE
 
           type.new(character, data, skipped, realm, temp_character).add
@@ -45,7 +48,7 @@ module Audit
       @skipped = skipped
       @realm = realm
 
-      if !@skipped && @realm.kind != 'classic_era' && @realm.kind != 'classic_anniversary'
+      if !@skipped && @realm.game_version != 'classic_era' && @realm.game_version != 'classic_anniversary'
         @achievements = @data[:achievements]
                           .group_by{ |ach| ach[:id] }
                           .transform_values(&:first)

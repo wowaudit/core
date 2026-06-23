@@ -19,8 +19,7 @@ module Audit
 
         # Parse messages
         new_header[4] = "#{CURRENT_VERSION[:live]}|#{VERSION_MESSAGE}"
-        new_header[5] = team.warning
-        new_header[6] = team.guild.patron_id ? "patreon" : "no patreon"
+        new_header[6] = team.refresh_factor > 1 ? "patreon" : "no patreon"
 
         # Add raid bosses to header, spreadsheet relies on it being in the 141th column
         data = []

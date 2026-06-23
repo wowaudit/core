@@ -49,6 +49,9 @@ module Audit
               if slots.keys.include? item
                 if TBC_TIER_ITEMS[tier].include?(equipped_item[:item][:id].to_i)
                   @character.details["tier_#{tier}_#{item}"] = @character.details['current_gear'][item]['ilvl']
+                  (@character.details["tier_items_t#{tier}"] ||= {})[item] = {
+                    'ilvl' => @character.details['current_gear'][item]['ilvl']
+                  }
                 end
 
                 tier_statuses[tier] += @character.details["tier_#{tier}_#{item}"] ? 1 : 0
@@ -100,9 +103,9 @@ module Audit
           [2, 3, 4].first(sockets_expected).each do |enchantment_slot|
             if enchantment = equipped_item[:enchantments]&.find { |e| e.dig(:enchantment_slot, :id) == enchantment_slot }
               if meta_gem_type = TBC_META_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
-                @character.data['meta_gem_quality'] = GEM_QUALITY_MAPPING[meta_gem_type]
+                @character.data['meta_gem_quality'] = TBC_GEM_QUALITY_MAPPING[meta_gem_type]
               elsif gem_type = TBC_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
-                @character.gems << GEM_QUALITY_MAPPING[gem_type]
+                @character.gems << TBC_GEM_QUALITY_MAPPING[gem_type]
               else
                 @character.gems << 1 # unknown?
               end
@@ -121,8 +124,10 @@ module Audit
       def check_enchant(item, equipped_item)
         if TBC_ENCHANT_SLOTS.include? item
           begin
+            return if equipped_item[:inventory_type][:name] == "Held In Off-hand" && item == "off_hand"
+
             # Only Hunters need ranged enchants
-            return if item == 'ranged' && @character.class_id != 3
+            return if item == 'ranged' && @character.character.class_id != 3
 
             if (match = equipped_item[:enchantments].map { |e| TBC_ENCHANTS[item][e[:enchantment_id]] }.compact.first)
               quality, name, stats = match
@@ -139,14 +144,14 @@ module Audit
               end.first&.dig(:display_string)&.split('Enchanted: ')&.reject(&:empty?)&.first&.split(' |')&.first
 
               @character.data["#{item}_enchant_name"] = name_to_store = ''
-              @character.data["#{item}_enchant_quality"] = 0
+              @character.data["#{item}_enchant_quality"] = quality_to_store = 0
             end
           rescue
-            @character.data["#{item}_enchant_quality"] = 0
+            @character.data["#{item}_enchant_quality"] = quality_to_store = 0
             @character.data["#{item}_enchant_name"] = name_to_store = ''
           end
 
-          { name: name_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
+          { name: name_to_store, quality: quality_to_store, id: equipped_item[:enchantments]&.first&.dig(:enchantment_id), missing: name_to_store == '' }
         end
       end
     end

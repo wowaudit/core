@@ -13,12 +13,17 @@ spec:
     metadata:
       labels:
         app: historical-keystones
+        metrics: wowaudit-scraper
     spec:
       containers:
         - name: historical-keystones
           image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
           args: ["historical_keystones"]
+
+          ports:
+            - name: metrics
+              containerPort: 9394
 
           resources:
             requests:

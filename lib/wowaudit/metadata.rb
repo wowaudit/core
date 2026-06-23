@@ -2,7 +2,7 @@ module Wowaudit
   class Metadata
     class << self
       def client
-        @@client ||= Redis.new(
+        @@client ||= defined?(REDIS) ? REDIS : Redis.new(
           url: "#{ENV['REDIS_HOST']}/#{Wowaudit.redis_suffix}",
           password: ENV['REDIS_PASSWORD']
         )
@@ -10,6 +10,10 @@ module Wowaudit
 
       def store(result)
         client.set(result.character.redis_id, result.metadata.to_json)
+      end
+
+      def store_all(results)
+        client.mset(results.map{ |result| [result.character.redis_id, result.metadata.to_json] }.flatten)
       end
     end
   end

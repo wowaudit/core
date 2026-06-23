@@ -5,7 +5,7 @@ CURRENT_VERSION = {
   classic_anniversary: 203,
 }
 
-PREVENT_SKIP_TIMESTAMP = Time.parse("2026-04-06 18:30:00 +0200").to_i
+PREVENT_SKIP_TIMESTAMP = DateTime.parse("2026-03-19 22:35:00 +0200")
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
@@ -560,10 +560,10 @@ HEADER = {
     'off_hand_id',
     'off_hand_name',
     'off_hand_quality',
-    "", #'WCL_raid_finder',
-    "", #'WCL_normal',
-    "", #'WCL_heroic',
-    "", #'WCL_mythic',
+    'WCL_raid_finder',
+    'WCL_normal',
+    'WCL_heroic',
+    'WCL_mythic',
     "ranged_ilvl",
     "ranged_id",
     "ranged_name",
@@ -734,10 +734,10 @@ HEADER = {
     'off_hand_id',
     'off_hand_name',
     'off_hand_quality',
-    "", #'WCL_raid_finder',
-    "", #'WCL_normal',
-    "", #'WCL_heroic',
-    "", #'WCL_mythic',
+    'WCL_raid_finder',
+    'WCL_normal',
+    'WCL_heroic',
+    'WCL_mythic',
     "",
     "",
     "",
@@ -909,10 +909,10 @@ HEADER = {
     'off_hand_id',
     'off_hand_name',
     'off_hand_quality',
-    "", #'WCL_raid_finder',
-    "", #'WCL_normal',
-    "", #'WCL_heroic',
-    "", #'WCL_mythic',
+    'WCL_raid_finder',
+    'WCL_normal',
+    'WCL_heroic',
+    'WCL_mythic',
     'ranged_ilvl',
     'ranged_id',
     'ranged_name',
@@ -1020,4 +1020,9 @@ CHARACTER_IDENTIFICATION_IDS = [
   131, # Journeyman Medic
   973, # 5 Daily Quests Completed
   14271, # WoW's 16th Anniversary
+]
+
+USER_IDENTIFICATION_IDS = [
+  19470, # One Warband Mentor: The War Within
+  61211, # Welcome Home
 ]

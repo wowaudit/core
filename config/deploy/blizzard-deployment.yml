@@ -5,7 +5,7 @@ metadata:
   labels:
     app: blizzard
 spec:
-  replicas: 9
+  replicas: 8
   selector:
     matchLabels:
       app: blizzard
@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: blizzard
+        metrics: wowaudit-scraper
     spec:
       containers:
         - name: blizzard
@@ -20,14 +21,18 @@ spec:
           command: ["/srv/bin/refresh"]
           args: ["blizzard"]
 
+          ports:
+            - name: metrics
+              containerPort: 9394
+
           resources:
             requests:
               cpu: 250m
-              memory: 350Mi
+              memory: 450Mi
 
             limits:
-              cpu: 250m
-              memory: 600Mi
+              cpu: 1000m
+              memory: 1250Mi
 
       imagePullSecrets:
         - name: regcred

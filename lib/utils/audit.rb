@@ -3,25 +3,24 @@ module Audit
 
   class << self
     def refresh(entities, type)
-      query = []
       entities.each do |team|
         begin
           Logger.t(INFO_TEAM_STARTING, team.to_i)
-          (type.include?("keystones") ? Realm : Team).refresh(team.to_i, type)
+          Wowaudit::Client::RETRIEVERS[type.to_sym].retrieve_group(team)
         rescue ApiLimitReachedException
           Logger.t(ERROR_API_LIMIT_REACHED, team.to_i)
           sleep 60
           redo
-        rescue Net::ReadTimeout, Mysql2::Error => e
-          Rollbar.error(e, team_id: team.to_i, type: type)
+        rescue Net::ReadTimeout, PG::ConnectionBad => e
+          Sentry.capture_exception(e, extra: { team_id: team.to_i, type: type })
           Logger.t(ERROR_DATABASE_CONNECTION, team.to_i)
           sleep 180
           redo
         rescue RBattlenet::Errors::Unauthorized
           Logger.t(ERROR_NO_API_KEY, team.to_i)
         rescue => e
-          Rollbar.error(e, team_id: team.to_i, type: type)
-          sleep(180) if e.class == Mysql2::Error
+          Sentry.capture_exception(e, extra: { team_id: team.to_i, type: type })
+          sleep(180) if e.class == PG::ConnectionBad
           Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
         end
       end
@@ -31,7 +30,7 @@ module Audit
       current_api_key = nil
       waiting_since = Time.now
       loop do
-        worker = Schedule.where(name: `hostname`.strip).first || register_worker(type, 1)
+        worker = Schedule.where(name: "#{`hostname`.strip}-#{type}").first || register_worker(type, 1)
 
         if ['wcl', 'raiderio'].include?(type) || (worker.api_key && !worker.api_key.expired?)
           waiting_since = nil
@@ -57,14 +56,14 @@ module Audit
             worker.update(updated_at: DateTime.now)
           end
 
-          self.refresh(schedule, worker.base_type)
+          self.refresh(schedule, worker.type)
           Logger.g(INFO_FINISHED_SCHEDULE)
         else
           puts Logger.g(INFO_NO_TOKEN_AVAILABLE)
 
           waiting_since ||= Time.now
           if (Time.now - waiting_since) > 15 # seconds
-            Rollbar.error('Waiting too long for a token...')
+            Sentry.capture_message('Waiting too long for a token...')
             waiting_since = nil
           end
 
@@ -93,7 +92,7 @@ module Audit
     def register_worker(type, zone)
       Logger.g(INFO_REGISTERED_WORKER)
       Schedule.find_or_create(
-        name: `hostname`.strip,
+        name: "#{`hostname`.strip}-#{type}",
       ) do |schedule|
         schedule.type = type
         schedule.active = true
@@ -187,10 +186,31 @@ module Audit
       end
 
       if !details['current_gear'].is_a? Hash
-        details['current_gear'] = ITEMS[realm.kind.to_sym].map { |item| [item, { ilvl: 0 }] }.to_h
+        details['current_gear'] = ITEMS[realm.game_version.to_sym].map { |item| [item, { ilvl: 0 }] }.to_h
       end
 
-      if realm.kind == 'live'
+      if realm.game_version == 'classic_era'
+        CLASSIC_ERA_TIER_ITEMS_BY_SLOT.each do |tier, slots|
+          key = "tier_items_t#{tier}"
+          details[key] = slots.keys.map { |slot| [slot, { 'ilvl' => 0 }] }.to_h unless details[key].is_a?(Hash)
+        end
+      end
+
+      if realm.game_version == 'classic_anniversary'
+        TBC_TIER_ITEMS_BY_SLOT.each do |tier, slots|
+          key = "tier_items_t#{tier}"
+          details[key] = slots.keys.map { |slot| [slot, { 'ilvl' => 0 }] }.to_h unless details[key].is_a?(Hash)
+        end
+      end
+
+      if realm.game_version == 'classic_progression'
+        MOP_TIER_ITEMS_BY_SLOT.each do |tier, slots|
+          key = "tier_items_t#{tier}"
+          details[key] = slots.keys.map { |slot| [slot, { 'ilvl' => 0 }] }.to_h unless details[key].is_a?(Hash)
+        end
+      end
+
+      if realm.game_version == 'live'
         # Initialise snapshots if not present
         if !details['snapshots'].is_a? Hash
           details['snapshots'] = {}
@@ -204,7 +224,6 @@ module Audit
             'weekly_highest' => 0,
             'period' => 0,
             'top_ten_highest' => [],
-            'leaderboard_runs' => [],
           }
         end
 

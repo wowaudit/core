@@ -4,6 +4,8 @@ TIMELINE_EVENTS = {
     to: Date.new(2007, 1, 15),
     title: 'Vanilla',
     criteria: [
+      { achievement_id: 416, quality: :legendary, name: 'Scarab Lord', icon: 'achievement_zone_silithus_01' },
+
       { achievement_id: 433, quality: :legendary, name: 'Grand Marshal', icon: 'achievement_pvp_a_14' },
       { achievement_id: 443, quality: :legendary, name: 'High Warlord', icon: 'achievement_pvp_h_14' },
 
@@ -47,6 +49,8 @@ TIMELINE_EVENTS = {
 
       { achievement_id: 454, quality: :rare, name: 'Scout', icon: 'achievement_pvp_h_01' },
       { achievement_id: 442, quality: :rare, name: 'Private', icon: 'achievement_pvp_a_01' },
+
+      { achievement_id: 2079, quality: :rare, name: 'Tabard of the Protector', icon: 'inv_shirt_guildtabard_01' },
     ]
   },
   2 => {
@@ -431,6 +435,22 @@ TIMELINE_EVENTS = {
       { achievement_id: 41625, quality: :legendary, name: "Hall of Fame: Dimensius, the All-Devouring", icon: 'inv_112_achievement_raid_dimensius', time_sensitive: Date.new(2025, 10, 7) },
       { achievement_id: 41625, quality: :epic, name: "Cutting Edge: Dimensius, the All-Devouring", icon: 'inv_112_achievement_raid_dimensius' },
       { achievement_id: 41624, quality: :rare, name: "Ahead of the Curve: Dimensius, the All-Devouring", icon: 'inv_112_achievement_raid_dimensius' },
+    ],
+  },
+  37 => {
+    from: Date.new(2026, 3, 2),
+    to: Date.new(2026, 10, 20),
+    title: "Voidspire & Dreamrift & March on Quel'danas",
+    criteria: [
+      { achievement_id: 61627, quality: :legendary, name: "Hall of Fame: Midnight Falls", icon: 'inv_120_raid_marchonqueldanas_lura', time_sensitive: Date.new(2026, 3, 2) },
+      { achievement_id: 61625, quality: :legendary, name: "Hall of Fame: Crown of the Cosmos", icon: 'inv_120_raid_voidspire_alleria', time_sensitive: Date.new(2026, 3, 2) },
+      { achievement_id: 61492, quality: :legendary, name: "Hall of Fame: Chimearus, the Undreamt God", icon: 'inv_120_raid_dreamwell_malformedmanifestation', time_sensitive: Date.new(2026, 3, 31) },
+      { achievement_id: 61627, quality: :epic, name: "Cutting Edge: Midnight Falls", icon: 'inv_120_raid_marchonqueldanas_lura' },
+      { achievement_id: 61625, quality: :epic, name: "Cutting Edge: Crown of the Cosmos", icon: 'inv_120_raid_voidspire_alleria' },
+      { achievement_id: 61492, quality: :epic, name: "Cutting Edge: Chimearus, the Undreamt God", icon: 'inv_120_raid_dreamwell_malformedmanifestation' },
+      { achievement_id: 61626, quality: :rare, name: "Ahead of the Curve: Midnight Falls", icon: 'inv_120_raid_marchonqueldanas_lura' },
+      { achievement_id: 61624, quality: :rare, name: "Ahead of the Curve: Crown of the Cosmos", icon: 'inv_120_raid_voidspire_alleria' },
+      { achievement_id: 61491, quality: :rare, name: "Ahead of the Curve: Chimearus, the Undreamt God", icon: 'inv_120_raid_dreamwell_malformedmanifestation' },
     ],
   },
 }

@@ -3,17 +3,21 @@ module Audit
     class ExternalData < Data
       SKIPPABLE = false
 
-      def add
-        add_warcraftlogs_data
-        add_raiderio_data
-        add_leaderboard_data
+      def add(type = :live)
+        add_warcraftlogs_data(type)
+
+        # Raider.io and leaderboard (Mythic+) data only exist on the live game version.
+        if type == :live
+          add_raiderio_data
+          add_leaderboard_data
+        end
       end
 
-      def add_warcraftlogs_data
+      def add_warcraftlogs_data(type = :live)
         RAID_DIFFICULTIES.each_key do |diff|
           output = []
-          WCL_IDS[:live].each do |boss|
-            value = @character.details['warcraftlogs'][diff.to_s][boss]
+          WCL_IDS[type].each do |boss|
+            value = @character.details.dig('warcraftlogs', diff.to_s, boss)
             output << (value ? (value == '-' ? '-' : value&.to_f.to_i) : '-')
           end
           @character.data["WCL_#{RAID_DIFFICULTIES[diff]}"] = output.join('|')

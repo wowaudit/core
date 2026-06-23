@@ -6,7 +6,7 @@ module Audit
       if type.include? "blizzard"
         "collections"
       else
-        type.gsub("dedicated-", "").gsub("historical_", "")
+        type.gsub("dedicated-", "")
       end
     end
   end

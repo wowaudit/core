@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: raiderio
+        metrics: wowaudit-scraper
     spec:
       tolerations:
         - key: low-performance-node
@@ -23,6 +24,10 @@ spec:
           image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
           args: ["raiderio"]
+
+          ports:
+            - name: metrics
+              containerPort: 9394
 
           resources:
             requests:

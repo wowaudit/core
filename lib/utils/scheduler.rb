@@ -5,10 +5,10 @@ module Audit
       raiderio: 60,
       wcl: 15,
       keystones: 5,
+      historical_keystones: 5,
     }
 
     def initialize
-      stats = {}
       loop do
         schedule = Schedule.all
 
@@ -30,25 +30,37 @@ module Audit
 
     def self.schedule_work(worker)
       if worker.type.include?("keystones")
-        table = "realms"
-        teams = Writer.query("SELECT id, last_refreshed_#{worker.type} FROM realms WHERE kind = 'live' AND obsolete = FALSE " +
-                             "ORDER BY last_refreshed_#{worker.type} ASC LIMIT 10", false).to_a
+        all_realm_ids = Realm.where(game_version: 'live').map{ |realm| realm.id }
+        DB.run(
+          "INSERT INTO realm_refresh_statuses (realm_id) " \
+          "SELECT id FROM unnest(ARRAY[#{all_realm_ids}]::integer[]) AS id " \
+          "WHERE NOT EXISTS (" \
+          "SELECT 1 FROM realm_refresh_statuses rrs WHERE rrs.realm_id = id" \
+          ")"
+        )
+
+        table = "realm_refresh_statuses"
+        id_column = "realm_id"
+        entities = DB.fetch("SELECT #{id_column} AS id, last_refreshed_#{worker.type} FROM #{table} " +
+                             "ORDER BY last_refreshed_#{worker.type} ASC NULLS FIRST LIMIT 10").to_a
       else
-        table = "teams"
-        teams = Writer.query("SELECT t.id, ((#{Audit.now.to_i} - IFNULL(t.last_refreshed_#{worker.base_type}, 0)) " +
-                            "* t.refresh_factor) + t.refresh_factor AS priority, " +
-                            "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM `teams` t " +
-                            "INNER JOIN guilds g ON g.id = t.guild_id " +
-                            (worker.type.include?("dedicated") ? "INNER JOIN api_keys a ON a.guild_id = t.guild_id WHERE a.active = 1 AND " : "WHERE ") +
-                            "g.active = 1 ORDER BY priority DESC LIMIT 5", false).to_a
+        table = 'teams'
+        id_column = "id"
+        entities = DB.fetch(
+          "SELECT t.id, ((#{Audit.now.to_i}::bigint - COALESCE(t.last_refreshed_#{worker.base_type}, 0)) " \
+          "* t.refresh_factor) + t.refresh_factor AS priority, " \
+          "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM #{table} t " \
+          "INNER JOIN guilds g ON g.id = t.owner_id " \
+          "WHERE g.active = TRUE ORDER BY priority DESC LIMIT 5"
+        ).to_a
       end
-      team_ids = teams.map{ |team| team["id"] }
+      entity_ids = entities.map{ |entity| entity[:id] }
 
       # Manual query since Sequel does not support
       # single update queries for multiple objects
-      Writer.query("UPDATE #{table} SET last_refreshed_#{worker.base_type} = #{Audit.now.to_i} WHERE id IN (#{team_ids.join(',')})", false)
-      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.base_type} #{worker.name} | Entities: #{team_ids.join(', ')}")
-      team_ids
+      DB.run("UPDATE #{table} SET last_refreshed_#{worker.base_type} = #{Audit.now.to_i} WHERE #{id_column} IN (#{entity_ids.join(',')})")
+      Logger.g(INFO_SCHEDULER_ADDED + "Worker: #{worker.base_type} #{worker.name} | Entities: #{entity_ids.join(', ')}")
+      entity_ids
     end
   end
 end

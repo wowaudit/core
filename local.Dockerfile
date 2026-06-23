@@ -1,7 +1,7 @@
 # To run locally on M1 Mac:
 # docker build . --platform linux/arm64/v8 -t shedi/wowaudit-arm
 
-FROM ruby:3.1.3-slim
+FROM ruby:3.3.6-slim
 
 RUN apt-get update
 

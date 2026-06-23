@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/wowaudit/rbattlenet.git
-  revision: 39739655c01c892b44333e5c43f61c4364caae3e
+  revision: 08aeec292094a8db48932a261028dc0eb6a2cf8a
   branch: master
   specs:
-    rbattlenet (2.0.0)
+    rbattlenet (2.1.0)
       addressable
       oj
       require_all
@@ -12,8 +12,23 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.8.7)
-      public_suffix (>= 2.0.2, < 7.0)
+    activemodel (7.1.6)
+      activesupport (= 7.1.6)
+    activesupport (7.1.6)
+      base64
+      benchmark (>= 0.3)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      connection_pool (>= 2.2.5)
+      drb
+      i18n (>= 1.6, < 2)
+      logger (>= 1.4.2)
+      minitest (>= 5.1)
+      mutex_m
+      securerandom (>= 0.3)
+      tzinfo (~> 2.0)
+    addressable (2.9.0)
+      public_suffix (>= 2.0.2, < 8.0)
     aws-eventstream (1.2.0)
     aws-partitions (1.702.0)
     aws-sdk-core (3.170.0)
@@ -30,29 +45,54 @@ GEM
       aws-sigv4 (~> 1.4)
     aws-sigv4 (1.5.2)
       aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.3.0)
+    benchmark (0.5.0)
+    bigdecimal (4.0.1)
     byebug (11.1.0)
     concurrent-ruby (1.2.0)
     connection_pool (2.3.0)
-    ethon (0.16.0)
+    drb (2.2.3)
+    ethon (0.18.0)
       ffi (>= 1.15.0)
-    ffi (1.15.5)
+      logger
+    ffi (1.17.4)
+    frozen_record (0.27.4)
+      activemodel
+    i18n (1.14.8)
+      concurrent-ruby (~> 1.0)
     jmespath (1.6.2)
     json (2.6.3)
-    mysql2 (0.5.5)
-    oj (3.14.1)
-    public_suffix (6.0.1)
+    logger (1.7.0)
+    minitest (6.0.2)
+      drb (~> 2.0)
+      prism (~> 1.5)
+    mutex_m (0.3.0)
+    oj (3.17.3)
+      bigdecimal (>= 3.0)
+      ostruct (>= 0.2)
+    ostruct (0.6.3)
+    pg (1.6.3)
+    prism (1.9.0)
+    prometheus-client (4.2.5)
+      base64
+    public_suffix (7.0.5)
     redis (5.0.6)
       redis-client (>= 0.9.0)
     redis-client (0.12.1)
       connection_pool
     require_all (3.0.0)
     rexml (3.2.5)
-    rollbar (3.4.0)
+    securerandom (0.4.1)
+    sentry-ruby (6.6.0)
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      logger
     sequel (5.65.0)
-    typhoeus (1.4.0)
-      ethon (>= 0.9.0)
+    typhoeus (1.6.0)
+      ethon (>= 0.18.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    webrick (1.9.2)
 
 PLATFORMS
   ruby
@@ -60,20 +100,23 @@ PLATFORMS
 DEPENDENCIES
   aws-sdk-s3
   byebug
+  frozen_record
   json
-  mysql2
   oj
+  pg
+  prometheus-client
   rbattlenet!
   redis
   require_all
   rexml
-  rollbar
+  sentry-ruby
   sequel
   typhoeus
   tzinfo
+  webrick
 
 RUBY VERSION
-   ruby 3.1.3p185
+   ruby 3.3.6p108
 
 BUNDLED WITH
-   2.4.1
+   2.5.23
