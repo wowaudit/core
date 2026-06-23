@@ -26,6 +26,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "rbattlenet"
   spec.add_runtime_dependency "typhoeus", "~> 1.1"
   spec.add_runtime_dependency "require_all" # convenience
-  spec.add_runtime_dependency "prometheus-client" # worker request metrics
-  spec.add_runtime_dependency "webrick" # serves worker /metrics endpoint
 end
