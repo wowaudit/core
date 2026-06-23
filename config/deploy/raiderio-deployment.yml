@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: historical-keystones-deployment-acc
+  name: raiderio-deployment
   labels:
-    app: historical-keystones-acc
+    app: raiderio
 spec:
-  replicas: 1
+  replicas: 6
   selector:
     matchLabels:
-      app: historical-keystones-acc
+      app: raiderio
   template:
     metadata:
       labels:
-        app: historical-keystones-acc
+        app: raiderio
         metrics: wowaudit-scraper
     spec:
       tolerations:
@@ -20,10 +20,10 @@ spec:
           operator: Exists
           effect: NoSchedule
       containers:
-        - name: historical-keystones-acc
-          image: shedi/wowaudit-acc:latest
+        - name: raiderio
+          image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
-          args: ["historical_keystones"]
+          args: ["raiderio"]
 
           ports:
             - name: metrics
@@ -31,11 +31,11 @@ spec:
 
           resources:
             requests:
-              cpu: 250m
-              memory: 1000Mi
+              cpu: 50m
+              memory: 250Mi
 
             limits:
-              memory: 1500Mi
+              memory: 500Mi
 
       imagePullSecrets:
         - name: regcred

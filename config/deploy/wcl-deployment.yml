@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: wcl-deployment-acc
+  name: wcl-deployment
   labels:
-    app: wcl-acc
+    app: wcl
 spec:
   replicas: 0
   selector:
     matchLabels:
-      app: wcl-acc
+      app: wcl
   template:
     metadata:
       labels:
-        app: wcl-acc
+        app: wcl
     spec:
       tolerations:
         - key: low-performance-node
           operator: Exists
           effect: NoSchedule
       containers:
-        - name: wcl-acc
-          image: shedi/wowaudit-acc:latest
+        - name: wcl
+          image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
           args: ["wcl"]
 

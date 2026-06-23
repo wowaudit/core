@@ -1,26 +1,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: scheduler-deployment-acc
+  name: scheduler-deployment
   labels:
-    app: scheduler-acc
+    app: scheduler
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: scheduler-acc
+      app: scheduler
   template:
     metadata:
       labels:
-        app: scheduler-acc
+        app: scheduler
     spec:
       tolerations:
         - key: low-performance-node
           operator: Exists
           effect: NoSchedule
       containers:
-        - name: scheduler-acc
-          image: shedi/wowaudit-acc:latest
+        - name: scheduler
+          image: shedi/wowaudit:latest
           command: ["/srv/bin/schedule"]
 
           resources:

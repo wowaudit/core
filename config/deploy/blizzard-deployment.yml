@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: blizzard-deployment-acc
+  name: blizzard-deployment
   labels:
-    app: blizzard-acc
+    app: blizzard
 spec:
-  replicas: 1
+  replicas: 8
   selector:
     matchLabels:
-      app: blizzard-acc
+      app: blizzard
   template:
     metadata:
       labels:
-        app: blizzard-acc
+        app: blizzard
         metrics: wowaudit-scraper
     spec:
       containers:
-        - name: blizzard-acc
-          image: shedi/wowaudit-acc:latest
+        - name: blizzard
+          image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
           args: ["blizzard"]
 

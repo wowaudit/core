@@ -1,29 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: keystones-deployment-acc
+  name: historical-keystones-deployment
   labels:
-    app: keystones-acc
+    app: historical-keystones
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: keystones-acc
+      app: historical-keystones
   template:
     metadata:
       labels:
-        app: keystones-acc
+        app: historical-keystones
         metrics: wowaudit-scraper
     spec:
-      tolerations:
-        - key: low-performance-node
-          operator: Exists
-          effect: NoSchedule
       containers:
-        - name: keystones-acc
-          image: shedi/wowaudit-acc:latest
+        - name: historical-keystones
+          image: shedi/wowaudit:latest
           command: ["/srv/bin/refresh"]
-          args: ["keystones"]
+          args: ["historical_keystones"]
 
           ports:
             - name: metrics
@@ -31,11 +27,11 @@ spec:
 
           resources:
             requests:
-              cpu: 750m
-              memory: 2000Mi
+              cpu: 250m
+              memory: 1000Mi
 
             limits:
-              memory: 5000Mi
+              memory: 1500Mi
 
       imagePullSecrets:
         - name: regcred
