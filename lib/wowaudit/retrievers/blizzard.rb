@@ -1,7 +1,7 @@
 module Wowaudit
   module Retrievers
     class Blizzard
-      def self.retrieve(all_characters, output = {}, commit_changes = true)
+      def self.retrieve(all_characters, output = {}, commit_changes = true, failed = [])
         api_limited = []
 
         all_characters.group_by { |ch| ch.realm.namespace }.each do |namespace, characters|
@@ -31,13 +31,14 @@ module Wowaudit
               api_limited << character[:source]
             rescue Wowaudit::Exception::CharacterUnavailable => error
               raise error unless Wowaudit.ignore_unavailable
+              failed << character[:source]
             end
           end
         end
 
         if api_limited.any?
           raise Wowaudit::Exception::ApiLimitReached unless Wowaudit.retry_on_api_limit
-          self.retrieve(api_limited, output, commit_changes)
+          self.retrieve(api_limited, output, commit_changes, failed)
         else
           output
         end
@@ -47,7 +48,8 @@ module Wowaudit
         team = Audit::Team.where(id: team_id).first
 
         if team.characters.any?
-          output = retrieve(team.characters.first(100), {}, false)
+          failed = []
+          output = retrieve(team.characters.first(100), {}, false, failed)
           Audit::Logger.t(INFO_TEAM_REFRESHED + "#{output.length} characters.", team.id)
 
           section = {
@@ -60,10 +62,8 @@ module Wowaudit
 
           Audit::Writer.write(team, output.values.sort_by{|c| c.character.name}, section::HeaderData.altered_header(team))
 
-          if output.values.any?
-            Audit::Writer.update_db(output.values)
-            Wowaudit::Metadata.store_all(output.values)
-          end
+          Audit::Writer.update_db(output.values, failed)
+          Wowaudit::Metadata.store_all(output.values) if output.values.any?
         else
           Audit::Logger.t(INFO_TEAM_EMPTY, team.id)
         end

@@ -11,8 +11,8 @@ module Audit
         Logger.t(INFO_TEAM_WRITTEN, team.id)
       end
 
-      def update_db(results)
-        changed = results.select(&:changed).map(&:character)
+      def update_db(results, extra_changed = [])
+        changed = results.select(&:changed).map(&:character) + extra_changed
         tracking_ids = results.select { |r| r.character.status == 'tracking' }.map { |r| r.character.id }
         return if changed.empty? && tracking_ids.empty?
 
