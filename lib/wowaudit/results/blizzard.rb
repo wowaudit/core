@@ -3,10 +3,11 @@ module Wowaudit
     class Blizzard < Base
       attr_accessor :data, :gems, :ilvl, :changed, :stat_info, :delve_info, :prey_info
 
-      def initialize(character, response, commit_changes = true)
+      def initialize(character, response, commit_changes = true, skipped = false)
         super(character, response, commit_changes)
 
-        @data = {}
+        @skipped = skipped
+        @data = @character.details['last_refresh'].is_a?(Hash) ? @character.details['last_refresh'].dup : {}
         @gems = []
         @ilvl = 0.0
         @stat_info = TRACKED_STATS.values.map { |stat| [stat, { gear: 0, enchantments: 0 }] }.to_h
@@ -17,7 +18,14 @@ module Wowaudit
         @data['realm_slug'] = character.realm.slug
 
         raise Wowaudit::Exception::ApiLimitReached if check_api_limit_reached
-        if check_character_api_status && !@character.marked_for_deletion_at && check_data_completeness
+
+        if @skipped
+          update_field(@character, :status, 'tracking')
+
+          Audit::Data.process(self, @response, true, @character.realm, @character)
+          HEADER[@character.realm.game_version.to_sym].each { |value| @output << (@data[value] || 0) }
+          store_metadata
+        elsif check_character_api_status && !@character.marked_for_deletion_at && check_data_completeness
           update_field(@character, :status, 'tracking')
           update_field(@character, :last_status_code, 200)
 
@@ -58,15 +66,19 @@ module Wowaudit
             [(i + 1).to_s, last_refresh_data["great_vault_slot_#{i + 1}"] || @data["great_vault_slot_#{i + 1}"]]
           end.to_h })
 
-          @character.details['snapshots'][Audit.period.to_s]['wqs'] ||= @data['wqs_done_total']
-          @character.details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= @data['season_heroic_dungeons']
-          @character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'] = [@character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'], @data['week_regular_mythic_dungeons']].compact.max
-          @character.details['snapshots'][Audit.period.to_s]['delve_info'] ||= @delve_info
-          @character.details['snapshots'][Audit.period.to_s]['prey_info'] ||= @prey_info
+          unless @skipped
+            @character.details['snapshots'][Audit.period.to_s]['wqs'] ||= @data['wqs_done_total']
+            @character.details['snapshots'][Audit.period.to_s]['heroic_dungeons'] ||= @data['season_heroic_dungeons']
+            @character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'] = [@character.details['snapshots'][Audit.period.to_s]['regular_mythic_dungeons'], @data['week_regular_mythic_dungeons']].compact.max
+            @character.details['snapshots'][Audit.period.to_s]['delve_info'] ||= @delve_info
+            @character.details['snapshots'][Audit.period.to_s]['prey_info'] ||= @prey_info
+          end
         end
 
-        @character.details['current_version'] = CURRENT_VERSION[@character.realm.game_version.to_sym]
-        @character.details['current_period'] = Audit.period
+        unless @skipped
+          @character.details['current_version'] = CURRENT_VERSION[@character.realm.game_version.to_sym]
+          @character.details['current_period'] = Audit.period
+        end
       end
 
       private

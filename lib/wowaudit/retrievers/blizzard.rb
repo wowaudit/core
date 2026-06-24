@@ -26,7 +26,7 @@ module Wowaudit
             fields: FIELDS[characters.first.realm.game_version.to_sym] + Wowaudit.extra_fields + media_field,
           ) do |character, response|
             begin
-              output[character[:source]] = Wowaudit::Results::Blizzard.new(character[:source], response, commit_changes)
+              output[character[:source]] = Wowaudit::Results::Blizzard.new(character[:source], response, commit_changes, character[:skipped])
             rescue Wowaudit::Exception::ApiLimitReached
               api_limited << character[:source]
             rescue Wowaudit::Exception::CharacterUnavailable => error
