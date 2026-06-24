@@ -5,7 +5,7 @@ module Audit
     class << self
       def write(team, result, header)
         json = ([header] + result.map(&:output).compact.reject(&:empty?)).to_json
-        file = STORAGE[team.guild.realm.game_version.to_sym].bucket(BUCKET).object("acc-#{team.readonly_key}.json")
+        file = STORAGE[team.guild.realm.game_version.to_sym].bucket(BUCKET).object("#{team.readonly_key}.json")
         file.put(body: json)
 
         Logger.t(INFO_TEAM_WRITTEN, team.id)
