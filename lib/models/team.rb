@@ -15,7 +15,7 @@ module Audit
         members.each_with_index do |member, index|
           character = characters[index]
           character.team_rank = ranks_by_id[member.team_rank_id]
-          character.details = character_details(characters)[character.redis_id].to_h
+          character.details = character_details(characters)[character.legacy_redis_id].to_h
           character.role = member.role.capitalize
         end
 
@@ -33,7 +33,7 @@ module Audit
     end
 
     def character_details(characters)
-      @character_details ||= Redis.get_characters(characters.map(&:redis_id).compact)
+      @character_details ||= Redis.get_characters(characters.map(&:legacy_redis_id).compact)
     end
 
     def ranks_by_id

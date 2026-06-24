@@ -57,9 +57,9 @@ module Wowaudit
           metadata = Audit::Redis.get_characters(batch_ids)
           changed_docs = {}
 
-          batch_ids.each do |redis_id|
-            details = metadata[redis_id] || {}
-            payload = updates[redis_id]
+          batch_ids.each do |legacy_redis_id|
+            details = metadata[legacy_redis_id] || {}
+            payload = updates[legacy_redis_id]
             next unless payload
 
             details_changed = false
@@ -100,7 +100,7 @@ module Wowaudit
 
             next unless details_changed
 
-            changed_docs[redis_id] = details
+            changed_docs[legacy_redis_id] = details
           end
 
           changed += changed_docs.size

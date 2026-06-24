@@ -10,6 +10,10 @@ module Audit
       "#{realm.redis_prefix}:#{profile_id}"
     end
 
+    def legacy_redis_id
+      "#{realm.redis_prefix}:#{profile_id.split("-").last}_#{realm.legacy_wowaudit_id}"
+    end
+
     def set_details_from_api(data)
       self.name = data.name
       self.realm_id = data.realm.id

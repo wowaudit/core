@@ -9,11 +9,11 @@ module Wowaudit
       end
 
       def store(result)
-        client.set(result.character.redis_id, result.metadata.to_json)
+        client.set(result.character.legacy_redis_id, result.metadata.to_json)
       end
 
       def store_all(results)
-        client.mset(results.map{ |result| [result.character.redis_id, result.metadata.to_json] }.flatten)
+        client.mset(results.map{ |result| [result.character.legacy_redis_id, result.metadata.to_json] }.flatten)
       end
     end
   end

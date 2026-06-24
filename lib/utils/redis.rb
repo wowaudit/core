@@ -13,7 +13,7 @@ module Audit
       payload = if entries.is_a?(Hash)
         entries.map { |key, value| [key, value.is_a?(String) ? value : value.to_json] }.flatten
       else
-        entries.map { |character| [character.redis_id, character.metadata.to_json] }.flatten
+        entries.map { |character| [character.legacy_redis_id, character.metadata.to_json] }.flatten
       end
 
       REDIS.mset(payload)
