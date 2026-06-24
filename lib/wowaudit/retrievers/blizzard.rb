@@ -48,7 +48,7 @@ module Wowaudit
 
         if team.characters.any?
           output = retrieve(team.characters.first(100), {}, false)
-          Audit::Logger.t(INFO_TEAM_REFRESHED, team.id)
+          Audit::Logger.t(INFO_TEAM_REFRESHED + "#{output.length} characters.", team.id)
 
           section = {
             live: Audit::Live,

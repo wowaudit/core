@@ -29,7 +29,7 @@ module Wowaudit
         # load on the Warcraft Logs API would be too high
         output = self.retrieve(team.characters, team_id)
 
-        Audit::Logger.t(INFO_TEAM_REFRESHED, team_id)
+        Audit::Logger.t(INFO_TEAM_REFRESHED + "#{output.length} characters.", team_id)
         Wowaudit::Metadata.store_all(output) if output.any?
       end
 
