@@ -29,7 +29,7 @@ module Wowaudit
 
   self.updatable_fields = ALL_UPDATABLE_FIELDS.dup
   self.extra_fields = []
-  self.failure_status = :does_not_exist
+  self.failure_status = 'does_not_exist'
   self.retry_on_api_limit = true
   self.ignore_unavailable = true
   self.redis_suffix = 0
