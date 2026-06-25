@@ -59,9 +59,9 @@ MOP_UPGRADE_IDS_TO_OFFSET = {
   654 => { offset: 0, steps_missing: 2 }, # Legendary Cloak
   655 => { offset: 4, steps_missing: 1 }, # Legendary Cloak
   656 => { offset: 8, steps_missing: 0 }, # Legendary Cloak
-  659 => { offset: 0, steps_mising: 2 }, # Tier 2/2 (SoO)
-  660 => { offset: 4, steps_mising: 1 }, # Tier 2/2 (SoO)
-  661 => { offset: 8, steps_mising: 0 }, # Tier 2/2 (SoO)
+  659 => { offset: 0, steps_missing: 2 }, # Tier 2/2 (SoO)
+  660 => { offset: 4, steps_missing: 1 }, # Tier 2/2 (SoO)
+  661 => { offset: 8, steps_missing: 0 }, # Tier 2/2 (SoO)
 }
 
 weapon_enchants = {
