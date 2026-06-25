@@ -47,9 +47,21 @@ MOP_UPGRADE_IDS_TO_OFFSET = {
   465 => { offset: 0, steps_missing: 2 }, # Thunderforged 0/2 (ToT)
   466 => { offset: 4, steps_missing: 1 }, # Thunderforged 1/2 (ToT)
   467 => { offset: 8, steps_missing: 0 }, # Thunderforged 2/2 (ToT)
+  491 => { offset: 0, steps_missing: 2 }, # Celestial 0/2 (SoO)
+  492 => { offset: 7, steps_missing: 1 }, # Celestial 1/2 (SoO)
+  493 => { offset: 14, steps_missing: 0 }, # Celestial 2/2 (SoO)
   645 => { offset: 0, steps_missing: 2 }, # Reforged 0/2 (ToT)
   646 => { offset: 7, steps_missing: 1 }, # Reforged 1/2 (ToT)
   647 => { offset: 14, steps_missing: 0 }, # Reforged 2/2 (ToT)
+  651 => { offset: 0, steps_missing: 2 }, # Warforged 0/2 (SoO)
+  652 => { offset: 4, steps_missing: 1 }, # Warforged 1/2 (SoO)
+  653 => { offset: 8, steps_missing: 0 }, # Warforged 2/2 (SoO)
+  654 => { offset: 0, steps_missing: 2 }, # Legendary Cloak
+  655 => { offset: 4, steps_missing: 1 }, # Legendary Cloak
+  656 => { offset: 8, steps_missing: 0 }, # Legendary Cloak
+  659 => { offset: 0, steps_mising: 2 }, # Tier 2/2 (SoO)
+  660 => { offset: 4, steps_mising: 1 }, # Tier 2/2 (SoO)
+  661 => { offset: 8, steps_mising: 0 }, # Tier 2/2 (SoO)
 }
 
 weapon_enchants = {
