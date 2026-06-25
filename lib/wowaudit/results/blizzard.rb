@@ -55,6 +55,8 @@ module Wowaudit
       end
 
       def last_refresh_data
+        return {} if @output.empty?
+
         [HEADER[@character.realm.game_version.to_sym], @output].transpose.to_h
       end
 
