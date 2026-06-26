@@ -17,7 +17,7 @@ module Audit
           @character.data['professions_visible'] = @temp_character.team_rank&.spreadsheet_profession_visibility ? 'yes' : 'no'
         end
 
-        @character.data['note'] = (defined?(@temp_character.note) ? @temp_character.note : "") || ""
+        @character.data['note'] = @temp_character.note || ""
         @character.data['character_id'] = @temp_character.id
         @character.data['join_date'] = @temp_character.created_at
         @character.data['class'] = CLASSES[@temp_character.class_id || @data.dig(:character_class, :id)]

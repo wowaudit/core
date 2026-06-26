@@ -17,6 +17,7 @@ module Audit
           character.team_rank = ranks_by_id[member.team_rank_id]
           character.details = character_details(characters)[character.legacy_redis_id].to_h
           character.role = member.role.capitalize
+          character.note = member.note
         end
 
         characters.select do |character|
