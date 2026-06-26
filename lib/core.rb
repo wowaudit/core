@@ -70,7 +70,7 @@ end
 
 begin
   # Connections
-  Wowaudit.redis_suffix = 1 # acceptance
+  Wowaudit.redis_suffix = 0 # production
 
   DB = Sequel.connect(db_config['postgres'])
   Sequel::Model.db = DB
