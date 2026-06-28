@@ -19,7 +19,7 @@ require_rel './constants'
 ALL_UPDATABLE_FIELDS = [
   :guild_profile_id, :race_id, :faction_id, :media_zone, :achievement_uid, :user_achievement_uid, :name,
   :level, :marked_for_deletion_at, :status, :refreshed_at, :profile_id, :gdpr_status,
-  :last_status_code, :refresh_failed_at, :current_spec_id
+  :last_status_code, :refresh_failed_at, :current_spec_id, :class_id
 ]
 
 module Wowaudit

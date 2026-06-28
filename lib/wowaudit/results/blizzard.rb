@@ -182,6 +182,7 @@ module Wowaudit
         update_field(target, :race_id, @response.dig(:race, :id))
         update_field(target, :faction_id, FACTIONS.invert[@response.dig(:faction, :name)])
         update_field(target, :name, @response.dig(:name))
+        update_field(target, :class_id, @response.dig(:character_class, :id))
         update_field(target, :current_spec_id, @response.dig(:active_spec, :id))
 
         update_field(target, :level, @response[:level])
