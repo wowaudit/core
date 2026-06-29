@@ -28,11 +28,11 @@ spec:
           resources:
             requests:
               cpu: 250m
-              memory: 450Mi
+              memory: 300Mi
 
             limits:
               cpu: 1000m
-              memory: 1250Mi
+              memory: 2000Mi
 
       imagePullSecrets:
         - name: regcred
