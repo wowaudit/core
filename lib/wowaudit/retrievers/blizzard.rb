@@ -47,7 +47,7 @@ module Wowaudit
       def self.retrieve_group(team_id)
         team = Audit::Team.where(id: team_id).first
 
-        if team.characters.any?
+        if team && team.characters.any?
           failed = []
           output = retrieve(team.characters.first(100), {}, false, failed)
           Audit::Logger.t(INFO_TEAM_REFRESHED + "#{output.length} characters.", team.id)
@@ -65,7 +65,7 @@ module Wowaudit
           Audit::Writer.update_db(output.values, failed)
           Wowaudit::Metadata.store_all(output.values) if output.values.any?
         else
-          Audit::Logger.t(INFO_TEAM_EMPTY, team.id)
+          Audit::Logger.t(INFO_TEAM_EMPTY, team_id)
         end
       end
 

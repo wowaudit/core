@@ -47,7 +47,11 @@ module Audit
 
             # Ask for a new schedule
             worker.schedule = nil
-            worker.save_changes
+            begin
+              worker.save_changes
+            rescue Sequel::NoExistingObject
+              next
+            end
 
           else
             # Schedule own work if no schedule is available

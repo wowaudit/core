@@ -142,6 +142,7 @@ module Wowaudit
       end
 
       def check_data_completeness
+        return false if @response.dig(:name).blank?
         return false unless @response[:equipment] && @response[:equipment][:equipped_items]
 
         if @character.realm.game_version != 'classic_era' && @character.realm.game_version != 'classic_anniversary'

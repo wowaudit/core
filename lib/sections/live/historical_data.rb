@@ -59,7 +59,7 @@ module Audit
         end
 
         # Weekly quests and delve data doesn't reset until each character logs out again after the reset
-        if Time.at(@character.data['blizzard_last_modified'] / 1000.0) < Time.at(Audit.timestamp)
+        if Time.at(@character.data['blizzard_last_modified'].to_i / 1000.0) < Time.at(Audit.timestamp)
           @character.data['great_vault_slot_7'] = ""
           @character.data['great_vault_slot_8'] = ""
           @character.data['great_vault_slot_9'] = ""

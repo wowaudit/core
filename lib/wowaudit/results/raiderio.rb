@@ -15,7 +15,7 @@ module Wowaudit
           @character.details['raiderio']['season_highest'] =
             (data['mythic_plus_highest_level_runs'][0]['mythic_level'] rescue 0)
 
-          weekly_runs = data['mythic_plus_weekly_highest_level_runs'] || []
+          weekly_runs = data.dig('mythic_plus_weekly_highest_level_runs') || []
           count = -1
           @character.details['raiderio']['top_ten_highest'] = weekly_runs.map do |run|
             # Exclude duplicate runs (Raider.io or Blizzard issue), check if completions are within 60 seconds of each other
@@ -26,7 +26,7 @@ module Wowaudit
             run.dig('mythic_level').to_i
           end.compact
 
-          (weekly_runs + (data['mythic_plus_highest_level_runs'] || []) + (data['mythic_plus_recent_runs'] || [])).each do |run|
+          (weekly_runs + (data.dig('mythic_plus_highest_level_runs') || []) + (data.dig('mythic_plus_recent_runs') || [])).each do |run|
             run_id = Time.parse(run['completed_at']).to_i
             run_period = Audit.period_from_timestamp(run_id).to_s
 
