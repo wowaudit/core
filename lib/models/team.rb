@@ -33,6 +33,14 @@ module Audit
       end
     end
 
+    def warning
+      if characters.any? { |character| character.gdpr_status == Wowaudit.failure_status }
+        TRACK_WARNING
+      else
+        NO_WARNING
+      end
+    end
+
     def character_details(characters)
       @character_details ||= Redis.get_characters(characters.map(&:legacy_redis_id).compact)
     end
