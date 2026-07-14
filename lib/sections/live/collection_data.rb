@@ -21,6 +21,7 @@ module Audit
         if @achievements
           @character.data['mounts'] = @achievements[2143][:criteria][:child_criteria].first[:amount] rescue 0
           @character.data['toys_owned'] = @achievements[9670][:criteria][:child_criteria].first[:amount] rescue 0
+          @character.data['folio_amount'] = "#{@achievements.dig(63325, :criteria, :amount) || 0} / 5"
         end
 
         if @data[:titles]
