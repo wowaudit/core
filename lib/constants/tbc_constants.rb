@@ -61,6 +61,17 @@ weapon_enchants = {
 
 }
 
+shield_enchants = {
+  1071 => [4, "Major Stamina"],
+  1888 => [3, "Resistance"],
+  2653 => [4, "Tough Shield"],
+  2654 => [4, "Intellect"],
+  2655 => [4, "Shield Block"],
+  3229 => [4, "Resilience"],
+}
+
+off_hand_enchants = weapon_enchants.merge(shield_enchants)
+
 ring_enchants = {
   2930 => [4, "Healing Power"],
   2928 => [4, "Spellpower"],
@@ -166,7 +177,7 @@ TBC_ENCHANTS = {
   'finger_1' => ring_enchants,
   'finger_2' => ring_enchants,
   'main_hand' => weapon_enchants,
-  'off_hand' => weapon_enchants,
+  'off_hand' => off_hand_enchants,
 }
 
 TBC_GEM_QUALITY_MAPPING = {
