@@ -200,6 +200,7 @@ SEASON_DATA = {
     pvp_season: 41,
     spark_label: "Radiance Crafted",
     spark_ilvl_bump_bonus_id: [],
+    catalyst_charge_achievement_id: 61490,
     keystone_dungeons: [
       { id: 558, name: "Magister's Terrace", mythic_id: 61217, legacy: false },
       { id: 560, name: "Maisara Caverns", mythic_id: 61655, legacy: false },
