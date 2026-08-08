@@ -7,7 +7,9 @@ module Audit
           @character.data['wqs_done_total'] = @achievements[11132][:criteria][:child_criteria].first[:amount] rescue 0
           @character.data['dailies_done_total'] = @achievements[977][:criteria][:child_criteria].first[:amount] rescue 0
 
-          @character.data['catalyst_charge_completed'] = (@achievements[Season.current.data[:catalyst_charge_achievement_id]][:criteria][:is_completed] ? 'yes' : 'no') rescue 'no'
+          completed = (@achievements[Season.current.data[:catalyst_charge_achievement_id]][:criteria][:is_completed] ? 'yes' : 'no') rescue 'no'
+          @character.details['catalyst_charges'][Season.current.id.to_s] = completed
+          @character.data['catalyst_charge_completed'] = completed
         end
 
         @character.data['unity_against_the_void_weekly'] = 'no'

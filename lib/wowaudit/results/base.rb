@@ -31,6 +31,7 @@ module Wowaudit
           raiderio: @details["raiderio"],
           tier_items: @details['tier_items'],
           trinket_cache: @details['trinket_cache'],
+          catalyst_charges: @details['catalyst_charges'],
           timeline: @details["timeline"],
         } : {}).merge(tier_items_metadata)
       end

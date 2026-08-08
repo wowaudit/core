@@ -265,6 +265,8 @@ module Audit
         details['trinket_cache'] = {} unless details['trinket_cache'].is_a?(Hash)
         details['trinket_cache'][season_key] = {} unless details['trinket_cache'][season_key].is_a?(Hash)
 
+        details['catalyst_charges'] = {} unless details['catalyst_charges'].is_a?(Hash)
+
         if !details['keystones'].is_a? Hash
           details['keystones'] = {}
         end
