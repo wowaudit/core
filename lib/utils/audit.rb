@@ -240,13 +240,30 @@ module Audit
           details['best_gear'] = ITEMS[:live].map { |item| [item, { ilvl: 0 }] }.to_h
         end
 
-        if !details['spark_gear_s1'].is_a? Hash
-          details['spark_gear_s1'] = ITEMS[:live].map { |item| [item, {}] }.to_h
+        season_key = Audit::Season.current.id.to_s
+
+        details['spark_gear'] = {} unless details['spark_gear'].is_a?(Hash)
+        details['tier_items'] = {} unless details['tier_items'].is_a?(Hash)
+
+        # On-the-fly migration from the old flat format into the current season slot
+        if details['spark_gear_s1'].is_a?(Hash) && !details['spark_gear'].key?(season_key)
+          details['spark_gear'][season_key] = details['spark_gear_s1']
+        end
+        if details['tier_items_s1'].is_a?(Hash) && !details['tier_items'].key?(season_key)
+          details['tier_items'][season_key] = details['tier_items_s1']
+        end
+        details.delete('spark_gear_s1')
+        details.delete('tier_items_s1')
+
+        unless details['spark_gear'][season_key].is_a?(Hash)
+          details['spark_gear'][season_key] = ITEMS[:live].map { |item| [item, {}] }.to_h
+        end
+        unless details['tier_items'][season_key].is_a?(Hash)
+          details['tier_items'][season_key] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
         end
 
-        if !details['tier_items_s1'].is_a? Hash
-          details['tier_items_s1'] = TIER_ITEMS_BY_SLOT.keys.map { |item| [item, { 'ilvl' => 0, 'difficulty' => '' }] }.to_h
-        end
+        details['trinket_cache'] = {} unless details['trinket_cache'].is_a?(Hash)
+        details['trinket_cache'][season_key] = {} unless details['trinket_cache'][season_key].is_a?(Hash)
 
         if !details['keystones'].is_a? Hash
           details['keystones'] = {}

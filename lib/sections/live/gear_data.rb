@@ -3,6 +3,7 @@ module Audit
     class GearData < Data
       def add
         # Check equipped gear
+        season_key = Season.current.id.to_s
         sparks_used = 0
         embellished_found = 0
         total_upgrades_missing = 0
@@ -54,7 +55,7 @@ module Audit
               # 2 handed weapons cost 2 sparks
               sparks_used += (equipped_item[:inventory_type][:type] == "TWOHWEAPON" || (equipped_item[:inventory_type][:name] == "Ranged" && equipped_item.dig(:weapon, :damage, :damage_class, :type) == "PHYSICAL") ? 2 : 1)
 
-              @character.details['spark_gear_s1'][item] = {
+              @character.details['spark_gear'][season_key][item] = {
                 'ilvl' => equipped_item[:level][:value],
                 'id' => equipped_item[:item][:id],
                 'name' => equipped_item[:name],
@@ -96,6 +97,16 @@ module Audit
 
             @character.data["#{track}_track_items"] += 1 if track
 
+            if track && %w[trinket_1 trinket_2].include?(item)
+              track_index = BonusIds::DIFFICULTY_LABELS.keys.index(track)
+              unless track_index.nil?
+                item_id = equipped_item[:item][:id].to_s
+                cache = @character.details['trinket_cache'][season_key]
+                existing_index = cache[item_id]
+                cache[item_id] = track_index if existing_index.nil? || track_index < existing_index
+              end
+            end
+
             @character.details['current_gear'][item] = {
               'ilvl' => equipped_item[:level][:value],
               'id' => equipped_item[:item][:id],
@@ -119,16 +130,16 @@ module Audit
                 upgradeable_difficulty = bonus_id_options[bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }]
                 difficulty_label = upgradeable_difficulty ? DIFFICULTY_LETTERS[upgradeable_difficulty] : LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last
 
-                if DIFFICULTY_LETTERS.index(difficulty_label) <= (DIFFICULTY_LETTERS.index(@character.details.dig('tier_items_s1', item, 'difficulty')) || 5)
-                  @character.details['tier_items_s1'][item] = {
+                if DIFFICULTY_LETTERS.index(difficulty_label) <= (DIFFICULTY_LETTERS.index(@character.details.dig('tier_items', season_key, item, 'difficulty')) || 5)
+                  @character.details['tier_items'][season_key][item] = {
                     'ilvl' => equipped_item[:level][:value],
                     'difficulty' => difficulty_label || ""
                   }
                 end
               end
 
-              @character.data["tier_#{item}_ilvl"] = @character.details['tier_items_s1'][item]['ilvl']
-              @character.data["tier_#{item}_difficulty"] = @character.details['tier_items_s1'][item]['difficulty']
+              @character.data["tier_#{item}_ilvl"] = @character.details['tier_items'][season_key][item]['ilvl']
+              @character.data["tier_#{item}_difficulty"] = @character.details['tier_items'][season_key][item]['difficulty']
             end
           rescue => err
             puts err
@@ -140,10 +151,10 @@ module Audit
           @character.data["best_#{item}_name"] = @character.details['best_gear'][item]['name'] || ''
           @character.data["best_#{item}_quality"] = @character.details['best_gear'][item]['quality'] || ''
 
-          @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear_s1'][item]['ilvl'] || ''
-          @character.data["spark_#{item}_id"] = @character.details['spark_gear_s1'][item]['id'] || ''
-          @character.data["spark_#{item}_name"] = @character.details['spark_gear_s1'][item]['name'] || ''
-          @character.data["spark_#{item}_quality"] = @character.details['spark_gear_s1'][item]['quality'] || ''
+          @character.data["spark_#{item}_ilvl"] = @character.details['spark_gear'][season_key][item]['ilvl'] || ''
+          @character.data["spark_#{item}_id"] = @character.details['spark_gear'][season_key][item]['id'] || ''
+          @character.data["spark_#{item}_name"] = @character.details['spark_gear'][season_key][item]['name'] || ''
+          @character.data["spark_#{item}_quality"] = @character.details['spark_gear'][season_key][item]['quality'] || ''
         end
 
         # For 2H weapons the item level is counted twice to normalise between weapon types

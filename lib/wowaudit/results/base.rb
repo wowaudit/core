@@ -23,13 +23,14 @@ module Wowaudit
           current_gear: @details['current_gear'],
         }.merge(@character.realm.game_version == 'live' ? {
           best_gear: @details['best_gear'],
-          spark_gear_s1: @details['spark_gear_s1'],
+          spark_gear: @details['spark_gear'],
           keystones: @details['keystones'],
           snapshots: @details["snapshots"],
           warcraftlogs: @details["warcraftlogs"],
           recent_reports: @details["recent_reports"],
           raiderio: @details["raiderio"],
-          tier_items_s1: @details["tier_items_s1"],
+          tier_items: @details['tier_items'],
+          trinket_cache: @details['trinket_cache'],
           timeline: @details["timeline"],
         } : {}).merge(tier_items_metadata)
       end
