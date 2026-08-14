@@ -9,11 +9,11 @@ module Audit
             category[:name] == "Character"
           end[:statistics]
 
-          @character.data['adventurer_crests'] = crest_stats.find { |stat| stat[:id] == 62292 }[:quantity] rescue 0
-          @character.data['veteran_crests'] = crest_stats.find { |stat| stat[:id] == 62293 }[:quantity] rescue 0
-          @character.data['champion_crests'] = crest_stats.find { |stat| stat[:id] == 62294 }[:quantity] rescue 0
-          @character.data['hero_crests'] = crest_stats.find { |stat| stat[:id] == 62295 }[:quantity] rescue 0
-          @character.data['myth_crests'] = crest_stats.find { |stat| stat[:id] == 62296 }[:quantity] rescue 0
+          @character.data['adventurer_crests'] = crest_stats.find { |stat| stat[:id] == 62912 }[:quantity] rescue 0
+          @character.data['veteran_crests'] = crest_stats.find { |stat| stat[:id] == 62913 }[:quantity] rescue 0
+          @character.data['champion_crests'] = crest_stats.find { |stat| stat[:id] == 62914 }[:quantity] rescue 0
+          @character.data['hero_crests'] = crest_stats.find { |stat| stat[:id] == 62915 }[:quantity] rescue 0
+          @character.data['myth_crests'] = crest_stats.find { |stat| stat[:id] == 62916 }[:quantity] rescue 0
         rescue
           nil
         end

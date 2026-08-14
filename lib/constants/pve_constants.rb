@@ -1,5 +1,5 @@
 FIRST_PERIOD_OF_EXPANSION = 1052
-CURRENT_SEASON = 17
+CURRENT_SEASON = 18
 
 SEASON_DATA = {
   13 => {
@@ -260,6 +260,72 @@ SEASON_DATA = {
         1 => { ilvl: 237, track: 'Veteran' },
       }
     }
+  },
+  18 => {
+    first_period: 1077,
+    pvp_season: 42,
+    spark_label: "Tidal Crafted",
+    spark_ilvl_bump_bonus_id: [],
+    catalyst_charge_achievement_id: 62872,
+    keystone_dungeons: [
+      { id: 588, name: "Altar of Fangs", mythic_id: 62287, legacy: false },
+      { id: 587, name: "Murder Row", mythic_id: 61275, legacy: false },
+      { id: 586, name: "Den of Nalorakk", mythic_id: 61652, legacy: false },
+      { id: 584, name: "The Blinding Vale", mythic_id: 61661, legacy: false },
+      { id: 585, name: "Voidscar Arena", mythic_id: 61513, legacy: false },
+      { id: 249, name: "Kings' Rest", mythic_id: 12763, legacy: true },
+      { id: 250, name: "Temple of Sethraliss", mythic_id: 12776, legacy: true },
+      { id: 399, name: "Ruby Life Pools", mythic_id: 16085, legacy: true },
+    ],
+    crests: [
+      { name: 'Myth', ilvl_cap: 334, weekly_increase: 100, first_period: 1076, icon_item_id: 269866 },
+      { name: 'Hero', ilvl_cap: 321, weekly_increase: 100, first_period: 1076, icon_item_id: 269865 },
+      { name: 'Champion', ilvl_cap: 308, weekly_increase: 100, first_period: 1076, icon_item_id: 269864 },
+      { name: 'Veteran', ilvl_cap: 295, weekly_increase: 100, first_period: 1076, icon_item_id: 269867 },
+    ],
+    track_cutoffs: [
+      { ilvl: 318, track: 'Myth', bonus_id: 12053, difficulty: :mythic },
+      { ilvl: 305, track: 'Hero', bonus_id: 12052, difficulty: :heroic },
+      { ilvl: 292, track: 'Champion', bonus_id: 12051, difficulty: :normal },
+      { ilvl: 279, track: 'Veteran' },
+      { ilvl: 266, track: 'Adventurer' },
+      { ilvl: 207, track: 'Explorer' }
+    ],
+    great_vault: {
+      raid: {
+        mythic: { ilvl: 334, track: 'Myth' },
+        heroic: { ilvl: 318, track: 'Myth' },
+        normal: { ilvl: 305, track: 'Hero' },
+        raid_finder: { ilvl: 292, track: 'Champion' },
+      },
+      dungeon: {
+        10 => { ilvl: 318, track: 'Myth' },
+        9 => { ilvl: 311, track: 'Hero' },
+        8 => { ilvl: 311, track: 'Hero' },
+        7 => { ilvl: 311, track: 'Hero' },
+        6 => { ilvl: 311, track: 'Hero' },
+        5 => { ilvl: 308, track: 'Hero' },
+        4 => { ilvl: 308, track: 'Hero' },
+        3 => { ilvl: 305, track: 'Hero' },
+        2 => { ilvl: 305, track: 'Hero' },
+        1 => { ilvl: 292, track: 'Champion' }, # Regular Mythic
+        0 => { ilvl: 279, track: 'Veteran' }, # Heroic
+        -1 => { ilvl: nil, track: nil },
+      },
+      delve: {
+        11 => { ilvl: 305, track: 'Hero' },
+        10 => { ilvl: 305, track: 'Hero' },
+        9 => { ilvl: 305, track: 'Hero' },
+        8 => { ilvl: 305, track: 'Hero' },
+        7 => { ilvl: 302, track: 'Champion' },
+        6 => { ilvl: 298, track: 'Champion' },
+        5 => { ilvl: 292, track: 'Champion' },
+        4 => { ilvl: 289, track: 'Veteran' },
+        3 => { ilvl: 285, track: 'Veteran' },
+        2 => { ilvl: 282, track: 'Veteran' },
+        1 => { ilvl: 272, track: 'Veteran' },
+      }
+    }
   }
 }
 
@@ -357,6 +423,7 @@ CUTTING_EDGE_ACHIEVEMENTS = [
   61625, # Crown of the Cosmos
   61492, # Chimearus, the Undreamt God
   61627, # Midnight Falls
+  63651, # Ula'tek
 ]
 
 AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
@@ -392,11 +459,13 @@ AHEAD_OF_THE_CURVE_ACHIEVEMENTS = [
   61624, # Crown of the Cosmos
   61491, # Chimearus, the Undreamt God
   61626, # Midnight Falls
+  63650, # Ula'tek
 ]
 
 VALID_RAIDS = {
   live: [
-    {"name"=>"Season 1", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>46, "encounters"=>[{"id"=>3176, "name"=>"Imperator Averzian", "raid_ids"=>{"raid_finder"=>[61276], "normal"=>[61277], "heroic"=>[61278], "mythic"=>[61279]}}, {"id"=>3177, "name"=>"Vorasius", "raid_ids"=>{"raid_finder"=>[61280], "normal"=>[61281], "heroic"=>[61282], "mythic"=>[61283]}}, {"id"=>3179, "name"=>"Fallen-King Salhadaar", "raid_ids"=>{"raid_finder"=>[61284], "normal"=>[61285], "heroic"=>[61286], "mythic"=>[61287]}}, {"id"=>3178, "name"=>"Vaelgor & Ezzorak", "raid_ids"=>{"raid_finder"=>[61288], "normal"=>[61289], "heroic"=>[61290], "mythic"=>[61291]}}, {"id"=>3180, "name"=>"Lightblinded Vanguard", "raid_ids"=>{"raid_finder"=>[61292], "normal"=>[61293], "heroic"=>[61294], "mythic"=>[61295]}}, {"id"=>3181, "name"=>"Crown of the Cosmos", "raid_ids"=>{"raid_finder"=>[61296], "normal"=>[61297], "heroic"=>[61298], "mythic"=>[61299]}}, {"id"=>3306, "name"=>"Chimaerus", "raid_ids"=>{"raid_finder"=>[61474], "normal"=>[61475], "heroic"=>[61476], "mythic"=>[61477]}}, {"id"=>3182, "name"=>"Belo'ren, Child of Al'ar", "raid_ids"=>{"raid_finder"=>[61300], "normal"=>[61301], "heroic"=>[61302], "mythic"=>[61303]}}, {"id"=>3183, "name"=>"Midnight Falls", "raid_ids"=>{"raid_finder"=>[61304], "normal"=>[61305], "heroic"=>[61306], "mythic"=>[61307]}},{"id"=>3159, "name"=>"Rotmire", "raid_ids"=>{"raid_finder"=>[63233], "normal"=>[63234], "heroic"=>[63235], "mythic"=>[63236]}}]},
+    {"name"=>"Season 1", "days"=>[], "id"=>46, "encounters"=>[{"id"=>3176, "name"=>"Imperator Averzian", "raid_ids"=>{"raid_finder"=>[61276], "normal"=>[61277], "heroic"=>[61278], "mythic"=>[61279]}}, {"id"=>3177, "name"=>"Vorasius", "raid_ids"=>{"raid_finder"=>[61280], "normal"=>[61281], "heroic"=>[61282], "mythic"=>[61283]}}, {"id"=>3179, "name"=>"Fallen-King Salhadaar", "raid_ids"=>{"raid_finder"=>[61284], "normal"=>[61285], "heroic"=>[61286], "mythic"=>[61287]}}, {"id"=>3178, "name"=>"Vaelgor & Ezzorak", "raid_ids"=>{"raid_finder"=>[61288], "normal"=>[61289], "heroic"=>[61290], "mythic"=>[61291]}}, {"id"=>3180, "name"=>"Lightblinded Vanguard", "raid_ids"=>{"raid_finder"=>[61292], "normal"=>[61293], "heroic"=>[61294], "mythic"=>[61295]}}, {"id"=>3181, "name"=>"Crown of the Cosmos", "raid_ids"=>{"raid_finder"=>[61296], "normal"=>[61297], "heroic"=>[61298], "mythic"=>[61299]}}, {"id"=>3306, "name"=>"Chimaerus", "raid_ids"=>{"raid_finder"=>[61474], "normal"=>[61475], "heroic"=>[61476], "mythic"=>[61477]}}, {"id"=>3182, "name"=>"Belo'ren, Child of Al'ar", "raid_ids"=>{"raid_finder"=>[61300], "normal"=>[61301], "heroic"=>[61302], "mythic"=>[61303]}}, {"id"=>3183, "name"=>"Midnight Falls", "raid_ids"=>{"raid_finder"=>[61304], "normal"=>[61305], "heroic"=>[61306], "mythic"=>[61307]}},{"id"=>3159, "name"=>"Rotmire", "raid_ids"=>{"raid_finder"=>[63233], "normal"=>[63234], "heroic"=>[63235], "mythic"=>[63236]}}]},
+    {"name"=>"Season 2", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>53, "encounters"=>[{"id"=>3470, "name"=>"Nek'zali the Soulcoiler", "raid_ids"=>{"raid_finder"=>[63533], "normal"=>[63534], "heroic"=>[63535], "mythic"=>[63536]}}, {"id"=>3445, "name"=>"Entombed Sentinels", "raid_ids"=>{"raid_finder"=>[63537], "normal"=>[63538], "heroic"=>[63539], "mythic"=>[63540]}}, {"id"=>3455, "name"=>"Vashnik the Malignant", "raid_ids"=>{"raid_finder"=>[63547], "normal"=>[63555], "heroic"=>[63556], "mythic"=>[63557]}}, {"id"=>3497, "name"=>"The Lost Explorers", "raid_ids"=>{"raid_finder"=>[63541], "normal"=>[63552], "heroic"=>[63553], "mythic"=>[63554]}}, {"id"=>3420, "name"=>"Sszorak", "raid_ids"=>{"raid_finder"=>[63548], "normal"=>[63558], "heroic"=>[63559], "mythic"=>[63560]}}, {"id"=>3421, "name"=>"The Twin Fangs", "raid_ids"=>{"raid_finder"=>[63549], "normal"=>[63561], "heroic"=>[63562], "mythic"=>[63563]}}, {"id"=>3429, "name"=>"The Coiled Altar", "raid_ids"=>{"raid_finder"=>[63550], "normal"=>[63564], "heroic"=>[63565], "mythic"=>[63566]}}, {"id"=>3492, "name"=>"Ula'tek", "raid_ids"=>{"raid_finder"=>[63551], "normal"=>[63567], "heroic"=>[63568], "mythic"=>[63569]}}, {"id"=>3379, "name"=>"Nymrissa Wavecaller", "raid_ids"=>{"raid_finder"=>[63613], "normal"=>[63614], "heroic"=>[63615], "mythic"=>[63616]}}]}
   ],
   classic_era: [
     {"name"=>"Naxxramas", "days"=>[0, 1, 2, 3, 4, 5, 6], "id"=>2006, "encounters"=>[{"id"=>51118, "name"=>"Patchwerk", "raid_ids"=>{}}, {"id"=>51111, "name"=>"Grobbulus", "raid_ids"=>{}}, {"id"=>51108, "name"=>"Gluth", "raid_ids"=>{}}, {"id"=>51120, "name"=>"Thaddius", "raid_ids"=>{}}, {"id"=>51117, "name"=>"Noth the Plaguebringer", "raid_ids"=>{}}, {"id"=>51112, "name"=>"Heigan the Unclean", "raid_ids"=>{}}, {"id"=>51115, "name"=>"Loatheb", "raid_ids"=>{}}, {"id"=>51107, "name"=>"Anub'Rekhan", "raid_ids"=>{}}, {"id"=>51110, "name"=>"Grand Widow Faerlina", "raid_ids"=>{}}, {"id"=>51116, "name"=>"Maexxna", "raid_ids"=>{}}, {"id"=>51113, "name"=>"Instructor Razuvious", "raid_ids"=>{}}, {"id"=>51109, "name"=>"Gothik the Harvester", "raid_ids"=>{}}, {"id"=>51121, "name"=>"The Four Horsemen", "raid_ids"=>{}}, {"id"=>51119, "name"=>"Sapphiron", "raid_ids"=>{}}, {"id"=>51114, "name"=>"Kel'Thuzad", "raid_ids"=>{}}]}
