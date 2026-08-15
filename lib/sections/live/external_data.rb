@@ -55,17 +55,20 @@ module Audit
           end
         end.compact
 
+        regular_mythic_count = @character.data['week_regular_mythic_dungeons'] ||
+          @character.details.dig('snapshots', Audit.period.to_s, 'regular_mythic_dungeons')
+
         # Before the season's first M+ period, regular mythics fill the dungeon vault (as +1).
         # After that they would double-count with keystone runs of the same dungeon.
         if preseason
-          @character.data['week_mythic_dungeons'] = @character.data['week_regular_mythic_dungeons'] || 0
+          @character.data['week_mythic_dungeons'] = regular_mythic_count || @character.data['week_mythic_dungeons'] || 0
         end
 
         @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum + (@character.data['week_mythic_dungeons'] || 0)
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
         dungeon_data = if preseason
-          (@character.data['week_regular_mythic_dungeons'] || 0).times.map { 1 }
+          (regular_mythic_count || @character.data['week_mythic_dungeons'] || 0).times.map { 1 }
         else
           (@character.details['keystones'][Audit.period.to_s]&.values&.map { |dungeon| dungeon['level'] } || []).sort.reverse
         end
