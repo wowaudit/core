@@ -245,12 +245,12 @@ module Audit
         details['spark_gear'] = {} unless details['spark_gear'].is_a?(Hash)
         details['tier_items'] = {} unless details['tier_items'].is_a?(Hash)
 
-        # On-the-fly migration from the old flat format into the current season slot
-        if details['spark_gear_s1'].is_a?(Hash) && !details['spark_gear'].key?(season_key)
-          details['spark_gear'][season_key] = details['spark_gear_s1']
+        # On-the-fly migration from the old flat format into Midnight season 1 (17)
+        if details['spark_gear_s1'].is_a?(Hash) && !details['spark_gear'].key?('17')
+          details['spark_gear']['17'] = details['spark_gear_s1']
         end
-        if details['tier_items_s1'].is_a?(Hash) && !details['tier_items'].key?(season_key)
-          details['tier_items'][season_key] = details['tier_items_s1']
+        if details['tier_items_s1'].is_a?(Hash) && !details['tier_items'].key?('17')
+          details['tier_items']['17'] = details['tier_items_s1']
         end
         details.delete('spark_gear_s1')
         details.delete('tier_items_s1')

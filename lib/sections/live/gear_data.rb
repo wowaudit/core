@@ -126,6 +126,12 @@ module Audit
             end
 
             if TIER_ITEMS_BY_SLOT.keys.include? item
+              # Backfix for broken tier items
+              stored_tier = @character.details['tier_items'][season_key][item]
+              if stored_tier && stored_tier['ilvl'].to_i.positive? && stored_tier['ilvl'].to_i < 290
+                @character.details['tier_items'][season_key][item] = { 'ilvl' => 0, 'difficulty' => '' }
+              end
+
               if TIER_ITEMS.include?(equipped_item[:item][:id].to_i)
                 upgradeable_difficulty = bonus_id_options[bonus_list.find { |bonus_id| bonus_id_options.keys.include? bonus_id }]
                 difficulty_label = upgradeable_difficulty ? DIFFICULTY_LETTERS[upgradeable_difficulty] : LEGACY_TIER_CUTOFFS.map { |cutoff, string| string if cutoff <= equipped_item[:level][:value] }.compact.last
