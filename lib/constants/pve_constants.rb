@@ -264,6 +264,7 @@ SEASON_DATA = {
   18 => {
     first_period: 1077,
     pvp_season: 42,
+    bonus_roll_currency_id: 0,
     spark_label: "Tidal Crafted",
     spark_ilvl_bump_bonus_id: [],
     catalyst_charge_achievement_id: 62872,

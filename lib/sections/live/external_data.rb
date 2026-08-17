@@ -10,6 +10,7 @@ module Audit
         if type == :live
           add_raiderio_data
           add_leaderboard_data
+          add_game_data
         end
       end
 
@@ -33,6 +34,39 @@ module Audit
             (@character.details['raiderio']['weekly_highest'] rescue 0) || 0,
             (@character.details['raiderio']['top_ten_highest'][0] rescue 0) || 0
           ].max
+      end
+
+      def add_game_data
+        bonus_roll = bonus_roll_data
+        expected = Season.current.data[:bonus_roll_currency_id]
+
+        if bonus_roll.nil? || bonus_roll.empty? || (expected && bonus_roll['currency_id'] != expected)
+          @character.data['bonus_rolls_left'] = "?"
+          @character.data['bonus_rolls_earned'] = "?"
+          @character.data['bonus_rolls_synced'] = "-"
+          return
+        end
+
+        @character.data['bonus_rolls_left'] = bonus_roll['left']
+        @character.data['bonus_rolls_earned'] = bonus_roll['earned']
+        @character.data['bonus_rolls_synced'] = format_bonus_roll_age(bonus_roll['updated_at'])
+      end
+
+      def bonus_roll_data
+        raw = @temp_character.respond_to?(:game_data) ? @temp_character.game_data : nil
+        game_data = case raw
+                    when String then (JSON.parse(raw) rescue {})
+                    when Hash then raw
+                    else {}
+                    end
+        game_data['bonus_roll']
+      end
+
+      def format_bonus_roll_age(updated_at)
+        return "" if updated_at.nil? || updated_at == ""
+
+        hours = (Time.now.to_i - updated_at.to_i) / 3600
+        hours < 24 ? "#{hours}h ago" : "#{hours / 24}d ago"
       end
 
       def add_leaderboard_data

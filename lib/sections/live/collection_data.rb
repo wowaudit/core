@@ -31,11 +31,13 @@ module Audit
 
         if @data[:mounts]
           @character.data['midnight_falls_mount'] = 'no'
+          @character.data['ulatek_mount'] = 'no'
 
           @data[:mounts].lazy.each do |entry|
             next unless entry.is_a? Hash
 
             @character.data['midnight_falls_mount'] = 'yes' if entry.dig(:mount, :id) == 2607
+            @character.data['ulatek_mount'] = 'yes' if entry.dig(:mount, :id) == 3030
           end
         end
 

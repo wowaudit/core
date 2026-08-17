@@ -9,6 +9,7 @@ REPUTATIONS = {
   2696 => "amani_tribe",
   2704 => 'harati',
   2699 => "the_singularity",
+  2772 => 'zuljarras_forces'
 }
 
 RAID_BUFF_IDS = []

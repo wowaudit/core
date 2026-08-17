@@ -439,7 +439,7 @@ TIMELINE_EVENTS = {
   },
   37 => {
     from: Date.new(2026, 3, 2),
-    to: Date.new(2026, 10, 20),
+    to: Date.new(2026, 8, 17),
     title: "Voidspire & Dreamrift & March on Quel'danas",
     criteria: [
       { achievement_id: 61627, quality: :legendary, name: "Hall of Fame: Midnight Falls", icon: 'inv_120_raid_marchonqueldanas_lura', time_sensitive: Date.new(2026, 3, 2) },
@@ -451,6 +451,16 @@ TIMELINE_EVENTS = {
       { achievement_id: 61626, quality: :rare, name: "Ahead of the Curve: Midnight Falls", icon: 'inv_120_raid_marchonqueldanas_lura' },
       { achievement_id: 61624, quality: :rare, name: "Ahead of the Curve: Crown of the Cosmos", icon: 'inv_120_raid_voidspire_alleria' },
       { achievement_id: 61491, quality: :rare, name: "Ahead of the Curve: Chimearus, the Undreamt God", icon: 'inv_120_raid_dreamwell_malformedmanifestation' },
+    ],
+  },
+  38 => {
+    from: Date.new(2026, 8, 18),
+    to: Date.new(2027, 2, 1),
+    title: 'The Venomous Abyss',
+    criteria: [
+      { achievement_id: 63651, quality: :legendary, name: "Hall of Fame: Ula'tek", icon: 'inv_121_raid_achievement_ulatek', time_sensitive: Date.new(2026, 9, 17) },
+      { achievement_id: 63651, quality: :epic, name: "Cutting Edge: Ula'tek", icon: 'inv_121_raid_achievement_ulatek' },
+      { achievement_id: 63650, quality: :rare, name: "Ahead of the Curve: Ula'tek", icon: 'inv_121_raid_achievement_ulatek' },
     ],
   },
 }
