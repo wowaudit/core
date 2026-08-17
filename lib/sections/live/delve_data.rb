@@ -49,9 +49,11 @@ module Audit
           delves_this_week.sort!
           delves_this_week.reverse!
 
-          @character.data['great_vault_slot_7'] = Season.current.data[:great_vault][:delve][[delves_this_week[1] || 0, 11].min]&.dig(:ilvl) || ""
-          @character.data['great_vault_slot_8'] = Season.current.data[:great_vault][:delve][[delves_this_week[3] || 0, 11].min]&.dig(:ilvl) || ""
-          @character.data['great_vault_slot_9'] = Season.current.data[:great_vault][:delve][[delves_this_week[7] || 0, 11].min]&.dig(:ilvl) || ""
+          max_tier = Season.current.data[:first_period] > Audit.period ? PRESEASON_MAX_DELVE_VAULT_TIER : 11
+          delve_vault = Season.current.data[:great_vault][:delve]
+          @character.data['great_vault_slot_7'] = delve_vault[[delves_this_week[1] || 0, max_tier].min]&.dig(:ilvl) || ""
+          @character.data['great_vault_slot_8'] = delve_vault[[delves_this_week[3] || 0, max_tier].min]&.dig(:ilvl) || ""
+          @character.data['great_vault_slot_9'] = delve_vault[[delves_this_week[7] || 0, max_tier].min]&.dig(:ilvl) || ""
         end
       end
     end
