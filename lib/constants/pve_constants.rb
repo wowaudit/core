@@ -309,7 +309,7 @@ SEASON_DATA = {
         4 => { ilvl: 308, track: 'Hero' },
         3 => { ilvl: 305, track: 'Hero' },
         2 => { ilvl: 305, track: 'Hero' },
-        1 => { ilvl: 292, track: 'Champion' }, # Regular Mythic
+        1 => { ilvl: 302, track: 'Champion' }, # Regular Mythic
         0 => { ilvl: 279, track: 'Veteran' }, # Heroic
         -1 => { ilvl: nil, track: nil },
       },
