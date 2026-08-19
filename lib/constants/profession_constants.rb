@@ -34,6 +34,7 @@ SPARK_RECIPE_NAME_TO_ITEM_ID = {
   "Bouquet of Herbs" => { id: 245651, profession: 'Alchemy' },
   "Box of Rocks" => { id: 242650, profession: 'Alchemy' },
   "Cauldron of Sin'dorei Flasks" => { id: 241319, profession: 'Alchemy' },
+  "Concentrated Silvermoon Health Potion" => { id: 271883, profession: 'Alchemy' },
   "Draught of Rampant Abandon" => { id: 241293, profession: 'Alchemy' },
   "Entropic Illuminant" => { id: 262355, profession: 'Alchemy' },
   "Flask of Thalassian Resistance" => { id: 241321, profession: 'Alchemy' },
