@@ -128,7 +128,8 @@ module Audit
             if TIER_ITEMS_BY_SLOT.keys.include? item
               # Backfix for broken tier items
               stored_tier = @character.details['tier_items'][season_key][item]
-              if stored_tier && stored_tier['ilvl'].to_i.positive? && (stored_tier['ilvl'].to_i < 290 || (stored_tier['ilvl'].to_i == 298 && stored_tier['difficulty'] == 'M'))
+              stale_ilvl = { 'M' => 298, 'H' => 285, 'N' => 272, 'R' => 259 }[stored_tier&.dig('difficulty')]
+              if stored_tier && stored_tier['ilvl'].to_i.positive? && stale_ilvl && stored_tier['ilvl'].to_i <= stale_ilvl
                 @character.details['tier_items'][season_key][item] = { 'ilvl' => 0, 'difficulty' => '' }
               end
 
