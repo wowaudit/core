@@ -60,7 +60,10 @@ module Wowaudit
             tournament: Audit::ClassicEra,
           }[team.guild.realm.game_version.to_sym]
 
-          Audit::Writer.write(team, output.values.sort_by{|c| c.character.name}, section::HeaderData.altered_header(team))
+          spreadsheet_results = output.values.select { |result| team.spreadsheet_visible?(result.character) }
+          if spreadsheet_results.any?
+            Audit::Writer.write(team, spreadsheet_results.sort_by { |result| result.character.name }, section::HeaderData.altered_header(team))
+          end
 
           Audit::Writer.update_db(output.values, failed)
           Wowaudit::Metadata.store_all(output.values) if output.values.any?

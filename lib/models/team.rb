@@ -20,17 +20,20 @@ module Audit
           character.note = member.note
         end
 
-        characters.select do |character|
-          (
-            character.team_rank&.spreadsheet_summary_visibility ||
-            character.team_rank&.spreadsheet_roster_visibility ||
-            character.team_rank&.spreadsheet_overview_visibility ||
-            character.team_rank&.spreadsheet_vault_visibility ||
-            character.team_rank&.spreadsheet_profession_visibility ||
-            character.team_rank&.spreadsheet_raids_visibility
-          )
-        end
+        characters
       end
+    end
+
+    def spreadsheet_visible?(character)
+      rank = character.team_rank
+      return false unless rank
+
+      rank.spreadsheet_summary_visibility ||
+        rank.spreadsheet_roster_visibility ||
+        rank.spreadsheet_overview_visibility ||
+        rank.spreadsheet_vault_visibility ||
+        rank.spreadsheet_profession_visibility ||
+        rank.spreadsheet_raids_visibility
     end
 
     def warning
