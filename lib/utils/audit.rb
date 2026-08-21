@@ -267,6 +267,9 @@ module Audit
 
         details['catalyst_charges'] = {} unless details['catalyst_charges'].is_a?(Hash)
 
+        details['uncapped_crests'] = {} unless details['uncapped_crests'].is_a?(Hash)
+        details['uncapped_crests'][season_key] = {} unless details['uncapped_crests'][season_key].is_a?(Hash)
+
         if !details['keystones'].is_a? Hash
           details['keystones'] = {}
         end

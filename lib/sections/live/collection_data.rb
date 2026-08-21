@@ -18,22 +18,7 @@ module Audit
           nil
         end
 
-        @character.data['uncapped_hero_crests'] = 0
-        @character.data['uncapped_myth_crests'] = 0
-
-        if @data.dig(:completed_quests, :quests)&.any? { |quest| quest[:id] == 97910 }
-          @character.data['uncapped_hero_crests'] += 20
-          @character.data['uncapped_myth_crests'] += 20
-        end
-
-        if @achievements&.dig(63332, :criteria, :is_completed)
-          @character.data['uncapped_hero_crests'] += 30
-          @character.data['uncapped_myth_crests'] += 30
-        end
-
-        if @achievements&.dig(63326, :criteria, :is_completed)
-          @character.data['uncapped_hero_crests'] += 30
-        end
+        add_uncapped_crests!
 
         if @achievements
           @character.data['mounts'] = @achievements[2143][:criteria][:child_criteria].first[:amount] rescue 0
@@ -73,6 +58,47 @@ module Audit
 
           @character.data['unique_pets'] = pets_owned.size # Await Blizzard to add account wide collection achievement again
           @character.data['lvl_25_pets'] = level_25_pets
+        end
+      end
+
+      private
+
+      def add_uncapped_crests!
+        season = Season.current
+        season_key = season.id.to_s
+        earned_by_type = {}
+
+        (season.data[:crests] || []).each do |crest|
+          sources = crest[:uncapped_crests]
+          next unless sources.is_a?(Hash) && sources.any?
+
+          field = "uncapped_#{crest[:name].downcase}_crests"
+          earned = {}
+
+          sources.each do |source, amount|
+            next unless uncapped_source_earned?(source.to_s)
+
+            earned[source.to_s] = amount
+          end
+
+          @character.data[field] = earned.values.sum
+          earned_by_type[crest[:name]] = earned if earned.any?
+        end
+
+        @character.details['uncapped_crests'][season_key] = earned_by_type
+      end
+
+      def uncapped_source_earned?(source)
+        type, id = source.delete_prefix('/').split('=', 2)
+        return false unless id
+
+        case type
+        when 'quest'
+          @data.dig(:completed_quests, :quests)&.any? { |quest| quest[:id] == id.to_i }
+        when 'achievement'
+          @achievements&.dig(id.to_i, :criteria, :is_completed)
+        else
+          false
         end
       end
     end

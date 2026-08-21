@@ -279,8 +279,8 @@ SEASON_DATA = {
       { id: 399, name: "Ruby Life Pools", mythic_id: 16085, legacy: true },
     ],
     crests: [
-      { name: 'Myth', ilvl_cap: 334, weekly_increase: 100, first_period: 1076, icon_item_id: 269866 },
-      { name: 'Hero', ilvl_cap: 321, weekly_increase: 100, first_period: 1076, icon_item_id: 269865 },
+      { name: 'Myth', ilvl_cap: 334, weekly_increase: 100, first_period: 1076, icon_item_id: 269866, uncapped_crests: { '/quest=97910' => 20, '/achievement=63332' => 30 } },
+      { name: 'Hero', ilvl_cap: 321, weekly_increase: 100, first_period: 1076, icon_item_id: 269865, uncapped_crests: { '/quest=97910' => 20, '/achievement=63332' => 30, '/achievement=63326' => 30 } },
       { name: 'Champion', ilvl_cap: 308, weekly_increase: 100, first_period: 1076, icon_item_id: 269864 },
       { name: 'Veteran', ilvl_cap: 295, weekly_increase: 100, first_period: 1076, icon_item_id: 269867 },
     ],
