@@ -80,7 +80,13 @@ module Audit
         # From the new endpoint, we don't pass the season parameter (old way in character_query),
         # so the season_keystones field doesn't work. Instead, we are using the keystones field
         # which returns the current season score.
-        @character.data['m+_score'] = (@data.dig(:season_keystones, :mythic_rating, :rating) || @data.dig(:keystones, :current_mythic_rating, :rating) || 0).to_i
+        # Blizzard keeps last season's M+ score until the character logs out after the season starts.
+        last_logout = @character.data['blizzard_last_modified'].to_i / 1000
+        @character.data['m+_score'] = if last_logout.positive? && Audit.period_from_timestamp(last_logout) < Season.current.data[:first_period]
+          0
+        else
+          (@data.dig(:season_keystones, :mythic_rating, :rating) || @data.dig(:keystones, :current_mythic_rating, :rating) || 0).to_i
+        end
 
         vault_index = -1
         encounters_by_raid.each_with_index do |raid_encounters, raid_index|
