@@ -32,6 +32,7 @@ module Wowaudit
           tier_items: @details['tier_items'],
           trinket_cache: @details['trinket_cache'],
           catalyst_charges: @details['catalyst_charges'],
+          uncapped_crests: @details['uncapped_crests'],
           timeline: @details["timeline"],
         } : {}).merge(tier_items_metadata)
       end
