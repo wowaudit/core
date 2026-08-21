@@ -75,8 +75,9 @@ module Audit
           field = "uncapped_#{crest[:name].downcase}_crests"
           earned = {}
 
-          sources.each do |source, amount|
-            next unless uncapped_source_earned?(source.to_s)
+          sources.each do |source, config|
+            amount = uncapped_source_amount(config)
+            next unless amount && uncapped_source_earned?(source.to_s)
 
             earned[source.to_s] = amount
           end
@@ -86,6 +87,10 @@ module Audit
         end
 
         @character.details['uncapped_crests'][season_key] = earned_by_type
+      end
+
+      def uncapped_source_amount(config)
+        config.is_a?(Hash) ? config[:amount] || config['amount'] : config
       end
 
       def uncapped_source_earned?(source)
