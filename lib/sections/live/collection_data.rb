@@ -18,6 +18,23 @@ module Audit
           nil
         end
 
+        @character.data['uncapped_hero_crests'] = 0
+        @character.data['uncapped_myth_crests'] = 0
+
+        if @data.dig(:completed_quests, :quests)&.any? { |quest| quest[:id] == 97910 }
+          @character.data['uncapped_hero_crests'] += 20
+          @character.data['uncapped_myth_crests'] += 20
+        end
+
+        if @achievements&.dig(63332, :criteria, :is_completed)
+          @character.data['uncapped_hero_crests'] += 30
+          @character.data['uncapped_myth_crests'] += 30
+        end
+
+        if @achievements&.dig(63326, :criteria, :is_completed)
+          @character.data['uncapped_hero_crests'] += 30
+        end
+
         if @achievements
           @character.data['mounts'] = @achievements[2143][:criteria][:child_criteria].first[:amount] rescue 0
           @character.data['toys_owned'] = @achievements[9670][:criteria][:child_criteria].first[:amount] rescue 0

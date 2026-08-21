@@ -491,6 +491,8 @@ HEADER = {
     'bonus_rolls_left',
     'bonus_rolls_earned',
     'bonus_rolls_synced',
+    'uncapped_hero_crests',
+    'uncapped_myth_crests',
   ],
   classic_era: [
     'name',
