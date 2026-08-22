@@ -27,6 +27,12 @@ module Audit
           # Experiment with constructing historical vaults from stored keystones instead of using a one-time snapshot
           # TODO: this doesn't work when looking back at previous seasons, it will now always return the item level of the current season.
           dungeon_data = (@character.details['keystones'][period.to_s]&.values || []).map { |run| run['level'] }.sort.reverse
+
+          # Preseason weeks have no keystones; regular mythics filled the dungeon vault as +1
+          if dungeon_data.empty? && period < Season.current.data[:first_period]
+            dungeon_data = week['regular_mythic_dungeons'].to_i.times.map { 1 }
+          end
+
           vault[4].insert(0, Season.current.data[:great_vault][:dungeon][[dungeon_data[0] || -1, 10].min]&.dig(:ilvl) || "-")
           vault[5].insert(0, Season.current.data[:great_vault][:dungeon][[dungeon_data[3] || -1, 10].min]&.dig(:ilvl) || "-")
           vault[6].insert(0, Season.current.data[:great_vault][:dungeon][[dungeon_data[7] || -1, 10].min]&.dig(:ilvl) || "-")

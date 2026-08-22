@@ -99,6 +99,15 @@ module Audit
         end
 
         @character.data['season_mythic_dungeons'] = dungeons_per_week_in_season.sum + (@character.data['week_mythic_dungeons'] || 0)
+
+        # Keep the preseason week's regular mythics visible as "1 week ago" after M+ starts.
+        # Not included in season_mythic_dungeons — those runs were before the first M+ period.
+        unless preseason
+          preseason_period = (first_period - 1).to_s
+          preseason_count = @character.details.dig('snapshots', preseason_period, 'regular_mythic_dungeons')
+          dungeons_per_week_in_season << preseason_count if preseason_count
+        end
+
         @character.data['historical_dungeons_done'] = dungeons_per_week_in_season.join('|')
 
         dungeon_data = if preseason
