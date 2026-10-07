@@ -253,7 +253,7 @@ module Audit
             @character.data['empty_sockets'] += 1
           end
 
-          socket_info << { type: socket.dig(:socket_type, :type), gem: socket.dig(:item, :id) }
+          socket_info << { type: socket.dig(:socket_type, :type), gem: socket.dig(:item, :id), gem_quality: gem&.dig(:quality) }
         end
 
         socket_info

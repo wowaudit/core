@@ -102,15 +102,19 @@ module Audit
         if sockets_expected > 0
           [2, 3, 4].first(sockets_expected).each do |enchantment_slot|
             if enchantment = equipped_item[:enchantments]&.find { |e| e.dig(:enchantment_slot, :id) == enchantment_slot }
+              gem_quality = nil
+
               if meta_gem_type = TBC_META_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
                 @character.data['meta_gem_quality'] = TBC_GEM_QUALITY_MAPPING[meta_gem_type]
               elsif gem_type = TBC_GEMS.find { |category, ids| ids.include?(enchantment[:source_item][:id]) }&.first
-                @character.gems << TBC_GEM_QUALITY_MAPPING[gem_type]
+                gem_quality = TBC_GEM_QUALITY_MAPPING[gem_type]
+                @character.gems << gem_quality
               else
-                @character.gems << 1 # unknown?
+                gem_quality = 1 # unknown?
+                @character.gems << gem_quality
               end
 
-              socket_info << { type: meta_gem_type ? 'meta' : 'socket', gem: enchantment[:source_item][:id] }
+              socket_info << { type: meta_gem_type ? 'meta' : 'socket', gem: enchantment[:source_item][:id], gem_quality: gem_quality }
             else
               @character.data['empty_sockets'] += 1
               socket_info << { type: nil, gem: nil }
