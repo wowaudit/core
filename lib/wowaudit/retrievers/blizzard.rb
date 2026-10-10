@@ -46,6 +46,7 @@ module Wowaudit
 
       def self.retrieve_group(team_id)
         team = Audit::Team.where(id: team_id).first
+        return if team && GAME_VERSIONS_WITHOUT_API.include?(team.guild.game_version.to_s)
 
         if team && team.characters.any?
           failed = []

@@ -51,7 +51,8 @@ module Audit
           "* t.refresh_factor) + t.refresh_factor AS priority, " \
           "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM #{table} t " \
           "INNER JOIN guilds g ON g.id = t.owner_id " \
-          "WHERE g.active = TRUE ORDER BY priority DESC LIMIT 5"
+          "WHERE g.active = TRUE AND g.game_version NOT IN (#{GAME_VERSIONS_WITHOUT_API.map { |version| "'#{version}'" }.join(', ')}) " \
+          "ORDER BY priority DESC LIMIT 5"
         ).to_a
       end
       entity_ids = entities.map{ |entity| entity[:id] }

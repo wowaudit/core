@@ -5,6 +5,8 @@ CURRENT_VERSION = {
   classic_anniversary: 203,
 }
 
+GAME_VERSIONS_WITHOUT_API = %w[classic_forever].freeze
+
 PREVENT_SKIP_TIMESTAMP = DateTime.parse("2026-08-20 13:55:00 +0200")
 
 TIME_ZONE = 'Europe/Amsterdam'

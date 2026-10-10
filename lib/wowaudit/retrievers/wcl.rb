@@ -23,6 +23,7 @@ module Wowaudit
       def self.retrieve_group(team_id)
         team = Audit::Team.where(id: team_id).first
 
+        return if GAME_VERSIONS_WITHOUT_API.include?(team.guild.game_version.to_s)
         return unless team.guild.realm.game_version == 'live'
 
         # Requests are not made in parallel, otherwise
