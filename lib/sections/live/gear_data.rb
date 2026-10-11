@@ -176,7 +176,9 @@ module Audit
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
 
-        if @character.details['max_ilvl'] > 300
+        # Stored values above the season ceiling are leftovers from an older item level scale.
+        season_ilvl_ceiling = Season.current.data[:crests].map { |crest| crest[:ilvl_cap] }.max + 15
+        if @character.details['max_ilvl'] > season_ilvl_ceiling
           @character.details['max_ilvl'] = @character.data['ilvl']
         end
 
