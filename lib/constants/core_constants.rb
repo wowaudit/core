@@ -7,7 +7,7 @@ CURRENT_VERSION = {
 
 GAME_VERSIONS_WITHOUT_API = %w[classic_forever].freeze
 
-PREVENT_SKIP_TIMESTAMP = DateTime.parse("2026-08-20 13:55:00 +0200")
+PREVENT_SKIP_TIMESTAMP = DateTime.parse("2026-10-15 13:59:00 +0200")
 
 TIME_ZONE = 'Europe/Amsterdam'
 HOUR = (1.0 / 24)
