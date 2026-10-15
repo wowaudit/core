@@ -71,9 +71,10 @@ module Audit
             @character.data["upgrade_level_#{item}"] = track_ids ? "#{track_ids.to_a.index(upgrade_id) + 1} / #{track_ids.to_a.size}" : '-'
             total_upgrades_missing += (track_ids.to_a.size - (track_ids.to_a.index(upgrade_id) + 1)) if track_ids
 
-            voidforged_track = { 13653 => :heroic, 13654 => :mythic }
-            if !track && bonus_list.find { |bonus_id| voidforged_track[bonus_id] }
-              # track = voidforged_track[voidforged_bonus_id]
+            voidforged_bonus_ids = Season.current.data.dig(:voidforged, :bonus_ids) || {}
+            voidforged_track = voidforged_bonus_ids.find { |_, bonus_id| bonus_list.include?(bonus_id) }&.first
+            if !track && voidforged_track
+              track = voidforged_track
               @character.data['voidforged_items'] += two_handed_item?(item) ? 2 : 1
             end
 
@@ -87,7 +88,7 @@ module Audit
                 @character.data["upgrade_level_#{item}"] = '-'
               end
 
-              if bonus_list.include?(13655)
+              if bonus_list.include?(Season.current.data.dig(:voidforged, :crafted_bonus_id))
                 @character.data['voidforged_items'] += two_handed_item?(item) ? 2 : 1
               end
 

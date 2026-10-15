@@ -201,6 +201,7 @@ SEASON_DATA = {
     spark_label: "Radiance Crafted",
     spark_ilvl_bump_bonus_id: [],
     catalyst_charge_achievement_id: 61490,
+    voidforged: { label: "Voidforged", bonus_ids: { mythic: 13654, heroic: 13653 }, crafted_bonus_id: 13655 },
     keystone_dungeons: [
       { id: 558, name: "Magister's Terrace", mythic_id: 61217, legacy: false },
       { id: 560, name: "Maisara Caverns", mythic_id: 61655, legacy: false },
@@ -268,6 +269,7 @@ SEASON_DATA = {
     spark_label: "Tidal Crafted",
     spark_ilvl_bump_bonus_id: [],
     catalyst_charge_achievement_id: 62872,
+    voidforged: { label: "Venomforged", bonus_ids: { mythic: 12856, heroic: 12848 }, crafted_bonus_id: 13852 },
     keystone_dungeons: [
       { id: 588, name: "Altar of Fangs", mythic_id: 62287, legacy: false },
       { id: 587, name: "Murder Row", mythic_id: 61275, legacy: false },
@@ -279,8 +281,8 @@ SEASON_DATA = {
       { id: 399, name: "Ruby Life Pools", mythic_id: 16085, legacy: true },
     ],
     crests: [
-      { name: 'Myth', ilvl_cap: 334, weekly_increase: 100, first_period: 1076, icon_item_id: 269866, uncapped_crests: { '/quest=97910' => 20, '/achievement=63332' => 30 } },
-      { name: 'Hero', ilvl_cap: 321, weekly_increase: 100, first_period: 1076, icon_item_id: 269865, uncapped_crests: { '/quest=97910' => 20, '/achievement=63332' => 30, '/achievement=63326' => 30 } },
+      { name: 'Myth', ilvl_cap: 334, weekly_increase: 100, first_period: 1076, icon_item_id: 269866, uncapped_crests: { '/quest=97910' => 20, '/achievement=63332' => 30, '/achievement=63716' => 20 } },
+      { name: 'Hero', ilvl_cap: 321, weekly_increase: 100, first_period: 1076, icon_item_id: 269865, uncapped_crests: { '/quest=97910' => 20, '/achievement=63332' => 30, '/achievement=63716' => 20, '/achievement=63326' => 30 } },
       { name: 'Champion', ilvl_cap: 308, weekly_increase: 100, first_period: 1076, icon_item_id: 269864 },
       { name: 'Veteran', ilvl_cap: 295, weekly_increase: 100, first_period: 1076, icon_item_id: 269867 },
     ],
