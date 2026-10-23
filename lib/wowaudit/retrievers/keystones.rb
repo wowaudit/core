@@ -27,7 +27,11 @@ module Wowaudit
               next unless group && group[:members]
               group[:dungeon_id] = dungeon[:map_challenge_mode_id]
               group[:members].each do |member|
-                (runs_by_character[ "#{member[:profile][:realm][:id]}-#{member[:profile][:id]}"] ||= []) << group
+                member_realm = Audit::Realm.find_by(id: member.dig(:profile, :realm, :id))
+                next unless member_realm
+
+                legacy_redis_id = "#{member_realm.redis_prefix}:#{member[:profile][:id]}_#{member_realm.legacy_wowaudit_id}"
+                (runs_by_character[legacy_redis_id] ||= []) << group
               end
             end
           else
@@ -35,8 +39,8 @@ module Wowaudit
           end
         end
 
-        updates = runs_by_character.each_with_object({}) do |(profile_id, runs), output|
-          output["#{realm.redis_prefix}:#{profile_id}"] = {
+        updates = runs_by_character.each_with_object({}) do |(legacy_redis_id, runs), output|
+          output[legacy_redis_id] = {
             runs: runs.map do |run|
               next unless run[:completed_timestamp]
               run_id = run[:completed_timestamp] / 1000
@@ -60,7 +64,8 @@ module Wowaudit
           batch_ids.each do |legacy_redis_id|
             details = metadata[legacy_redis_id] || {}
             payload = updates[legacy_redis_id]
-            next unless payload
+            # Only characters tracked by a team have a key; don't create keys for everyone on the leaderboards.
+            next if details.empty? || !payload
 
             details_changed = false
             if !details['keystones'].is_a?(Hash)
