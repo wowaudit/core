@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/wowaudit/rbattlenet.git
-  revision: 08aeec292094a8db48932a261028dc0eb6a2cf8a
+  revision: 84d948b0af963691e64afcc919b60c860be2a2df
   branch: master
   specs:
     rbattlenet (2.1.0)
