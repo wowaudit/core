@@ -34,6 +34,7 @@ module Wowaudit
           catalyst_charges: @details['catalyst_charges'],
           uncapped_crests: @details['uncapped_crests'],
           timeline: @details["timeline"],
+          known_recipes_digest: @details['known_recipes_digest'],
         } : {}).merge(tier_items_metadata)
       end
 

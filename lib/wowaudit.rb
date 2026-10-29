@@ -13,6 +13,7 @@ require_rel './models/frozen_base.rb'
 require_rel './utils/audit.rb'
 require_rel './utils/season.rb'
 require_rel './utils/bonus_ids.rb'
+require_rel './utils/recipe_index.rb'
 require_rel './sections'
 require_rel './constants'
 
