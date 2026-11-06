@@ -458,7 +458,7 @@ TIMELINE_EVENTS = {
     to: Date.new(2027, 2, 1),
     title: 'The Venomous Abyss',
     criteria: [
-      { achievement_id: 63651, quality: :legendary, name: "Hall of Fame: Ula'tek", icon: 'inv_121_raid_achievement_ulatek', time_sensitive: Date.new(2026, 9, 17) },
+      { achievement_id: 63651, quality: :legendary, name: "Hall of Fame: Ula'tek", icon: 'inv_121_raid_achievement_ulatek', time_sensitive: Date.new(2026, 10, 14) },
       { achievement_id: 63651, quality: :epic, name: "Cutting Edge: Ula'tek", icon: 'inv_121_raid_achievement_ulatek' },
       { achievement_id: 63650, quality: :rare, name: "Ahead of the Curve: Ula'tek", icon: 'inv_121_raid_achievement_ulatek' },
     ],

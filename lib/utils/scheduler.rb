@@ -52,7 +52,7 @@ module Audit
           "* t.refresh_factor) + t.refresh_factor AS priority, " \
           "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM #{table} t " \
           "INNER JOIN guilds g ON g.id = t.owner_id " \
-          "WHERE g.active = TRUE #{without_api}" \
+          "WHERE g.active = TRUE AND t.deactivated_at IS NULL #{without_api}" \
           "ORDER BY priority DESC LIMIT 5"
         ).to_a
       end
