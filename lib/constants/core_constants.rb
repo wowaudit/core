@@ -6,7 +6,7 @@ CURRENT_VERSION = {
   classic_forever: 1,
 }
 
-GAME_VERSIONS_WITHOUT_API = %w[classic_forever].freeze
+GAME_VERSIONS_WITHOUT_API = %w[].freeze
 
 # Characters and guilds are addressed by name (and surname) only, their ruleset maps to one of our realms
 GAME_VERSIONS_WITH_RULESETS = %w[classic_forever].freeze
