@@ -15,13 +15,11 @@ module Wowaudit
             characters.map do |ch|
               Audit.verify_details(ch, ch.details, ch.realm)
 
-              {
-                name: ch.name.downcase,
-                realm: ch.realm.slug,
+              self.subject_for(ch).merge(
                 season: Audit::Season.current.id,
                 source: ch,
                 timestamp: self.last_modified_for_character(ch),
-              }
+              )
             end,
             fields: FIELDS[characters.first.realm.game_version.to_sym] + Wowaudit.extra_fields + media_field,
           ) do |character, response|
@@ -62,7 +60,7 @@ module Wowaudit
           }[team.guild.realm.game_version.to_sym]
 
           spreadsheet_results = output.values.select { |result| team.spreadsheet_visible?(result.character) }
-          if spreadsheet_results.any?
+          if spreadsheet_results.any? && STORAGE.key?(team.guild.realm.game_version.to_sym)
             Audit::Writer.write(team, spreadsheet_results.sort_by { |result| result.character.name }, section::HeaderData.altered_header(team))
           end
 
@@ -70,6 +68,14 @@ module Wowaudit
           Wowaudit::Metadata.store_all(output.values) if output.values.any?
         else
           Audit::Logger.t(INFO_TEAM_EMPTY, team_id)
+        end
+      end
+
+      def self.subject_for(character)
+        if GAME_VERSIONS_WITH_RULESETS.include?(character.realm.game_version.to_s)
+          { name: "#{character.name}-#{character.surname}".downcase }
+        else
+          { name: character.name.downcase, realm: character.realm.slug }
         end
       end
 

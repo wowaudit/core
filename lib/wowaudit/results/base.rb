@@ -34,13 +34,12 @@ module Wowaudit
           catalyst_charges: @details['catalyst_charges'],
           uncapped_crests: @details['uncapped_crests'],
           timeline: @details["timeline"],
-          known_recipes_digest: @details['known_recipes_digest'],
-        } : {}).merge(tier_items_metadata)
+        } : {}).merge({ known_recipes_digest: @details['known_recipes_digest'] }.compact).merge(tier_items_metadata)
       end
 
       def tier_items_metadata
         tiers_by_slot = case @character.realm.game_version
-        when 'classic_era' then CLASSIC_ERA_TIER_ITEMS_BY_SLOT
+        when 'classic_era', 'classic_forever' then CLASSIC_ERA_TIER_ITEMS_BY_SLOT
         when 'classic_anniversary' then TBC_TIER_ITEMS_BY_SLOT
         when 'classic_progression' then MOP_TIER_ITEMS_BY_SLOT
         end

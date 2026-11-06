@@ -46,12 +46,13 @@ module Audit
       else
         table = 'teams'
         id_column = "id"
+        without_api = GAME_VERSIONS_WITHOUT_API.any? ? "AND g.game_version::text NOT IN (#{GAME_VERSIONS_WITHOUT_API.map { |version| "'#{version}'" }.join(', ')}) " : ""
         entities = DB.fetch(
           "SELECT t.id, ((#{Audit.now.to_i}::bigint - COALESCE(t.last_refreshed_#{worker.base_type}, 0)) " \
           "* t.refresh_factor) + t.refresh_factor AS priority, " \
           "t.last_refreshed_#{worker.base_type} AS last_refreshed FROM #{table} t " \
           "INNER JOIN guilds g ON g.id = t.owner_id " \
-          "WHERE g.active = TRUE AND g.game_version::text NOT IN (#{GAME_VERSIONS_WITHOUT_API.map { |version| "'#{version}'" }.join(', ')}) " \
+          "WHERE g.active = TRUE #{without_api}" \
           "ORDER BY priority DESC LIMIT 5"
         ).to_a
       end

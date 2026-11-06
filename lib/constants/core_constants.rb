@@ -3,9 +3,15 @@ CURRENT_VERSION = {
   classic_era: 105,
   classic_progression: 312,
   classic_anniversary: 203,
+  classic_forever: 1,
 }
 
 GAME_VERSIONS_WITHOUT_API = %w[classic_forever].freeze
+
+# Characters and guilds are addressed by name (and surname) only, their ruleset maps to one of our realms
+GAME_VERSIONS_WITH_RULESETS = %w[classic_forever].freeze
+
+GAME_VERSIONS_WITHOUT_ACHIEVEMENTS = %w[classic_era classic_anniversary classic_forever].freeze
 
 PREVENT_SKIP_TIMESTAMP = DateTime.parse("2026-10-29 13:25:00 +0100")
 
@@ -84,6 +90,13 @@ FIELDS = {
     :pvp_bracket_2v2,
     :pvp_bracket_3v3,
     :pvp_bracket_5v5,
+    :status,
+  ],
+  classic_forever: [
+    :completed_quests,
+    :equipment,
+    :professions,
+    :pvp_summary,
     :status,
   ],
 }
@@ -1019,6 +1032,39 @@ HEADER = {
     '5v5_season_played',
     '5v5_week_played',
     '',
+  ],
+  # Not used for a spreadsheet, so only the fields the website reads are needed (in any order)
+  classic_forever: [
+    'name',
+    'class',
+    'realm_slug',
+    'ilvl',
+    'gender',
+    'faction',
+    'level',
+    'race',
+    'role',
+    'note',
+    'realm',
+    'rank',
+    'join_date',
+    'character_id',
+    'blizzard_last_modified',
+    'highest_ilvl_ever_equipped',
+    *%w[
+      head neck shoulder back chest wrist hands waist legs feet
+      finger_1 finger_2 trinket_1 trinket_2 main_hand off_hand ranged
+    ].flat_map { |slot| %w[ilvl id name quality].map { |field| "#{slot}_#{field}" } },
+    *(1..2).flat_map { |index| %w[name rank max_rank].map { |field| "profession_#{index}_#{field}" } },
+    'honor_level',
+    'honor_title',
+    'honorable_kills',
+    'tier_1_status',
+    'tier_2_status',
+    'tier_2.5_status',
+    'tier_3_status',
+    'dalaran_sewers_attuned',
+    'onyxia_attuned',
   ],
 }
 

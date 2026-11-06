@@ -19,7 +19,7 @@ module Audit
         }
         tier_finger_counted = false
 
-        ITEMS[:classic_era].each do |item|
+        ITEMS[@realm.game_version.to_sym].each do |item|
           begin
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             items_equipped += 1 if equipped_item
@@ -30,7 +30,7 @@ module Audit
             end
 
             @character.details['current_gear'][item] = {
-              'ilvl' => CLASSIC_ERA_ITEM_LEVELS[equipped_item[:item][:id]] || 0,
+              'ilvl' => item_level(equipped_item),
               'id' => equipped_item[:item][:id],
               'bonus_ids' => [],
               'name' => equipped_item[:name],
@@ -39,7 +39,7 @@ module Audit
               'quality' => QUALITIES[equipped_item[:quality][:type].to_sym],
             }
 
-            @character.ilvl += CLASSIC_ERA_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+            @character.ilvl += item_level(equipped_item)
 
             CLASSIC_ERA_TIER_ITEMS_BY_SLOT.each do |tier, slots|
               generic_item = item.split('_').first
@@ -60,7 +60,7 @@ module Audit
             end
 
             @character.data[item + '_id'] = equipped_item[:item][:id]
-            @character.data[item + '_ilvl'] = CLASSIC_ERA_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+            @character.data[item + '_ilvl'] = item_level(equipped_item)
             @character.data[item + '_name'] = equipped_item[:name]
             @character.data[item + '_quality'] = QUALITIES[equipped_item[:quality][:type].to_sym]
           rescue => err
@@ -74,7 +74,7 @@ module Audit
         # For 2H weapons the item level is counted twice to normalise between weapon types
         if @data[:equipment][:equipped_items] && !@data[:equipment][:equipped_items].any?{ |eq_item| eq_item[:slot][:type] == "OFF_HAND" }
           items_equipped += 1
-          main_hand_ilvl = (CLASSIC_ERA_ITEM_LEVELS[@data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first[:item][:id]] || 0) rescue 0
+          main_hand_ilvl = item_level(@data[:equipment][:equipped_items].select{ |eq_item| eq_item[:slot][:type] == "MAIN_HAND" }.first) rescue 0
           @character.ilvl += main_hand_ilvl
         end
 
@@ -91,6 +91,10 @@ module Audit
 
         @character.details['max_ilvl'] = [@character.data['ilvl'], @character.details['max_ilvl'].to_f].max
         @character.data['highest_ilvl_ever_equipped'] = @character.details['max_ilvl']
+      end
+
+      def item_level(equipped_item)
+        CLASSIC_ERA_ITEM_LEVELS[equipped_item[:item][:id]] || 0
       end
 
       def check_enchant(item, equipped_item)

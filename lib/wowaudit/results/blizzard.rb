@@ -104,9 +104,9 @@ module Wowaudit
         return true if @response.dig(:status_codes, :itself, :code) == 404
         return true if @response.dig(:status, :is_valid) == false
 
-        profile_id = "#{@response.dig(:realm, :id)}-#{@response[:id]}"
+        profile_id = "#{response_realm_id}-#{@response[:id]}"
         if @character.profile_id != profile_id && @response[:id].present?
-          if @character.realm.game_version == 'classic_era' || @character.realm.game_version == 'classic_anniversary' || (new_achievement_uid && @character.achievement_uid != new_achievement_uid)
+          if recreated_character?
             create_newly_found_character(profile_id)
             return true
           else
@@ -128,12 +128,33 @@ module Wowaudit
         false
       end
 
+      def recreated_character?
+        game_version = @character.realm.game_version.to_s
+
+        if GAME_VERSIONS_WITH_RULESETS.include?(game_version)
+          # A ruleset change keeps the Blizzard id, while a deleted and recreated character gets a new one.
+          # Characters that were added before the API existed have no Blizzard id yet.
+          !@character.profile_id.to_s.start_with?('manual-') && @character.profile_id.to_s.split('-').last != @response[:id].to_s
+        elsif GAME_VERSIONS_WITHOUT_ACHIEVEMENTS.include?(game_version)
+          true
+        else
+          new_achievement_uid && @character.achievement_uid != new_achievement_uid
+        end
+      end
+
+      # Characters of game versions with rulesets have no realm, their ruleset decides which of our realms they belong to
+      def response_realm_id
+        return @response.dig(:realm, :id) unless GAME_VERSIONS_WITH_RULESETS.include?(@character.realm.game_version.to_s)
+
+        Audit::Realm.for_ruleset(@character.realm.region, @response.dig(:ruleset, :id))&.id
+      end
+
       def create_newly_found_character(profile_id)
         klass = Wowaudit.character_class || Audit::Character
         (klass.where(profile_id: profile_id).first || klass.new(profile_id: profile_id)).tap do |new_character|
           now = DateTime.now
           new_character.game_version = @character.realm.game_version
-          new_character.realm_id = @response.dig(:realm, :id)
+          new_character.realm_id = response_realm_id
           new_character.created_at ||= now
           new_character.updated_at = now
           store_metadata(new_character)
@@ -145,7 +166,7 @@ module Wowaudit
         return false if @response.dig(:name).blank?
         return false unless @response[:equipment] && @response[:equipment][:equipped_items]
 
-        if @character.realm.game_version != 'classic_era' && @character.realm.game_version != 'classic_anniversary'
+        unless GAME_VERSIONS_WITHOUT_ACHIEVEMENTS.include?(@character.realm.game_version.to_s)
           return false unless @response[:achievements]&.is_a? Array
         end
 
@@ -178,13 +199,18 @@ module Wowaudit
       end
 
       def store_metadata(target = @character)
-        update_field(target, :guild_profile_id, ("#{@response.dig(:guild, :realm, :id)}-#{@response.dig(:guild, :id)}" if @response.dig(:guild)))
-        update_field(target, :realm_id, @response.dig(:realm, :id))
+        with_rulesets = GAME_VERSIONS_WITH_RULESETS.include?(@character.realm.game_version.to_s)
+        # Guild members always share the guild's ruleset
+        guild_realm_id = with_rulesets ? response_realm_id : @response.dig(:guild, :realm, :id)
+
+        update_field(target, :guild_profile_id, ("#{guild_realm_id}-#{@response.dig(:guild, :id)}" if @response.dig(:guild)))
+        update_field(target, :realm_id, response_realm_id) if response_realm_id
         update_field(target, :race_id, @response.dig(:race, :id))
         update_field(target, :faction_id, FACTIONS.invert[@response.dig(:faction, :name)])
         update_field(target, :name, @response.dig(:name))
         update_field(target, :class_id, @response.dig(:character_class, :id))
-        update_field(target, :current_spec_id, @response.dig(:active_spec, :id))
+        # Their spec ids don't match the playable specializations, and there is no active spec to keep in sync
+        update_field(target, :current_spec_id, @response.dig(:active_spec, :id)) unless with_rulesets
 
         update_field(target, :level, @response[:level])
         if (media_zone = (@response[:media] && @response[:media][:assets].first[:value].split('/')[-2] rescue nil))

@@ -32,7 +32,13 @@ module Audit
             Audit::ClassicAnniversary::PvPData,
             Audit::ClassicAnniversary::ExternalData,
           ],
-
+          classic_forever: [
+            Audit::ClassicEra::BasicData,
+            Audit::ClassicForever::GearData,
+            Audit::ClassicForever::ProfessionData,
+            Audit::ClassicForever::QuestData,
+            Audit::ClassicEra::PvPData,
+          ],
         }[realm.game_version.to_sym].each do |type|
           next if skipped && type::SKIPPABLE
 
@@ -48,7 +54,7 @@ module Audit
       @skipped = skipped
       @realm = realm
 
-      if !@skipped && @realm.game_version != 'classic_era' && @realm.game_version != 'classic_anniversary'
+      if !@skipped && !GAME_VERSIONS_WITHOUT_ACHIEVEMENTS.include?(@realm.game_version.to_s)
         @achievements = @data[:achievements]
                           .group_by{ |ach| ach[:id] }
                           .transform_values(&:first)

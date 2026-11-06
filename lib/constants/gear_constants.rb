@@ -22,6 +22,7 @@ ITEMS = {
   classic_era: base_items + ['ranged'],
   classic_progression: base_items,
   classic_anniversary: base_items + ['ranged'],
+  classic_forever: base_items + ['ranged'],
 }
 
 QUALITIES = {

@@ -27,15 +27,19 @@ module Audit
 
           @character.data['profession_recipes'] = "|#{spark_items.join('|')}|"
 
-          digest = Zlib.crc32(known_recipes.to_json).to_s(36)
-          if @character.details['known_recipes_digest'] != digest
-            @character.details['known_recipes'] = known_recipes
-            @character.details['known_recipes_digest'] = digest
-          end
+          store_known_recipes(known_recipes)
         end
       end
 
       private
+
+      def store_known_recipes(known_recipes)
+        digest = Zlib.crc32(known_recipes.to_json).to_s(36)
+        return if @character.details['known_recipes_digest'] == digest
+
+        @character.details['known_recipes'] = known_recipes
+        @character.details['known_recipes_digest'] = digest
+      end
 
       def known_recipes_for(profession)
         tiers = profession[:tiers] || []
