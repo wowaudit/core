@@ -86,6 +86,15 @@ module Wowaudit
       private
 
       def check_character_api_status
+        # Keep checking, since the character may have reached the minimum level in the meantime
+        if below_minimum_api_level? && @response.dig(:status_codes, :itself, :code) == 404
+          if @character.gdpr_status == 'does_not_exist'
+            update_field(@character, :gdpr_status, 'exists')
+            update_field(@character, :marked_for_deletion_at, nil)
+          end
+          return false
+        end
+
         if gdpr_deletion? && @character.gdpr_status == 'exists'
           update_field(@character, :gdpr_status, Wowaudit.failure_status)
           update_field(@character, :marked_for_deletion_at, DateTime.now)
@@ -126,6 +135,10 @@ module Wowaudit
         end
 
         false
+      end
+
+      def below_minimum_api_level?
+        @character.level.present? && @character.level < MINIMUM_API_CHARACTER_LEVEL
       end
 
       def recreated_character?

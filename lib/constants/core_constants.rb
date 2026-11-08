@@ -13,6 +13,9 @@ GAME_VERSIONS_WITH_RULESETS = %w[classic_forever].freeze
 
 GAME_VERSIONS_WITHOUT_ACHIEVEMENTS = %w[classic_era classic_anniversary classic_forever].freeze
 
+# Blizzard's character API leaves out characters below this level, while guild rosters do include them
+MINIMUM_API_CHARACTER_LEVEL = 10
+
 PREVENT_SKIP_TIMESTAMP = DateTime.parse("2026-10-29 13:25:00 +0100")
 
 TIME_ZONE = 'Europe/Amsterdam'
