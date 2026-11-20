@@ -1,4 +1,4 @@
-FROM ruby:3.3.6-slim
+FROM ruby:3.3.14-slim
 
 RUN apt-get update
 
