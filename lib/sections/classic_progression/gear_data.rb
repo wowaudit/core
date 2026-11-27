@@ -27,7 +27,7 @@ module Audit
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             items_equipped += 1 if equipped_item
 
-            ilvl = MOP_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+            ilvl = ItemLevels.lookup(@realm.game_version, equipped_item[:item][:id]) || 0
 
             if equipped_item[:upgrade_id] && upgrade_info = MOP_UPGRADE_IDS_TO_OFFSET[equipped_item[:upgrade_id]]
               upgrade_steps_missing += upgrade_info[:steps_missing]

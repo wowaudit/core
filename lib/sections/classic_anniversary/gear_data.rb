@@ -31,7 +31,7 @@ module Audit
             equipped_item = @data[:equipment][:equipped_items].lazy.select{ |eq_item| eq_item[:slot][:type] == item.upcase }.first
             items_equipped += 1 if equipped_item
 
-            ilvl = TBC_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+            ilvl = ItemLevels.lookup(@realm.game_version, equipped_item[:item][:id]) || 0
             @character.ilvl += ilvl
 
             @character.details['current_gear'][item] = {

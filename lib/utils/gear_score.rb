@@ -50,9 +50,10 @@ module Audit
       HEIRLOOM:  { A: 0.75, B: 1.8, SCALE: 1     },
     }
 
-    def initialize(character, gear)
+    def initialize(character, gear, game_version)
       @character = character
       @gear = gear
+      @game_version = game_version
     end
 
     def total
@@ -66,7 +67,7 @@ module Audit
       return 0 unless item
 
       quality = item[:quality][:type].to_sym
-      item_level = quality == :HEIRLOOM ? 187.05 : WOTLK_ITEM_LEVELS[item[:item][:id]] || CLASSIC_ERA_ITEM_LEVELS[item[:item][:id]] || 0
+      item_level = quality == :HEIRLOOM ? 187.05 : ItemLevels.lookup(@game_version, item[:item][:id]) || 0
       modifier = item_level > 120 ? QUALITY_MODIFIER[quality] : LEGACY_QUALITY_MODIFIER[quality]
 
       slot_scale = if slot == 'ranged' && @character.data['class'] == 'Hunter'

@@ -23,6 +23,8 @@ module Audit
           sleep(180) if e.class == PG::ConnectionBad
           Logger.t(ERROR_TEAM + "#{$!.message}\n#{$!.backtrace.join("\n")}", team.to_i)
         end
+
+        ItemLevels.flush_missing
       end
     end
 

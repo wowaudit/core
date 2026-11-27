@@ -94,7 +94,7 @@ module Audit
       end
 
       def item_level(equipped_item)
-        CLASSIC_ERA_ITEM_LEVELS[equipped_item[:item][:id]] || 0
+        ItemLevels.lookup(@realm.game_version, equipped_item[:item][:id]) || 0
       end
 
       def check_enchant(item, equipped_item)
