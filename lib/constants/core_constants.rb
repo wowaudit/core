@@ -3,7 +3,7 @@ CURRENT_VERSION = {
   classic_era: 105,
   classic_progression: 312,
   classic_anniversary: 203,
-  classic_forever: 1,
+  classic_forever: 2,
 }
 
 GAME_VERSIONS_WITHOUT_API = %w[].freeze

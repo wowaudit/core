@@ -15,6 +15,7 @@ require_rel './utils/audit.rb'
 require_rel './utils/season.rb'
 require_rel './utils/bonus_ids.rb'
 require_rel './utils/recipe_index.rb'
+require_rel './utils/item_levels.rb'
 require_rel './sections'
 require_rel './constants'
 
@@ -48,6 +49,7 @@ module Wowaudit
   def self.retrieve(characters, client_id = nil, client_secret = nil)
     client.authenticate(client_id, client_secret) if client_id && client_secret
     result = client.retrieve([characters].flatten)
+    Audit::ItemLevels.flush_missing
 
     # Reset client authentication back to the default when finished with the custom credential requests
     client.authenticate(ENV['BLIZZARD_CLIENT_ID'], ENV['BLIZZARD_CLIENT_SECRET']) if client_id && client_secret
